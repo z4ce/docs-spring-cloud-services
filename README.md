@@ -43,4 +43,13 @@ rackup
   
 1. Repeat the last 2 steps when you make changes to docs-spring-cloud-services
 
+## Files to change
+
+In docs-book-pivotalcf:
+- /master_middleman/source/subnavs/spring_cloud_subnav.erb
+
+In docs-spring-cloud-services:
+- All files from the root of this repo
+
+
 
