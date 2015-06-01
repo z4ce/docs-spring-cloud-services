@@ -176,7 +176,7 @@ The Spring Cloud Eureka and Connectors dependencies are required to enable the S
 
 ## <a id="consuming-service"></a>Consuming the service from a client application ##
 
-To consume an application from the Service Registry, again use the ```@EnableDiscoveryClient``` annotation in your Application's configuration class. What’s significant to note is that the URL given to getForObject() has a host name of "greeting-service", which is the name for which the service is registered as in Eureka. In this way, the client doesn’t need to know the actual URL of the service.
+To consume an application from the Service Registry, again use the ```@EnableDiscoveryClient``` annotation in your Application's configuration class. What's significant to note is that the URL given to getForObject() has a host name of "greeting-service", which is the name for which the service is registered as in Eureka. In this way, the client doesnt need to know the actual URL of the service.
 
 *src/main/java/demo/DemoApplication.java*
 
@@ -208,8 +208,8 @@ public class DemoApplication {
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String hello() {
-      Greeting greeting = rest.getForObject("http://greeting-service/greeting", Greeting.class);
-      return greeting.getMessage();
+        Greeting greeting = rest.getForObject("http://greeting-service/greeting", Greeting.class);
+        return greeting.getMessage();
     }
 
     private static class Greeting {

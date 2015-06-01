@@ -4,7 +4,7 @@ title: Config Server for Pivotal Cloud Foundry
 
 ## <a id="overview"></a>Overview ##
 
-Config Server for Pivotal Cloud Foundry is an externalized application configuration service. With the Config Server you have a central place to manage external properties for applications across all environments. The concepts on both client and server map identically to the Spring Environment and PropertySource abstractions, so they fit very well with Spring applications, but can be used with any application running in any language. As an application moves through the deployment pipeline from dev to test and into production you can manage the configuration between those environments and be certain that applications have everything they need to run when they migrate. The default implementation of the server storage backend uses git so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content. Subversion and classpath-local configurations are also supported. 
+Config Server for Pivotal Cloud Foundry is an externalized application configuration service. With the Config Server you have a central place to manage external properties for applications across all environments. The concepts on both client and server map identically to the Spring Environment and PropertySource abstractions, so they fit very well with Spring applications, but can be used with any application running in any language. As an application moves through the deployment pipeline from dev to test and into production you can manage the configuration between those environments and be certain that applications have everything they need to run when they migrate. The default implementation of the server storage backend uses git so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content. Subversion and classpath-local configurations are also supported.
 
 ## <a id="config-server"></a>The Config Server ##
 
@@ -18,11 +18,11 @@ A Config Server serves properties in either Java Properties format or Yaml forma
 /{label}/{application}-{profile}.properties
 ```
 
-A Configuration path contains an Application, a Profile, and optionally a Label. 
+A Configuration path contains an Application, a Profile, and optionally a Label.
 
 ## <a id="config-sources"></a>Configuration Sources ##
 
-Configurations served by the Config Server ultimately come from a Configration Source, which can be a Git repository, SVN repository, or a local filesystem path. A Configuration Source can contain one or more configuration files for one or more applications. Configuration files can be in Java Properties or Yaml format. A configuration file applies to an Application, and can optionally apply to a specific Profile and/or Label. 
+Configurations served by the Config Server ultimately come from a Configration Source, which can be a Git repository, SVN repository, or a local filesystem path. A Configuration Source can contain one or more configuration files for one or more applications. Configuration files can be in Java Properties or Yaml format. A configuration file applies to an Application, and can optionally apply to a specific Profile and/or Label.
 
 Here's an example Git repository that can be used as a Configuration Source:
 
@@ -44,7 +44,7 @@ https://github.com/myorg/configurations
 
 In this example, the Configuration Source defines configurations for the application named ```myapp```. The server will serve different properties for myapp depending on the values of ```{profile}``` and ```{label}``` in the request path. An example response can be found [here](#example-request).
 
-If the ```{profile}``` is neither ```development``` or ```production```, the properties in myapp.yml will be returned. If the ```{profile}``` is ```production```, the properties in both myapp-production.yml and myapp.yml will be returned.  
+If the ```{profile}``` is neither ```development``` or ```production```, the properties in myapp.yml will be returned. If the ```{profile}``` is ```production```, the properties in both myapp-production.yml and myapp.yml will be returned.
 
 If the request contains a ```{label}``` of ```v1.0.0```, properties from that tag will be served. If ```{label}``` is not present in the request, properties from the default label will be served. ```{label}``` can be a git commit hash as well as a tag or branch name. The default label for git repositories is "master", but this can be configured in the next section.
 
@@ -220,15 +220,15 @@ public class MyApp {
     public static void main(String[] args) {
        SpringApplication.run(MyApp.class, args);
     }
-    
+
     @Value("${hello.message}")
     private String helloMessage;
-    
+
     @RequestMapping("/")
     public String hello() {
         return helloMessage;
     }
-    
+
 }
 
 ```

@@ -4,9 +4,9 @@ title: Circuit Breaker for Pivotal Cloud Foundry
 
 ## <a id="overview"></a>Overview ##
 
-Circuit Breaker for Pivotal Cloud Foundry allows Spring applications running in Pivotal Cloud Foundry to use the [Circuit Breaker Pattern](http://martinfowler.com/bliki/CircuitBreaker.html). 
+Circuit Breaker for Pivotal Cloud Foundry allows Spring applications running in Pivotal Cloud Foundry to use the [Circuit Breaker Pattern](http://martinfowler.com/bliki/CircuitBreaker.html).
 
-Cloud native architectures are typically composed of multiple layers of distributed services, and end-user requests may be composed of multiple calls to these services. If a lower level service fails, the failure can cascade all the way up to the end-user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair. 
+Cloud native architectures are typically composed of multiple layers of distributed services, and end-user requests may be composed of multiple calls to these services. If a lower level service fails, the failure can cascade all the way up to the end-user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair.
 
 Using Circuit Breakers can address these issues by providing a fallback mechanism when services fail, and "opening" the circuit when failures reach a certain threshold, so that failing or overwhelmed services are no longer bombarded and can have time to heal.
 
@@ -31,7 +31,7 @@ Using Circuit Breakers can address these issues by providing a fallback mechanis
 1. It may take a few minutes to provision the dashboard. Once it's ready, a link will appear. Click on the link to enter the dashboard.
    <%= image_tag("circuit-breaker/dashboard.png") %>
 
-The Circuit Breaker Dashboard is now ready to be used. 
+The Circuit Breaker Dashboard is now ready to be used.
 
 ## <a id="apps"></a>Applying the Circuit Breaker Pattern ##
 
@@ -64,7 +64,7 @@ public class CircuitBreakerExample {
     public static void main(String[] args) {
        SpringApplication.run(CircuitBreakerExample.class, args);
     }
-    
+
     @Autowired
     private FlakeyService service;
 
@@ -72,10 +72,10 @@ public class CircuitBreakerExample {
     public String hello() {
         return service.hello();
     }
-    
+
     @Component
     public static class FlakeyService {
-        
+
         @HystrixCommand(fallbackMethod="goodbye")
         public String hello() {
             if (Calendar.getInstance().get(Calendar.MINUTE) % 2 == 0) {
@@ -83,7 +83,7 @@ public class CircuitBreakerExample {
             }
             return "hello!";
         }
-        
+
         String goodbye() {
             return "goodbye.";
         }
@@ -176,13 +176,13 @@ With the example app above receiving no load, the dashboard will display the fol
 
 <%= image_tag("circuit-breaker/dashboard-start.png") %>
 
-To see the circuit breaker in action, use curl, JMeter, Apache Bench or similar to simulate load. 
+To see the circuit breaker in action, use curl, JMeter, Apache Bench or similar to simulate load.
 
 ```
 $ while true; do curl circuit-breaker-example.my-cf.com; done
 ```
 
-Depending on the time, the example app will either respond with ```hello!``` indicating a sucessful service call, or ```goodbye.``` indicating that an Exception was thrown and the fallback method was used. 
+Depending on the time, the example app will either respond with ```hello!``` indicating a sucessful service call, or ```goodbye.``` indicating that an Exception was thrown and the fallback method was used.
 
 When service calls are sucessful, the circuit is closed, and the rate of calls per second and sucessful calls per 10 seconds is indicated.
 
@@ -196,4 +196,4 @@ When failures exceed their configured threshold (default of 20 failures in 5 sec
 
 <%= image_tag("circuit-breaker/dashboard-open.png") %>
 
-At no point does the example app return a non-200 response to the requestor. 
+At no point does the example app return a non-200 response to the requestor.
