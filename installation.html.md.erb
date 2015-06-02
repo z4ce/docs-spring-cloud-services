@@ -2,19 +2,25 @@
 title: Installing Spring Cloud Services for Pivotal Cloud Foundry
 ---
 
-1. Spring Cloud Services requires [MySQL for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-mysql) and [RabbitMQ for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service). If they are not installed, you can follow the same installation instructions below to install all products at the same time.
+# Prerequisites
+
+Spring Cloud Services requires [MySQL for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-mysql) and [RabbitMQ for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service). If they are not installed, you can follow the same installation instructions below to install all products at the same time.
+
+Spring Cloud Services requires **Java Buildpack version 2.5 or greater** to be the default Java Buildpack on the Pivotal Cloud Foundry platform. You can use the `cf` Cloud Foundry CLI command `cf buildpacks` to see the version of the Java Buildpack that is currently installed. If the default Java Buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry following the instructions in the [Administration guide](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html). You can delete the older Java Buildpack, disable it, or just make sure the newer Java Buildpack is in a lower position to make it the default. 
+
+# Installation
 
 1. Download Spring Cloud Services for Pivotal Cloud Foundry from [Pivotal Network](https://network.pivotal.io/).
 
-1. On the left sidebar, click Import Product to upload p-spring-cloud-services-&lt;version&gt;.pivotal
+1. On the left sidebar, click **Import Product** to upload p-spring-cloud-services-&lt;version&gt;.pivotal.
    
     <%= image_tag("pre-upload.png") %>
 
-1. Hover over Spring Cloud Services in the Available Products list and click the Add button.
+1. Hover over **Spring Cloud Services** in the **Available Products** list and click the **Add** button.
 
     <%= image_tag("pre-add.png") %>
 
-1. Start the installation process by clicking Apply Changes on the right sidebar.
+1. Start the installation process by clicking **Apply Changes** on the right sidebar.
 
     <%= image_tag("post-add.png") %>
 
