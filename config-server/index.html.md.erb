@@ -4,7 +4,7 @@ title: Config Server for Pivotal Cloud Foundry
 
 ## <a id="overview"></a>Overview ##
 
-Config Server for Pivotal Cloud Foundry is an externalized application configuration service. With the Config Server you have a central place to manage external properties for applications across all environments. The concepts on both client and server map identically to the Spring Environment and PropertySource abstractions, so they fit very well with Spring applications, but can be used with any application running in any language. As an application moves through the deployment pipeline from dev to test and into production you can manage the configuration between those environments and be certain that applications have everything they need to run when they migrate. The default implementation of the server storage backend uses git so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content. Subversion and classpath-local configurations are also supported.
+Config Server for Pivotal Cloud Foundry is an externalized application configuration service. With the Config Server you have a central place to manage external properties for applications across all environments. The concepts on both client and server map identically to the Spring Environment and PropertySource abstractions, so they fit very well with Spring applications, but can be used with any application running in any language. As an application moves through the deployment pipeline from dev to test and into production you can manage the configuration between those environments and be certain that applications have everything they need to run when they migrate. The default implementation of the server storage backend uses git so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content. Subversion configuration is also supported.
 
 ## <a id="config-server"></a>The Config Server ##
 
@@ -22,7 +22,7 @@ A Configuration path contains an Application, a Profile, and optionally a Label.
 
 ## <a id="config-sources"></a>Configuration Sources ##
 
-Configurations served by the Config Server ultimately come from a Configration Source, which can be a Git repository, SVN repository, or a local filesystem path. A Configuration Source can contain one or more configuration files for one or more applications. Configuration files can be in Java Properties or Yaml format. A configuration file applies to an Application, and can optionally apply to a specific Profile and/or Label.
+Configurations served by the Config Server ultimately come from a Configration Source, which can be a Git or Subversion repository. A Configuration Source can contain one or more configuration files for one or more applications. Configuration files can be in Java Properties or Yaml format. A configuration file applies to an Application, and can optionally apply to a specific Profile and/or Label.
 
 Here's an example Git repository that can be used as a Configuration Source:
 
