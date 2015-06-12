@@ -101,45 +101,22 @@ public class CircuitBreakerExample {
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>demo</groupId>
-  <artifactId>circuit-breaker-example</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <groupId>com.mydomain</groupId>
+  <artifactId>myapp</artifactId>
+  <version>0.1.0</version>
   <packaging>jar</packaging>
 
   <parent>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-parent</artifactId>
-    <version>1.0.2.RELEASE</version>
+    <groupId>io.pivotal.spring.cloud</groupId>
+    <artifactId>spring-cloud-services-starter-parent</artifactId>
+    <version>1.0.0.BUILD-SNAPSHOT</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
-  <properties>
-    <!-- Override the managed version of the Pivotal Cloud Connectors dependencies -->
-    <spring-cloud-connectors.version>1.2.0.RC1</spring-cloud-connectors.version>
-  </properties>
-
   <dependencies>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-hystrix</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-netflix-hystrix-amqp</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.pivotal.spring.cloud</groupId>
-      <artifactId>spring-cloud-pivotal-cloudfoundry-connector</artifactId>
-      <version>1.0.0.M1</version>
-    </dependency>
-    <dependency>
-      <groupId>io.pivotal.spring.cloud</groupId>
-      <artifactId>spring-cloud-pivotal-spring-connector</artifactId>
-      <version>1.0.0.M1</version>
+      <artifactId>spring-cloud-services-starter-circuit-breaker</artifactId>
     </dependency>
   </dependencies>
 
@@ -154,10 +131,23 @@ public class CircuitBreakerExample {
 
   <repositories>
     <repository>
-      <id>spring-milestones</id>
-      <url>https://repo.spring.io/libs-milestone</url>
+      <id>spring-snapshots</id>
+      <url>https://repo.spring.io/libs-snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-snapshots</id>
+      <url>https://repo.spring.io/libs-snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
 </project>
 
