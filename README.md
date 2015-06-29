@@ -11,7 +11,7 @@ Documentation for Spring Cloud Services Product
 xcode-select --install
 ```
 
-1. Install rbenv, ruby 2.0.0-p481, bundler, and bookbindery:
+2. Install rbenv, ruby 2.0.0-p481, bundler, and bookbindery:
   
   ```
 brew install rbenv ruby-build
@@ -26,28 +26,28 @@ rbenv global 2.0.0-p481
 gem install bookbindery
   ```
   
-1. Clone this repo and the main Pivotal CF docs repo (its folder should be sibling to this repo):
+3. Clone this repo and the main Pivotal CF docs repo (its folder should be sibling to this repo):
   
   ```
 git clone git@github.com:pivotal-cf/docs-spring-cloud-services.git
 git clone git@github.com:pivotal-cf/docs-book-pivotalcf.git
   ```
 
-1. Update the main docs site:
+4. Update the main docs site:
   
   ```
 cd docs-book-pivotalcf
 bookbinder bind local
   ```
   
-1. Run the site locally:
+5. Run the site locally:
 
   ```
 cd final_app
 rackup
   ```
   
-1. Repeat the last two steps when you make changes to docs-spring-cloud-services.
+6. Repeat the last two steps when you make changes to docs-spring-cloud-services.
 
 ## Files to change
 
