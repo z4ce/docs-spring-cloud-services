@@ -4,15 +4,32 @@ title: Installing Spring Cloud Services for Pivotal Cloud Foundry
 
 # Prerequisites
 
-Spring Cloud Services requires [MySQL for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-mysql) and [RabbitMQ for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service). If they are not installed, you can follow the same installation instructions below to install all products at the same time.
+Spring Cloud Services requires the following Pivotal Cloud Foundry products:
 
-Spring Cloud Services requires **Java Buildpack version 2.5 or greater** to be the default Java Buildpack on the Pivotal Cloud Foundry platform. You can use the `cf` Cloud Foundry CLI command `cf buildpacks` to see the version of the Java Buildpack that is currently installed. If the default Java Buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry following the instructions in the [Administration guide](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html). You can delete the older Java Buildpack, disable it, or just make sure the newer Java Buildpack is in a lower position to make it the default. 
+* [MySQL for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-mysql)
+* [RabbitMQ for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service)
+
+If they are not installed, you can follow the installation instructions below to install them along with Spring Cloud Services.
+
+Spring Cloud Services also requires version 2.5 or greater of the Java buildpack to be the default Java buildpack on the Pivotal Cloud Foundry platform. You can use the cf Command Line Interface tool to see the version of the Java buildpack that is currently installed.
+
+<pre class="terminal">
+$ cf buildpacks
+Getting buildpacks...
+
+buildpack                position   enabled   locked   filename
+java_buildpack_offline   1          true      false    java-buildpack-offline-v2.7.1.zip
+ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.3.0.zip
+nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.2.0.zip
+</pre>
+
+If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. If you do not delete or disable the older Java buildpack, make sure that the newer Java buildpack is in a lower position so that it will be the default. 
 
 # Installation
 
 1. Download Spring Cloud Services for Pivotal Cloud Foundry from [Pivotal Network](https://network.pivotal.io/).
 
-1. On the left sidebar, click **Import Product** to upload p-spring-cloud-services-&lt;version&gt;.pivotal.
+1. In Pivotal Cloud Foundry Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
    
     <%= image_tag("pre-upload.png") %>
 
@@ -20,19 +37,19 @@ Spring Cloud Services requires **Java Buildpack version 2.5 or greater** to be t
 
     <%= image_tag("pre-add.png") %>
 
-1. Start the installation process by clicking **Apply Changes** on the right sidebar.
+1. Start the installation process by clicking **Apply changes** on the right sidebar. 
 
     <%= image_tag("post-add.png") %>
 
-1. Go get a coffee. The installation process may take 20-30 minutes.
+1. Go get a coffee. The installation process may take 20&#8211;30 minutes.
 
     <%= image_tag("applying-changes.png") %>
 
-    When the installation process is complete you'll see the dialog below.
+1. When the installation process is complete, you will see the dialog shown below. Click **Return to Installation Dashboard**.
 
     <%= image_tag("changes-applied.png") %>
 
-1. Congratulations! You have successfully installed Spring Cloud Services for Pivotal Cloud Foundry
+1. Congratulations! You have successfully installed Spring Cloud Services for Pivotal Cloud Foundry.
 
     <%= image_tag("post-install.png") %>
     
