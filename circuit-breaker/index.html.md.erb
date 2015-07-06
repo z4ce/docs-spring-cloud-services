@@ -1,10 +1,10 @@
 ---
-title: Circuit Breaker for Pivotal Cloud Foundry
+title: Circuit Breaker Dashboard for Pivotal Cloud Foundry
 ---
 
 ## <a id="overview"></a>Overview ##
 
-Circuit Breaker for Pivotal Cloud Foundry allows Spring applications running in Pivotal Cloud Foundry to use the [Circuit Breaker Pattern](http://martinfowler.com/bliki/CircuitBreaker.html).
+Circuit Breaker Dashboard for Pivotal Cloud Foundry allows Spring applications running in Pivotal Cloud Foundry to use the [Circuit Breaker Pattern](http://martinfowler.com/bliki/CircuitBreaker.html).
 
 Cloud native architectures are typically composed of multiple layers of distributed services, and end-user requests may be composed of multiple calls to these services. If a lower level service fails, the failure can cascade all the way up to the end-user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair.
 
@@ -160,7 +160,7 @@ spring.application.name: circuit-breaker-example
 ```
 
 ## <a id="apps"></a>Using the Circuit Breaker Dashboard ##
-To use the Circuit Breaker dashboard, bind an app that contains ```@HystrixCommand```s to the Circuit Breaker service instance. Once bound and restaged, the app will update the dashboard with metrics that describe the health of its service calls.
+To use the Circuit Breaker dashboard, bind an app that contains ```@HystrixCommand```s to the Circuit Breaker Dashboard service instance. Once bound and restaged, the app will update the dashboard with metrics that describe the health of its service calls.
 
 With the example app above receiving no load, the dashboard will display the following:
 
