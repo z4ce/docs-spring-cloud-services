@@ -2,6 +2,8 @@
 title: Installing Spring Cloud Services for Pivotal Cloud Foundry
 ---
 
+_**NOTE:** For the current BETA release of Spring Cloud Services, when installing alongside PCF Elastic Runtime 1.5.0, all experimental features which disable HTTP traffic must be unchecked._
+
 # Prerequisites
 
 Spring Cloud Services requires the following Pivotal Cloud Foundry products:
@@ -23,21 +25,21 @@ ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.
 nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.2.0.zip
 </pre>
 
-If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. If you do not delete or disable the older Java buildpack, make sure that the newer Java buildpack is in a lower position so that it will be the default. 
+If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. If you do not delete or disable the older Java buildpack, make sure that the newer Java buildpack is in a lower position so that it will be the default.
 
 # Installation
 
 1. Download Spring Cloud Services for Pivotal Cloud Foundry from [Pivotal Network](https://network.pivotal.io/).
 
 1. In Pivotal Cloud Foundry Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
-   
+
     <%= image_tag("pre-upload.png") %>
 
 1. Hover over **Spring Cloud Services** in the **Available Products** list and click the **Add &#187;** button.
 
     <%= image_tag("pre-add.png") %>
 
-1. Start the installation process by clicking **Apply changes** on the right sidebar. 
+1. Start the installation process by clicking **Apply changes** on the right sidebar.
 
     <%= image_tag("post-add.png") %>
 
@@ -52,4 +54,3 @@ If the default Java buildpack is older than version 2.5, you can download a newe
 1. Congratulations! You have successfully installed Spring Cloud Services for Pivotal Cloud Foundry.
 
     <%= image_tag("post-install.png") %>
-    
