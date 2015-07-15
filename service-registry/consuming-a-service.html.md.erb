@@ -1,0 +1,129 @@
+---
+title: Consuming a Service from a Client Application
+---
+
+To consume an application from the Service Registry, again use the ```@EnableDiscoveryClient``` annotation in your Application's configuration class. What's significant to note is that the URL given to getForObject() has a host name of "greeting-service", which is the name for which the service is registered as in Eureka. In this way, the client doesnt need to know the actual URL of the service.
+
+*src/main/java/demo/DemoApplication.java*
+
+```java
+package demo;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+@SpringBootApplication
+@EnableDiscoveryClient
+@RestController
+public class DemoApplication {
+
+    @Autowired
+    private RestTemplate rest;
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public String hello() {
+        Greeting greeting = rest.getForObject("http://greeting-service/greeting", Greeting.class);
+        return greeting.getMessage();
+    }
+
+    private static class Greeting {
+
+        private String message;
+
+        @JsonCreator
+        public Greeting(@JsonProperty("message") String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return this.message;
+        }
+
+    }
+
+}
+
+```
+
+The dependencies for a consuming app are the same as a service.
+
+*pom.xml*
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.springframework.demo</groupId>
+    <artifactId>greeting-client</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
+    <name>greeting-client</name>
+    <description>Demo project for Spring Cloud</description>
+
+    <parent>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-parent</artifactId>
+      <version>1.0.2.RELEASE</version>
+      <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+      <!-- Override the managed version of the Pivotal Cloud Connectors dependencies -->
+      <spring-cloud-connectors.version>1.2.0.RC1</spring-cloud-connectors.version>
+    </properties>
+
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>io.pivotal.spring.cloud</groupId>
+        <artifactId>spring-cloud-pivotal-cloudfoundry-connector</artifactId>
+        <version>1.0.0.M1</version>
+      </dependency>
+      <dependency>
+        <groupId>io.pivotal.spring.cloud</groupId>
+        <artifactId>spring-cloud-pivotal-spring-connector</artifactId>
+        <version>1.0.0.M1</version>
+      </dependency>
+    </dependencies>
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+      </plugins>
+    </build>
+
+    <repositories>
+      <repository>
+        <id>spring-milestones</id>
+        <url>https://repo.spring.io/libs-milestone</url>
+      </repository>
+    </repositories>
+
+</project>
+```
+

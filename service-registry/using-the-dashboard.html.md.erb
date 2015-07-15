@@ -1,0 +1,11 @@
+---
+title: Using the Dashboard
+---
+
+Before an application is bound to the Service Registry service instance, the dashboard reflects that there are "No applications registered".
+
+<%= image_tag("service-registry/dashboard_empty.png") %>
+
+To see applications on the Service Registry dashboard, bind an app that contains ```@EnableDiscoveryClient``` to the Service Registry service instance. Once bound and restaged, the dashboard will display each registered apps.
+
+<%= image_tag("service-registry/dashboard_apps.png") %>
