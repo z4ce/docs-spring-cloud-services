@@ -1,0 +1,70 @@
+---
+title: Creating an Instance
+---
+
+You can create a Config Server instance using either the cf Command Line Interface tool or Pivotal Cloud Foundry Apps Manager.
+
+## Using the cf CLI
+
+Begin by targeting the correct space.
+
+<pre class="terminal">
+$ cf target -o myorg -s outer
+
+API endpoint:   https://api.mydomain.com (API version: 2.25.0)
+User:           user
+Org:            myorg
+Space:          outer
+</pre>
+
+If desired, view plan details for the Config Server product using `cf marketplace -s`.
+
+<pre class="terminal">
+$ cf marketplace
+Getting services from marketplace in org myorg / space outer as user...
+OK
+
+service                       plans          description
+p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard       Config Server for Spring Cloud Applications
+p-service-registry            standard       Service Registry for Spring Cloud Applications
+
+$ cf marketplace -s p-config-server
+Getting service plan information for service p-config-server as ebenezer...
+OK
+
+service plan   description     free or paid
+standard       Standard Plan   free
+</pre>
+
+Run `cf create-service`, specifying the service, plan name, and instance name.
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server
+Creating service instance config-server in org myorg / space outer as user...
+OK
+</pre>
+
+## Using Apps Manager
+
+Log into Apps Manager as a Space Developer. In the Marketplace, select **Config Server for Pivotal Cloud Foundry**.  
+
+   <%= image_tag("config-server/1_marketplace.png") %>
+
+Select the desired plan for the new service.  
+
+   <%= image_tag("config-server/2_select_plan.png") %>
+
+Provide a name for the service (e.g. &#8220;config-server&#8221;). Click the **Add** button.  
+
+   <%= image_tag("config-server/3_instance_name.png") %>
+
+In the **Services** list, click the **Manage** link under the listing for the new service instance.  
+
+   <%= image_tag("config-server/4_service_successfully_added.png") %>
+
+Select a **Configuration Source** and enter a repository URI. You can also enter a branch name as the default &#8220;label&#8221; to be used if no label is given in a request. Hit the **Submit** button.  
+
+   <%= image_tag("config-server/dashboard.png") %>
+
+The Config Server instance is now ready to be used. For details on how configurations are stored and retrieved, see the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.
