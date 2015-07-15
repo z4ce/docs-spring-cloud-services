@@ -8,35 +8,6 @@ Service Registry for Pivotal Cloud Foundry is a service which enables service di
 
 When a client registers with the Service Registry, it provide meta-data about itself such as host and port. Eureka receives heartbeat messages from each instance belonging to a service. If the heartbeat fails over a certain time, the instance is normally removed from the registry.
 
-## <a id="create-service-registry"></a>Creating a Service Registry Service ##
-
-1. Log into the Apps Manager as a Space Developer
-
-1. Select the Service Registry for Pivotal Cloud Foundry from the Marketplace:
-   <%= image_tag("service-registry/1_marketplace.png") %>
-
-1. Select the desired plan for the new service:
-   <%= image_tag("service-registry/2_select_plan.png") %>
-
-1. Provide a name for the new Service Registry service (e.g. service-registry) and click the Add button:
-   <%= image_tag("service-registry/3_instance_name.png") %>
-
-1. Select the Manage link on the new service instance:
-   <%= image_tag("service-registry/4_service_successfully_added.png") %>
-
-1. It may take a few minutes to provision the service. Once it's ready, a link will appear. Click the link to enter the dashboard.
-   <%= image_tag("service-registry/dashboard.png") %>
-
-The Service Registry is now ready to be used.
-
-## <a id="create-service-registry-cli"></a>Creating a Service Registry Service using the CLI ##
-
-Use the `cf` Cloud Foundry CLI as an alternative to the Apps Manager UI. Create a new Service Registry service:
-
-```sh
-cf create-service p-service-registry standard service-registry
-```
-
 ## <a id="registering-service"></a>Registering a Service ##
 
 To register an application in the Service Registry, use the ```@EnableDiscoveryClient``` annotation in your Application's configuration class.

@@ -1,0 +1,63 @@
+---
+title: Creating an Instance
+---
+
+You can create a Service Registry instance using either the cf Command Line Interface tool or Pivotal Cloud Foundry Apps Manager.
+
+## Using the cf CLI
+
+Begin by targeting the correct space.
+
+<pre class="terminal">
+$ cf target -o myorg -s outer
+
+API endpoint:   https://api.mydomain.com (API version: 2.25.0)
+User:           user
+Org:            myorg
+Space:          outer
+</pre>
+
+If desired, view plan details for the Config Server product using `cf marketplace -s`.
+
+<pre class="terminal">
+$ cf marketplace
+Getting services from marketplace in org myorg / space outer as user...
+OK
+
+service                       plans          description
+p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard       Config Server for Spring Cloud Applications
+p-service-registry            standard       Service Registry for Spring Cloud Applications
+
+$ cf marketplace -s p-service-registry
+Getting service plan information for service p-service-registry as user...
+OK
+
+service plan   description     free or paid
+standard       Standard Plan   free
+</pre>
+
+## Using Apps Manager
+
+Log into Apps Manager as a Space Developer. In the Marketplace, select **Service Registry for Pivotal Cloud Foundry**.  
+
+<%= image_tag("service-registry/1_marketplace.png") %>
+
+Select the desired plan for the new service.  
+
+<%= image_tag("service-registry/2_select_plan.png") %>
+
+Provide a name for the service (e.g. &#8220;service-registry&#8221;). Click the **Add** button.  
+
+<%= image_tag("service-registry/3_instance_name.png") %>
+
+In the **Services** list, click the **Manage** link under the listing for the new service instance.  
+
+<%= image_tag("service-registry/4_service_successfully_added.png") %>
+
+It may take a few minutes to provision the service. Once it is ready, a **Service Registry Dashboard** link will appear. Click the link to enter the instance Dashboard.
+
+<%= image_tag("service-registry/dashboard.png") %>
+
+The Service Registry instance is now ready to be used.
+
