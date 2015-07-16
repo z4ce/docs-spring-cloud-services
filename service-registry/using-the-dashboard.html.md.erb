@@ -2,10 +2,10 @@
 title: Using the Dashboard
 ---
 
-Before an application is bound to the Service Registry service instance, the dashboard reflects that there are "No applications registered".
+Before any applications are bound to the Service Registry service instance, the Service Registry dashboard will reflect that there are &#8220;No applications registered&#8221;.
 
 <%= image_tag("service-registry/dashboard_empty.png") %>
 
-To see applications on the Service Registry dashboard, bind an app that contains ```@EnableDiscoveryClient``` to the Service Registry service instance. Once bound and restaged, the dashboard will display each registered apps.
+To see applications listed in the dashboard, bind an application which uses ```@EnableDiscoveryClient``` to the service instance. Once an application has been bound to the instance, has been restaged, and has registered with Eureka, the dashboard will display it under **Registered Apps**.
 
 <%= image_tag("service-registry/dashboard_apps.png") %>
