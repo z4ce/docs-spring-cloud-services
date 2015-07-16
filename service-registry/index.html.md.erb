@@ -2,9 +2,14 @@
 title: Service Registry for Pivotal Cloud Foundry
 ---
 
-## <a id="overview"></a>Overview ##
+## Overview ##
 
-Service Registry for Pivotal Cloud Foundry is a service which enables service discoverability for applications running in a Pivotal Cloud Foundry environment. Service Discovery is one of the key tenets of a microservice based architecture. Trying to hand configure each client or some form of convention can be very difficult to do and can be very brittle. [Eureka](https://github.com/Netflix/eureka) is the Netflix Service Discovery Server and Client and is the underlying technology behind the Service Registry.
+Service Registry for Pivotal Cloud Foundry enables your applications to take advantage of the Service Discovery pattern, one of the key tenets of a microservice-based architecture. Trying to hand-configure each client or adopt some form of convention can be very difficult and brittle. Service Registry allows your applications to dynamically discover and call registered services.
 
-When a client registers with the Service Registry, it provide meta-data about itself such as host and port. Eureka receives heartbeat messages from each instance belonging to a service. If the heartbeat fails over a certain time, the instance is normally removed from the registry.
+<%= image_tag("service-registry/service-registry-fig3.png") %>
 
+When a client registers with the Service Registry, it provides meta-data about itself, such as its host and port. From then on, the Registry receives a heartbeat message from each instance belonging to a service. If an instance&#8217;s begins to consistently fail to send heartbeat messages, it will be removed from the Registry.
+
+Service Registry for Pivotal Cloud Foundry is based on [Eureka](https://github.com/Netflix/eureka), Netflix&#8217;s Service Discovery server and client.
+
+_Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">&#8220;greeting&#8221; repository</a> to follow along with code in this topic._
