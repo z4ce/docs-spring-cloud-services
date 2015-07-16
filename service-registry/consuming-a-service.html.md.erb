@@ -2,6 +2,8 @@
 title: Consuming a Service from a Client Application
 ---
 
+_Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">&#8220;greeting&#8221; repository</a> to follow along with the code in this subtopic._
+
 To consume an application from the Service Registry, again use the ```@EnableDiscoveryClient``` annotation in your Application's configuration class. What's significant to note is that the URL given to getForObject() has a host name of "greeting-service", which is the name for which the service is registered as in Eureka. In this way, the client doesnt need to know the actual URL of the service.
 
 *src/main/java/demo/DemoApplication.java*
