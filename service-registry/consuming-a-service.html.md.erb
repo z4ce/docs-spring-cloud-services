@@ -4,7 +4,7 @@ title: Consuming a Service from a Client Application
 
 _Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">&#8220;greeting&#8221; repository</a> to follow along with the code in this subtopic._
 
-To consume a service which has registered with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency. 
+To consume a service which is registered with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency. 
 
 If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/pom.xml#L14-30">include in `pom.xml`</a>:
 
@@ -96,7 +96,7 @@ The Expedition application is registered with the Service Registry instance as &
     }
 ```
 
-The Camelboy application now responds with a customizable `Greeting` when its `/hello` endpoint is accessed.
+The Camelboy application now responds with a customizable `Greeting` when we access its `/hello` endpoint.
 
 <pre class="terminal">
 $ curl http://camelboy.wise.com/hello

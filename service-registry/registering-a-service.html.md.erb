@@ -66,7 +66,7 @@ The `ExpeditionApplication` class also has <a href="https://github.com/spring-cl
     }
 ```
 
-Set `spring.application.name` and `eureka.instance.hostname` to the values from the application deployment. `eureka.instance.nonSecurePort` must be set for compatibility with Pivotal Cloud Foundry.
+Set `spring.application.name` and `eureka.instance.hostname` to the values from the application deployment. You must also set `eureka.instance.nonSecurePort` for compatibility with Pivotal Cloud Foundry.
 
 <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/resources/application.yml">In `application.yml`</a>:
 
@@ -81,7 +81,7 @@ eureka:
     nonSecurePort: 80
 ```
 
-The application can now be bound to and register with a Service Registry instance. Once it has been bound, restaged and successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
+You can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
 
 <%= image_tag("service-registry/registered-service.png") %>
 

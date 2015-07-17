@@ -2,10 +2,10 @@
 title: Using the Dashboard
 ---
 
-Before any applications are bound to the Service Registry service instance, the Service Registry dashboard will reflect that there are &#8220;No applications registered&#8221;.
+Before you have bound any applications to the Service Registry instance, the Service Registry dashboard will reflect that there are &#8220;No applications registered&#8221;.
 
 <%= image_tag("service-registry/dashboard_empty.png") %>
 
-To see applications listed in the dashboard, bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the <a href="/spring-cloud-services/service-registry/registering-a-service.html">Registering a Service</a> and <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopics). Once an application has been bound to the instance, has been restaged, and has registered with Eureka, the dashboard will display it under **Registered Apps**.
+To see applications listed in the dashboard, bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the <a href="/spring-cloud-services/service-registry/registering-a-service.html">Registering a Service</a> and <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopics). Once you have restaged the application and it has registered with Eureka, the dashboard will display it under **Registered Apps**.
 
 <%= image_tag("service-registry/registered-service.png") %>

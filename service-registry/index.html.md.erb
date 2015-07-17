@@ -8,7 +8,7 @@ Service Registry for Pivotal Cloud Foundry enables your applications to take adv
 
 <%= image_tag("service-registry/service-registry-fig3.png") %>
 
-When a client registers with the Service Registry, it provides metadata about itself, such as its host and port. From then on, the Registry will expect a regular heartbeat message from each service instance. If an instance begins to consistently fail to send the heartbeat, it will be removed from the Registry.
+When a client registers with the Service Registry, it provides metadata about itself, such as its host and port. From then on, the Registry will expect a regular heartbeat message from each service instance. If an instance begins to consistently fail to send the heartbeat, the Service Registry will remove the instance from its registry.
 
 Service Registry for Pivotal Cloud Foundry is based on [Eureka](https://github.com/Netflix/eureka), Netflix&#8217;s Service Discovery server and client.
 
