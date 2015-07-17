@@ -4,6 +4,10 @@ title: Consuming a Service from a Client Application
 
 _Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">&#8220;greeting&#8221; repository</a> to follow along with the code in this subtopic._
 
+Follow the below instructions to consume a service registered with the Service Registry from a Spring application.
+
+## Declaring Dependencies
+
 To consume a service which is registered with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency. 
 
 If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/pom.xml#L14-30">include in `pom.xml`</a>:
@@ -43,7 +47,9 @@ dependencies {
 
 (Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
 
-A consuming application must also <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/src/main/java/camelboy/CamelboyApplication.java#L21-27">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+## Discovering and Consuming a Service
+
+A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/src/main/java/camelboy/CamelboyApplication.java#L21-27">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
