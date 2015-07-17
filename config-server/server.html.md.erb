@@ -2,7 +2,7 @@
 title: The Config Server
 ---
 
-The Config Server serves configurations stored as either Java Properties files or YAML files. The files are stored in a Git or Subversion repository (the _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
+The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git or Subversion repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
 
 <p class='note'><strong>Note</strong>: Config Server for Pivotal Cloud Foundry does not support multiple repositories as configuration sources at this time.</p>
 
@@ -54,7 +54,7 @@ In this example, the configuration source defines configurations for the `myapp`
 }
 ```
 
-```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the server will serve properties from the `v1.0.0` tag. If ```{label}``` is not present in the request, it will serve properties from the default label.  For Git repositories, the default label is &#8220;master&#8221;; for Subversion repositories, it is &#8220;trunk&#8221;. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
+```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label.  For Git repositories, the default label is &#8220;master&#8221;; for Subversion repositories, it is &#8220;trunk&#8221;. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
 
 ## Request Paths ##
 

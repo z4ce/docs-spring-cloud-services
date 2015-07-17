@@ -132,7 +132,7 @@ $ curl https://user:password@configserver.mydomain.com/cook/default
 }
 </pre>
 
-Now you can (e.g.) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. In the <a href="https://github.com/spring-cloud-samples/cook/blob/master/src/main/java/cook/Menu.java">Menu.java</a> class, the value of `special` is read from the `cook.special` configuration property.
+Now you can (e.g.) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/master/src/main/java/cook/Menu.java">The Menu</a> class reads the value of `special` from the `cook.special` configuration property.
 
 ```java
 @RefreshScope
@@ -149,7 +149,7 @@ public class Menu {
 }
 ```
 
-<a href="https://github.com/spring-cloud-samples/cook/blob/master/src/main/java/cook/Application.java">The `Application.java` class</a> is a `@RestController`. It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which is mapped to `/restaurant`.
+<a href="https://github.com/spring-cloud-samples/cook/blob/master/src/main/java/cook/Application.java">The `Application` class</a> is a `@RestController`. It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
 
 ```java
 @RestController
@@ -210,11 +210,11 @@ The sample configuration source <a href="https://github.com/spring-cloud-samples
 }
 ```
 
-As noted in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value given for a property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
+As noted in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
 
 ## Refreshing Application Configuration
 
-<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds a `/refresh` endpoint to the application. You can make a POST request to this endpoint to refresh any `@RefreshScope` beans, and you can use the `@RequestScope` to enable refreshing of properties which were initialized with values provided by the Config Server.
+<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds a `/refresh` endpoint to the application. A POST request to this endpoint will refresh any `@RefreshScope` beans. You can use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
 
 To begin, add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-samples/cook/blob/master/pom.xml#L37-40">add to `pom.xml`</a>:
 
@@ -246,7 +246,7 @@ public class Menu {
   //...
 ```
 
-This means that after values in the configuration source repository are changed, a refresh event triggered on the application will update the `special` on the `Application.java` class&#8217;s `menu`.
+This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class&#8217;s `menu` with a refresh event triggered on the application.
 
 <pre class="terminal">
 $ curl http://cookie.wise.com/restaurant

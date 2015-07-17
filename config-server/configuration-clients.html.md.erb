@@ -2,7 +2,7 @@
 title: Configuration Clients
 ---
 
-Config Server client applications can be written in any language. The interface for retrieving configuration is HTTP, and the endpoints are protected with HTTP Basic authentication.
+Config Server client applications can be written in any language. The interface for retrieving configuration is HTTP, and the endpoints are protected by HTTP Basic authentication.
 
 To get a base URI and credentials for accessing a Config Server instance, a Cloud Foundry application needs to bind to the instance.
 
@@ -56,7 +56,7 @@ System-Provided:
 ...
 </pre>
 
-The following is an example of a request made against the example Git repository outlined in the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic and using the `uri` in the myapp Config Server&#8217;s `credentials` object, with the response returned by the Config Server.
+The following is an example of making a request against the example Git repository outlined in the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic, using the `uri` in the myapp Config Server&#8217;s `credentials` object.
 
 <pre class="terminal">
 $ curl http://user:password@configserver.mydomain.com/myapp/production
@@ -84,13 +84,13 @@ $ curl http://user:password@configserver.mydomain.com/myapp/production
 }
 </pre>
 
-The client application must decide how to interpret a response, such as that in this example, which contains multiple values for the same property. The intent is that the first value in the list should take precedence over the others, so in the above example, the client application should use "Hello Production!" as the value for the property ```hello.message```. Spring applications will do this for you automatically.
+In this example, the Server&#8217;s response contains multiple values for the `hello.message` property. The client application must decide how to interpret such a response. The intent is that the first value in the list should take precedence over the others, so that in the above example, the client application should use "Hello Production!" as the value for ```hello.message```. Spring applications will do this for you automatically.
 
 ### Spring Client Applications ###
 
 A Spring application can use a Config Server as a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html">Property Source</a>. Properties from a Config Server will override those defined locally (e.g. via an `application.yml` in the classpath).
 
-The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see &#8220;Request Paths&#8221; in the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic). Values for the three parameters are derived from the following properties:
+The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see &#8220;Request Paths&#8221; in the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic). It will derive values for these three parameters from the following properties:
 
 * `{application}`: ```spring.cloud.config.name``` or ```spring.application.name```
 * `{profile}`: ```spring.cloud.config.env``` or ```spring.profiles.active```
@@ -102,6 +102,6 @@ These values can be specified in an `application.yml` or `application.properties
 $ cf set-env myapp SPRING_PROFILES_ACTIVE production
 </pre>
 
-In the example `curl` request and response above, a Spring application would give the two Config Server property sources precendece over other property sources. This means that properties in `https://github.com/myorg/configurations/myapp-production.yml` would have precedence over properties in `https://github.com/myorg/configurations/myapp.yml`, which would have precedence over properties in the application&#8217;s other property sources (such as `classpath:application.yml`).
+In the example `curl` request and response above, a Spring application would give the two Config Server property sources precedence over other property sources. This means that properties from `https://github.com/myorg/configurations/myapp-production.yml` would have precedence over properties from `https://github.com/myorg/configurations/myapp.yml`, which would have precedence over properties from the application&#8217;s other property sources (such as `classpath:application.yml`).
 
-For an example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-a-spring-client.html">Writing a Spring Client</a> subtopic.
+For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-a-spring-client.html">Writing a Spring Client</a> subtopic.
