@@ -43,7 +43,7 @@ dependencies {
 
 (Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L15-18">have the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L15-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -81,4 +81,8 @@ eureka:
     nonSecurePort: 80
 ```
 
-The application can now be bound to and register with a Service Registry instance. For information on discovering and consuming registered services, see the <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopic.
+The application can now be bound to and register with a Service Registry instance. Once it has been bound, restaged and successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
+
+<%= image_tag("service-registry/registered-service.png") %>
+
+For information on discovering and consuming registered services, see the <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopic.

@@ -4,7 +4,7 @@ title: Consuming a Service from a Client Application
 
 _Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">&#8220;greeting&#8221; repository</a> to follow along with the code in this subtopic._
 
-To consume an application from a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency. 
+To consume a service which has registered with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency. 
 
 If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/pom.xml#L14-30">include in `pom.xml`</a>:
 
@@ -43,7 +43,7 @@ dependencies {
 
 (Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
 
-A consuming application must also <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/src/main/java/camelboy/CamelboyApplication.java#L21-27">use the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+A consuming application must also <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/src/main/java/camelboy/CamelboyApplication.java#L21-27">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -56,7 +56,7 @@ public class CamelboyApplication {
     //...
 ```
 
-To call a service that has registered with the Service Registry instance, a consuming application uses a URI with a hostname matching the name by which the service has registered with the Registry. This way, the consuming application does not need to know the service application&#8217;s actual URL&#8212;the Registry will take care of finding and routing to the service.
+To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application&#8217;s actual URL&#8212;the Registry will take care of finding and routing to the service.
 
 The Expedition application is registered with the Service Registry instance as &#8220;expedition&#8221;, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/camelboy/src/main/java/camelboy/CamelboyApplication.java#L34-44">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI `http://expedition` to get a greeting message from Expedition.
 

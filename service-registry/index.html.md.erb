@@ -4,11 +4,11 @@ title: Service Registry for Pivotal Cloud Foundry
 
 ## Overview ##
 
-Service Registry for Pivotal Cloud Foundry enables your applications to take advantage of the Service Discovery pattern, one of the key tenets of a microservice-based architecture. Trying to hand-configure each client or adopt some form of convention can be very difficult and brittle. Service Registry allows your applications to dynamically discover and call registered services.
+Service Registry for Pivotal Cloud Foundry enables your applications to take advantage of the Service Discovery pattern, one of the key tenets of a microservice-based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be very difficult and prove to be brittle in production. Instead, the Service Registry allows your applications to dynamically discover and call registered services.
 
 <%= image_tag("service-registry/service-registry-fig3.png") %>
 
-When a client registers with the Service Registry, it provides metadata about itself, such as its host and port. From then on, the Registry receives a heartbeat message from each service instance. If an instance begins to consistently fail to send heartbeat messages, it will be removed from the Registry.
+When a client registers with the Service Registry, it provides metadata about itself, such as its host and port. From then on, the Registry will expect a regular heartbeat message from each service instance. If an instance begins to consistently fail to send the heartbeat, it will be removed from the Registry.
 
 Service Registry for Pivotal Cloud Foundry is based on [Eureka](https://github.com/Netflix/eureka), Netflix&#8217;s Service Discovery server and client.
 
