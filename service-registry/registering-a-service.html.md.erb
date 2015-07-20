@@ -43,9 +43,12 @@ dependencies {
 
 (Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L15-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L5-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+//..
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
