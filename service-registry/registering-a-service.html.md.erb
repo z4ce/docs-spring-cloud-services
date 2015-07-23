@@ -43,12 +43,36 @@ dependencies {
 
 (Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L5-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+You will also need to add `repo.spring.io/libs-snapshot` as a repository.
+
+<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/pom.xml#L59-67">Using Maven</a>:
+
+```xml
+  <repositories>
+    <repository>
+      <id>spring-snapshots</id>
+      <url>https://repo.spring.io/libs-snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+```
+
+<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L31-36">Using Gradle</a>:
 
 ```java
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-//..
+repositories {
+    ...
+    maven {
+        url "https://repo.spring.io/libs-snapshot"
+    }
+}
+```
 
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L15-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+
+```java
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
