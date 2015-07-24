@@ -4,12 +4,12 @@ title: Circuit Breaker Dashboard for Pivotal Cloud Foundry
 
 ## Overview ##
 
-Circuit Breaker Dashboard for Pivotal Cloud Foundry provides Spring applications with an implementation of the Circuit Breaker pattern. Cloud-native architectures are typically composed of multiple layers of distributed services. End-user requests may comprise multiple calls to these services, and if a lower-level service fails, the failure can cascade up to the end user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair. Circuit Breaker Dashboard can help to prevent cascading failures and supply dependent services until the failing service is operable again.
+Circuit Breaker Dashboard for Pivotal Cloud Foundry provides Spring applications with an implementation of the Circuit Breaker pattern. Cloud-native architectures are typically composed of multiple layers of distributed services. End-user requests may comprise multiple calls to these services, and if a lower-level service fails, the failure can cascade up to the end user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair. Using Circuit Breaker Dashboard, you can monitor a service for failure, prevent failures from cascading, and supply dependent services until the failing service is operable again.
 
 <%= image_tag("circuit-breaker/circuit-breaker-fig5.png") %>
 
-The Circuit Breaker watches for failing calls to a service. If failures continue past a certain threshold, the circuit is &#8220;opened&#8221; so that calls fail automatically and are handled by a fallback mechanism until the service has had time to recover.
+When applied to a service, a circuit breaker watches for failing calls to a service. If failures reach a certain threshold, it &#8220;opens&#8221; the circuit and automatically redirects calls to the specified fallback mechanism. This gives the failing service time to recover.
 
-Circuit Breaker Dashboard for Pivotal Cloud Foundry is based on [Hystrix](https://github.com/Netflix/Hystrix), Netflix&#8217;s latency and fault-tolerance library.
+Circuit Breaker Dashboard for Pivotal Cloud Foundry is based on [Hystrix](https://github.com/Netflix/Hystrix), Netflix&#8217;s latency and fault-tolerance library. For more information on Hystrix and on the Circuit Breaker pattern, see <a href="/spring-cloud-services/circuit-breaker/resources.html">Additional Resources</a>.
 
 _Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/guide">&#8220;guide&#8221; repository</a> to follow along with code in this topic._
