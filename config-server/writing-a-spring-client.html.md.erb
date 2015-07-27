@@ -2,7 +2,7 @@
 title: Writing a Spring Client
 ---
 
-_Please refer to the <a href="https://github.com/spring-cloud-samples/cook">&#8220;Cook&#8221; sample application</a> to follow along with the code in this subtopic._
+_Please refer to the <a href="https://github.com/spring-cloud-samples/cook">"Cook" sample application</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to use a Spring Boot application as a client for a Config Server instance.
 
@@ -85,7 +85,7 @@ spring:
     name: cook
 ```
 
-This application will retrieve configuration properties from files named `cook*` in the Config Server&#8217;s configuration source. You can see what configuration(s) the server will return by visiting the URI contained in the application&#8217;s `VCAP_SERVICES` environment variable, appending the application name and a profile name (e.g., for the `default` profile, `/cook/default`).
+This application will retrieve configuration properties from files named `cook*` in the Config Server's configuration source. You can see what configuration(s) the server will return by visiting the URI contained in the application's `VCAP_SERVICES` environment variable, appending the application name and a profile name (e.g., for the `default` profile, `/cook/default`).
 
 <pre class="terminal">
 $ cf env cook
@@ -168,7 +168,7 @@ public class Application {
 
 ## Varying Configurations Based on Profiles ##
 
-You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance&#8217;s configuration source (the Git or Subversion repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
+You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git or Subversion repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
 
 The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/master/manifest.yml">`manifest.yml`</a>.
 
@@ -246,7 +246,7 @@ public class Menu {
   //...
 ```
 
-This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class&#8217;s `menu` with a refresh event triggered on the application.
+This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class's `menu` with a refresh event triggered on the application.
 
 <pre class="terminal">
 $ curl http://cookie.wise.com/restaurant

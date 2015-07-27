@@ -54,7 +54,7 @@ In this example, the configuration source defines configurations for the `myapp`
 }
 ```
 
-```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label.  For Git repositories, the default label is &#8220;master&#8221;; for Subversion repositories, it is &#8220;trunk&#8221;. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
+```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. For Subversion repositories, the default label is **trunk**. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
 
 ## Request Paths ##
 
@@ -72,7 +72,7 @@ A path includes an _application_, a _profile_, and optionally a _label_.
 
 * **Application**: The name of the application. In a Spring application, this will be derived from `spring.application.name` or `spring.cloud.config.name`.
 
-* **Profile**: The name of a profile, or a comma-separated list of profile names. The Config Server&#8217;s concept of a &#8220;profile&#8221; corresponds directly to that of the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/Profile.html">Spring Profile</a>.
+* **Profile**: The name of a profile, or a comma-separated list of profile names. The Config Server's concept of a "profile" corresponds directly to that of the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/Profile.html">Spring Profile</a>.
 
 * **Label**: The name of a version marker in the configuration source (repository). This might be a branch name, a tag name, or a Git commit hash.
 
