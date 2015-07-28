@@ -37,7 +37,7 @@ The Circuit Breaker Dashboard is now ready to be used.
 
 To apply the Circuit Breaker pattern, use the ```@EnableCircuitBreaker``` annotation in your Application's configuration class. You'll also need to annotate any method that could fail with ```@HystrixCommand``` along with a ```fallbackMethod```. ```fallbackMethod```s must be in the same class, and have the same method signature (return type and parameters), as the method that uses it. ```fallbackMethod```s can themselves be annotated with  ```@HystrixCommand``` to create a fallback chain.
 
-Typcially, you'll want to add ```@HystrixCommand``` to methods that call a remote service, but for brevity, here is an example application which will delegate calls to the fallback method if the current minute is an even number.
+Typically, you'll want to add ```@HystrixCommand``` to methods that call a remote service, but for brevity, here is an example application which will delegate calls to the fallback method if the current minute is an even number.
 
 *CircuitBreakerDemo.java*
 
@@ -172,9 +172,9 @@ To see the circuit breaker in action, use curl, JMeter, Apache Bench or similar 
 $ while true; do curl circuit-breaker-example.my-cf.com; done
 ```
 
-Depending on the time, the example app will either respond with ```hello!``` indicating a sucessful service call, or ```goodbye.``` indicating that an Exception was thrown and the fallback method was used.
+Depending on the time, the example app will either respond with ```hello!``` indicating a successful service call, or ```goodbye.``` indicating that an Exception was thrown and the fallback method was used.
 
-When service calls are sucessful, the circuit is closed, and the rate of calls per second and sucessful calls per 10 seconds is indicated.
+When service calls are successful, the circuit is closed, and the rate of calls per second and successful calls per 10 seconds is indicated.
 
 <%= image_tag("circuit-breaker/dashboard-closed.png") %>
 
@@ -182,7 +182,7 @@ When service calls begin to fail, the rate of failed calls is indicated in red.
 
 <%= image_tag("circuit-breaker/dashboard-opening.png") %>
 
-When failures exceed their configured threshold (default of 20 failures in 5 seconds), the circuit is opened. The rate of short circuited calls is indicated in blue; these are calls that are going straight to the fallback method. There are still calls being made to the failing method at a rate of 1 every 5 seconds, as indicated in red; this is necessary to determine if sucessful calls can be made, and if the circuit can be closed.
+When failures exceed their configured threshold (default of 20 failures in 5 seconds), the circuit is opened. The rate of short circuited calls is indicated in blue; these are calls that are going straight to the fallback method. There are still calls being made to the failing method at a rate of 1 every 5 seconds, as indicated in red; this is necessary to determine if successful calls can be made, and if the circuit can be closed.
 
 <%= image_tag("circuit-breaker/dashboard-open.png") %>
 

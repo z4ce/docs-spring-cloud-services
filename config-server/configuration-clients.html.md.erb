@@ -1,0 +1,107 @@
+---
+title: Configuration Clients
+---
+
+Config Server client applications can be written in any language. The interface for retrieving configuration is HTTP, and the endpoints are protected by HTTP Basic authentication.
+
+To get a base URI and credentials for accessing a Config Server instance, a Cloud Foundry application needs to bind to the instance.
+
+## Binding a Service Instance to an Application ##
+
+Using Apps Manager, select an application from the **Applications** list.
+
+<%= image_tag("config-server/1-select-application.png") %>
+
+In the **Services** tab, click the **Bind a Service** button. Select a service from the dropdown list and click **Bind**.
+
+<%= image_tag("config-server/2-bind-service.png") %>
+
+Alternatively, you can use the cf Command Line Interface tool. Run the command `cf bind-service`, specifying the application name and service name.
+
+<pre class="terminal">
+$ cf bind-service myapp config-server
+Binding service config-server to app myapp in org myorg / space outer as user...
+OK
+</pre>
+
+## Configuration Requests and Responses
+
+After the application is bound to the service instance, the application's `VCAP_SERVICES` environment variable will contain an entry under the key ```p-config-server```. You can view the application's environment variables using the cf CLI.
+
+<pre class="terminal">
+$ cf env myapp
+Getting env variables for app myapp in org myorg / space outer as ebenezer...
+OK
+
+System-Provided:
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "uri": "http://user:password@configserver.mydomain.com"
+    },
+    "label": "p-config-server",
+    "name": "config-server",
+    "plan": "standard",
+    "tags": [
+     "configuration",
+     "spring-cloud"
+    ]
+   }
+  ],
+  ...
+ }
+}
+...
+</pre>
+
+The following is an example of making a request against the example Git repository outlined in the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic, using the `uri` in the myapp Config Server's `credentials` object.
+
+<pre class="terminal">
+$ curl http://user:password@configserver.mydomain.com/myapp/production
+
+{
+  "name": "myapp",
+  "profiles": [
+    "production"
+  ],
+  "label": "master",
+  "propertySources": [
+    {
+      "name": "https://github.com/myorg/configurations/myapp-production.yml",
+      "source": {
+        "hello.message": "Hello Production!"
+      }
+    },
+    {
+      "name": "https://github.com/myorg/configurations/myapp.yml",
+      "source": {
+        "hello.message": "Hello Default!"
+      }
+    }
+  ]
+}
+</pre>
+
+In this example, the Server's response contains multiple values for the `hello.message` property. The client application must decide how to interpret such a response. The intent is that the first value in the list should take precedence over the others, so that in the above example, the client application should use "Hello Production!" as the value for ```hello.message```. Spring applications will do this for you automatically.
+
+### Spring Client Applications ###
+
+A Spring application can use a Config Server as a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html">Property Source</a>. Properties from a Config Server will override those defined locally (e.g. via an `application.yml` in the classpath).
+
+The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see "Request Paths" in the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic). It will derive values for these three parameters from the following properties:
+
+* `{application}`: ```spring.cloud.config.name``` or ```spring.application.name```
+* `{profile}`: ```spring.cloud.config.env``` or ```spring.profiles.active```
+* `{label}`: ```spring.cloud.config.label``` if it is defined; otherwise, the Config Server's default label
+
+These values can be specified in an `application.yml` or `application.properties` file on the classpath, via a system property (as in `-Dspring.profiles.active=production`), or (more commonly in Cloud Foundry) via an environment variable.
+
+<pre class="terminal">
+$ cf set-env myapp SPRING_PROFILES_ACTIVE production
+</pre>
+
+In the example `curl` request and response above, a Spring application would give the two Config Server property sources precedence over other property sources. This means that properties from `https://github.com/myorg/configurations/myapp-production.yml` would have precedence over properties from `https://github.com/myorg/configurations/myapp.yml`, which would have precedence over properties from the application's other property sources (such as `classpath:application.yml`).
+
+For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-a-spring-client.html">Writing a Spring Client</a> subtopic.
