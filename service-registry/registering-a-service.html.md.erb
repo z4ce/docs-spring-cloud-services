@@ -2,17 +2,21 @@
 title: Registering a Service
 ---
 
-_Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/0.1.1-BETA">"greeting" repository</a> to follow along with the code in this subtopic._
+
+Follow the below instructions to register a Spring application with the Service Registry.
+
+## Declare Dependencies
 
 To register with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
-If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/pom.xml#L14-30">include in `pom.xml`</a>:
+If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/pom.xml#L14-L30">include in `pom.xml`</a>:
 
 ```xml
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.BUILD-SNAPSHOT</version>
+    <version>1.0.0.M1</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   ...
@@ -24,7 +28,7 @@ If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/m
     ...
 ```
 
-If using Gradle, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L22-43">include in `build.gradle`</a>:
+If using Gradle, <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/build.gradle#L20-L40">include in `build.gradle`</a>:
 
 ```groovy
 dependencyManagement {
@@ -41,11 +45,9 @@ dependencies {
 }
 ```
 
-(Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
+(Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/build.gradle#L5-L13">use of the Gradle dependency management plugin</a>.)
 
-You will also need to add `repo.spring.io/libs-snapshot` as a repository.
-
-<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/pom.xml#L59-67">Using Maven</a>:
+You will also need to add `repo.spring.io/libs-snapshot` as a repository. <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/pom.xml#L53-L61">Using Maven</a>:
 
 ```xml
   <repositories>
@@ -59,7 +61,7 @@ You will also need to add `repo.spring.io/libs-snapshot` as a repository.
   </repositories>
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L31-36">Using Gradle</a>:
+<a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/build.gradle#L29-L34">Using Gradle</a>:
 
 ```java
 repositories {
@@ -70,7 +72,11 @@ repositories {
 }
 ```
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L15-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+The dependencies bring in the Spring Cloud Netflix client library for <a href="https://github.com/Netflix/eureka">Eureka</a>, as well as the Spring Cloud Connectors Cloud Foundry Connector and Spring Cloud Services Connector. See the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> subtopic for more information.
+
+## Identify the Application
+
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -80,7 +86,7 @@ public class ExpeditionApplication {
     //...
 ```
 
-The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L27-31">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
+The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/src/main/java/expedition/ExpeditionApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
 
 ```java
     @RequestMapping("/greeting")
@@ -95,7 +101,7 @@ The `ExpeditionApplication` class also has <a href="https://github.com/spring-cl
 
 Set `spring.application.name` and `eureka.instance.hostname` to the values from the application deployment. You must also set `eureka.instance.nonSecurePort` for compatibility with Pivotal Cloud Foundry.
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/resources/application.yml">In `application.yml`</a>:
+<a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/expedition/src/main/resources/application.yml">In `application.yml`</a>:
 
 ```yml
 spring:
