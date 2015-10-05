@@ -6,7 +6,7 @@ Config Server client applications can be written in any language. The interface 
 
 To get a base URI and credentials for accessing a Config Server instance, a Cloud Foundry application needs to bind to the instance.
 
-## Binding a Service Instance to an Application ##
+## Bind a Service Instance to an Application ##
 
 Using Apps Manager, select an application from the **Applications** list.
 
@@ -49,8 +49,7 @@ System-Provided:
      "spring-cloud"
     ]
    }
-  ],
-  ...
+  ]
  }
 }
 ...
@@ -62,22 +61,22 @@ The following is an example of making a request against the example Git reposito
 $ curl http://user:password@configserver.mydomain.com/myapp/production
 
 {
-  "name": "myapp",
-  "profiles": [
+  "name":"myapp",
+  "profiles":[
     "production"
   ],
-  "label": "master",
-  "propertySources": [
+  "label":"master",
+  "propertySources":[
     {
-      "name": "https://github.com/myorg/configurations/myapp-production.yml",
-      "source": {
-        "hello.message": "Hello Production!"
+      "name":"https://github.com/myorg/configurations/myapp-production.yml",
+      "source":{
+        "hello.message":"Hello Production!"
       }
     },
     {
-      "name": "https://github.com/myorg/configurations/myapp.yml",
-      "source": {
-        "hello.message": "Hello Default!"
+      "name":"https://github.com/myorg/configurations/myapp.yml",
+      "source":{
+        "hello.message":"Hello Default!"
       }
     }
   ]
