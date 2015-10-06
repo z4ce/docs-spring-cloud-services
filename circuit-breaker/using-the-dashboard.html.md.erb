@@ -4,7 +4,7 @@ title: Using the Circuit Breaker Dashboard
 
 To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls.
 
-With the &#8220;Agency&#8221; example application (see the <a href="https://github.com/spring-cloud-samples/traveler">&#8220;traveler&#8221; repository</a>) receiving no load, the dashboard displays the following:
+With the "Agency" example application (see the <a href="https://github.com/spring-cloud-samples/traveler/tree/0.1.1-BETA">"traveler" repository</a>) receiving no load, the dashboard displays the following:
 
 <%= image_tag("circuit-breaker/dashboard-start-ii.png") %>
 
@@ -14,7 +14,7 @@ To see the circuit breaker in action, use curl, <a href="http://jmeter.apache.or
 $ while true; do curl agency.wise.com; done
 </pre>
 
-With the Company application running and available via the Service Registry instance (see the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic), the Agency application responds with a guide name, indicating a successful service call. If you stop Company, Agency will respond with a &#8220;None available&#8221; message, indicating that the call to its `getGuide()` method failed and was redirected to the fallback method.
+With the Company application running and available via the Service Registry instance (see the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic), the Agency application responds with a guide name, indicating a successful service call. If you stop Company, Agency will respond with a "None available" message, indicating that the call to its `getGuide()` method failed and was redirected to the fallback method.
 
 When service calls are succeeding, the circuit is closed, and the dashboard graph shows the rate of calls per second and sucessful calls per 10 seconds.
 
@@ -24,7 +24,7 @@ When calls begin to fail, the graph shows the rate of failed calls in red.
 
 <%= image_tag("circuit-breaker/dashboard-opening-ii.png") %>
 
-When failures exceed the configured threshold (the default is 20 failures in 5 seconds), the breaker opens the circuit. The dashboard shows the rate of short-circuited calls&#8212;calls which are going straight to the fallback method&#8212;in blue. The application is still allowing calls to the failing method at a rate of 1 every 5 seconds, as indicated in red; this is necessary to determine if calls are succeeding again and if the circuit can be closed.
+When failures exceed the configured threshold (the default is 20 failures in 5 seconds), the breaker opens the circuit. The dashboard shows the rate of short-circuited calls---calls which are going straight to the fallback method---in blue. The application is still allowing calls to the failing method at a rate of 1 every 5 seconds, as indicated in red; this is necessary to determine if calls are succeeding again and if the circuit can be closed.
 
 <%= image_tag("circuit-breaker/dashboard-open-ii.png") %>
 

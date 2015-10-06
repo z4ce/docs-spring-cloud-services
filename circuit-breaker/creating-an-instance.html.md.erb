@@ -25,10 +25,12 @@ $ cf marketplace
 Getting services from marketplace in org myorg / space outer as user...
 OK
 
-service                       plans          description
-p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
-p-config-server               standard       Config Server for Spring Cloud Applications
-p-service-registry            standard       Service Registry for Spring Cloud Applications
+service                       plans                     description
+p-circuit-breaker-dashboard   standard                  Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard                  Config Server for Spring Cloud Applications
+p-service-registry            standard                  Service Registry for Spring Cloud Applications
+
+TIP:  Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
 
 $ cf marketplace -s p-circuit-breaker-dashboard
 Getting service plan information for service p-circuit-breaker-dashboard as user...
