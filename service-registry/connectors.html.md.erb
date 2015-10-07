@@ -1,0 +1,49 @@
+---
+title: Spring Cloud Connectors
+---
+
+To connect client applications to the Service Registry, Spring Cloud Services uses the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
+
+## Service Detection
+
+The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Service Registry.
+
+```json
+"p-service-registry": [
+ {
+  "credentials": {
+   "uri": "http://R5KYq8:OAyQ0x4y@eureka-8982c70c-9ad1.wise.com"
+  },
+  "label": "p-service-registry",
+  "name": "service-registry",
+  "plan": "standard",
+  "tags": [
+   "eureka",
+   "discovery",
+   "registry",
+   "spring-cloud"
+  ]
+ }
+]
+```
+
+For each service in the `VCAP_SERVICES` variable, the connector considers the following fields:
+
+* `tags`: Attributes or names of backing technologies behind the service.
+* `label`: The service offering's name (not to be confused with a service _instance's_ name).
+* `credentials.uri`: A URI pertaining to the service instance.
+* `credentials.uris`: URIs pertaining to the service instance.
+
+### Service Registry Detection Criteria
+
+To establish availability of the Service Registry, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
+
+* `tags` including `eureka`
+* `label` beginning with the `eureka` tag
+
+## See Also
+
+For more information about the Spring Cloud Cloud Foundry Connector, see the following:
+
+* [Spring Cloud Cloud Foundry Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html)
+* [Spring Cloud Connectors documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html)
