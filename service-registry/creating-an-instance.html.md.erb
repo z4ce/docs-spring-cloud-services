@@ -24,10 +24,12 @@ $ cf marketplace
 Getting services from marketplace in org myorg / space outer as user...
 OK
 
-service                       plans          description
-p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
-p-config-server               standard       Config Server for Spring Cloud Applications
-p-service-registry            standard       Service Registry for Spring Cloud Applications
+service                       plans                     description
+p-circuit-breaker-dashboard   standard                  Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard                  Config Server for Spring Cloud Applications
+p-service-registry            standard                  Service Registry for Spring Cloud Applications
+
+TIP:  Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
 
 $ cf marketplace -s p-service-registry
 Getting service plan information for service p-service-registry as user...
@@ -59,5 +61,5 @@ It may take a few minutes to provision the service. Once it is ready, you will s
 
 <%= image_tag("service-registry/dashboard.png") %>
 
-The Service Registry instance is now ready to be used. For information on registering a service application, see the <a href="/spring-cloud-services/service-registry/registering-a-service.html">Registering a Service</a> subtopic.
+The Service Registry instance is now ready to be used. For information about registering a service application, see the <a href="/spring-cloud-services/service-registry/registering-a-service.html">Registering a Service</a> subtopic.
 
