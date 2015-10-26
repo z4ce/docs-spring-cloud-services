@@ -1,0 +1,91 @@
+---
+title: Operator Information
+---
+
+See below for information about Spring Cloud Services' deployment model and other information which may be useful in operating its services or client applications.
+
+<a id="service-orchestration-and-instance-management"></a>
+## Service Orchestration and Instance Management
+
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on Pivotal Cloud Foundry. It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services (Config Server, Service Registry, and Circuit Breaker Dashboard) that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+
+<%= image_tag("/spring-cloud-services/images/ops1.png") %>
+
+<a id="the-service-broker"></a>
+### The Service Broker
+
+The service broker is a Spring Boot application deployed in the `system` org to the `p-spring-cloud-services` space.
+
+The broker's functionality is divided between two applications: `spring-cloud-broker`, which implements the Service Broker API ("the Broker application"), and `spring-cloud-broker-worker`, which provisions service instances ("the Worker application"). The two applications communicate using a RabbitMQ queue (see "Broker Services" below).
+
+#### Broker Services
+
+The broker relies on two other Pivotal Cloud Foundry products, MySQL and RabbitMQ, for the following service instances.
+
+* `spring-cloud-broker-db`: A MySQL database used by `spring-cloud-broker`.
+* `spring-cloud-broker-rmq`: A RabbitMQ queue used for communication between the Broker application and the Worker application.
+
+#### UAA Identity Zone
+
+Spring Cloud Services uses the multitenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new identity zone, `p-spring-cloud-services`, for all authorization from Config Server and Service Registry service instances to client applications which possess bindings to such service instances. 
+
+#### UAA Clients
+
+Within the `uaa` identity zone, Spring Cloud Services creates a `p-spring-cloud-services` UAA client for the Broker application and a `p-spring-cloud-services-worker` UAA client for the Worker application. In the `p-spring-cloud-services` identity zone, it creates a `p-spring-cloud-services-worker` UAA client for the Worker application.
+
+In the `uaa` identity zone, it also creates:
+
+* A `eureka-GUID` UAA client per Service Registry service instance.
+* A `hystrix-GUID` UAA client per Circuit Breaker Dashboard service instance.
+
+In the `p-spring-cloud-services` identity zone, it also creates:
+
+* A `config-GUID` UAA client per Config Server service instance.
+* A `eureka-GUID` UAA client per Service Registry service instance.
+
+<a id="service-instances"></a>
+### Service Instances
+
+A service instance is a Spring Boot application deployed by the Worker application in the `p-spring-cloud-services` org to the `instances` space.
+
+A service instance is assigned a GUID at provision time. Backing applications for services include the GUID in their names:
+
+**Config Server**
+
+* `config-GUID`: A [Spring Cloud Config](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html) server application.
+
+**Service Registry**
+
+* `eureka-GUID`: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Eureka server application.
+
+**Circuit Breaker Dashboard**
+
+* `hystrix-GUID`: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Hystrix server application.
+* `turbine-GUID`: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Turbine application.
+* **`p-rabbitmq`**: A [RabbitMQ for PCF](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance.
+
+## Application Health and Status
+
+#### Actuator Endpoints
+
+The service broker applications and backing applications for service instances use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds [a number of endpoints](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) to these applications; in the Spring Cloud Services applications, these are secured and require a username and password. You can obtain the username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry Operations Manager. Click on the Spring Cloud Services tile, and in the **Credentials** tab, copy the **Broker Credentials**.
+
+<%= image_tag("/spring-cloud-services/images/broker-credentials.png") %>
+
+Some Actuator endpoints are summarized below.
+
+| Endpoint | Function                                                                    |
+|----------|-----------------------------------------------------------------------------|
+| <code>env</code>      | Displays profiles, properties, and property sources from the application environment                                                                  |
+| <code>health</code>   | Displays information on the health and status of the application                                                                                      |
+| <code>metrics</code>   | Displays metrics information from the application                                                                                                    |
+| <code>mappings</code>   | Displays list of <code>@RequestMapping</code> paths in the application                                                                              |
+| <code>shutdown</code>   | Allows for graceful shutdown of the application (disabled by default; not enabled in Spring Cloud Services broker or instance-backing applications) |
+
+See the <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints">Endpoints</a> section of the Actuator documentation for the full list of endpoints.
+
+<!---#
+### Application Logs
+-->
+
+
