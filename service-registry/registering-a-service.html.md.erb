@@ -2,75 +2,77 @@
 title: Registering a Service
 ---
 
-_Please refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.0">"greeting" repository</a> to follow along with the code in this subtopic._
 
-To register with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency.
+Follow the below instructions to register a Spring service application with a Service Registry instance.
 
-If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/pom.xml#L14-30">include in `pom.xml`</a>:
+## Declare Dependencies
+
+To register with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
+
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/pom.xml#L14-L58">`pom.xml`</a>:
 
 ```xml
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.BUILD-SNAPSHOT</version>
+    <version>1.0.0.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  ...
+
   <dependencies>
     <dependency>
       <groupId>io.pivotal.spring.cloud</groupId>
       <artifactId>spring-cloud-services-starter-service-registry</artifactId>
     </dependency>
-    ...
-```
+  </dependencies>
 
-If using Gradle, <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L22-43">include in `build.gradle`</a>:
-
-```groovy
-dependencyManagement {
-    imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.M1"
-    }
-}
-
-...
-
-dependencies {
-    ...
-    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
-}
-```
-
-(Note that this will require <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L5-13">use of the Gradle dependency management plugin</a>.)
-
-You will also need to add `repo.spring.io/libs-snapshot` as a repository.
-
-<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/pom.xml#L59-67">Using Maven</a>:
-
-```xml
   <repositories>
     <repository>
-      <id>spring-snapshots</id>
-      <url>https://repo.spring.io/libs-snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+      <id>spring-releases</id>
+      <url>https://repo.spring.io/libs-release</url>
     </repository>
   </repositories>
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/build.gradle#L31-36">Using Gradle</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/build.gradle#L1-L40">`build.gradle`</a>:
 
-```java
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.RELEASE"
+    }
+}
+
+dependencies {
+    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
+}
+
 repositories {
-    ...
     maven {
-        url "https://repo.spring.io/libs-snapshot"
+        url "https://repo.spring.io/libs-release"
     }
 }
 ```
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L15-18">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+The dependencies bring in the Spring Cloud Netflix client library for <a href="https://github.com/Netflix/eureka">Eureka</a>, as well as the Spring Cloud Connectors Cloud Foundry Connector and Spring Cloud Services Connector. See the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> subtopic for more information.
+
+<p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
+
+## Identify and Register the Application
+
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -80,7 +82,7 @@ public class ExpeditionApplication {
     //...
 ```
 
-The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/java/expedition/ExpeditionApplication.java#L27-31">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
+The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/java/expedition/ExpeditionApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
 
 ```java
     @RequestMapping("/greeting")
@@ -93,23 +95,99 @@ The `ExpeditionApplication` class also has <a href="https://github.com/spring-cl
     }
 ```
 
-Set `spring.application.name` and `eureka.instance.hostname` to the values from the application deployment. You must also set `eureka.instance.nonSecurePort` for compatibility with Pivotal Cloud Foundry.
-
-<a href="https://github.com/spring-cloud-samples/greeting/blob/master/expedition/src/main/resources/application.yml">In `application.yml`</a>:
+Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
   application:
     name: ${vcap.application.name}
-
-eureka:
-  instance:
-    hostname: ${vcap.application.uris[0]}
-    nonSecurePort: 80
 ```
 
-You can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
+Optionally, you may also specify the registration method that you wish to use for the application, using the `spring.cloud.services.registrationMethod` property. It can take either of two values:
 
-<%= image_tag("service-registry/registered-service.png") %>
+* ```route```: The application will be registered using its Cloud Foundry route.
+* ```direct```: The application will be registered using its host IP and port.
 
-For information on discovering and consuming registered services, see the <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopic.
+The default value for the ```registrationMethod``` property is ```route```. You may also provide configuration using properties under ```eureka.instance```, such as ```eureka.instance.hostname``` and ```eureka.instance.nonSecurePort``` (see the [Spring Cloud Netflix documentation](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html#_service_discovery_eureka_clients)); if you do, those properties will override the value of ```registrationMethod```.
+
+See below for information about the ```route``` and ```direct``` registration methods.
+
+### Route Registration
+
+An application deployed to Pivotal Cloud Foundry can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```application_uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
+
+```json
+{
+ "VCAP_APPLICATION": {
+  "application_name": "expedition",
+  "application_uris": [
+   "expedition.wise.com"
+  ],
+```
+
+Requests from client applications to this registered application go through the Pivotal Cloud Foundry Router, and the Router provides load balancing between the clients and registered applications.
+
+<!---
+```java
+// TODO: diagram showing Router use?
+```
+-->
+
+This registration method is compatible with all deployments of Pivotal Cloud Foundry.
+
+### Direct Registration
+
+An application running on Pivotal Cloud Foundry is provided with an externally-accessible IP address and port, which are made available in two environment variables: ```CF_INSTANCE_IP``` and ```CF_INSTANCE_PORT```. If you specify the ```direct``` registration method, the application will be registered with the Service Registry instance using this IP address and port.
+
+Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
+
+This registration method is only compatible with Pivotal Cloud Foundry version 1.5 or higher. In Pivotal Cloud Foundry Operations Manager, within the **Pivotal Elastic Runtime** tile's **Security Config**, the "Enable cross-container traffic within each DEA" or "Enable cross-container traffic" option must be enabled.
+
+### Specify a Registration Method
+
+If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
+
+```yml
+spring:
+  application:
+    name: ${vcap.application.name}
+  cloud:
+    services:
+      registrationMethod: route
+```
+
+As mentioned above, the ```route``` method is the default; it will be used if you do not specify ```registrationMethod```.
+
+With the ```spring.application.name``` property set, you can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
+
+<%= image_tag("service-registry/registered_service.png") %>
+
+For information about discovering and consuming registered services, see the <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopic.
+
+<a id="disable-http-basic-auth"></a>
+## Disable HTTP Basic Authentication
+
+The Spring Cloud Services Starters for Service Registry has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
+
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In `application.yml`:
+
+```yml
+security:
+  basic:
+    enabled: false
+```
+
+You might make this setting specific to a profile (such as the `dev` profile if you want Basic authentication disabled only for development):
+
+```yml
+---
+
+spring:
+  profiles: dev
+
+security:
+  basic:
+    enabled: false
+```
+
+For more information, see ["Security" in the Spring Boot Reference Guide](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security).
