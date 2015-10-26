@@ -1,0 +1,34 @@
+---
+title: Release Notes for Spring Cloud Services on Pivotal Cloud Foundry
+---
+
+Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
+
+### 1.0.0
+
+**Release Date: 26th October 2015**
+
+Features included in this release:
+
+* General Availability release
+
+Known issues:
+
+* [Feign](https://github.com/Netflix/feign) clients require [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/) version 1.0.4. This release of Spring Cloud Services depends on Spring Cloud Netflix version 1.0.3. If you wish to use a Feign client with a Spring Cloud Services service instance, you must manually override the version of Spring Cloud Netflix used by your application.
+<br/> <br/>
+    Using Gradle:
+
+    ```groovy
+    ext {
+        spring-cloud-netflix.version = "1.0.4.RELEASE"
+    }
+    ```
+
+    Using Maven:
+
+    ```xml
+    <properties>
+        <!-- override the managed versions of Spring Cloud Netflix dependencies -->
+        <spring-cloud-netflix.version>1.0.4.RELEASE</spring-cloud-netflix.version>
+    </properties> 
+    ```
