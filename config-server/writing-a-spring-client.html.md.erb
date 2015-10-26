@@ -2,83 +2,80 @@
 title: Writing a Spring Client
 ---
 
-_Please refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/0.1.1-BETA">"Cook" sample application</a> to follow along with the code in this subtopic._
+_Refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/1.0.0">"Cook" sample application</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to use a Spring Boot application as a client for a Config Server instance.
 
 ## Declare Dependencies ##
 
-To use your Spring application as a Config Server client, you must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-config-client` as a dependency.
+To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-release` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
 
-If using Maven, <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/pom.xml#L14-L30">include in `pom.xml`</a>:
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/pom.xml#L14-L68">`pom.xml`</a>:
 
 ```xml
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.M1</version>
+    <version>1.0.0.RC3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  ...
+
   <dependencies>
     <dependency>
       <groupId>io.pivotal.spring.cloud</groupId>
       <artifactId>spring-cloud-services-starter-config-client</artifactId>
     </dependency>
-    ...
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>spring-release</id>
+      <url>https://repo.spring.io/libs-release</url>
+    </repository>
+  </repositories>
 ```
 
-If using Gradle, <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/build.gradle#L20-L48">include in `build.gradle`</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/build.gradle#L1-L43">`build.gradle`</a>:
 
-```java
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.M1"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.RC3"
     }
 }
 
-...
-
 dependencies {
-...
     compile("io.pivotal.spring.cloud:spring-cloud-services-starter-config-client")
-...
 }
-```
 
-(This will require <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/build.gradle#L5-L13">use of the Gradle dependency management plugin</a>.)
-
-You will also need to add `repo.spring.io/libs-snapshot` as a repository. <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/pom.xml#L70-L76">Using Maven</a>:
-
-```xml
-    <repository>
-      <id>spring-snapshot</id>
-      <url>https://repo.spring.io/libs-snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-```
-
-<a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/build.gradle#L29-L40">Using Gradle</a>:
-
-```java
 repositories {
-...
     maven {
-        url "https://repo.spring.io/libs-snapshot"
+        url "https://repo.spring.io/libs-release"
     }
     ...
 }
 ```
 
-The dependencies bring in the Spring Cloud Config Server client library as well as the Spring Cloud Connectors Cloud Foundry Connector and Spring Cloud Services Connector. See the <a href="/spring-cloud-services/config-server/connectors.html">Spring Cloud Connectors</a> subtopic for more information.
+The dependencies bring in the Spring Cloud Config Server client library, as well as the Spring Cloud Connectors Cloud Foundry Connector and Spring Cloud Services Connector. See the <a href="/spring-cloud-services/config-server/connectors.html">Spring Cloud Connectors</a> subtopic for more information.
+
+<p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Config Client starter will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
 ## Use Configuration Values ##
 
 When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic). You can declare the application name in `application.properties` or `application.yml`.
 
-<a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/src/main/resources/application.yml">In `application.yml`</a>:
+In <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -86,53 +83,9 @@ spring:
     name: cook
 ```
 
-This application will retrieve configuration properties from files named `cook*` in the Config Server's configuration source. You can see what configuration(s) the server will return by visiting the URI contained in the application's `VCAP_SERVICES` environment variable, appending the application name and a profile name (e.g., for the `default` profile, `/cook/default`).
+This application will use a path with the application name `cook`, so the Config Server will look in its configuration source for files whose names begin with `cook`, and return configuration properties from those files.
 
-<pre class="terminal">
-$ cf env cook
-Getting env variables for app cook in org myorg / space outer as user...
-OK
-
-System-Provided:
-{
- "VCAP_SERVICES": {
-  "p-config-server": [
-   {
-    "credentials": {
-     "uri": "http://user:password@configserver.mydomain.com"
-    },
-    "label": "p-config-server",
-    "name": "config-server",
-    "plan": "standard",
-    "tags": [
-     "configuration",
-     "spring-cloud"
-    ]
-   }
-  ]
- }
-}
-...
-
-$ curl https://user:password@configserver.mydomain.com/cook/default
-{
-  "name":"cook",
-  "profiles":[
-    "default"
-  ],
-  "label":"master",
-  "propertySources":[
-    {
-      "name":"https://github.com/spring-cloud-samples/cook-config/cook.properties",
-      "source":{
-          "cook.special":"Pickled Cactus"
-      }
-    }
-  ]
-}
-</pre>
-
-Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/src/main/java/cook/Menu.java">The `Menu`</a> class reads the value of `special` from the `cook.special` configuration property.
+Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/java/cook/Menu.java">The Menu</a> class reads the value of `special` from the `cook.special` configuration property.
 
 ```java
 @RefreshScope
@@ -149,7 +102,7 @@ public class Menu {
 }
 ```
 
-<a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/src/main/java/cook/Application.java">The `Application` class</a> is a `@RestController`. It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
+<a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
 
 ```java
 @RestController
@@ -170,7 +123,7 @@ public class Application {
 
 You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git or Subversion repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
 
-The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/manifest.yml">`manifest.yml`</a>.
+The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/manifest.yml">`manifest.yml`</a>.
 
 ```yml
 applications:
@@ -182,7 +135,7 @@ applications:
       SPRING_PROFILES_ACTIVE: production
 ```
 
-The sample configuration source <a href="https://github.com/spring-cloud-samples/cook-config">cook-config</a> contains the files `cook.properties` and `cook-production.properties`. With the active profile set to `production` as in `manifest.yml` above, the application will make a request of the Config Server using the path `/cook/production`, and the Config Server will return both `cook-production.properties` (the profile-specific configuration) and `cook.properties` (the default configuration).
+The sample configuration source <a href="https://github.com/spring-cloud-samples/cook-config">cook-config</a> contains the files `cook.properties` and `cook-production.properties`. With the active profile set to `production` as in `manifest.yml` above, the application will make a request of the Config Server using the path `/cook/production`, and the Config Server will return properties from both `cook-production.properties` (the profile-specific configuration) and `cook.properties` (the default configuration):
 
 ```
 {
@@ -212,11 +165,12 @@ The sample configuration source <a href="https://github.com/spring-cloud-samples
 
 As noted in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
 
-## Refresh Application Configuration
+<a id="view-client-application-configuration"></a>
+## View Client Application Configuration
 
-<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds a `/refresh` endpoint to the application. A POST request to this endpoint will refresh any `@RefreshScope` beans. You can use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
+<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds an `env` endpoint to the application and maps it to `/env`. This endpoint displays the application's profiles and property sources from the Spring ```ConfigurableEnvironment```. (See ["Endpoints"](http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html) in the "Spring Boot Actuator" section of the Spring Boot Reference Guide.) In the case of an application which is bound to a Config Server service instance, `env` will display properties provided by the instance.
 
-To begin, add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/pom.xml#L37-L40">add to `pom.xml`</a>:
+To use Actuator, you must add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/pom.xml#L37-L40">add to `pom.xml`</a>:
 
 ```xml
 <dependency>
@@ -225,13 +179,44 @@ To begin, add the `spring-boot-starter-actuator` dependency to your project. If 
 </dependency>
 ```
 
-If using Gradle, <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/build.gradle#L44">add to `build.gradle`</a>:
+If using Gradle, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/build.gradle#L40">add to `build.gradle`</a>:
 
 ```groovy
 compile("org.springframework.boot:spring-boot-starter-actuator")
 ```
 
-The `Menu.java` class is <a href="https://github.com/spring-cloud-samples/cook/blob/0.1.1-BETA/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
+You can now visit `/env` to see the application environment's properties (the below example has been edited for brevity):
+
+<pre class="terminal">
+$ curl http://cookie.wise.com/env
+{
+  "applicationConfig: [classpath:/application.yml]": {
+      "spring.application.name": "cook"
+  },
+  "applicationConfig: [file:./application.yml]#dev": {
+      "management.security.enabled": false,
+      "security.basic.enabled": false,
+      "spring.profiles": "dev"
+  },
+  "configService:https://github.com/spring-cloud-samples/cook-config/cook.properties": {
+      "cook.special": "Pickled Cactus"
+  },
+  "defaultProperties": {
+      "spring.application.name": "bootstrap"
+  },
+  "profiles": [
+      "dev",
+      "cloud"
+  ],
+  # ...
+</pre>
+
+<a id="refresh-client-application-configuration"></a>
+## Refresh Client Application Configuration
+
+Spring Boot Actuator also adds a `refresh` endpoint to the application. This endpoint is mapped to `/refresh`, and a POST request to the `refresh` endpoint refreshes any beans which are annotated with `@RefreshScope`. You can thus use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
+
+The `Menu.java` class is <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
 
 ```java
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -246,19 +231,51 @@ public class Menu {
   //...
 ```
 
-This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class's `menu` with a refresh event triggered on the application.
+This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class's `menu` with a refresh event triggered on the application:
 
 <pre class="terminal">
 $ curl http://cookie.wise.com/restaurant
-Today's special is: Fried Salamander
+Today's special is: Pickled Cactus
 
 $ git commit -am "new special"
 [master 3c9ff23] new special
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+$ git push
+
 $ curl -X POST http://cookie.wise.com/refresh
 ["cook.special"]
 
 $ curl http://cookie.wise.com/restaurant
-Today's special is: Pickled Cactus
+Today's special is: Birdfeather Tea
 </pre>
+
+<a id="disable-http-basic-auth"></a>
+## Disable HTTP Basic Authentication
+
+The Spring Cloud Config Client starter has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
+
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In `application.yml`:
+
+```yml
+security:
+  basic:
+    enabled: false
+```
+
+You might make this setting specific to a profile (such as the `dev` profile if you want Basic authentication disabled only for development):
+
+```yml
+---
+
+spring:
+  profiles: dev
+
+security:
+  basic:
+    enabled: false
+```
+
+For more information, see ["Security" in the Spring Boot Reference Guide](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security).
+
+<p class='note'><strong>Note</strong>: Because of the Spring Security dependency, HTTPS Basic authentication will also be enabled for Spring Boot Actuator endpoints. If you wish to disable that as well, you must also set the <code>management.security.enabled</code> property to <code>false</code>. See <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-customizing-management-server-port">"Customizing the management server port" in the Spring Boot Reference Guide</a>.</p>

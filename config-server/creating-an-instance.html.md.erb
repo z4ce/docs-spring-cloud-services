@@ -6,12 +6,12 @@ You can create a Config Server instance using either the cf Command Line Interfa
 
 ## Using the cf CLI
 
-Begin by targeting the correct space.
+Begin by targeting the correct org and space.
 
 <pre class="terminal">
 $ cf target -o myorg -s outer
 
-API endpoint:   https://api.mydomain.com (API version: 2.25.0)
+API endpoint:   https://api.wise.com (API version: 2.25.0)
 User:           user
 Org:            myorg
 Space:          outer
@@ -24,10 +24,12 @@ $ cf marketplace
 Getting services from marketplace in org myorg / space outer as user...
 OK
 
-service                       plans          description
-p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
-p-config-server               standard       Config Server for Spring Cloud Applications
-p-service-registry            standard       Service Registry for Spring Cloud Applications
+service                       plans                     description
+p-circuit-breaker-dashboard   standard   Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard   Config Server for Spring Cloud Applications
+p-service-registry            standard   Service Registry for Spring Cloud Applications
+
+TIP:  Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
 
 $ cf marketplace -s p-config-server
 Getting service plan information for service p-config-server as user...
@@ -55,7 +57,7 @@ Select the desired plan for the new service.
 
    <%= image_tag("config-server/2_select_plan.png") %>
 
-Provide a name for the service (e.g., "My Config Server"). Click the **Add** button.
+Provide a name for the service (for example, "My Config Server"). Click the **Add** button.
 
    <%= image_tag("config-server/3_instance_name.png") %>
 
@@ -63,7 +65,13 @@ In the **Services** list, click the **Manage** link under the listing for the ne
 
    <%= image_tag("config-server/4_service_successfully_added.png") %>
 
-Select a **Configuration Source** and enter a repository URI. You can also enter a branch name as the default "label" to be used if the Config Server receives a request without a label. Hit the **Submit** button.
+   Select a **Configuration Source** and enter a repository URI. You can also enter:
+   
+   * A branch name as the default "label" to be used if the Config Server receives a request without a label.
+   * A pattern or comma-separated list of patterns which specifies how the Config Server searches for configuration-containing subdirectories in the repository (see the [Spring Cloud Config documentation on `searchPaths`](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_git_backend)).
+   * A username and password if the repository uses HTTP Basic authentication.
+   
+   When the appropriate fields are filled out, hit the **Submit** button.
 
    <%= image_tag("config-server/dashboard.png") %>
 

@@ -2,7 +2,7 @@
 title: Spring Cloud Connectors
 ---
 
-To connect client applications to the Circuit Breaker Dashboard, Spring Cloud Services uses the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
+To connect client applications to the Circuit Breaker Dashboard, Spring Cloud Services uses [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html), including the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
 
 ## Service Detection
 
@@ -43,11 +43,80 @@ For each service in the `VCAP_SERVICES` variable, the connector considers the fo
 To establish availability of the Circuit Breaker Dashboard, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
 
 * `tags` including `hystrix-amqp`
-* `label` beginning with the `hystrix-amqp` tag
+
+## Application Configuration
+
+In a Spring Boot application which is bound to a Circuit Breaker Dashboard service instance, the connector automatically creates a Spring RabbitMQ ```ConnectionFactory``` bean using the credentials from the service binding. [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Hystrix AMQP uses this ```ConnectionFactory``` to send metrics from the client application to a [Netflix Turbine](https://github.com/Netflix/Turbine) application, which aggregates metrics from all applications bound to the Circuit Breaker Dashboard service instance for display on the Hystrix dashboard.
+
+In a Spring application which is not using Spring Boot and will be bound to a Circuit Breaker Dashboard service instance, you can explicitly invoke the Spring Service Connector's service scanning to cause the Hystrix AMQP ```ConnectionFactory``` to be created and registered. See ["Scanning for Services" in the Spring Cloud Spring Service Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-spring-service-connector.html#_scanning_for_services).
+
+If you do not want to use either Spring Boot autoconfiguration or service scanning, or if you want to further customize the ```ConnectionFactory``` in Java code, you can explicitly invoke the Spring Cloud Connectors configuration for Circuit Breaker Dashboard:
+
+```java
+@Configuration
+public class CloudConfig extends CloudConnectorsConfig {
+  @Bean
+  public ConnectionFactory hystrixConnectionFactory() {
+    return connectionFactory().hystrixConnectionFactory();
+  }
+}
+```
+
+<a id="configure-multiple-rabbitmq-connections"></a>
+### Configure Multiple RabbitMQ Connections
+
+If your client application uses RabbitMQ for its own business purposes and is bound to a Pivotal Cloud Foundry RabbitMQ service instance as well as to a Spring Cloud Services Circuit Breaker Dashboard service instance, then the client application may need two Spring RabbitMQ ```ConnectionFactory``` beans. In this scenario, Spring Cloud needs to know which ```ConnectionFactory``` bean to use for Hystrix AMQP.
+
+To facilitate this, use explicit Spring Cloud Connectors configuration to create the two ```ConnectionFactory``` beans, using annotations to make the purpose of each bean clear.
+
+One configuration class uses the ```@HystrixConnectionFactory``` annotation to cause Hystrix AMQP to use the created ```ConnectionFactory```:
+
+```java
+@Configuration
+public class CloudConfig extends CloudConnectorsConfig {
+  @Bean
+  @HystrixConnectionFactory
+  public ConnectionFactory hystrixConnectionFactory() {
+    return connectionFactory().hystrixConnectionFactory();
+  }
+}
+```
+
+Another configuration class uses the ```@Primary``` annotation to cause your client application code to use the created ```ConnectionFactory```:
+
+```java
+@Configuration
+public class RabbitConfig extends AbstractCloudConfig {
+  @Bean
+  @Primary
+  public ConnectionFactory rabbitConnectionFactory() {
+    return connectionFactory().rabbitConnectionFactory();
+  }
+
+  @Bean
+  public DirectExchange exchange() {
+    return new DirectExchange("sample-exchange", true, false);
+  }
+
+  @Bean
+  public Queue queue() {
+    return new Queue("sample-queue");
+  }
+
+  @Bean
+  public Binding sampleBinding() {
+    Queue queue = queue();
+    DirectExchange exchange = exchange();
+    return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
+  }
+}
+```
 
 ## See Also
 
-For more information about the Spring Cloud Cloud Foundry Connector, see the following:
+For more information about Spring Cloud Connectors, see the following:
 
 * [Spring Cloud Cloud Foundry Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html)
+* [Spring Cloud Spring Service Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-spring-service-connector.html)
 * [Spring Cloud Connectors documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html)
+* [Spring Cloud Connectors for Spring Cloud Services on Pivotal Cloud Foundry](https://github.com/pivotal-cf/spring-cloud-services-connector)

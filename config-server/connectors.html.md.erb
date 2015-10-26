@@ -2,7 +2,7 @@
 title: Spring Cloud Connectors
 ---
 
-To connect client applications to the Config Server, Spring Cloud Services uses the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
+To connect client applications to the Config Server, Spring Cloud Services uses [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html), including the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
 
 ## Service Detection
 
@@ -37,11 +37,15 @@ For each service in the `VCAP_SERVICES` variable, the connector considers the fo
 To establish availability of the Config Server, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
 
 * `tags` including `configuration`
-* `label` beginning with the `configuration` tag
+
+## Application Configuration
+
+When the connector detects a Config Server service instance which has been bound to the application, it will automatically set the ```spring.cloud.config.uri``` property in the client application's environment, using the URL provided in the Config Server instance's ```credentials``` object. The connector will also set additional security properties to allow the client application to access the Config Server service instance.
 
 ## See Also
 
-For more information about the Spring Cloud Cloud Foundry Connector, see the following:
+For more information about Spring Cloud Connectors, see the following:
 
 * [Spring Cloud Cloud Foundry Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html)
 * [Spring Cloud Connectors documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html)
+* [Spring Cloud Connectors for Spring Cloud Services on Pivotal Cloud Foundry](https://github.com/pivotal-cf/spring-cloud-services-connector)

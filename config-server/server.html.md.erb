@@ -6,6 +6,7 @@ The Config Server serves configurations stored as either Java Properties files o
 
 <p class='note'><strong>Note</strong>: Config Server for Pivotal Cloud Foundry does not support multiple repositories as configuration sources at this time.</p>
 
+<a id="configuration-sources"></a>
 ## Configuration Sources
 
 A configuration source contains one or more configuration files used by one or more applications. Each file applies to an _application_ and can optionally apply to a specific _profile_ and / or _label_.
@@ -30,32 +31,9 @@ https://github.com/myorg/configurations
 
 In this example, the configuration source defines configurations for the `myapp` application. The Server will serve different properties for `myapp` depending on the values of `{profile}` and `{label}` in the request path. If the ```{profile}``` is neither ```development``` nor ```production```, the server will return the properties in `myapp.yml`, or if the ```{profile}``` is ```production```, the server will return the properties in both `myapp-production.yml` and `myapp.yml`.
 
-```
-{
-  "name": "myapp",
-  "profiles": [
-    "production"
-  ],
-  "label": "master",
-  "propertySources": [
-    {
-      "name": "https://github.com/myorg/configurations/myapp-production.yml",
-      "source": {
-        "hello.message": "Hello Production!"
-      }
-    },
-    {
-      "name": "https://github.com/myorg/configurations/myapp.yml",
-      "source": {
-        "hello.message": "Hello Default!"
-      }
-    }
-  ]
-}
-```
-
 ```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. For Subversion repositories, the default label is **trunk**. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
 
+<a id="request-paths"></a>
 ## Request Paths ##
 
 Configuration requests use one of the following path formats:
@@ -74,6 +52,6 @@ A path includes an _application_, a _profile_, and optionally a _label_.
 
 * **Profile**: The name of a profile, or a comma-separated list of profile names. The Config Server's concept of a "profile" corresponds directly to that of the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/Profile.html">Spring Profile</a>.
 
-* **Label**: The name of a version marker in the configuration source (repository). This might be a branch name, a tag name, or a Git commit hash.
+* **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash.
 
 For information about using a Cloud Foundry application as a Config Server client, see the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic.

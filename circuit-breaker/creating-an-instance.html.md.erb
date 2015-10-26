@@ -6,15 +6,15 @@ You can create a Circuit Breaker Dashboard instance using either the cf Command 
 
 ## Using the cf CLI
 
-Begin by targeting the correct space.
+Begin by targeting the correct org and space.
 
 <pre class="terminal">
-$ cf target -o myorg -s outer
+$ cf target -o myorg -s development
 
-API endpoint:   https://api.mydomain.com (API version: 2.25.0)
+API endpoint:   https://api.wise.com (API version: 2.25.0)
 User:           user
 Org:            myorg
-Space:          outer
+Space:          development
 </pre>
 
 If desired, view plan details for the Circuit Breaker Dashboard product using  
@@ -22,7 +22,7 @@ If desired, view plan details for the Circuit Breaker Dashboard product using
 
 <pre class="terminal">
 $ cf marketplace
-Getting services from marketplace in org myorg / space outer as user...
+Getting services from marketplace in org myorg / space development as user...
 OK
 
 service                       plans                     description
@@ -44,7 +44,7 @@ Run `cf create-service`, specifying the service, plan name, and instance name.
 
 <pre class="terminal">
 $ cf create-service p-circuit-breaker-dashboard standard circuit-breaker-dashboard
-Creating service instance circuit-breaker-dashboard in org myorg / space outer as user...
+Creating service instance circuit-breaker-dashboard in org myorg / space development as user...
 OK
 </pre>
 
@@ -58,7 +58,7 @@ Select the desired plan for the new service.
 
    <%= image_tag("circuit-breaker/2_select_plan.png") %>
 
-Provide a name for the service (e.g. &#8220;circuit-breaker-dashboard&#8221;). Click the **Add** button.  
+Provide a name for the service (for example, "My Circuit Breaker Dashboard"). Click the **Add** button.  
 
    <%= image_tag("circuit-breaker/3_instance_name.png") %>
 
@@ -66,8 +66,6 @@ In the **Services** list, click the **Manage** link under the listing for the ne
 
    <%= image_tag("circuit-breaker/4_service_successfully_added.png") %>
 
-It may take a few minutes to provision the dashboard. Once it is ready, you will see a **Circuit Breaker Dashboard** link. Click the link to enter the instance dashboard.
-
-   <%= image_tag("circuit-breaker/dashboard.png") %>
+It may take a few minutes to provision the service; while it is being provisioned, you will see a "The service instance is initializing" message. Once the instance is ready, its dashboard will load automatically.
 
 The Circuit Breaker Dashboard instance is now ready to be used. For an example of using a circuit breaker in an application, see the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic.

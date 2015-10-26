@@ -2,82 +2,77 @@
 title: Consuming a Service from a Client Application
 ---
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/0.1.1-BETA">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.0">"greeting" repository</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to consume a service registered with the Service Registry from a Spring application.
 
 ## Declare Dependencies
 
-To consume a service which is registered with a Service Registry instance, a Spring application must include the `spring-cloud-services-starter-parent` BOM and declare `spring-cloud-services-starter-service-registry` as a dependency.
+To consume a service which is registered with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
-If using Maven, <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/pom.xml#L14-L30">include in `pom.xml`</a>:
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/pom.xml#L14-L58">`pom.xml`</a>:
 
 ```xml
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.M1</version>
+    <version>1.0.0.RC3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  ...
+
   <dependencies>
     <dependency>
       <groupId>io.pivotal.spring.cloud</groupId>
       <artifactId>spring-cloud-services-starter-service-registry</artifactId>
     </dependency>
-    ...
-```
+  </dependencies>
 
-If using Gradle, <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/build.gradle#L20-L40">include in `build.gradle`</a>:
-
-```groovy
-dependencyManagement {
-    imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.M1"
-    }
-}
-
-...
-
-dependencies {
-    ...
-    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
-}
-```
-
-(This will require <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/build.gradle#L5-L13">use of the Gradle dependency management plugin</a>.)
-
-You will also need to add `repo.spring.io/libs-snapshot` as a repository. <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/pom.xml#L53-L61">Using Maven</a>:
-
-```xml
   <repositories>
     <repository>
-      <id>spring-snapshots</id>
-      <url>https://repo.spring.io/libs-snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+      <id>spring-releases</id>
+      <url>https://repo.spring.io/libs-release</url>
     </repository>
   </repositories>
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/build.gradle#L29-L34">Using Gradle</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/build.gradle#L1-L40">`build.gradle`</a>:
 
-```java
-repositories {
-    ...
-    maven {
-        url "https://repo.spring.io/libs-snapshot"
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
     }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.RC3"
+    }
+}
+
+repositories {
+    maven {
+        url "https://repo.spring.io/libs-release"
+    }
+}
+
+dependencies {
+    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
 }
 ```
 
 The dependencies bring in the Spring Cloud Netflix client library for <a href="https://github.com/Netflix/eureka">Eureka</a>, as well as the Spring Cloud Connectors Cloud Foundry Connector and Spring Cloud Services Connector. See the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> subtopic for more information.
 
+<p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
 ## Discover and Consume a Service
 
-A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -92,7 +87,9 @@ public class CamelboyApplication {
 
 To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application's actual URL; the Registry will take care of finding and routing to the service.
 
-The Expedition application is registered with the Service Registry instance as **expedition**, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/src/main/java/camelboy/CamelboyApplication.java#L31-L41">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI `http://expedition` to get a greeting message from Expedition.
+The Expedition application is registered with the Service Registry instance as ```expedition```, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L31-L41">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI ```http://expedition``` to get a greeting message from Expedition.
+
+<p class='note'><strong>Important</strong>: If your Pivotal Cloud Foundry installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
@@ -111,7 +108,7 @@ The Expedition application is registered with the Service Registry instance as *
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/0.1.1-BETA/camelboy/src/main/java/camelboy/CamelboyApplication.java#L43-L56">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L43-L56">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
 
 ```java
     private static class Greeting {
@@ -130,7 +127,7 @@ The Expedition application is registered with the Service Registry instance as *
     }
 ```
 
-The Camelboy application now responds with a customizable `Greeting` when we access its `/hello` endpoint.
+The Camelboy application now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
 
 <pre class="terminal">
 $ curl http://camelboy.wise.com/hello
@@ -139,3 +136,31 @@ Hello, camel boy!
 $ curl http://camelboy.wise.com/hello?name=Jesse
 Hello, Jesse!
 </pre>
+
+<a id="disable-http-basic-auth"></a>
+## Disable HTTP Basic Authentication
+
+The Spring Cloud Services Starter for Service Registry has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
+
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In `application.yml`:
+
+```yml
+security:
+  basic:
+    enabled: false
+```
+
+You might make this setting specific to a profile (such as the `dev` profile if you want Basic authentication disabled only for development):
+
+```yml
+---
+
+spring:
+  profiles: dev
+
+security:
+  basic:
+    enabled: false
+```
+
+For more information, see ["Security" in the Spring Boot Reference Guide](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security).

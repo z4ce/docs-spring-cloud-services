@@ -4,7 +4,7 @@ title: Using the Circuit Breaker Dashboard
 
 To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls.
 
-With the "Agency" example application (see the <a href="https://github.com/spring-cloud-samples/traveler/tree/0.1.1-BETA">"traveler" repository</a>) receiving no load, the dashboard displays the following:
+With the &#8220;Agency&#8221; example application (see the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.0">&#8220;traveler&#8221; repository</a>) receiving no load, the dashboard displays the following:
 
 <%= image_tag("circuit-breaker/dashboard-start-ii.png") %>
 
@@ -28,4 +28,4 @@ When failures exceed the configured threshold (the default is 20 failures in 5 s
 
 <%= image_tag("circuit-breaker/dashboard-open-ii.png") %>
 
-With the circuit breaker in place on its `getGuide()` method, the Agency example application never returns a status code other than `200` to the requester.
+With the circuit breaker in place on its `getGuide()` method, the Agency example application never returns an HTTP status code other than `200` to the requester.
