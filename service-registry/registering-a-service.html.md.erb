@@ -70,6 +70,23 @@ The dependencies bring in the Spring Cloud Netflix client library for <a href="h
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
+<a id="self-signed-ssl-certificate"></a>
+## Add Self-Signed SSL Certificate to JVM Truststore ##
+
+Spring Cloud Services uses HTTPS for all client-to-service communication. If your Pivotal Cloud Foundry installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your application can be registered with a Service Registry service instance.
+
+Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your application to the API endpoint of your Elastic Runtime instance:
+
+<pre class="terminal">
+$ cf set-env expedition CF_TARGET https://api.wise.com
+Setting env variable 'CF_TARGET' to 'https://api.wise.com' for app expedition in org myorg / space outer as user...
+OK
+TIP: Use 'cf restage' to ensure your env variable changes take effect
+$ cf restage expedition
+</pre>
+
+As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
+
 ## Identify and Register the Application
 
 Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
