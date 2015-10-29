@@ -41,7 +41,7 @@ You will need to update your Elastic Runtime SSL certificate as described in the
 
 ## Self-Signed Certificates and Internal CAs
 
-If your Pivotal Cloud Foundry installation is using its own self-signed SSL certificate, you must enable the "Trust Self-Signed Certificates" option in the **Security Config** tab of the Pivotal Elastic Runtime tile's **Settings**. See [Step 6 of the Configuring Elastic Runtime for vSphere and vCloud topic](http://docs.pivotal.io/pivotalcf/customizing/config-er-vmware.html#security-config) in the Pivotal Cloud Foundry documentation.
+If your Pivotal Cloud Foundry installation is using its own self-signed SSL certificate, you must enable the "Trust Self-Signed Certificates" or "Ignore SSL certificate verification" option in the **Security Config** tab of the Pivotal Elastic Runtime tile's **Settings**. See [Step 6 of the Configuring Elastic Runtime for vSphere and vCloud topic](http://docs.pivotal.io/pivotalcf/customizing/config-er-vmware.html#security-config) in the Pivotal Cloud Foundry documentation.
 
 If you are using an SSL certificate signed by an internal root Certificate Authority (CA), you must use a custom Java buildpack whose keystore contains the internal root CA. Follow the below steps to create and add the custom buildpack.
 
