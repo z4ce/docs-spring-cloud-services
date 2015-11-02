@@ -8,7 +8,7 @@ Follow the below instructions to use a circuit breaker in a Spring application w
 
 ## Declare Dependencies
 
-Your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-circuit-breaker` as a dependency.
+Your Spring application must have `repo.spring.io/libs-milestone` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-circuit-breaker` as a dependency.
 
 If using Maven, include in <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.0/agency/pom.xml#L14-L71">`pom.xml`</a>:
 
@@ -29,8 +29,8 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/trav
 
   <repositories>
     <repository>
-      <id>spring-releases</id>
-      <url>https://repo.spring.io/libs-release</url>
+      <id>spring-milestone</id>
+      <url>https://repo.spring.io/libs-milestone</url>
     </repository>
   </repositories>
 ```
@@ -57,7 +57,7 @@ dependencyManagement {
 
 repositories {
     maven {
-        url "https://repo.spring.io/libs-release"
+        url "https://repo.spring.io/libs-milestone"
     }
 }
 

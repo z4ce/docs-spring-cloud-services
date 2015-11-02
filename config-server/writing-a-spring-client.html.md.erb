@@ -8,7 +8,7 @@ Follow the below instructions to use a Spring Boot application as a client for a
 
 ## Declare Dependencies ##
 
-To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-release` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
+To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-milestone` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
 
 If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/pom.xml#L14-L68">`pom.xml`</a>:
 
@@ -29,8 +29,8 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook
 
   <repositories>
     <repository>
-      <id>spring-release</id>
-      <url>https://repo.spring.io/libs-release</url>
+      <id>spring-milestone</id>
+      <url>https://repo.spring.io/libs-milestone</url>
     </repository>
   </repositories>
 ```
@@ -61,7 +61,7 @@ dependencies {
 
 repositories {
     maven {
-        url "https://repo.spring.io/libs-release"
+        url "https://repo.spring.io/libs-milestone"
     }
     ...
 }
