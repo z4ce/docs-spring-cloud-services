@@ -8,7 +8,7 @@ Follow the below instructions to register a Spring service application with a Se
 
 ## Declare Dependencies
 
-To register with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
+To register with a Service Registry instance, your Spring application must have `repo.spring.io/libs-milestone` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
 If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/pom.xml#L14-L58">`pom.xml`</a>:
 
@@ -29,8 +29,8 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/gree
 
   <repositories>
     <repository>
-      <id>spring-releases</id>
-      <url>https://repo.spring.io/libs-release</url>
+      <id>spring-milestone</id>
+      <url>https://repo.spring.io/libs-milestone</url>
     </repository>
   </repositories>
 ```
@@ -61,7 +61,7 @@ dependencies {
 
 repositories {
     maven {
-        url "https://repo.spring.io/libs-release"
+        url "https://repo.spring.io/libs-milestone"
     }
 }
 ```
