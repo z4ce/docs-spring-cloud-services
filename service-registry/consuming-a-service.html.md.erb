@@ -73,7 +73,7 @@ The dependencies bring in the Spring Cloud Netflix client library for <a href="h
 <a id="self-signed-ssl-certificate"></a>
 ## Add Self-Signed SSL Certificate to JVM Truststore ##
 
-Spring Cloud Services uses HTTPS for all client-to-service communication. If your Pivotal Cloud Foundry installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can use a Service Registry service instance to discover a service application.
+Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can use a Service Registry service instance to discover a service application.
 
 Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
 
@@ -106,7 +106,7 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 The Expedition application is registered with the Service Registry instance as ```expedition```, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L31-L41">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI ```http://expedition``` to get a greeting message from Expedition.
 
-<p class='note'><strong>Important</strong>: If your Pivotal Cloud Foundry installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
+<p class='note'><strong>Important</strong>: If your <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)

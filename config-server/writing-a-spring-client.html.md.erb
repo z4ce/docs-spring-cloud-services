@@ -74,7 +74,7 @@ The dependencies bring in the Spring Cloud Config Server client library, as well
 <a id="self-signed-ssl-certificate"></a>
 ## Add Self-Signed SSL Certificate to JVM Truststore ##
 
-Spring Cloud Services uses HTTPS for all client-to-service communication. If your Pivotal Cloud Foundry installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can consume properties from a Config Server service instance.
+Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can consume properties from a Config Server service instance.
 
 Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
 

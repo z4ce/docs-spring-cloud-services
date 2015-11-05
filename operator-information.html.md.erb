@@ -7,7 +7,7 @@ See below for information about Spring Cloud Services' deployment model and othe
 <a id="service-orchestration-and-instance-management"></a>
 ## Service Orchestration and Instance Management
 
-Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on Pivotal Cloud Foundry. It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services (Config Server, Service Registry, and Circuit Breaker Dashboard) that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services (Config Server, Service Registry, and Circuit Breaker Dashboard) that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
 
 <%= image_tag("/spring-cloud-services/images/ops1.png") %>
 
@@ -20,14 +20,14 @@ The broker's functionality is divided between two applications: `spring-cloud-br
 
 #### Broker Services
 
-The broker relies on two other Pivotal Cloud Foundry products, MySQL and RabbitMQ, for the following service instances.
+The broker relies on two other Pivotal Cloud Foundry&reg; products, MySQL and RabbitMQ, for the following service instances.
 
 * `spring-cloud-broker-db`: A MySQL database used by `spring-cloud-broker`.
 * `spring-cloud-broker-rmq`: A RabbitMQ queue used for communication between the Broker application and the Worker application.
 
 #### UAA Identity Zone
 
-Spring Cloud Services uses the multitenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new identity zone, `p-spring-cloud-services`, for all authorization from Config Server and Service Registry service instances to client applications which possess bindings to such service instances. 
+Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new identity zone, `p-spring-cloud-services`, for all authorization from Config Server and Service Registry service instances to client applications which possess bindings to such service instances. 
 
 #### UAA Clients
 
@@ -68,7 +68,7 @@ A service instance is assigned a GUID at provision time. Backing applications fo
 
 #### Actuator Endpoints
 
-The service broker applications and backing applications for service instances use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds [a number of endpoints](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) to these applications; in the Spring Cloud Services applications, these are secured and require a username and password. You can obtain the username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry Operations Manager. Click on the Spring Cloud Services tile, and in the **Credentials** tab, copy the **Broker Credentials**.
+The service broker applications and backing applications for service instances use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds [a number of endpoints](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) to these applications; in the Spring Cloud Services applications, these are secured and require a username and password. You can obtain the username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry&reg; Operations Manager. Click on the Spring Cloud Services tile, and in the **Credentials** tab, copy the **Broker Credentials**.
 
 <%= image_tag("/spring-cloud-services/images/broker-credentials.png") %>
 

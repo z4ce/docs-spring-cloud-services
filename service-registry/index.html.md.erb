@@ -1,15 +1,15 @@
 ---
-title: Service Registry for Pivotal Cloud Foundry
+title: Service Registry for Pivotal Cloud Foundry&reg;
 ---
 
 ## Overview ##
 
-Service Registry for Pivotal Cloud Foundry provides your applications with an implementation of the Service Discovery pattern, one of the key tenets of a microservice-based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, your applications can use the Service Registry to dynamically discover and call registered services.
+Service Registry for [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) provides your applications with an implementation of the Service Discovery pattern, one of the key tenets of a microservice-based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, your applications can use the Service Registry to dynamically discover and call registered services.
 
 <%= image_tag("service-registry/service-registry-fig3.png") %>
 
 When a client registers with the Service Registry, it provides metadata about itself, such as its host and port. The Registry expects a regular heartbeat message from each service instance. If an instance begins to consistently fail to send the heartbeat, the Service Registry will remove the instance from its registry.
 
-Service Registry for Pivotal Cloud Foundry is based on [Eureka](https://github.com/Netflix/eureka), Netflix's Service Discovery server and client. For more information about Eureka and about the Service Discovery pattern, see <a href="/spring-cloud-services/service-registry/resources.html">Additional Resources</a>.
+Service Registry for Pivotal Cloud Foundry&reg; is based on [Eureka](https://github.com/Netflix/eureka), Netflix's Service Discovery server and client. For more information about Eureka and about the Service Discovery pattern, see <a href="/spring-cloud-services/service-registry/resources.html">Additional Resources</a>.
 
 _Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.0">"greeting" repository</a> to follow along with code in this topic._
