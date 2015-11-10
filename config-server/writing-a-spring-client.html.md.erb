@@ -138,7 +138,7 @@ public class Application {
 
 ## Vary Configurations Based on Profiles ##
 
-You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git or Subversion repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
+You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
 
 The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/manifest.yml">`manifest.yml`</a>.
 
