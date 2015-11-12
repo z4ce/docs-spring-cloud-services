@@ -2,7 +2,7 @@
 title: The Config Server
 ---
 
-The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git or Subversion repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
+The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
 
 <p class='note'><strong>Note</strong>: Config Server for <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> does not support multiple repositories as configuration sources at this time.</p>
 
@@ -31,7 +31,7 @@ https://github.com/myorg/configurations
 
 In this example, the configuration source defines configurations for the `myapp` application. The Server will serve different properties for `myapp` depending on the values of `{profile}` and `{label}` in the request path. If the ```{profile}``` is neither ```development``` nor ```production```, the server will return the properties in `myapp.yml`, or if the ```{profile}``` is ```production```, the server will return the properties in both `myapp-production.yml` and `myapp.yml`.
 
-```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. For Subversion repositories, the default label is **trunk**. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
+```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> subtopic).
 
 <a id="request-paths"></a>
 ## Request Paths ##
