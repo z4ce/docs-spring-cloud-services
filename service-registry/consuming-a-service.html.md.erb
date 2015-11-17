@@ -6,7 +6,7 @@ _Refer to the sample applications in the <a href="https://github.com/spring-clou
 
 Follow the below instructions to consume a service registered with the Service Registry from a Spring application.
 
-## Declare Dependencies
+## <a id="declare-dependencies"></a>Declare Dependencies
 
 To consume a service which is registered with a Service Registry instance, your Spring application must have `repo.spring.io/libs-milestone` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
@@ -70,8 +70,7 @@ The dependencies bring in the Spring Cloud Netflix client library for <a href="h
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
-<a id="self-signed-ssl-certificate"></a>
-## Add Self-Signed SSL Certificate to JVM Truststore ##
+## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
 
 Spring Cloud Services uses HTTPS for all client-to-service communication. If your Pivotal Cloud Foundry installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can use a Service Registry service instance to discover a service application.
 
@@ -87,7 +86,7 @@ $ cf restage camelboy
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
 
-## Discover and Consume a Service
+## <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
 
 A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
@@ -154,8 +153,7 @@ $ curl http://camelboy.wise.com/hello?name=Jesse
 Hello, Jesse!
 </pre>
 
-<a id="disable-http-basic-auth"></a>
-## Disable HTTP Basic Authentication
+## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
 
 The Spring Cloud Services Starter for Service Registry has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
 
