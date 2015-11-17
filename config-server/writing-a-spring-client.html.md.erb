@@ -6,7 +6,7 @@ _Refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/1.0.0">
 
 Follow the below instructions to use a Spring Boot application as a client for a Config Server instance.
 
-## Declare Dependencies ##
+## <a id="declare-dependencies"></a>Declare Dependencies
 
 To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-milestone` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
 
@@ -71,8 +71,7 @@ The dependencies bring in the Spring Cloud Config Server client library, as well
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Config Client starter will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
-<a id="self-signed-ssl-certificate"></a>
-## Add Self-Signed SSL Certificate to JVM Truststore ##
+## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
 
 Spring Cloud Services uses HTTPS for all client-to-service communication. If your Pivotal Cloud Foundry installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can consume properties from a Config Server service instance.
 
@@ -88,7 +87,7 @@ $ cf restage cook
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
 
-## Use Configuration Values ##
+## <a id="use-configuration-values"></a>Use Configuration Values
 
 When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic). You can declare the application name in `application.properties` or `application.yml`.
 
@@ -136,7 +135,7 @@ public class Application {
     //...
 ```
 
-## Vary Configurations Based on Profiles ##
+## <a id="vary-configurations-based-on-profiles"></a>Vary Configurations Based on Profiles
 
 You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git or Subversion repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
 
@@ -182,8 +181,7 @@ The sample configuration source <a href="https://github.com/spring-cloud-samples
 
 As noted in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
 
-<a id="view-client-application-configuration"></a>
-## View Client Application Configuration
+## <a id="view-client-application-configuration"></a>View Client Application Configuration
 
 <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds an `env` endpoint to the application and maps it to `/env`. This endpoint displays the application's profiles and property sources from the Spring ```ConfigurableEnvironment```. (See ["Endpoints"](http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html) in the "Spring Boot Actuator" section of the Spring Boot Reference Guide.) In the case of an application which is bound to a Config Server service instance, `env` will display properties provided by the instance.
 
@@ -228,8 +226,7 @@ $ curl http://cookie.wise.com/env
   # ...
 </pre>
 
-<a id="refresh-client-application-configuration"></a>
-## Refresh Client Application Configuration
+## <a id="refresh-client-application-configuration"></a>Refresh Client Application Configuration
 
 Spring Boot Actuator also adds a `refresh` endpoint to the application. This endpoint is mapped to `/refresh`, and a POST request to the `refresh` endpoint refreshes any beans which are annotated with `@RefreshScope`. You can thus use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
 
@@ -267,8 +264,7 @@ $ curl http://cookie.wise.com/restaurant
 Today's special is: Birdfeather Tea
 </pre>
 
-<a id="disable-http-basic-auth"></a>
-## Disable HTTP Basic Authentication
+## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
 
 The Spring Cloud Config Client starter has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
 
