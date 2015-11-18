@@ -2,7 +2,7 @@
 title: Writing a Spring Client
 ---
 
-_Refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/1.0.0">"Cook" sample application</a> to follow along with the code in this subtopic._
+_Refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/1.0.1">"Cook" sample application</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to use a Spring Boot application as a client for a Config Server instance.
 
@@ -10,7 +10,7 @@ Follow the below instructions to use a Spring Boot application as a client for a
 
 To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-release` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
 
-If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/pom.xml#L14-L68">`pom.xml`</a>:
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/pom.xml#L14-L68">`pom.xml`</a>:
 
 ```xml
   <parent>
@@ -35,7 +35,7 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook
   </repositories>
 ```
 
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/build.gradle#L1-L43">`build.gradle`</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/build.gradle#L1-L43">`build.gradle`</a>:
 
 ```groovy
 buildscript {
@@ -91,7 +91,7 @@ As the output from the ```cf set-env``` command suggests, restage the applicatio
 
 When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic). You can declare the application name in `application.properties` or `application.yml`.
 
-In <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+In <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -101,7 +101,7 @@ spring:
 
 This application will use a path with the application name `cook`, so the Config Server will look in its configuration source for files whose names begin with `cook`, and return configuration properties from those files.
 
-Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/java/cook/Menu.java">The Menu</a> class reads the value of `special` from the `cook.special` configuration property.
+Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/src/main/java/cook/Menu.java">The Menu</a> class reads the value of `special` from the `cook.special` configuration property.
 
 ```java
 @RefreshScope
@@ -118,7 +118,7 @@ public class Menu {
 }
 ```
 
-<a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
+<a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
 
 ```java
 @RestController
@@ -139,7 +139,7 @@ public class Application {
 
 You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git or Subversion repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
 
-The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/manifest.yml">`manifest.yml`</a>.
+The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/manifest.yml">`manifest.yml`</a>.
 
 ```yml
 applications:
@@ -185,7 +185,7 @@ As noted in the <a href="/spring-cloud-services/config-server/configuration-clie
 
 <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds an `env` endpoint to the application and maps it to `/env`. This endpoint displays the application's profiles and property sources from the Spring ```ConfigurableEnvironment```. (See ["Endpoints"](http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html) in the "Spring Boot Actuator" section of the Spring Boot Reference Guide.) In the case of an application which is bound to a Config Server service instance, `env` will display properties provided by the instance.
 
-To use Actuator, you must add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/pom.xml#L37-L40">add to `pom.xml`</a>:
+To use Actuator, you must add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/pom.xml#L37-L40">add to `pom.xml`</a>:
 
 ```xml
 <dependency>
@@ -194,7 +194,7 @@ To use Actuator, you must add the `spring-boot-starter-actuator` dependency to y
 </dependency>
 ```
 
-If using Gradle, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/build.gradle#L40">add to `build.gradle`</a>:
+If using Gradle, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/build.gradle#L40">add to `build.gradle`</a>:
 
 ```groovy
 compile("org.springframework.boot:spring-boot-starter-actuator")
@@ -230,7 +230,7 @@ $ curl http://cookie.wise.com/env
 
 Spring Boot Actuator also adds a `refresh` endpoint to the application. This endpoint is mapped to `/refresh`, and a POST request to the `refresh` endpoint refreshes any beans which are annotated with `@RefreshScope`. You can thus use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
 
-The `Menu.java` class is <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
+The `Menu.java` class is <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.1/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
 
 ```java
 import org.springframework.cloud.context.config.annotation.RefreshScope;

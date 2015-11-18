@@ -2,7 +2,7 @@
 title: Consuming a Service from a Client Application
 ---
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.0">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.1">"greeting" repository</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to consume a service registered with the Service Registry from a Spring application.
 
@@ -10,7 +10,7 @@ Follow the below instructions to consume a service registered with the Service R
 
 To consume a service which is registered with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
-If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/pom.xml#L14-L58">`pom.xml`</a>:
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/pom.xml#L14-L58">`pom.xml`</a>:
 
 ```xml
   <parent>
@@ -35,7 +35,7 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/gree
   </repositories>
 ```
 
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/build.gradle#L1-L40">`build.gradle`</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/build.gradle#L1-L40">`build.gradle`</a>:
 
 ```groovy
 buildscript {
@@ -88,7 +88,7 @@ As the output from the ```cf set-env``` command suggests, restage the applicatio
 
 ## <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
 
-A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -117,7 +117,7 @@ ribbon:
   IsSecure: false
 ```
 
-The Expedition application is registered with the Service Registry instance as ```expedition```, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L31-L41">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI ```http://expedition``` to get a greeting message from Expedition.
+The Expedition application is registered with the Service Registry instance as ```expedition```, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L31-L41">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI ```http://expedition``` to get a greeting message from Expedition.
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
@@ -136,7 +136,7 @@ The Expedition application is registered with the Service Registry instance as `
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/camelboy/src/main/java/camelboy/CamelboyApplication.java#L43-L56">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L43-L56">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
 
 ```java
     private static class Greeting {
@@ -169,7 +169,7 @@ Hello, Jesse!
 
 If you wish to use [Feign](https://github.com/Netflix/feign) to consume a service that is registered with a Service Registry instance, you must declare ```spring-cloud-starter-feign``` as a dependency. Spring Cloud Netflix's Feign support had [a bug](https://github.com/spring-cloud/spring-cloud-netflix/issues/441) which was fixed in its version 1.0.4; however, Spring Cloud Services currently depends on Spring Cloud Netflix version 1.0.3. You will therefore also have to manually override the managed versions of the Spring Cloud Netflix dependencies.
 
-If using Maven, include in [```pom.xml```](https://github.com/spring-cloud-samples/greeting/blob/1.0.0/feign-camelboy/pom.xml#L21-L37):
+If using Maven, include in [```pom.xml```](https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/pom.xml#L21-L37):
 
 ```xml
   <properties>
@@ -185,7 +185,7 @@ If using Maven, include in [```pom.xml```](https://github.com/spring-cloud-sampl
   </dependencies>
 ```
 
-If using Gradle, include in [```build.gradle```](https://github.com/spring-cloud-samples/greeting/blob/1.0.0/feign-camelboy/build.gradle#L11-L43):
+If using Gradle, include in [```build.gradle```](https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/build.gradle#L11-L43):
 
 ```groovy
 ext["spring-cloud-netflix.version"] = "1.0.4.RELEASE"
@@ -195,7 +195,7 @@ dependencies {
 }
 ```
 
-Your consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. To have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation. In the Camelboy application, the ```CamelboyApplication``` class contains an ```ExpeditionClient``` interface, which is a Feign client for the Expedition application.
+Your consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. To have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation. In the Camelboy application, the ```CamelboyApplication``` class contains an ```ExpeditionClient``` interface, which is a Feign client for the Expedition application.
 
 ```java
 @SpringBootApplication
@@ -225,7 +225,7 @@ ribbon:
   IsSecure: false
 ```
 
-The Expedition application is registered with the Service Registry instance as ```expedition```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L52-L56">```ExpeditionClient``` interface</a> uses the base URI ```http://expedition```. The interface declares one method, ```greeting()```, which accesses the Expedition application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
+The Expedition application is registered with the Service Registry instance as ```expedition```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L52-L56">```ExpeditionClient``` interface</a> uses the base URI ```http://expedition```. The interface declares one method, ```greeting()```, which accesses the Expedition application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
 
 ```java
     @FeignClient("http://expedition")
@@ -235,7 +235,7 @@ The Expedition application is registered with the Service Registry instance as `
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L37-L50">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L37-L50">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
 
 ```java
     private static class Greeting {
@@ -254,7 +254,7 @@ The Expedition application is registered with the Service Registry instance as `
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```ExpeditionClient``` to get a greeting.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```ExpeditionClient``` to get a greeting.
 
 ```java
     @RequestMapping(value = "/hello", method = GET)

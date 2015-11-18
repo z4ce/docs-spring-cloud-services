@@ -2,7 +2,7 @@
 title: Registering a Service
 ---
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.0">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.1">"greeting" repository</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to register a Spring service application with a Service Registry instance.
 
@@ -10,7 +10,7 @@ Follow the below instructions to register a Spring service application with a Se
 
 To register with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
-If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/pom.xml#L14-L58">`pom.xml`</a>:
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/pom.xml#L14-L58">`pom.xml`</a>:
 
 ```xml
   <parent>
@@ -35,7 +35,7 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/gree
   </repositories>
 ```
 
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/build.gradle#L1-L40">`build.gradle`</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/build.gradle#L1-L40">`build.gradle`</a>:
 
 ```groovy
 buildscript {
@@ -90,7 +90,7 @@ As the output from the ```cf set-env``` command suggests, restage the applicatio
 <a id="identify-and-register-the-application"></a>
 ## Identify and Register the Application
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -100,7 +100,7 @@ public class ExpeditionApplication {
     //...
 ```
 
-The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/java/expedition/ExpeditionApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
+The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/java/expedition/ExpeditionApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
 
 ```java
     @RequestMapping("/greeting")
@@ -113,7 +113,7 @@ The `ExpeditionApplication` class also has <a href="https://github.com/spring-cl
     }
 ```
 
-Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -163,7 +163,7 @@ This registration method is only compatible with Pivotal Cloud Foundry version 1
 
 ### Specify a Registration Method
 
-If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
+If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
 
 ```yml
 spring:
