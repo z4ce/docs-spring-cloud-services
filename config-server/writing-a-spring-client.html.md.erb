@@ -8,7 +8,7 @@ Follow the below instructions to use a Spring Boot application as a client for a
 
 ## <a id="declare-dependencies"></a>Declare Dependencies
 
-To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-milestone` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
+To use your Spring application as a Config Server client, you must add `repo.spring.io/libs-release` as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-config-client` as a dependency.
 
 If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.0/pom.xml#L14-L68">`pom.xml`</a>:
 
@@ -16,7 +16,7 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.RC3</version>
+    <version>1.0.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -29,8 +29,8 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/cook
 
   <repositories>
     <repository>
-      <id>spring-milestone</id>
-      <url>https://repo.spring.io/libs-milestone</url>
+      <id>spring-release</id>
+      <url>https://repo.spring.io/libs-release</url>
     </repository>
   </repositories>
 ```
@@ -51,7 +51,7 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.RC3"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.1.RELEASE"
     }
 }
 
@@ -61,7 +61,7 @@ dependencies {
 
 repositories {
     maven {
-        url "https://repo.spring.io/libs-milestone"
+        url "https://repo.spring.io/libs-release"
     }
     ...
 }

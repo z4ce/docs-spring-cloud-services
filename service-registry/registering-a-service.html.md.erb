@@ -8,7 +8,7 @@ Follow the below instructions to register a Spring service application with a Se
 
 ## Declare Dependencies
 
-To register with a Service Registry instance, your Spring application must have `repo.spring.io/libs-milestone` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
+To register with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
 
 If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.0/expedition/pom.xml#L14-L58">`pom.xml`</a>:
 
@@ -16,7 +16,7 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/gree
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.RC3</version>
+    <version>1.0.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -29,8 +29,8 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/gree
 
   <repositories>
     <repository>
-      <id>spring-milestone</id>
-      <url>https://repo.spring.io/libs-milestone</url>
+      <id>spring-release</id>
+      <url>https://repo.spring.io/libs-release</url>
     </repository>
   </repositories>
 ```
@@ -51,7 +51,7 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.RC3"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.1.RELEASE"
     }
 }
 
@@ -61,7 +61,7 @@ dependencies {
 
 repositories {
     maven {
-        url "https://repo.spring.io/libs-milestone"
+        url "https://repo.spring.io/libs-release"
     }
 }
 ```
