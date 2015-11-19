@@ -2,7 +2,7 @@
 title: Using a Circuit Breaker
 ---
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.0">&#8220;traveler&#8221; repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.1">&#8220;traveler&#8221; repository</a> to follow along with the code in this subtopic._
 
 Follow the below instructions to use a circuit breaker in a Spring application with a Circuit Breaker Dashboard service instance.
 
@@ -10,13 +10,13 @@ Follow the below instructions to use a circuit breaker in a Spring application w
 
 Your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-circuit-breaker` as a dependency.
 
-If using Maven, include in <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.0/agency/pom.xml#L14-L71">`pom.xml`</a>:
+If using Maven, include in <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/pom.xml#L14-L71">`pom.xml`</a>:
 
 ```xml
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.0.RC3</version>
+    <version>1.0.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -29,13 +29,13 @@ If using Maven, include in <a href="https://github.com/spring-cloud-samples/trav
 
   <repositories>
     <repository>
-      <id>spring-releases</id>
+      <id>spring-release</id>
       <url>https://repo.spring.io/libs-release</url>
     </repository>
   </repositories>
 ```
 
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.0/agency/build.gradle#L1-L41">`build.gradle`</a>:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/build.gradle#L1-L41">`build.gradle`</a>:
 
 ```groovy
 buildscript {
@@ -51,7 +51,7 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.0.RC3"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.1.RELEASE"
     }
 }
 
@@ -70,7 +70,7 @@ The dependencies bring in the Spring Cloud Netflix client library for [Hystrix](
 
 ## Apply the Circuit Breaker Pattern
 
-To work with a Circuit Breaker Dashboard instance, your application must <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.0/agency/src/main/java/agency/AgencyApplication.java#L7-L15">include the ```@EnableCircuitBreaker``` annotation on a configuration class</a>.
+To work with a Circuit Breaker Dashboard instance, your application must <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/src/main/java/agency/AgencyApplication.java#L7-L15">include the ```@EnableCircuitBreaker``` annotation on a configuration class</a>.
 
 ```java
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -84,7 +84,7 @@ public class AgencyApplication {
     //...
 ```
 
-To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.0/agency/src/main/java/agency/TravelAgent.java#L17-L20">annotate the method with ```@HystrixCommand```</a>, giving the annotation the name of a ```fallbackMethod```.
+To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/src/main/java/agency/TravelAgent.java#L17-L20">annotate the method with ```@HystrixCommand```</a>, giving the annotation the name of a ```fallbackMethod```.
 
 ```java
     @HystrixCommand(fallbackMethod = "getBackupGuide")
@@ -95,7 +95,7 @@ To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud
 
 The `getGuide()` method uses a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">`RestTemplate`</a> to obtain a guide name from another application called Company, which is registered with a Service Registry instance. (See the <a href="/spring-cloud-services/service-registry/index.html">Service Registry documentation</a>, specifically the <a href="/spring-cloud-services/service-registry/consuming-a-service.html">Consuming a Service</a> subtopic.) The method thus relies on the Company application to return a response, and if the Company application fails to do so, calls to `getGuide()` will fail. When the failures exceed the threshold, the breaker on `getGuide()` will open the circuit.
 
-While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.0/agency/src/main/java/agency/TravelAgent.java#L22-L24">`getBackupGuide()`</a>.
+While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/src/main/java/agency/TravelAgent.java#L22-L24">`getBackupGuide()`</a>.
 
 ```java
     String getBackupGuide() {
