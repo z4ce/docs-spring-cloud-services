@@ -72,7 +72,7 @@ The dependencies bring in the Spring Cloud Netflix client library for <a href="h
 
 ## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
 
-Spring Cloud Services uses HTTPS for all client-to-service communication. If your Pivotal Cloud Foundry installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can use a Service Registry service instance to discover a service application.
+Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can use a Service Registry service instance to discover a service application.
 
 Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
 
@@ -103,7 +103,7 @@ public class CamelboyApplication {
 
 To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application's actual URL; the Registry will take care of finding and routing to the service.
 
-<p class='note'><strong>Important</strong>: If your Pivotal Cloud Foundry installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
+<p class='note'><strong>Important</strong>: If your <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
 
 By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/registering-a-service.html#identify-and-register-the-application">Identify and Register the Application</a> section of the <a href="/spring-cloud-services/service-registry/registering-a-service.html">Registering a Service</a> subtopic), you have two options:
 

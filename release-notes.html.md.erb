@@ -1,8 +1,19 @@
 ---
-title: Release Notes for Spring Cloud Services on Pivotal Cloud Foundry
+title: Release Notes for Spring Cloud Services on Pivotal Cloud Foundry&reg;
 ---
 
-Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
+Release notes for [Spring Cloud Services for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/p-spring-cloud-services)
+
+### 1.0.1
+
+**Release Date: 12th November 2015**
+
+Features included in this release:
+
+* Updated stemcell to 3130. This resolves the folllowing issues:
+  * [[USN-2806-1]](http://www.ubuntu.com/usn/usn-2806-1/): Linux kernel (Vivid HWE) vulnerability
+  * [[USN-2798-1]](http://www.ubuntu.com/usn/usn-2798-1/): Linux kernel (Vivid HWE) vulnerabilities
+* Removed SVN support from Config Server due to licensing issues
 
 ### 1.0.0
 
@@ -28,5 +39,5 @@ Known issues:
     <properties>
         <!-- override the managed versions of Spring Cloud Netflix dependencies -->
         <spring-cloud-netflix.version>1.0.4.RELEASE</spring-cloud-netflix.version>
-    </properties> 
+    </properties>
     ```
