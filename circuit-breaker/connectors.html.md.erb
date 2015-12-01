@@ -65,7 +65,7 @@ public class CloudConfig extends CloudConnectorsConfig {
 <a id="configure-multiple-rabbitmq-connections"></a>
 ### Configure Multiple RabbitMQ Connections
 
-If your client application uses RabbitMQ for its own business purposes and is bound to a Pivotal Cloud Foundry RabbitMQ service instance as well as to a Spring Cloud Services Circuit Breaker Dashboard service instance, then the client application may need two Spring RabbitMQ ```ConnectionFactory``` beans. In this scenario, Spring Cloud needs to know which ```ConnectionFactory``` bean to use for Hystrix AMQP.
+If your client application uses RabbitMQ for its own business purposes and is bound to a [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) RabbitMQ service instance as well as to a Spring Cloud Services Circuit Breaker Dashboard service instance, then the client application may need two Spring RabbitMQ ```ConnectionFactory``` beans. In this scenario, Spring Cloud needs to know which ```ConnectionFactory``` bean to use for Hystrix AMQP.
 
 To facilitate this, use explicit Spring Cloud Connectors configuration to create the two ```ConnectionFactory``` beans, using annotations to make the purpose of each bean clear.
 
@@ -119,4 +119,4 @@ For more information about Spring Cloud Connectors, see the following:
 * [Spring Cloud Cloud Foundry Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html)
 * [Spring Cloud Spring Service Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-spring-service-connector.html)
 * [Spring Cloud Connectors documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html)
-* [Spring Cloud Connectors for Spring Cloud Services on Pivotal Cloud Foundry](https://github.com/pivotal-cf/spring-cloud-services-connector)
+* [Spring Cloud Connectors for Spring Cloud Services on Pivotal Cloud Foundry&reg;](https://github.com/pivotal-cf/spring-cloud-services-connector)
