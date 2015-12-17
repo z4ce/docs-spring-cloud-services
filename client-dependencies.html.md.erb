@@ -1,0 +1,191 @@
+---
+title: Client Dependencies
+---
+
+See below for information about the dependencies required for client applications using Spring Cloud Services service instances.
+
+## <a id="include-starters"></a>Include Spring Cloud Services Starters
+
+To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-starter-parent` BOM.
+
+If using Maven, include in `pom.xml`:
+
+```xml
+  <parent>
+    <groupId>io.pivotal.spring.cloud</groupId>
+    <artifactId>spring-cloud-services-starter-parent</artifactId>
+    <version>1.0.1.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <repositories>
+    <repository>
+      <id>spring-release</id>
+      <url>https://repo.spring.io/libs-release</url>
+    </repository>
+  </repositories>
+```
+
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in `build.gradle`:
+
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.1.RELEASE"
+    }
+}
+
+repositories {
+    maven {
+        url "https://repo.spring.io/libs-release"
+    }
+    ...
+}
+```
+
+### <a id="config-server"></a>Config Server
+
+Your application must declare `spring-cloud-services-starter-config-client` as a dependency.
+
+If using Maven, include in `pom.xml`:
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>io.pivotal.spring.cloud</groupId>
+      <artifactId>spring-cloud-services-starter-config-client</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+If using Gradle, include in `build.gradle`:
+
+```
+dependencies {
+    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-config-client")
+}
+```
+
+### <a id="service-registry"></a>Service Registry
+
+Your application must declare `spring-cloud-services-starter-service-registry` as a dependency.
+
+If using Maven, include in `pom.xml`:
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>io.pivotal.spring.cloud</groupId>
+      <artifactId>spring-cloud-services-starter-service-registry</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+If using Gradle, include in `build.gradle`:
+
+```
+dependencies {
+    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
+}
+```
+
+### <a id="circuit-breaker-dashboard"></a>Circuit Breaker Dashboard
+
+Your application must declare `spring-cloud-services-starter-circuit-breaker` as a dependency.
+
+If using Maven, include in `pom.xml`:
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>io.pivotal.spring.cloud</groupId>
+      <artifactId>spring-cloud-services-starter-circuit-breaker</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+If using Gradle, include in `build.gradle`:
+
+```
+dependencies {
+    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker")
+}
+```
+
+## <a id="using-spring-cloud-brixton"></a>Using Spring Cloud OSS Brixton
+
+If your application is using a Brixton release of Spring Cloud OSS, you must use Spring Boot 1.3, the latest snapshot of Brixton, and the 1.0.0.BRIXTON version of the Spring Cloud Services Connector.
+
+If using Maven, include in `pom.xml`:
+
+```xml
+    <parent>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-parent</artifactId>
+        <version>Brixton.BUILD-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.3.0.RC1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.pivotal.spring.cloud</groupId>
+                <artifactId>spring-cloud-services-starter-parent</artifactId>
+                <version>1.0.0.BUILD-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+```
+
+If using Gradle, include in `build.gradle`:
+
+```groovy
+buildscript {
+    ext {
+        springBootVersion = '1.3.0.RC1'
+        springCloudVersion = 'Brixton.BUILD-SNAPSHOT'
+        springCloudServicesVersion = '1.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/libs-snapshot' }
+        maven { url "https://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.3.RELEASE")
+        classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:${springCloudServicesVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-starter-parent:${springCloudVersion}"
+    }
+}
+
+ext["spring-cloud-services-connectors.version"] = "1.0.0.BRIXTON.BUILD-SNAPSHOT"
+ext["spring-cloud-netflix-core.version"] = "1.1.0.BUILD-SNAPSHOT"
+```
+
