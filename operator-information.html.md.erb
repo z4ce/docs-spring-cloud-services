@@ -6,83 +6,341 @@ See below for information about Spring Cloud Services' deployment model and othe
 
 ## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
 
-Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services (Config Server, Service Registry, and Circuit Breaker Dashboard) that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
 
 <%= image_tag("/spring-cloud-services/images/ops1.png") %>
 
 ### <a id="the-service-broker"></a>The Service Broker
 
-The service broker consists of two Spring Boot applications deployed in the "system" org to the "p-spring-cloud-services" space.
+The service broker's functionality is divided between the following two Spring Boot applications, which are deployed in the "system" org to the "p-spring-cloud-services" space.
 
-The broker's functionality is divided between the two applications: spring-cloud-broker, which implements the Service Broker API ("the SB"), and spring-cloud-broker-worker, which provisions service instances ("the Worker"). The two applications communicate using a RabbitMQ queue (see "Broker Services" below).
+* spring-cloud-broker ("the SB"): Implements the Service Broker API.
+* spring-cloud-broker-worker ("the Worker"): Acts on provision, deprovision, bind, and unbind requests.
 
-#### Broker Services
-
-The SB relies on two other Pivotal Cloud Foundry&reg; products, [MySQL for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/p-mysql) and [RabbitMQ for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-rabbitmq-service), for the following service instances.
+The broker relies on two other Pivotal Cloud Foundry&reg; products, [MySQL for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/p-mysql) and [RabbitMQ for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-rabbitmq-service), for the following service instances.
 
 * **spring-cloud-broker-db**: A MySQL database used by the SB.
 * **spring-cloud-broker-rmq**: A RabbitMQ queue used for communication between the SB and the Worker.
 
-#### UAA Identity Zone
+You can obtain the broker username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry&reg; Operations Manager. Click on the Spring Cloud Services tile, and in the **Credentials** tab, copy the Broker Credentials.
 
-Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which possess bindings to such service instances. 
+<%= image_tag("/spring-cloud-services/images/broker-credentials.png") %>
 
-#### UAA Clients
+#### Access Broker Applications in Apps Manager
 
-Within the UAA Identity Zone, Spring Cloud Services creates a `p-spring-cloud-services` UAA client for the SB and a `p-spring-cloud-services-worker` UAA client for the Worker. In the Spring Cloud Services Identity Zone, it creates a `p-spring-cloud-services-worker` UAA client for the Worker.
+To view the broker applications in Pivotal Cloud Foundry&reg; Apps Manager, log into Apps Manager as an admin user and select the "system" org.
 
-In the UAA Identity Zone, it also creates:
+<%= image_tag("/spring-cloud-services/images/broker-apps-apps-manager-org.png") %>
 
-* A `eureka-GUID` UAA client per Service Registry service instance.
-* A `hystrix-GUID` UAA client per Circuit Breaker Dashboard service instance.
+The applications are deployed in the "p-spring-cloud-services" space.
 
-In the Spring Cloud Services Identity Zone, it also creates:
-
-* A `config-GUID` UAA client per Config Server service instance.
-* A `eureka-GUID` UAA client per Service Registry service instance.
+<%= image_tag("/spring-cloud-services/images/broker-apps-apps-manager-space.png") %>
 
 ### <a id="service-instances"></a>Service Instances
 
-A service instance is a Spring Boot application deployed by the Worker in the "p-spring-cloud-services" org to the "instances" space.
+A service instance is backed by one or more Spring Boot applications deployed by the Worker in the "p-spring-cloud-services" org to the "instances" space.
 
 A service instance is assigned a GUID at provision time. Backing applications for services include the GUID in their names:
 
 **Config Server**
 
-* `config-GUID`: A [Spring Cloud Config](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html) server application.
+* config-[GUID]: A [Spring Cloud Config](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html) server application.
 
 **Service Registry**
 
-* `eureka-GUID`: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Eureka server application.
+* eureka-[GUID]: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Eureka server application.
 
 **Circuit Breaker Dashboard**
 
-* `hystrix-GUID`: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Hystrix server application.
-* `turbine-GUID`: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Turbine application.
-* **`p-rabbitmq`**: A [RabbitMQ for PCF](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance.
+* hystrix-[GUID]: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Hystrix server application.
+* turbine-[GUID]: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Turbine application.
+* **rabbitmq-[GUID]**: A [RabbitMQ for PCF](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance.
+
+#### Access Service Instance Backing Applications in Apps Manager
+
+To view a backing application for a service instance in Pivotal Cloud Foundry&reg; Apps Manager, get the service instance's GUID and look for the corresponding application in the "instances" space.
+
+Target the org and space of the service instance.
+
+<pre class="terminal">
+$ cf target -o myorg -s outer
+
+API endpoint:   https://api.wise.com (API version: 2.41.0)
+User:           admin
+Org:            myorg
+Space:          outer
+
+$ cf services
+Getting services in org myorg / space outer as admin...
+OK
+
+name             service            plan        bound apps    last operation
+config-server    p-config-server    standard    cook          create succeeded
+[...]
+</pre>
+
+Run `cf service` with the `CF_TRACE` environment variable set to `true`. Copy the value of `resources.metadata.guid`, which is the service instance GUID.
+
+<pre class="terminal">
+$ CF_TRACE=true cf service config-server
+
+VERSION:
+6.11.3-cebadc9
+
+REQUEST: [2015-12-09T20:38:44-06:00]
+[...]
+
+RESPONSE: [2015-12-09T20:38:44-06:00]
+[...]
+
+{
+  "total_results": 1,
+  "total_pages": 1,
+  "prev_url": null,
+  "next_url": null,
+  "resources": [
+    {
+      "metadata": {
+        "guid": "7b76f84c-455c-4ee6-8687-dbd93d734406",
+[...]
+</pre>
+
+Log into Apps Manager as an admin user and select the "p-spring-cloud-services" org.
+
+<%= image_tag("/spring-cloud-services/images/instance-apps-apps-manager-org.png") %>
+
+The applications are deployed in the "instances" space. Look for the backing application named as described above, with the prefix specific to the service type and the service instance GUID.
+
+<%= image_tag("/spring-cloud-services/images/instance-apps-apps-manager-space.png") %>
+
+## <a id="uaa-identity-zones-and-clients"></a>UAA Identity Zones and Clients
+
+Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which possess bindings to such service instances. 
+
+Within the platform Identity Zone ("the UAA Identity Zone"), Spring Cloud Services creates a `p-spring-cloud-services` UAA client for the SB and a `p-spring-cloud-services-worker` UAA client for the Worker. In the Spring Cloud Services Identity Zone, it creates a `p-spring-cloud-services-worker` UAA client for the Worker.
+
+In the UAA Identity Zone, it also creates the following clients, where `[GUID]` is the service instance's GUID:
+
+* A `eureka-[GUID]` UAA client per Service Registry service instance.
+* A `hystrix-[GUID]` UAA client per Circuit Breaker Dashboard service instance.
+
+In the Spring Cloud Services Identity Zone, it also creates the following clients, where `[GUID]` is the service instance's GUID:
+
+* A `config-server-[GUID]` UAA client per Config Server service instance.
+* A `eureka-[GUID]` UAA client per Service Registry service instance.
+
+### <a id="get-access-token-for-direct-requests-to-a-service-instance"></a>Get Access Token for Direct Requests to a Service Instance
+
+To make requests directly against a Config Server service instance's Spring Cloud Config Server backing application or a Service Registry service instance's Eureka backing application, you can get an access token using the binding credentials of an application that is bound to the service instance. To do this, you must have [uaac](https://github.com/cloudfoundry/cf-uaac) installed.
+
+1. Run `cf env`, giving the name of an application that is bound to the service instance:
+
+    <pre class="terminal">
+    $ cf services
+    Getting services in org myorg / space outer as admin...
+    OK
+
+    name                    service                   plan       bound apps    last operation
+    config-server           p-config-server           standard   cook          create succeeded
+
+    $ cf env cook
+    Getting env variables for app cook in org myorg / space outer as admin...
+    OK
+
+    System-Provided:
+    {
+     "VCAP_SERVICES": {
+      "p-config-server": [
+       {
+        "credentials": {
+         "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+         "client_id": "p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b",
+         "client_secret": "DWiPkHI83ZVg",
+         "uri": "https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com"
+        },
+    [...]
+    </pre>
+
+2. From the service instance's entry in the application's `VCAP_SERVICES` environment variable, copy the URL in `credentials.access_token_uri`. Remove the `/oauth/token` path from that URL and target it using `uaac target`:
+
+    <pre class="terminal">
+    $ uaac target https://p-spring-cloud-services.uaa.cf.wise.com
+
+    Target: https://p-spring-cloud-services.uaa.cf.wise.com
+
+    </pre>
+
+3. From the service instance's entry in the application's `VCAP_SERVICES` environment variable, copy the values of `credentials.client_id` and `credentials.client_secret`. Run `uaac token client get`, providing those values:
+
+    <pre class="terminal">
+    $ uaac token client get p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b -s DWiPkHI83ZVg
+
+    Successfully fetched token via client credentials grant.
+    Target: https://p-spring-cloud-services.uaa.cf.wise.com
+    Context: p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b, from client p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b
+
+    </pre>
+
+
+4. Run `uaac context` to display the current context:
+
+    <pre class="terminal">
+    $ uaac context
+
+    [2]*[https://p-spring-cloud-services.uaa.cf.wise.com]
+      skip_ssl_validation: true
+
+      [0]*[p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b]
+          client_id: p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b
+          access_token: eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIwNWI1NWM5ZS1iZTdlLTQ5YzMtYTBhYi1lMDI5OWE2MDMyM2UiLCJzdWIiOiJwLWNvbmZpZy1zZX_a-bUNcH1ofOTHer567cHaRACtErs32iN0A23VErY1lOnG3stRiNg
+          token_type: bearer
+          expires_in: 43199
+          scope: p-config-server.7b76f84c-455c-4ee6-8687-dbd93d734406.read
+          jti: 05b55c9e-be7e-49c3-a0ab-e0299a60323e
+
+    </pre>
+
+    Copy the value of `access_token`.
+
+With the access token, you can now make requests directly against the service instance, e.g. using curl. Use the URL in `credentials.uri` from the service instance's entry in the application's `VCAP_SERVICES` environment variable.
+
+For a Config Server service instance:
+
+<pre class="terminal">
+$ curl -H 'Authorization: bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIwNWI1NWM5ZS1iZTdlLTQ5YzMtYTBhYi1lMDI5OWE2MDMyM2UiLCJzdWIiOiJwLWNvbmZpZy1zZX_a-bUNcH1ofOTHer567cHaRACtErs32iN0A23VErY1lOnG3stRiNg' https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
+{"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+</pre>
+
+For a Service Registry service instance:
+
+<pre class="terminal">
+$ curl -H 'Authorization: bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4ZjlkMTIxYy1mNjUwLTRhODMtODE0Mi02ZWNlYWYxNTNiMzEiLCJzdWIiOiJwLXNlcnZpY2UtcmVnaXN0cnktYjFlM2Q5YzgtOGM4YS00ZTk3LTllZTctZTcyN2NiMTM' https://eureka-defe7d0b-13b1-4293-83d3-57503712a0b8.apps.wise.com/eureka/apps
+<applications>
+  <versions__delta>1</versions__delta>
+  <apps__hashcode>UP_1_</apps__hashcode>
+  <application>
+    <name>COMPANY</name>
+    <instance>
+      <hostName>company.apps.wise.com</hostName>
+      <app>COMPANY</app>
+      <ipAddr>10.68.224.46</ipAddr>
+      <status>UP</status>
+      [...]
+</pre>
 
 ## <a id="application-health-and-status"></a>Application Health and Status
 
-#### <a id="actuator-endpoints"></a>Actuator Endpoints
+For more visibility into how Spring Cloud Services service instances and the broker applications are behaving, or for troubleshooting purposes, you may wish to access those applications directly. See below for information about accessing their output.
 
-The SB and Worker applications, as well as backing applications for service instances, use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds [a number of endpoints](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) to these applications; in the Spring Cloud Services applications, these are secured and require a username and password. You can obtain the username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry&reg; Operations Manager. Click on the Spring Cloud Services tile, and in the **Credentials** tab, copy the **Broker Credentials**.
+### <a id="broker-application-logs"></a>Read Broker Application Logs
 
-<%= image_tag("/spring-cloud-services/images/broker-credentials.png") %>
+To access logs for the SB and Worker applications, target the "system" org and its "p-spring-cloud-services" space:
 
-Some Actuator endpoints are summarized below.
+<pre class="terminal">
+$ cf target -o system -s p-spring-cloud-services
 
-| Endpoint              | Function                                                                                                                                              |
+API endpoint:   https://api.cf.wise.com (API version: 2.41.0)
+User:           admin
+Org:            system
+Space:          p-spring-cloud-services
+
+$ cf apps
+Getting apps in org system / space p-spring-cloud-services as admin...
+OK
+
+name                         requested state   instances   memory   disk   urls
+spring-cloud-broker          started           1/1         512M     1G     spring-cloud-broker.apps.wise.com
+spring-cloud-broker-worker   started           1/1         512M     1G     spring-cloud-broker-worker.apps.wise.com
+</pre>
+
+Then you can use ```cf logs``` to tail logs for either the SB:
+
+<pre class="terminal">
+$ cf logs spring-cloud-broker
+Connected, tailing logs for app spring-cloud-broker in org system / space p-spring-cloud-services as admin...
+</pre>
+
+or the Worker:
+
+<pre class="terminal">
+$ cf logs spring-cloud-broker-worker
+Connected, tailing logs for app spring-cloud-broker-worker in org system / space p-spring-cloud-services as admin...
+</pre>
+
+### <a id="backing-application-logs"></a>Read Backing Application Logs
+
+To access logs for service instance backing applications, target the "p-spring-cloud-services" org and its "instances" space:
+
+<pre class="terminal">
+$ cf target -o p-spring-cloud-services -s instances
+
+API endpoint:   https://api.cf.wise.com (API version: 2.41.0)
+User:           admin
+Org:            p-spring-cloud-services
+Space:          instances
+
+$ cf apps
+Getting apps in org p-spring-cloud-services / space instances as admin...
+OK
+
+name                                           requested state   instances   memory   disk   urls
+config-7b76f84c-455c-4ee6-8687-dbd93d734406    started           1/1         1G       1G     config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com
+</pre>
+
+Then you can use ```cf logs``` to tail logs for a backing application.
+
+<pre class="terminal">
+$ cf logs config-7b76f84c-455c-4ee6-8687-dbd93d734406
+Connected, tailing logs for app config-7b76f84c-455c-4ee6-8687-dbd93d734406 in org p-spring-cloud-services / space instances as admin...
+</pre>
+
+### <a id="access-actuator-endpoints"></a>Access Actuator Endpoints
+
+The SB and Worker applications, as well as backing applications for service instances, use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds [a number of endpoints](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) to these applications; some of the added endpoints are summarized below.
+
+| ID                    | Function                                                                                                                                              |
 |-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | <code>env</code>      | Displays profiles, properties, and property sources from the application environment                                                                  |
 | <code>health</code>   | Displays information on the health and status of the application                                                                                      |
 | <code>metrics</code>  | Displays metrics information from the application                                                                                                     |
 | <code>mappings</code> | Displays list of <code>@RequestMapping</code> paths in the application                                                                                |
-| <code>shutdown</code> | Allows for graceful shutdown of the application (disabled by default; not enabled in Spring Cloud Services broker or instance-backing applications)   |
+| <code>shutdown</code> | Allows for graceful shutdown of the application. Disabled by default; not enabled in Spring Cloud Services broker or instance-backing applications    |
 
 See the <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints">Endpoints</a> section of the Actuator documentation for the full list of endpoints.
 
-<!---#
-### Application Logs
--->
+#### Endpoints on SB, Worker, Service Registry, or Circuit Breaker Dashboard
 
+The SB application, the Worker application, the Service Registry's Eureka backing application, and the Circuit Breaker Dashboard's Hystrix backing application use [Dashboard SSO](http://docs.cloudfoundry.org/services/dashboard-sso.html). To access Actuator endpoints on one of these applications, you must be authenticated as a Space Developer in the application's space and have a current session with the application.
+
+1. Log in to Apps Manager as an admin user and navigate to the relevant application: for the SB or Worker, access the SB application or Worker application as described in the [The Service Broker](#the-service-broker) section; for a Service Registry or Circuit Breaker Dashboard service instance, access the backing application as described in the [Service Instances](#service-instances) section.
+
+    <%= image_tag("/spring-cloud-services/images/hystrix.png") %>
+
+2. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint on a Circuit Breaker Dashboard service instance’s Hystrix backing application, this would be something like `https://hystrix-cbd1d860-2353-4c48-81ca-c8df9a9652ac.apps.wise.com/health`.
+
+#### Endpoints on Config Server
+
+The Config Server's Spring Cloud Config Server backing application uses HTTP Basic authentication. To access Actuator endpoints on this application, you must authenticate with the credentials stored in the application's environment variables.
+
+1. Log in to Apps Manager as an admin user and navigate to the relevant application, as described in the [Service Instances](#service-instances) section.
+
+    <%= image_tag("/spring-cloud-services/images/config-server.png") %>
+
+2. From the **Env Variables** tab, copy the values of the `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` environment variables.
+
+    <%= image_tag("/spring-cloud-services/images/config-server-env-variables.png") %>
+
+3. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint, this would be something like `config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/health`. When challenged, provide the values of `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` from Step 2.
+
+## <a id="capacity-requirements"></a>Capacity Requirements
+
+Below are usage requirements of the applications backing a single service instance (SI) of each Spring Cloud Services service type.
+
+| Service Type              | Memory Limit / SI   | Disk Limit / SI  |
+|---------------------------|---------------------|------------------|
+| Config Server             | 1 GB                | 1 GB             |
+| Service Registry          | 1 GB                | 1 GB             |
+| Circuit Breaker Dashboard | 2 GB                | 2 GB             |
+
+Spring Cloud Services service types may also be backed by non-SCS service instances. For example, a Circuit Breaker Dashboard service instance uses a [RabbitMQ for Pivotal Cloud Foundry&reg;](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance for communication between its two backing applications.
 
