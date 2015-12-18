@@ -1,92 +1,132 @@
 ---
-title: Consuming a Service from a Client Application
+title: Writing Client Applications
 ---
 
 _Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.1">"greeting" repository</a> to follow along with the code in this subtopic._
 
-Follow the below instructions to consume a service registered with the Service Registry from a Spring application.
-
-## <a id="declare-dependencies"></a>Declare Dependencies
-
-To consume a service which is registered with a Service Registry instance, your Spring application must have `repo.spring.io/libs-release` listed as a repository, include the `spring-cloud-services-starter-parent` BOM, and declare `spring-cloud-services-starter-service-registry` as a dependency.
-
-If using Maven, include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/pom.xml#L14-L58">`pom.xml`</a>:
-
-```xml
-  <parent>
-    <groupId>io.pivotal.spring.cloud</groupId>
-    <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.1.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
-
-  <dependencies>
-    <dependency>
-      <groupId>io.pivotal.spring.cloud</groupId>
-      <artifactId>spring-cloud-services-starter-service-registry</artifactId>
-    </dependency>
-  </dependencies>
-
-  <repositories>
-    <repository>
-      <id>spring-release</id>
-      <url>https://repo.spring.io/libs-release</url>
-    </repository>
-  </repositories>
-```
-
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/build.gradle#L1-L40">`build.gradle`</a>:
-
-```groovy
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
-    }
-}
-
-apply plugin: "io.spring.dependency-management"
-
-dependencyManagement {
-    imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.1.RELEASE"
-    }
-}
-
-repositories {
-    maven {
-        url "https://repo.spring.io/libs-release"
-    }
-}
-
-dependencies {
-    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
-}
-```
-
-The dependencies bring in the Spring Cloud Netflix client library for <a href="https://github.com/Netflix/eureka">Eureka</a>, as well as the Spring Cloud Connectors Cloud Foundry Connector and Spring Cloud Services Connector. See the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> subtopic for more information.
+To register your application with a Service Registry service instance or use it to consume a service that is registered with a Service Registry service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#service-registry">Service Registry</a> as well.
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
 ## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
 
-Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can use a Service Registry service instance to discover a service application.
+Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your application can be registered with a Service Registry service instance or consume a service that is registered with a Service Registry service instance.
 
-Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
+Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your application to the API endpoint of your Elastic Runtime instance:
 
 <pre class="terminal">
-$ cf set-env camelboy CF_TARGET https://api.wise.com
-Setting env variable 'CF_TARGET' to 'https://api.wise.com' for app camelboy in org myorg / space outer as user...
+$ cf set-env expedition CF_TARGET https://api.wise.com
+Setting env variable 'CF_TARGET' to 'https://api.wise.com' for app expedition in org myorg / space outer as user...
 OK
 TIP: Use 'cf restage' to ensure your env variable changes take effect
-$ cf restage camelboy
+$ cf restage expedition
 </pre>
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
 
-## <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
+## <a id="register-a-service"></a>Register a Service
+
+Follow the below instructions to register an application with a Service Registry service instance.
+
+### <a id="identify-the-application"></a>Identify the Application
+
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+
+```java
+@SpringBootApplication
+@EnableDiscoveryClient
+@RestController
+public class ExpeditionApplication {
+    //...
+```
+
+The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/java/expedition/ExpeditionApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
+
+```java
+    @RequestMapping("/greeting")
+    public Greeting greeting(@RequestParam(value="salutation",
+                              defaultValue="Hello") String salutation,
+                             @RequestParam(value="name",
+                              defaultValue="camel boy") String name) {
+        //...
+        return new Greeting(salutation, name);
+    }
+```
+
+Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+
+```yml
+spring:
+  application:
+    name: ${vcap.application.name}
+```
+
+### <a id="register-the-application"></a>Register the Application
+
+Optionally, you may also specify the registration method that you wish to use for the application, using the `spring.cloud.services.registrationMethod` property. It can take either of two values:
+
+* ```route```: The application will be registered using its Cloud Foundry route.
+* ```direct```: The application will be registered using its host IP and port.
+
+The default value for the ```registrationMethod``` property is ```route```. You may also provide configuration using properties under ```eureka.instance```, such as ```eureka.instance.hostname``` and ```eureka.instance.nonSecurePort``` (see the [Spring Cloud Netflix documentation](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html#_service_discovery_eureka_clients)); if you do, those properties will override the value of ```registrationMethod```.
+
+See below for information about the ```route``` and ```direct``` registration methods.
+
+#### Route Registration
+
+An application deployed to Pivotal Cloud Foundry&reg; can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```application_uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
+
+```json
+{
+ "VCAP_APPLICATION": {
+  "application_name": "expedition",
+  "application_uris": [
+   "expedition.wise.com"
+  ],
+```
+
+Requests from client applications to this registered application go through the Pivotal Cloud Foundry&reg; Router, and the Router provides load balancing between the clients and registered applications.
+
+<!---
+```java
+// TODO: diagram showing Router use?
+```
+-->
+
+This registration method is compatible with all deployments of Pivotal Cloud Foundry&reg;.
+
+#### Direct Registration
+
+An application running on Pivotal Cloud Foundry&reg; is provided with an externally-accessible IP address and port, which are made available in two environment variables: ```CF_INSTANCE_IP``` and ```CF_INSTANCE_PORT```. If you specify the ```direct``` registration method, the application will be registered with the Service Registry instance using this IP address and port.
+
+Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry&reg; Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
+
+This registration method is only compatible with Pivotal Cloud Foundry&reg; version 1.5 or higher. In Pivotal Cloud Foundry&reg; Operations Manager, within the **Pivotal Elastic Runtime** tile's **Security Config**, the "Enable cross-container traffic within each DEA" or "Enable cross-container traffic" option must be enabled.
+
+#### Specify a Registration Method
+
+If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
+
+```yml
+spring:
+  application:
+    name: ${vcap.application.name}
+  cloud:
+    services:
+      registrationMethod: route
+```
+
+As mentioned above, the ```route``` method is the default; it will be used if you do not specify ```registrationMethod```.
+
+With the ```spring.application.name``` property set, you can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
+
+<%= image_tag("service-registry/registered_service.png") %>
+
+## <a id="consume-a-service"></a>Consume a Service
+
+Follow the below instructions to consume a service that is registered with a Service Registry service instance.
+
+### <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
 
 A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
@@ -165,7 +205,7 @@ $ curl http://camelboy.wise.com/hello?name=Jesse
 Hello, Jesse!
 </pre>
 
-## <a id="discover-and-consume-a-service-using-feign"></a>Discover and Consume a Service Using Feign
+### <a id="discover-and-consume-a-service-using-feign"></a>Discover and Consume a Service Using Feign
 
 If you wish to use [Feign](https://github.com/Netflix/feign) to consume a service that is registered with a Service Registry instance, you must declare ```spring-cloud-starter-feign``` as a dependency. Spring Cloud Netflix's Feign support had [a bug](https://github.com/spring-cloud/spring-cloud-netflix/issues/441) which was fixed in its version 1.0.4; however, Spring Cloud Services currently depends on Spring Cloud Netflix version 1.0.3. You will therefore also have to manually override the managed versions of the Spring Cloud Netflix dependencies.
 
@@ -278,7 +318,7 @@ Hello, Jesse!
 
 The Spring Cloud Services Starter for Service Registry has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
 
-If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In `application.yml`:
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In `application.yml` or `bootstrap.yml`:
 
 ```yml
 security:
