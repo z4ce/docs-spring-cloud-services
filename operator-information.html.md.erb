@@ -2,6 +2,8 @@
 title: Operator Information
 ---
 
+<strong><%= modified_date %></strong>
+
 See below for information about Spring Cloud Services' deployment model and other information which may be useful in operating its services or client applications.
 
 ## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
@@ -331,6 +333,36 @@ The Config Server's Spring Cloud Config Server backing application uses HTTP Bas
     <%= image_tag("/spring-cloud-services/images/config-server-env-variables.png") %>
 
 3. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint, this would be something like `config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/health`. When challenged, provide the values of `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` from Step 2.
+
+### <a id="invoke-config-server-endpoints"></a>Invoke Config Server Endpoints
+
+To view the configuration properties that a Config Server service instance is returning for an application, you can access the configuration endpoints on the service instance's Spring Cloud Config Server backing application directly.
+
+1. Obtain an access token for interacting with the service instance, as described in the [Get Access Token for Direct Requests to a Service Instance](#get-access-token-for-direct-requests-to-a-service-instance) section. In Step 1 of that section, copy the URL in `credentials.uri` from the service instance's entry in the `VCAP_SERVICES` environment variable.
+
+2. Make a request of the Config Server service instance backing application in the format `http://SERVER/APPLICATION_NAME/PROFILE`, where `SERVER` is the URL from `credentials.uri` as mentioned in Step 1, `APPLICATION_NAME` is the application name as set in the `spring.application.name` property, and `PROFILE` is the name of a profile that has a configuration file in the repository.
+
+    <br />
+    An example request URL might look like this:
+
+    ```
+    https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/production
+    ```
+
+    Or, for the `default` profile:
+
+    ```
+    https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
+    ```
+
+    You can make the request using curl, providing the token---`TOKEN` in the below example---in a header with the `-H` or `--header` option:
+
+    <pre class="terminal">
+    $ curl -H 'Authorization: bearer TOKEN' https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
+    {"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+    </pre>
+
+For a list of path formats that the Config Server accepts, see the [Request Paths](/spring-cloud-services/config-server/server.html#request-paths) section of the [The Config Server](/spring-cloud-services/config-server/server.html) subtopic in the [Config Server documentation](/spring-cloud-services/config-server/).
 
 ## <a id="capacity-requirements"></a>Capacity Requirements
 

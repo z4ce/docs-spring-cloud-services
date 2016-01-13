@@ -2,6 +2,8 @@
 title: Using the Circuit Breaker Dashboard 
 ---
 
+<strong><%= modified_date %></strong>
+
 To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls.
 
 With the &#8220;Agency&#8221; example application (see the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.1">&#8220;traveler&#8221; repository</a>) receiving no load, the dashboard displays the following:

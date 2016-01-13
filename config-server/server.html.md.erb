@@ -2,6 +2,8 @@
 title: The Config Server
 ---
 
+<strong><%= modified_date %></strong>
+
 The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
 
 <p class='note'><strong>Note</strong>: Config Server for <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> does not support multiple repositories as configuration sources at this time.</p>
