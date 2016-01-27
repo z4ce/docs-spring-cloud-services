@@ -10,7 +10,7 @@ See below for information about Spring Cloud Services' deployment model and othe
 
 Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
 
-<%= image_tag("/spring-cloud-services/images/ops1.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/ops1.png") %>
 
 ### <a id="the-service-broker"></a>The Service Broker
 
@@ -26,17 +26,17 @@ The broker relies on two other Pivotal Cloud Foundry&reg; products, [MySQL for P
 
 You can obtain the broker username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry&reg; Operations Manager. Click on the Spring Cloud Services tile, and in the **Credentials** tab, copy the Broker Credentials.
 
-<%= image_tag("/spring-cloud-services/images/broker-credentials.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/broker-credentials.png") %>
 
-#### Access Broker Applications in Apps Manager
+#### <a id="access-broker-applications-in-apps-manager"></a>Access Broker Applications in Apps Manager
 
 To view the broker applications in Pivotal Cloud Foundry&reg; Apps Manager, log into Apps Manager as an admin user and select the "system" org.
 
-<%= image_tag("/spring-cloud-services/images/broker-apps-apps-manager-org.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/broker-apps-apps-manager-org.png") %>
 
 The applications are deployed in the "p-spring-cloud-services" space.
 
-<%= image_tag("/spring-cloud-services/images/broker-apps-apps-manager-space.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/broker-apps-apps-manager-space.png") %>
 
 ### <a id="service-instances"></a>Service Instances
 
@@ -109,11 +109,11 @@ RESPONSE: [2015-12-09T20:38:44-06:00]
 
 Log into Apps Manager as an admin user and select the "p-spring-cloud-services" org.
 
-<%= image_tag("/spring-cloud-services/images/instance-apps-apps-manager-org.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/instance-apps-apps-manager-org.png") %>
 
 The applications are deployed in the "instances" space. Look for the backing application named as described above, with the prefix specific to the service type and the service instance GUID.
 
-<%= image_tag("/spring-cloud-services/images/instance-apps-apps-manager-space.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/instance-apps-apps-manager-space.png") %>
 
 ## <a id="uaa-identity-zones-and-clients"></a>UAA Identity Zones and Clients
 
@@ -316,7 +316,7 @@ The SB application, the Worker application, the Service Registry's Eureka backin
 
 1. Log in to Apps Manager as an admin user and navigate to the relevant application: for the SB or Worker, access the SB application or Worker application as described in the [The Service Broker](#the-service-broker) section; for a Service Registry or Circuit Breaker Dashboard service instance, access the backing application as described in the [Service Instances](#service-instances) section.
 
-    <%= image_tag("/spring-cloud-services/images/hystrix.png") %>
+    <%= image_tag("/spring-cloud-services/images/operator-information/hystrix.png") %>
 
 2. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint on a Circuit Breaker Dashboard service instance’s Hystrix backing application, this would be something like `https://hystrix-cbd1d860-2353-4c48-81ca-c8df9a9652ac.apps.wise.com/health`.
 
@@ -326,11 +326,11 @@ The Config Server's Spring Cloud Config Server backing application uses HTTP Bas
 
 1. Log in to Apps Manager as an admin user and navigate to the relevant application, as described in the [Service Instances](#service-instances) section.
 
-    <%= image_tag("/spring-cloud-services/images/config-server.png") %>
+    <%= image_tag("/spring-cloud-services/images/operator-information/config-server.png") %>
 
 2. From the **Env Variables** tab, copy the values of the `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` environment variables.
 
-    <%= image_tag("/spring-cloud-services/images/config-server-env-variables.png") %>
+    <%= image_tag("/spring-cloud-services/images/operator-information/config-server-env-variables.png") %>
 
 3. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint, this would be something like `config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/health`. When challenged, provide the values of `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` from Step 2.
 
