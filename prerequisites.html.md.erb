@@ -41,6 +41,13 @@ You will need to update your Elastic Runtime SSL certificate as described in the
 * `*.login.SYSTEM_DOMAIN.TLD`
 * `*.uaa.SYSTEM_DOMAIN.TLD`
 
+If any of these domains are not attributed to your Elastic Runtime SSL certificate, the installation of Spring Cloud Services will fail, and the installation logs will contain an error message that lists the missing domain entries:
+
+```
+Missing certs: *.uaa.example.com - exiting install. Please refer to the Security
+Requirements section of the Spring Cloud Services prerequisites documentation.
+```
+
 ### Self-Signed Certificates and Internal CAs
 
 If your Pivotal Cloud Foundry&reg; installation is using its own self-signed SSL certificate, you must enable the "Trust Self-Signed Certificates" or "Ignore SSL certificate verification" option in the **Security Config** tab of the Pivotal Elastic Runtime tile's **Settings**. See [Step 6 of the Configuring Elastic Runtime for vSphere and vCloud topic](http://docs.pivotal.io/pivotalcf/customizing/config-er-vmware.html#security-config) in the Pivotal Cloud Foundry&reg; documentation.
