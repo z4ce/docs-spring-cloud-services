@@ -230,6 +230,22 @@ $ curl -H 'Authorization: bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4ZjlkMTIxYy1mNj
       [...]
 </pre>
 
+## <a id="service-instances-dashboard"></a>The Service Instances Dashboard
+
+To view the status of individual service instances, visit the Service Instances dashboard. You can access it at the following URL, where `SCS_BROKER_URL` is the URL of the SB (spring-cloud-broker):
+
+```
+SCS_BROKER_URL/admin/serviceInstances
+```
+
+Locate the SB as described in the [Access Broker Applications in Apps Manager](#access-broker-applications-in-apps-manager) section. The Service Instances dashboard is also linked to on the main page of the SB.
+
+The dashboard shows the version and status of each service instance, as well as other information including the number of applications that are bound to the instance.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/si-dashboard.png") %>
+
+Click the **Instance Name** of a listed service instance to manage the instance. Hover over the number of an instance's **Bound Apps** to view the names of the applications that are bound to that instance.
+
 ## <a id="application-health-and-status"></a>Application Health and Status
 
 For more visibility into how Spring Cloud Services service instances and the broker applications are behaving, or for troubleshooting purposes, you may wish to access those applications directly. See below for information about accessing their output.
