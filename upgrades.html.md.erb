@@ -2,7 +2,7 @@
 title: Upgrading Spring Cloud Services for Pivotal Cloud Foundry&reg;
 ---
 
-## Product Upgrade Steps
+## <a id="product-upgrade-steps"></a>Product Upgrade Steps
 
 Follow the below steps to upgrade the Spring Cloud Services product.
 
@@ -31,4 +31,32 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 1. Congratulations! You have successfully upgraded Spring Cloud Services.
 
     <%= image_tag("./images/upgrades/installation-dashboard.png") %>
+
+## <a id="service-instance-upgrade-steps"></a>Service Instance Upgrade Steps
+
+<p class='note'><strong>Important</strong>: In the current version of Spring Cloud Services, upgrading a service instance will result in downtime for the instance while the upgrade is completed.</p>
+
+After upgrading the Spring Cloud Services product, follow the below steps to upgrade an individual service instance.
+
+1. To see the current version of a service instance, visit the Service Instances Dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html) subtopic.)
+
+    <%= image_tag("./images/upgrades/si-dashboard-pre-upgrade.png") %>
+
+1. Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
+
+    <pre class="terminal">
+    $ cf update-service -c '{"upgrade":true}' config-server
+    Updating service instance config-server as user...
+    OK
+    </pre>
+
+    <p class='note'><strong>Note</strong>: The <code>cf update-service</code> command begins the upgrade process. The actual upgrade may not have finished when the command exits.</p>
+
+1. Wait while any backing applications belonging to the service instance are upgraded. The Dashboard will show the `RESTARTING` status for the instance.
+
+    <%= image_tag("./images/upgrades/si-dashboard-upgrading.png") %>
+
+1. When the service instance has been upgraded, the Dashboard will show the new version.
+
+    <%= image_tag("./images/upgrades/si-dashboard-post-upgrade.png") %>
 
