@@ -28,6 +28,12 @@ You can obtain the broker username and password from the Spring Cloud Services t
 
 <%= image_tag("/spring-cloud-services/images/operator-information/broker-credentials.png") %>
 
+#### Broker Upgrades
+
+The Spring Cloud Services product upgrade process checks before redeploying the service broker to see whether the broker applications' version has changed. If the version has not changed, the upgrade process will continue without redeploying either the SB or the Worker.
+
+The SB application and the Worker application are deployed using a [blue-green deployment strategy](http://martinfowler.com/bliki/BlueGreenDeployment.html). During an upgrade of the service broker, the broker will continue processing requests to provision, deprovision, bind, and unbind service instances, without downtime.
+
 #### <a id="access-broker-applications-in-apps-manager"></a>Access Broker Applications in Apps Manager
 
 To view the broker applications in Pivotal Cloud Foundry&reg; Apps Manager, log into Apps Manager as an admin user and select the "system" org.
