@@ -113,6 +113,14 @@ public class RabbitConfig extends AbstractCloudConfig {
   }
 }
 ```
+If you do use any explicit Spring Cloud Connectors configuration, it will disable Spring Boot's [CloudAutoConfiguration](https://github.com/spring-projects/spring-boot/blob/v1.2.8.RELEASE/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/cloud/CloudAutoConfiguration.java), so you will need to explicitly declare beans for any other service to which your application is bound. For example, to explicitly declare a bean for a Netflix Eureka service:
+
+```java
+@Bean
+public EurekaClientConfigBean eurekaClientConfig() {
+    return connectionFactory().eurekaClientConfig();
+}
+```
 
 ## See Also
 
