@@ -1,0 +1,62 @@
+---
+title: Upgrading Spring Cloud Services for Pivotal Cloud Foundry&reg;
+---
+
+## <a id="product-upgrade-steps"></a>Product Upgrade Steps
+
+Follow the below steps to upgrade the Spring Cloud Services product.
+
+1. Download the latest version of Spring Cloud Services from [Pivotal Network](https://network.pivotal.io/).
+
+1. In [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
+
+    <%= image_tag("./images/upgrades/pre-upload.png") %>
+
+1. After uploading the file, hover over **Spring Cloud Services** in the **Available Products** list and click the **Upgrade &#187;** button.
+
+    <%= image_tag("./images/upgrades/pre-upgrade.png") %>
+
+1. Click **Apply changes** on the right sidebar.
+
+    <%= image_tag("./images/upgrades/post-upgrade.png") %>
+
+1. The upgrade process may take 20 to 30 minutes.
+
+    <%= image_tag("./images/upgrades/applying-changes.png") %>
+
+1. When the upgrade process is complete, you will see the dialog shown below. Click **Return to Installation Dashboard**.
+
+    <%= image_tag("./images/upgrades/changes-applied.png") %>
+
+1. Congratulations! You have successfully upgraded Spring Cloud Services.
+
+    <%= image_tag("./images/upgrades/installation-dashboard.png") %>
+
+## <a id="service-instance-upgrade-steps"></a>Service Instance Upgrade Steps
+
+<p class='note'><strong>Important</strong>: In the current version of Spring Cloud Services, upgrading a service instance will result in downtime for the instance while the upgrade is completed.</p>
+
+After upgrading the Spring Cloud Services product, follow the below steps to upgrade an individual service instance.
+
+1. To see the current version of a service instance, visit the Service Instances Dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html) subtopic.)
+
+    <%= image_tag("./images/upgrades/si-dashboard-pre-upgrade.png") %>
+
+1. Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
+
+    <pre class="terminal">
+    $ cf update-service -c '{"upgrade":true}' config-server
+    Updating service instance config-server as user...
+    OK
+    </pre>
+
+    <p class='note'><strong>Note</strong>: The <code>cf update-service</code> command begins the upgrade process. The actual upgrade may not have finished when the command exits.</p>
+
+1. Wait while any backing applications belonging to the service instance are upgraded. The Dashboard will show the `RESTARTING` status for the instance.
+
+    <%= image_tag("./images/upgrades/si-dashboard-upgrading.png") %>
+
+1. When the service instance has been upgraded, the Dashboard will show the new version.
+
+    <%= image_tag("./images/upgrades/si-dashboard-post-upgrade.png") %>
+

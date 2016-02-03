@@ -6,8 +6,7 @@ title: Prerequisites to Installing Spring Cloud Services for Pivotal Cloud Found
 
 Please ensure that your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation meets the below requirements before installing Spring Cloud Services.
 
-<a id="platform-and-product-requirements"></a>
-# Platform and Product Requirements
+## <a id="platform-and-product-requirements"></a>Platform and Product Requirements
 
 Spring Cloud Services requires version 2.5 or greater of the Java buildpack to be the default Java buildpack on the Pivotal Cloud Foundry&reg; platform. You can use the cf Command Line Interface tool to see the version of the Java buildpack that is currently installed.
 
@@ -31,8 +30,7 @@ Spring Cloud Services also requires the following Pivotal Cloud Foundry&reg; pro
 
 If they are not already installed, you can follow the steps listed in the <a href="/spring-cloud-services/installation.html">Installation</a> subtopic to install them along with Spring Cloud Services.
 
-<a id="security-requirements"></a>
-# Security Requirements
+## <a id="security-requirements"></a>Security Requirements
 
 You will need to update your Elastic Runtime SSL certificate as described in the [Pivotal Cloud Foundry&reg; documentation](http://docs.pivotal.io/pivotalcf/customizing/config-er-vmware.html#security-config). Generate one single certificate that includes all of the domains listed below, replacing `SYSTEM_DOMAIN.TLD` with your system domain and `APPLICATION_DOMAIN.TLD` with your application domain:
 
@@ -41,7 +39,14 @@ You will need to update your Elastic Runtime SSL certificate as described in the
 * `*.login.SYSTEM_DOMAIN.TLD`
 * `*.uaa.SYSTEM_DOMAIN.TLD`
 
-## Self-Signed Certificates and Internal CAs
+If any of these domains are not attributed to your Elastic Runtime SSL certificate, the installation of Spring Cloud Services will fail, and the installation logs will contain an error message that lists the missing domain entries:
+
+```
+Missing certs: *.uaa.example.com - exiting install. Please refer to the Security
+Requirements section of the Spring Cloud Services prerequisites documentation.
+```
+
+### <a id="self-signed-certificates-and-internal-cas"></a>Self-Signed Certificates and Internal CAs
 
 If your Pivotal Cloud Foundry&reg; installation is using its own self-signed SSL certificate, you must enable the "Trust Self-Signed Certificates" or "Ignore SSL certificate verification" option in the **Security Config** tab of the Pivotal Elastic Runtime tile's **Settings**. See [Step 6 of the Configuring Elastic Runtime for vSphere and vCloud topic](http://docs.pivotal.io/pivotalcf/customizing/config-er-vmware.html#security-config) in the Pivotal Cloud Foundry&reg; documentation.
 

@@ -4,6 +4,38 @@ title: Release Notes for Spring Cloud Services on Pivotal Cloud Foundry&reg;
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/p-spring-cloud-services)
 
+### 1.0.4
+
+**Release Date: 2nd February 2016**
+
+Features included in this release:
+
+* A new Service Instances dashboard is accessible to operators of Spring Cloud Services. The dashboard provides an overview of all service instances and shows their org/space locations, version, status, and bound applications. For more details, see the [The Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html).
+* Service instances can now be individually upgraded to the latest version using the cf CLI. For more details, see the [Service Instance Upgrade Steps](/spring-cloud-services/upgrades.html#service-instance-upgrade-steps) section of [Upgrades](/spring-cloud-services/upgrades.html).
+* Config Server instance settings (i.e. Git repository configuration) can now be provided using arbitrary parameters via "cf create-service." They can also be updated via "cf update-service."
+* The stemcell has been updated to 3146.6. This resolves the following issues:
+  * [[USN-2882-1]](http://www.ubuntu.com/usn/usn-2882-1/): curl vulnerability
+  * [[USN-2879-1]](http://www.ubuntu.com/usn/usn-2879-1/): rsync vulnerability
+  * [[USN-2875-1]](http://www.ubuntu.com/usn/usn-2875-1/): libxml2 vulnerabilities
+  * [[USN-2874-1]](http://www.ubuntu.com/usn/usn-2874-1/): Bind vulnerability
+
+Enhancements included in this release:
+
+* Error pages are now consistent with the Spring Cloud Services UI styles.
+* If the version of the Spring Cloud Services service broker has not changed, the Deploy Service Broker errand will not perform a deployment. For more details, see the [The Service Broker](/spring-cloud-services/operator-information.html#the-service-broker) section of the [Operator Information](/spring-cloud-services/operator-information.html).
+* Deployment of the Spring Cloud Services service broker will no longer result in a broker outage. For more details, see the [The Service Broker](/spring-cloud-services/operator-information.html#the-service-broker) section of the [Operator Information](/spring-cloud-services/operator-information.html).
+* The "cf" and "uaac" commands that are run in BOSH errands are now echoed so that commands can be correlated with their output for troubleshooting purposes.
+* Incorrect configuration of generated SSL certificates in Elastic Runtime will now result in an installation failure with a descriptive error message in the install logs. For more details, see the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of [Prerequisites](/spring-cloud-services/prerequisites.html).
+* Service instance dashboards now include the name of the service instance as breadcrumbs.
+* Config Server instances will no longer strip the `{cipher}` prefix from ciphertext contained in the backing Git repository, so that client-side decryption is now possible.
+* [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) load balancers with publicly routable IP addresses are now supported.
+
+Fixes included in this release:
+
+* The password field on the Config Server configuration dashboard is now appropriately masked.
+* Restart of the backing application for Service Registry service instances will no longer cause a temporary return of empty registry information to clients.
+* The Circuit Breaker Dashboard now displays correctly in Safari and Firefox.
+
 ### 1.0.3
 
 **Release Date: 7th January 2016**

@@ -16,7 +16,7 @@ If using Maven, include in `pom.xml`:
   <parent>
     <groupId>io.pivotal.spring.cloud</groupId>
     <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.0.2.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -36,7 +36,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE")
     }
 }
 
@@ -44,7 +44,7 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.1.RELEASE"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.2.RELEASE"
     }
 }
 
@@ -52,7 +52,6 @@ repositories {
     maven {
         url "https://repo.spring.io/libs-release"
     }
-    ...
 }
 ```
 
@@ -151,7 +150,7 @@ If using Maven, include in `pom.xml`:
             <dependency>
                 <groupId>io.pivotal.spring.cloud</groupId>
                 <artifactId>spring-cloud-services-starter-parent</artifactId>
-                <version>1.0.0.BUILD-SNAPSHOT</version>
+                <version>1.0.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

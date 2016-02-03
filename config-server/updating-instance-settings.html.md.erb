@@ -1,0 +1,48 @@
+---
+title: Updating Instance Settings
+---
+
+You can update a Config Server instance's settings using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
+
+## Using the cf CLI
+
+Run `cf update-service` on the service instance and add the `-c` flag with a JSON object that specifies new values for the Config Server's settings:
+
+* `git.uri`: The URL of the Git repository.
+* `git.label`: The default "label" to be used if the Config Server receives a request without a label.
+* `git.searchPaths`: A pattern or comma-separated list of patterns which specifies how the Config Server searches for configuration-containing subdirectories in the repository (see the [Spring Cloud Config documentation on `searchPaths`](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_git_backend)).
+* `git.username`: The username, if the repository is protected by HTTP Basic authentication.
+* `git.password`: The password, if the repository is protected by HTTP Basic authentication.
+
+The command should be formatted as in the following example, where `PARAMETERS` is the JSON object and `SERVICE_NAME` is the name of the Config Server service instance:
+
+```
+cf update-service -c 'PARAMETERS' SERVICE_NAME
+```
+
+To update the Git repository URL and label of a Config Server service instance named "config-server", run:
+
+<pre class="terminal">
+$ cf update-service -c '{ "git": { "uri": "https://github.com/spring-cloud-samples/cook-config", "label": "master" } }' config-server
+Updating service instance config-server as user...
+OK
+</pre>
+
+## Using Apps Manager
+
+In the **Services** list, click the **Manage** link under the listing for the Config Server service instance.
+
+   <%= image_tag("config-server/config-server-space.png") %>
+
+This will open the Config Server's configuration dashboard, where you can update:
+
+   * The URL of the Git repository from which the Config Server will retrieve configurations.
+   * The default "label" to be used if the Config Server receives a request without a label.
+   * A pattern or comma-separated list of patterns which specifies how the Config Server searches for configuration-containing subdirectories in the repository (see the [Spring Cloud Config documentation on `searchPaths`](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_git_backend)).
+   * A username and password if the repository uses HTTP Basic authentication.
+   
+   When you have finished updating the Config Server's settings, hit the **Submit** button.
+
+   <%= image_tag("config-server/manage-config-server.png") %>
+
+<p class='note'><strong>Important</strong>: When you submit the form, you will see the message "Config server settings saved", and the Config Server will attempt to initialize with the values that you provided. If the Server cannot initialize, you will get an error: "The Config Server cannot initialize using the configuration that has been provided in this form. Please double-check the configuration, correct any mistakes, and resubmit." <br /><br /> Be sure to double-check the fields that you filled out for accuracy and wait until the Config Server has initialized before proceeding.</p>

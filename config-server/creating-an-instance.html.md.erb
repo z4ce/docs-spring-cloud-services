@@ -41,11 +41,29 @@ service plan   description     free or paid
 standard       Standard Plan   free
 </pre>
 
-Run `cf create-service`, specifying the service, plan name, and instance name.
+Create the service instance using `cf create-service`. Optionally, you may add the `-c` flag and provide a JSON object that specifies configuration parameters:
+
+* `git.uri`: The URL of the Git repository
+* `git.label`: The label
+* `git.searchPaths`: The search path or paths
+* `git.username`: The username (necessary if the repository is protected by HTTP Basic authentication)
+* `git.password`: The password (necessary if the repository is protected by HTTP Basic authentication)
+
+For details on the purpose of each of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) subtopic.
+
+To create the instance by specifying only the service, plan name, and instance name:
 
 <pre class="terminal">
 $ cf create-service p-config-server standard config-server
 Creating service instance config-server in org myorg / space outer as user...
+OK
+</pre>
+
+To create the instance and specify configuration parameters:
+
+<pre class="terminal">
+$ cf create-service -c '{ "git": { "uri": "https://github.com/spring-cloud-samples/cook-config", "label": "master" } }' p-config-server standard config-server
+Creating service instance config-server in org myorg / space development as user...
 OK
 </pre>
 
