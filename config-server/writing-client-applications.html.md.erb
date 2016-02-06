@@ -17,10 +17,11 @@ Spring Cloud Services uses HTTPS for all client-to-service communication. If you
 Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
 
 <pre class="terminal">
-$ cf set-env cook CF_TARGET https://api.wise.com
-Setting env variable 'CF_TARGET' to 'https://api.wise.com' for app cook in org myorg / space outer as user...
+$ cf set-env cook CF_TARGET https://api.cf.wise.com
+Setting env variable 'CF_TARGET' to 'https://api.cf.wise.com' for app cook in org myorg / space development as user...
 OK
 TIP: Use 'cf restage' to ensure your env variable changes take effect
+
 $ cf restage cook
 </pre>
 

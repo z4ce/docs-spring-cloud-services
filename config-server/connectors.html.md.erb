@@ -14,10 +14,13 @@ The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, whi
 "p-config-server": [
  {
   "credentials": {
-   "uri": "http://4iCr7l:69e26t@config-1dc445ef-c09f.wise.com"
+   "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+   "client_id": "p-config-server-153f2832-8f43-48f5-becd-a9cc703dac33",
+   "client_secret": "LCfcsfxxC8La",
+   "uri": "https://config-56730ed1-be91-45ce-81aa-16f78377e0d5.apps.wise.com"
   },
   "label": "p-config-server",
-  "name": "config-server",
+  "name": "My Config Server",
   "plan": "standard",
   "tags": [
    "configuration",
