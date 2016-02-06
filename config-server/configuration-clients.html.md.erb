@@ -116,4 +116,4 @@ $ cf set-env cook SPRING_PROFILES_ACTIVE production
 
 Given the above example response for the request path ```/cook/production```, a Spring application would give the two Config Server property sources precedence over other property sources. This means that properties from `https://github.com/myorg/configurations/cook-production.yml` would have precedence over properties from `https://github.com/myorg/configurations/cook.yml`, which would have precedence over properties from the application's other property sources (such as `classpath:application.yml`).
 
-For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-a-spring-client.html">Writing a Spring Client</a> subtopic.
+For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> subtopic.
