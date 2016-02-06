@@ -12,25 +12,25 @@ The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, whi
 
 ```json
 "p-circuit-breaker-dashboard": [
-   {
-    "credentials": {
-     "dashboard": {
-      "uri": "http://hystrix-99dae898-35ef-4073-9d46-ab24e9dee6f0.black.springapps.io"
-     },
-     "stream": {
-      "uri": "http://turbine-99dae898-35ef-4073-9d46-ab24e9dee6f0.black.springapps.io"
-     }
-    },
-    "label": "p-circuit-breaker-dashboard",
-    "name": "circuit-breaker-dashboard",
-    "plan": "standard",
-    "tags": [
-     "circuit-breaker",
-     "hystrix-amqp",
-     "spring-cloud"
-    ]
+ {
+  "credentials": {
+   "dashboard": {
+    "uri": "https://hystrix-fd3842f2-ad07-40c0-9908-a763061f332c.apps.wise.com"
+   },
+   "stream": {
+    "uri": "https://turbine-fd3842f2-ad07-40c0-9908-a763061f332c.apps.wise.com"
    }
+  },
+  "label": "p-circuit-breaker-dashboard",
+  "name": "circuit-breaker-dashboard",
+  "plan": "standard",
+  "tags": [
+   "circuit-breaker",
+   "hystrix-amqp",
+   "spring-cloud"
   ]
+ }
+]
 ```
 
 For each service in the `VCAP_SERVICES` variable, the connector considers the following fields:
