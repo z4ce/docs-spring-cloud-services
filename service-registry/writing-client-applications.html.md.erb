@@ -4,7 +4,7 @@ title: Writing Client Applications
 
 <strong><%= modified_date %></strong>
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.1">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.4">"greeting" repository</a> to follow along with the code in this subtopic._
 
 To register your application with a Service Registry service instance or use it to consume a service that is registered with a Service Registry service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#service-registry">Service Registry</a> as well.
 
@@ -17,11 +17,11 @@ Spring Cloud Services uses HTTPS for all client-to-service communication. If you
 Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your application to the API endpoint of your Elastic Runtime instance:
 
 <pre class="terminal">
-$ cf set-env expedition CF_TARGET https://api.wise.com
-Setting env variable 'CF_TARGET' to 'https://api.wise.com' for app expedition in org myorg / space outer as user...
+$ cf set-env message-generation CF_TARGET https://api.cf.wise.com
+Setting env variable 'CF_TARGET' to 'https://api.cf.wise.com' for app message-generation in org myorg / space development as user...
 OK
 TIP: Use 'cf restage' to ensure your env variable changes take effect
-$ cf restage expedition
+$ cf restage message-generation
 </pre>
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
@@ -32,30 +32,30 @@ Follow the below instructions to register an application with a Service Registry
 
 ### <a id="identify-the-application"></a>Identify the Application
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/java/expedition/ExpeditionApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
-public class ExpeditionApplication {
+public class MessageGenerationApplication {
     //...
 ```
 
-The `ExpeditionApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/java/expedition/ExpeditionApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
+The `MessageGenerationApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
 
 ```java
     @RequestMapping("/greeting")
     public Greeting greeting(@RequestParam(value="salutation",
                               defaultValue="Hello") String salutation,
                              @RequestParam(value="name",
-                              defaultValue="camel boy") String name) {
+                              defaultValue="Bob") String name) {
         //...
         return new Greeting(salutation, name);
     }
 ```
 
-Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -81,9 +81,9 @@ An application deployed to Pivotal Cloud Foundry&reg; can have one or more URLs,
 ```json
 {
  "VCAP_APPLICATION": {
-  "application_name": "expedition",
+  "application_name": "message-generation",
   "application_uris": [
-   "expedition.wise.com"
+   "message-generation.wise.com"
   ],
 ```
 
@@ -107,7 +107,7 @@ This registration method is only compatible with Pivotal Cloud Foundry&reg; vers
 
 #### Specify a Registration Method
 
-If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/expedition/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
+If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
 
 ```yml
 spring:
@@ -130,13 +130,13 @@ Follow the below instructions to consume a service that is registered with a Ser
 
 ### <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
 
-A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/greeter/src/main/java/greeter/GreeterApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
-public class CamelboyApplication {
+public class GreeterApplication {
 
     @Autowired
     private RestTemplate rest;
@@ -145,7 +145,7 @@ public class CamelboyApplication {
 
 To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application's actual URL; the Registry will take care of finding and routing to the service.
 
-<p class='note'><strong>Important</strong>: If your <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
+<p class='note'><strong>Important</strong>: If your <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 
 By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you have two options:
 
@@ -159,15 +159,15 @@ ribbon:
   IsSecure: false
 ```
 
-The Expedition application is registered with the Service Registry instance as ```expedition```, so in the Camelboy application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L31-L41">the `hello()` method on the `CamelboyApplication` class</a> uses the base URI ```http://expedition``` to get a greeting message from Expedition.
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/greeter/src/main/java/greeter/GreeterApplication.java#L31-L41">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```http://message-generation``` to get a greeting message from Message Generation.
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String hello(@RequestParam(value="salutation",
                                         defaultValue="Hello") String salutation,
                         @RequestParam(value="name",
-                                        defaultValue="camel boy") String name) {
-        URI uri = UriComponentsBuilder.fromUriString("http://expedition/greeting")
+                                        defaultValue="Bob") String name) {
+        URI uri = UriComponentsBuilder.fromUriString("http://message-generation/greeting")
             .queryParam("salutation", salutation)
             .queryParam("name", name)
             .build()
@@ -178,7 +178,7 @@ The Expedition application is registered with the Service Registry instance as `
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/camelboy/src/main/java/camelboy/CamelboyApplication.java#L43-L56">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/greeter/src/main/java/greeter/GreeterApplication.java#L43-L56">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
 
 ```java
     private static class Greeting {
@@ -197,21 +197,21 @@ The Expedition application is registered with the Service Registry instance as `
     }
 ```
 
-The Camelboy application now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
+The Greeter application now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
 
 <pre class="terminal">
-$ curl http://camelboy.wise.com/hello
-Hello, camel boy!
+$ curl http://greeter.wise.com/hello
+Hello, Bob!
 
-$ curl http://camelboy.wise.com/hello?name=Jesse
-Hello, Jesse!
+$ curl http://greeter.wise.com/hello?name=John
+Hello, John!
 </pre>
 
 ### <a id="discover-and-consume-a-service-using-feign"></a>Discover and Consume a Service Using Feign
 
 If you wish to use [Feign](https://github.com/Netflix/feign) to consume a service that is registered with a Service Registry instance, you must declare ```spring-cloud-starter-feign``` as a dependency. Spring Cloud Netflix's Feign support had [a bug](https://github.com/spring-cloud/spring-cloud-netflix/issues/441) which was fixed in its version 1.0.4; however, Spring Cloud Services currently depends on Spring Cloud Netflix version 1.0.3. You will therefore also have to manually override the managed versions of the Spring Cloud Netflix dependencies.
 
-If using Maven, include in [```pom.xml```](https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/pom.xml#L21-L37):
+If using Maven, include in [```pom.xml```](https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/pom.xml#L21-L37):
 
 ```xml
   <properties>
@@ -227,7 +227,7 @@ If using Maven, include in [```pom.xml```](https://github.com/spring-cloud-sampl
   </dependencies>
 ```
 
-If using Gradle, include in [```build.gradle```](https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/build.gradle#L11-L43):
+If using Gradle, include in [```build.gradle```](https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/build.gradle#L11-L43):
 
 ```groovy
 ext["spring-cloud-netflix.version"] = "1.0.4.RELEASE"
@@ -237,23 +237,23 @@ dependencies {
 }
 ```
 
-Your consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. To have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation. In the Camelboy application, the ```CamelboyApplication``` class contains an ```ExpeditionClient``` interface, which is a Feign client for the Expedition application.
+Your consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. To have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation. In the Greeter application, the ```GreeterApplication``` class contains an ```MessageGenerationClient``` interface, which is a Feign client for the Message Generation application.
 
 ```java
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
 @RestController
-public class CamelboyApplication {
+public class GreeterApplication {
 
     @Autowired
-    ExpeditionClient expedition;
+    MessageGenerationClient messageGeneration;
     //...
 ```
 
 To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application's actual URL; the Registry will take care of finding and routing to the service.
 
-<p class='note'><strong>Important</strong>: If your Pivotal Cloud Foundry installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://expedition/greeting</code> to <code>https://expedition/greeting</code>.</p>
+<p class='note'><strong>Important</strong>: If your Pivotal Cloud Foundry installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 
 By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you have two options:
 
@@ -267,17 +267,17 @@ ribbon:
   IsSecure: false
 ```
 
-The Expedition application is registered with the Service Registry instance as ```expedition```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L52-L56">```ExpeditionClient``` interface</a> uses the base URI ```http://expedition```. The interface declares one method, ```greeting()```, which accesses the Expedition application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```http://message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
 
 ```java
-    @FeignClient("http://expedition")
-    interface ExpeditionClient {
+    @FeignClient("http://message-generation")
+    interface MessageGenerationClient {
       @RequestMapping(value = "/greeting", method = GET)
       Greeting greeting(@RequestParam("name") String name, @RequestParam("salutation") String salutation);
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L37-L50">Camelboy's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Expedition.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L37-L50">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
 
 ```java
     private static class Greeting {
@@ -296,24 +296,24 @@ The Expedition application is registered with the Service Registry instance as `
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.1/feign-camelboy/src/main/java/camelboy/CamelboyApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```ExpeditionClient``` to get a greeting.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```MessageGenerationClient``` to get a greeting.
 
 ```java
     @RequestMapping(value = "/hello", method = GET)
-    public String greeting(@RequestParam(value="salutation", defaultValue="Hello") String salutation, @RequestParam(value="name", defaultValue="camel boy") String name) {
-      Greeting greeting =  expedition.greeting(name, salutation);
+    public String greeting(@RequestParam(value="salutation", defaultValue="Hello") String salutation, @RequestParam(value="name", defaultValue="Bob") String name) {
+      Greeting greeting =  messageGeneration.greeting(name, salutation);
       return greeting.getMessage();
     }
 ```
 
-Camelboy now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
+Greeter now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
 
 <pre class="terminal">
-$ curl http://camelboy.wise.com/hello
-Hello, camel boy!
+$ curl http://greeter.wise.com/hello
+Hello, Bob!
 
-$ curl http://camelboy.wise.com/hello?name=Jesse
-Hello, Jesse!
+$ curl http://greeter.wise.com/hello?name=John
+Hello, John!
 </pre>
 
 ## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication

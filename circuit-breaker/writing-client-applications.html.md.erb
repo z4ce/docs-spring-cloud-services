@@ -4,13 +4,13 @@ title: Writing Client Applications
 
 <strong><%= modified_date %></strong>
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.1">&#8220;traveler&#8221; repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.4">&#8220;traveler&#8221; repository</a> to follow along with the code in this subtopic._
 
 To use a circuit breaker in a Spring application with a Circuit Breaker Dashboard service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#circuit-breaker-dashboard">Circuit Breaker Dashboard</a> as well.
 
 ## Apply the Circuit Breaker Pattern
 
-To work with a Circuit Breaker Dashboard instance, your application must <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/src/main/java/agency/AgencyApplication.java#L7-L15">include the ```@EnableCircuitBreaker``` annotation on a configuration class</a>.
+To work with a Circuit Breaker Dashboard instance, your application must <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.4/agency/src/main/java/agency/AgencyApplication.java#L7-L15">include the ```@EnableCircuitBreaker``` annotation on a configuration class</a>.
 
 ```java
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -24,7 +24,7 @@ public class AgencyApplication {
     //...
 ```
 
-To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/src/main/java/agency/TravelAgent.java#L17-L20">annotate the method with ```@HystrixCommand```</a>, giving the annotation the name of a ```fallbackMethod```.
+To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.4/agency/src/main/java/agency/TravelAgent.java#L17-L20">annotate the method with ```@HystrixCommand```</a>, giving the annotation the name of a ```fallbackMethod```.
 
 ```java
     @HystrixCommand(fallbackMethod = "getBackupGuide")
@@ -37,7 +37,7 @@ The `getGuide()` method uses a <a href="http://docs.spring.io/spring/docs/curren
 
 <p class='note'><strong>Note</strong>: You cannot apply <code>@HystrixCommand</code> directly to a <a href="https://github.com/Netflix/feign">Feign</a> client. Instead, call Feign client methods from a service class that is autowired as a Spring bean (either through the <a href="http://docs.spring.io/autorepo/docs/spring-framework/current/javadoc-api/org/springframework/stereotype/Service.html"><code>@Service</code></a> or <a href="http://docs.spring.io/autorepo/docs/spring-framework/current/javadoc-api/org/springframework/stereotype/Component.html"><code>@Component</code></a> annotations or by being declared as a <code>@Bean</code> in a configuration class) and annotate the service class methods with <code>@HystrixCommand</code>.</p>
 
-While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.1/agency/src/main/java/agency/TravelAgent.java#L22-L24">`getBackupGuide()`</a>.
+While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-samples/traveler/blob/1.0.4/agency/src/main/java/agency/TravelAgent.java#L22-L24">`getBackupGuide()`</a>.
 
 ```java
     String getBackupGuide() {

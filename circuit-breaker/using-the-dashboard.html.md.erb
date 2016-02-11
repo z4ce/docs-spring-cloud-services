@@ -4,11 +4,11 @@ title: Using the Circuit Breaker Dashboard
 
 <strong><%= modified_date %></strong>
 
-To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls.
+To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls.
 
 With the &#8220;Agency&#8221; example application (see the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.1">&#8220;traveler&#8221; repository</a>) receiving no load, the dashboard displays the following:
 
-<%= image_tag("circuit-breaker/dashboard-start-ii.png") %>
+<%= image_tag("circuit-breaker/dashboard-start.png") %>
 
 To see the circuit breaker in action, use curl, <a href="http://jmeter.apache.org/">JMeter</a>, <a href="http://httpd.apache.org/docs/2.2/programs/ab.html">Apache Bench</a>, or similar to simulate load.
 
@@ -20,14 +20,14 @@ With the Company application running and available via the Service Registry inst
 
 When service calls are succeeding, the circuit is closed, and the dashboard graph shows the rate of calls per second and successful calls per 10 seconds.
 
-<%= image_tag("circuit-breaker/dashboard-closed-ii.png") %>
+<%= image_tag("circuit-breaker/dashboard-closed.png") %>
 
 When calls begin to fail, the graph shows the rate of failed calls in red.
 
-<%= image_tag("circuit-breaker/dashboard-opening-ii.png") %>
+<%= image_tag("circuit-breaker/dashboard-opening.png") %>
 
 When failures exceed the configured threshold (the default is 20 failures in 5 seconds), the breaker opens the circuit. The dashboard shows the rate of short-circuited calls---calls which are going straight to the fallback method---in blue. The application is still allowing calls to the failing method at a rate of 1 every 5 seconds, as indicated in red; this is necessary to determine if calls are succeeding again and if the circuit can be closed.
 
-<%= image_tag("circuit-breaker/dashboard-open-ii.png") %>
+<%= image_tag("circuit-breaker/dashboard-open.png") %>
 
 With the circuit breaker in place on its `getGuide()` method, the Agency example application never returns an HTTP status code other than `200` to the requester.
