@@ -210,6 +210,8 @@ Today's special is: Birdfeather Tea
 
 ## <a id="use-client-side-decryption"></a>Use Client-Side Decryption
 
+<p class='note'><strong>Note</strong>: Use of Config Server to serve encrypted configuration values for client-side decryption is available only in Spring Cloud Services 1.0.4 and later.</p>
+
 On the Config Server, the decryption features are disabled, so encrypted property values from a configuration source are delivered to client applications unmodified. You can use the decryption features of Spring Cloud Config Client to perform client-side decryption of encrypted values.
  
 To use the decryption features in a client application, you must use a custom Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. Download the files from Oracle, fork the [Cloud Foundry Java buildpack](https://github.com/cloudfoundry/java-buildpack) on GitHub, and place the files in the `resources/open_jdk_jre/lib/security` directory. Then, following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic, add your custom buildpack to Pivotal Cloud Foundry&reg;. Make sure that it has the lowest position of all of the enabled Java buildpacks.
