@@ -6,6 +6,8 @@ You can update a Config Server instance's settings using either the cf Command L
 
 ## Using the cf CLI
 
+<p class='note'><strong>Note</strong>: Use of <code>cf update-service</code> to update settings on a Config Server service instance is available only in Spring Cloud Services 1.0.4 and later.</p>
+
 Run `cf update-service` on the service instance and add the `-c` flag with a JSON object that specifies new values for the Config Server's settings:
 
 * `git.uri`: The URL of the Git repository.
