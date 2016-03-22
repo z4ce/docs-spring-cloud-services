@@ -247,7 +247,7 @@ fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXP
 w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
 ```
 
-Put the key on the client application classpath. In the Cook application, the key is in [`src/main/resources`](https://github.com/spring-cloud-samples/cook/tree/master/src/main/resources).
+Put the key on the client application classpath. You can either add the keystore to the buildpack's `resources/open_jdk_jre/lib/security` directory (as described above for the JCE policy files) or include it with the source for the application. In the Cook application, the key is placed in [`src/main/resources`](https://github.com/spring-cloud-samples/cook/tree/develop/src/main/resources).
 
 ```
 cook
@@ -258,6 +258,8 @@ cook
             ├── bootstrap.yml
             └── server.jks
 ```
+
+<p class='note'><strong>Important</strong>: Cook is an example application, and the key is packaged with the application source for example purposes. If at all possible, use the buildpack for keystore distribution.</p>
 
 Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-samples/cook/blob/master/src/main/resources/bootstrap.yml#L5-L10) using the `encrypt.keyStore` properties:
 
