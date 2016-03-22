@@ -144,30 +144,27 @@ If using Gradle, <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.
 compile("org.springframework.boot:spring-boot-starter-actuator")
 ```
 
-You can now visit `/env` to see the application environment's properties (the below example has been edited for brevity):
+You can now visit `/env` to see the application environment's properties (the following shows an excerpt of an example response):
 
 <pre class="terminal">
 $ curl http://cookie.wise.com/env
 {
-  "applicationConfig: [classpath:/application.yml]": {
-      "spring.application.name": "cook"
-  },
-  "applicationConfig: [file:./application.yml]#dev": {
-      "management.security.enabled": false,
-      "security.basic.enabled": false,
-      "spring.profiles": "dev"
-  },
-  "configService:https://github.com/spring-cloud-samples/cook-config/cook.properties": {
-      "cook.special": "Pickled Cactus"
-  },
-  "defaultProperties": {
-      "spring.application.name": "bootstrap"
-  },
-  "profiles": [
-      "dev",
-      "cloud"
+  "profiles":[
+    "dev","cloud"
   ],
-  # ...
+  "configService:https://github.com/spring-cloud-samples/cook-config/cook.properties":{
+    "cook.special":"Pickled Cactus"
+  },
+  "vcap":{
+    "vcap.application.limits.mem":"512",
+    "vcap.application.application_uris":"cookie.wise.com",
+    "vcap.services.config-server.name":"config-server",
+    "vcap.application.uris":"cookie.wise.com",
+    "vcap.application.application_version":"179de3f9-38b6-4939-bff5-41a14ce4e700",
+    "vcap.services.config-server.tags[0]":"configuration",
+    "vcap.application.space_name":"development",
+    "vcap.services.config-server.plan":"standard",
+//...
 </pre>
 
 ## <a id="refresh-client-application-configuration"></a>Refresh Client Application Configuration
