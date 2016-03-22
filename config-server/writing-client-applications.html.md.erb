@@ -237,7 +237,7 @@ If using Gradle, [include in `build.gradle`](https://github.com/spring-cloud-sam
     compile("org.springframework.cloud:spring-cloud-context:1.0.5.RELEASE")
 ```
 
-Encrypted values must be prefixed with the string `{cipher}`. If using YAML, enclose the entire value in single quotes, as in `'{cipher}vALuE'`; if using a properties file, do not use quotes. The [configuration source for the Cook application](https://github.com/spring-cloud-samples/cook-config) has a [`secretMenu` property](https://github.com/spring-cloud-samples/cook-config/blob/master/cook.properties#L2) in its `cook.properties`:
+Encrypted values must be prefixed with the string `{cipher}`. If using YAML, enclose the entire value in single quotes, as in `'{cipher}vALuE'`; if using a properties file, do not use quotes. The [configuration source for the Cook application](https://github.com/spring-cloud-samples/cook-config) has a [`secretMenu` property](https://github.com/spring-cloud-samples/cook-config/blob/master/cook-encryption.properties#L2) in its `cook-encryption.properties`:
 
 ```
 secretMenu={cipher}AQA90Q3GIRAMu6ToMqwS++En2iFzMXIWX99G66yaZFRHrQNq64CntqOzWymd3xE7uJpZK
@@ -247,18 +247,19 @@ fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXP
 w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
 ```
 
-Put the key on the client application classpath. In the Cook application, the key is in [`src/main/resources`](https://github.com/spring-cloud-samples/cook/tree/develop/src/main/resources).
+Put the key on the client application classpath. In the Cook application, the key is in [`src/main/resources`](https://github.com/spring-cloud-samples/cook/tree/master/src/main/resources).
 
 ```
 cook
 └── src
     └── main
         └── resources
+            ├── application.yml
             ├── bootstrap.yml
             └── server.jks
 ```
 
-Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/resources/bootstrap.yml#L5-L10) using the `encrypt.keyStore` properties:
+Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-samples/cook/blob/master/src/main/resources/bootstrap.yml#L5-L10) using the `encrypt.keyStore` properties:
 
 ```yml
 encrypt:
@@ -269,7 +270,7 @@ encrypt:
     secret: changeme
 ```
 
-The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/java/cook/Menu.java#L14-L23), which is injected with the decrypted configuration value.
+The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/java/cook/Menu.java#L14-L23).
 
 ```java
   @Value("${secretMenu}")
@@ -282,7 +283,13 @@ The Menu class has [a String property `secretMenu`](https://github.com/spring-cl
   }
 ```
 
-In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
+A [default value for `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/resources/bootstrap.yml#L5) is in `bootstrap.yml`:
+
+```yml
+secretMenu: Animal Crackers
+```
+
+In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-samples/cook/blob/master/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
 
 ```java
     @RequestMapping("/restaurant/secret-menu")
@@ -290,6 +297,19 @@ In the Application class, [the method `secretMenu()` is mapped to `/restaurant/s
       return menu.getSecretMenu();
     }
 ```
+
+After making the key available to the application and installing the JCE policy files in the Java buildpack, you can cause the Config Server to serve properties from the `cook-encryption.properties` file by activating the `encryption` profile on the application, e.g. by running `cf set-env` to set the `SPRING_PROFILES_ACTIVE` environment variable:
+
+<pre class="terminal">
+$ cf set-env cook SPRING_PROFILES_ACTIVE dev,encryption
+Setting env variable 'SPRING_PROFILES_ACTIVE' to 'dev,encryption' for app cook in org myorg / space development as user...
+OK
+TIP: Use 'cf restage' to ensure your env variable changes take effect
+
+$ cf restage cook
+</pre>
+
+The application will decrypt the encrypted property after receiving it from the Config Server. You can view the property value by visiting `/restaurant/secret-menu` on the application.
 
 ## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
 
