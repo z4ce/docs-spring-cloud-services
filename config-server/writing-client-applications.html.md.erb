@@ -31,7 +31,7 @@ As the output from the ```cf set-env``` command suggests, restage the applicatio
 
 When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
 
-In <a href="https://github.com/spring-cloud-samples/cook/blob/develop/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
+In <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
 
 ```yml
 spring:
@@ -41,7 +41,7 @@ spring:
 
 This application will use a path with the application name `cook`, so the Config Server will look in its configuration source for files whose names begin with `cook`, and return configuration properties from those files.
 
-Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/develop/src/main/java/cook/Menu.java">The Menu</a> class reads the value of `special` from the `cook.special` configuration property.
+Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/java/cook/Menu.java">The Menu class</a> reads the value of `special` from the `cook.special` configuration property.
 
 ```java
 @RefreshScope
@@ -62,7 +62,7 @@ public class Menu {
 }
 ```
 
-<a href="https://github.com/spring-cloud-samples/cook/blob/develop/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
+<a href="https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
 
 ```java
 @RestController
@@ -215,7 +215,7 @@ To use the decryption features in a client application, you must use a custom Ja
 
 You must also include [Spring Security RSA](https://github.com/dsyer/spring-security-rsa) as a dependency and specify version 1.0.5.RELEASE of Spring Cloud Context in your client application's build file.
 
-If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-samples/cook/blob/develop/pom.xml#L53-L62):
+If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-samples/cook/blob/1.0.4/pom.xml#L53-L62):
 
 ```xml
     <dependency>
@@ -230,7 +230,7 @@ If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-samples/c
     </dependency>
 ```
 
-If using Gradle, [include in `build.gradle`](https://github.com/spring-cloud-samples/cook/blob/develop/build.gradle#L42-L43):
+If using Gradle, [include in `build.gradle`](https://github.com/spring-cloud-samples/cook/blob/1.0.4/build.gradle#L42-L43):
 
 ```groovy
     compile("org.springframework.security:spring-security-rsa")
@@ -247,7 +247,7 @@ fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXP
 w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
 ```
 
-Put the key on the client application classpath. You can either add the keystore to the buildpack's `resources/open_jdk_jre/lib/security` directory (as described above for the JCE policy files) or include it with the source for the application. In the Cook application, the key is placed in [`src/main/resources`](https://github.com/spring-cloud-samples/cook/tree/develop/src/main/resources).
+Put the key on the client application classpath. You can either add the keystore to the buildpack's `resources/open_jdk_jre/lib/security` directory (as described above for the JCE policy files) or include it with the source for the application. In the Cook application, the key is placed in [`src/main/resources`](https://github.com/spring-cloud-samples/cook/tree/1.0.4/src/main/resources).
 
 ```
 cook
@@ -261,7 +261,7 @@ cook
 
 <p class='note'><strong>Important</strong>: Cook is an example application, and the key is packaged with the application source for example purposes. If at all possible, use the buildpack for keystore distribution.</p>
 
-Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-samples/cook/blob/master/src/main/resources/bootstrap.yml#L5-L10) using the `encrypt.keyStore` properties:
+Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/resources/bootstrap.yml#L7-L12) using the `encrypt.keyStore` properties:
 
 ```yml
 encrypt:
@@ -272,7 +272,7 @@ encrypt:
     secret: changeme
 ```
 
-The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/java/cook/Menu.java#L14-L23).
+The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/java/cook/Menu.java#L14-L23).
 
 ```java
   @Value("${secretMenu}")
@@ -285,13 +285,13 @@ The Menu class has [a String property `secretMenu`](https://github.com/spring-cl
   }
 ```
 
-A [default value for `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/develop/src/main/resources/bootstrap.yml#L5) is in `bootstrap.yml`:
+A [default value for `secretMenu`](https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/resources/bootstrap.yml#L5) is in `bootstrap.yml`:
 
 ```yml
 secretMenu: Animal Crackers
 ```
 
-In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-samples/cook/blob/master/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
+In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
 
 ```java
     @RequestMapping("/restaurant/secret-menu")
@@ -317,7 +317,7 @@ The application will decrypt the encrypted property after receiving it from the 
 
 The Spring Cloud Config Client starter has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
 
-If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In `application.yml` or `bootstrap.yml`:
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/resources/application.yml">`application.yml`</a> or `bootstrap.yml`:
 
 ```yml
 security:
