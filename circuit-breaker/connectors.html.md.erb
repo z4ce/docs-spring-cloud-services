@@ -72,7 +72,7 @@ If your client application uses RabbitMQ for its own business purposes and is bo
 
 To facilitate this, use explicit Spring Cloud Connectors configuration to create the two ```ConnectionFactory``` beans, using annotations to make the purpose of each bean clear.
 
-One configuration class uses the ```@HystrixConnectionFactory``` annotation to cause Hystrix AMQP to use the created ```ConnectionFactory```:
+One bean uses the ```@HystrixConnectionFactory``` annotation so that its created ```ConnectionFactory``` will be used by Hystrix AMQP:
 
 ```java
 @Configuration
@@ -85,7 +85,7 @@ public class CloudConfig extends CloudConnectorsConfig {
 }
 ```
 
-Another configuration class uses the ```@Primary``` annotation to cause your client application code to use the created ```ConnectionFactory```:
+Another ```ConnectionFactory``` bean---in this example, created in a separate configuration class---is marked with the ```@Primary``` annotation so that this ```ConnectionFactory``` will be used by your client application code:
 
 ```java
 @Configuration
