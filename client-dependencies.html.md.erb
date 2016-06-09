@@ -20,13 +20,6 @@ If using Maven, include in `pom.xml`:
     <version>1.0.2.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-
-  <repositories>
-    <repository>
-      <id>spring-release</id>
-      <url>https://repo.spring.io/libs-release</url>
-    </repository>
-  </repositories>
 ```
 
 If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in `build.gradle`:
@@ -46,12 +39,6 @@ apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {
         mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.2.RELEASE"
-    }
-}
-
-repositories {
-    maven {
-        url "https://repo.spring.io/libs-release"
     }
 }
 ```
