@@ -5,7 +5,32 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls.
+To find the dashboard, navigate in Pivotal Cloud Foundry&reg; Apps Manager to the Circuit Breaker Dashboard service instance's space and click **Manage** in the listing for the service instance.
+
+<%= image_tag("circuit-breaker/circuit-breaker-dashboard-manage-link.png") %>
+
+If you are using version 6.8.0 or later of the cf Command Line Interface Tool, you can also use `cf service SERVICE_NAME`, where `SERVICE_NAME` is the name of the Circuit Breaker Dashboard service instance:
+
+<pre class="terminal">
+$ cf service circuit-breaker-dashboard
+
+Service instance: circuit-breaker-dashboard
+Service: p-circuit-breaker-dashboard
+Plan: standard
+Description: Circuit Breaker Dashboard for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-circuit-breaker-dashboard/e099ae0c-fafb-4d77-950f-5f87f2ca387f
+
+Last Operation
+Status: create succeeded
+Message:
+Started: 2016-05-17T03:51:48Z
+Updated:
+</pre>
+
+Visit the URL given for "Dashboard".
+
+To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> subtopic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls. 
 
 With the &#8220;Agency&#8221; example application (see the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.0.1">&#8220;traveler&#8221; repository</a>) receiving no load, the dashboard displays the following:
 
