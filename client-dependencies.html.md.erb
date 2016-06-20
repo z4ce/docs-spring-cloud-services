@@ -7,19 +7,57 @@ owner: Spring Cloud Services
 
 See below for information about the dependencies required for client applications using Spring Cloud Services service instances.
 
-## <a id="include-starters"></a>Include Spring Cloud Services Starters
+## <a id="include-dependencies"></a>Include Spring Cloud Services Dependencies
 
-To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-starter-parent` BOM.
+To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency.
 
 If using Maven, include in `pom.xml`:
 
 ```xml
   <parent>
-    <groupId>io.pivotal.spring.cloud</groupId>
-    <artifactId>spring-cloud-services-starter-parent</artifactId>
-    <version>1.0.2.RELEASE</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.3.5.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Brixton.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.pivotal.spring.cloud</groupId>
+            <artifactId>spring-cloud-services-dependencies</artifactId>
+            <version>1.1.0.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+If not using the `spring-boot-starter-parent`, include in the `<dependencyManagement>` block of `pom.xml`:
+
+```
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>1.3.5.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+        <!-- ... -->
+
+    </dependencies>
+  </dependencyManagement>
 ```
 
 If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in `build.gradle`:
@@ -31,14 +69,34 @@ buildscript {
     }
     dependencies {
         classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
     }
 }
 
+apply plugin: "java"
+apply plugin: "spring-boot"
 apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-starter-parent:1.0.2.RELEASE"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.1.0.RELEASE"
+    }
+}
+
+repositories {
+    maven {
+        url "https://repo.spring.io/plugins-release"
+    }
+}
+```
+
+If not using the Spring Boot Gradle plugin, include in the `dependencyManagement` block of `build.gradle`:
+
+```groovy
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:1.3.5.RELEASE"
     }
 }
 ```
