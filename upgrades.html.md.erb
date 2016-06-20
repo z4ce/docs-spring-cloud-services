@@ -55,6 +55,8 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
 After upgrading the Spring Cloud Services product, follow the below steps to upgrade an individual service instance.
 
+<p class='note'><strong>Important</strong>: If you have client applications which work with Spring Cloud Services 1.0.x service instances and are upgrading these service instances to 1.1.x, you must update your client applications to use the current version of the Spring Cloud Services client dependencies. See <a href="#client-application-changes-in-1-0-x">Client Application Changes in 1.1.x</a> below.</p>
+
 1. To see the current version of a service instance, visit the Service Instances Dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html) subtopic.)
 
     <%= image_tag("./images/upgrades/si-dashboard-pre-upgrade.png") %>
@@ -77,3 +79,8 @@ After upgrading the Spring Cloud Services product, follow the below steps to upg
 
     <%= image_tag("./images/upgrades/si-dashboard-post-upgrade.png") %>
 
+## <a id="client-application-changes-in-1-0-x"></a>Client Application Changes in 1.1.x
+    
+The client dependencies for Spring Cloud Services were restructured in Spring Cloud Services version 1.1.0. In particular, the `spring-cloud-services-starter-parent` has been replaced with a `spring-cloud-services-dependencies` Maven BOM (<a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies">Bill of Materials</a>), which does not include the Spring Cloud or Spring Boot dependency BOMs.
+
+If your client applications are using dependencies corresponding to a 1.0.x version of Spring Cloud Services, you must update them to use the 1.1.0 BOM and include the other requisite dependencies. See the <a href="/spring-cloud-services/client-dependencies">Client Dependencies</a> topic for details on the current client dependencies.
