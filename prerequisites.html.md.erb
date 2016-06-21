@@ -16,10 +16,10 @@ $ cf buildpacks
 Getting buildpacks...
 
 buildpack                position   enabled   locked   filename
-java_buildpack_offline   1          true      false    java-buildpack-offline-v3.0.zip
-ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.3.1.zip
-nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.2.1.zip
-go_buildpack             4          true      false    go_buildpack-cached-v1.2.0.zip
+java_buildpack_offline   1          true      false    java-buildpack-offline-v3.5.1.zip
+ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.6.8.zip
+nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.5.2.zip
+go_buildpack             4          true      false    go_buildpack-cached-v1.6.3.zip
 </pre>
 
 If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry&reg; by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. If you do not delete or disable the older Java buildpack, make sure that the newer Java buildpack is in a lower position so that it will be the default.
@@ -49,11 +49,11 @@ Requirements section of the Spring Cloud Services prerequisites documentation.
 
 ### <a id="self-signed-certificates-and-internal-cas"></a>Self-Signed Certificates and Internal CAs
 
-If your Pivotal Cloud Foundry&reg; installation is using its own self-signed SSL certificate, you must enable the "Trust Self-Signed Certificates" or "Ignore SSL certificate verification" option in the **Networking** section of the Pivotal Elastic Runtime tile **Settings** tab. See [Step 4 of the Configuring Elastic Runtime for vSphere and vCloud topic](http://docs.pivotal.io/pivotalcf/customizing/config-er-vmware.html#networking) in the Pivotal Cloud Foundry&reg; documentation.
+If your Pivotal Cloud Foundry&reg; installation is using its own self-signed SSL certificate, you must enable the "Ignore SSL certificate verification" or "Disable SSL certificate verification for this environment" option in the **Networking** section of the Pivotal Elastic Runtime tile **Settings** tab. See "Configuring Elastic Runtime for vSphere and vCloud" in the Pivotal Cloud Foundry&reg; documentation ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/customizing/config-er-vmware.html#security-config), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/customizing/config-er-vmware.html#networking)).
 
 If you are using an SSL certificate signed by an internal root Certificate Authority (CA), you must use a custom Java buildpack whose keystore contains the internal root CA. Follow the below steps to create and add the custom buildpack.
 
 1. Create a fork of the [Cloud Foundry Java buildpack](https://github.com/cloudfoundry/java-buildpack).
 1. Add your `cacerts` file to `resources/open_jdk_jre/lib/security/cacerts`.
-1. Following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic, add your custom buildpack to Pivotal Cloud Foundry&reg;.
+1. Following the instructions in the "Adding Buildpacks to Cloud Foundry" topic ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/adminguide/buildpacks.html), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/adminguide/buildpacks.html)), add your custom buildpack to Pivotal Cloud Foundry&reg;.
 1. Using the cf CLI as discussed in the <a href="/spring-cloud-services/prerequisites.html#platform-and-product-requirements">Platform and Product Requirements</a> section above, verify that the custom buildpack is now the default Java buildpack.
