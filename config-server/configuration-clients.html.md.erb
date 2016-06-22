@@ -102,7 +102,7 @@ As shown in the above example, the Config Server may include multiple values for
 
 A Spring application can use a Config Server as a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html">property source</a>. Properties from a Config Server will override those defined locally (e.g. via an `application.yml` in the classpath).
 
-The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see the <a href="/spring-cloud-services/config-server/server.html#request-paths">Request Paths</a> section of the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic). It will derive values for these three parameters from the following properties:
+The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see the <a href="/spring-cloud-services/config-server/server.html#request-paths">Request Paths</a> section of the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> topic). It will derive values for these three parameters from the following properties:
 
 
 * `{application}`: ```spring.cloud.config.name``` or ```spring.application.name```.
@@ -117,4 +117,4 @@ $ cf set-env cook SPRING_PROFILES_ACTIVE production
 
 Given the above example response for the request path ```/cook/production```, a Spring application would give the two Config Server property sources precedence over other property sources. This means that properties from `https://github.com/myorg/configurations/cook-production.yml` would have precedence over properties from `https://github.com/myorg/configurations/cook.yml`, which would have precedence over properties from the application's other property sources (such as `classpath:application.yml`).
 
-For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> subtopic.
+For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.

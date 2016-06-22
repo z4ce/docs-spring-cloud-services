@@ -5,7 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-_Refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/1.0.4">"Cook" sample application</a> to follow along with the code in this subtopic._
+_Refer to the <a href="https://github.com/spring-cloud-samples/cook/tree/1.0.4">"Cook" sample application</a> to follow along with the code in this topic._
 
 To use a Spring Boot application as a client for a Config Server instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#config-server">Config Server</a> as well.
 
@@ -30,7 +30,7 @@ As the output from the ```cf set-env``` command suggests, restage the applicatio
 
 ## <a id="use-configuration-values"></a>Use Configuration Values
 
-When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
+When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> topic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
 
 In <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.4/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
 
@@ -82,7 +82,7 @@ public class Application {
 
 ## <a id="vary-configurations-based-on-profiles"></a>Vary Configurations Based on Profiles
 
-You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> subtopic.)
+You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> topic.)
 
 The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-samples/cook/blob/1.0.4/manifest.yml">`manifest.yml`</a>.
 
@@ -124,7 +124,7 @@ The sample configuration source <a href="https://github.com/spring-cloud-samples
 }
 ```
 
-As noted in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> subtopic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
+As noted in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> topic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
 
 ## <a id="view-client-application-configuration"></a>View Client Application Configuration
 

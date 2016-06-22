@@ -5,7 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.4">"greeting" repository</a> to follow along with the code in this subtopic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.4">"greeting" repository</a> to follow along with the code in this topic._
 
 To register your application with a Service Registry service instance or use it to consume a service that is registered with a Service Registry service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#service-registry">Service Registry</a> as well.
 
@@ -121,7 +121,7 @@ spring:
 
 As mentioned above, the ```route``` method is the default; it will be used if you do not specify ```registrationMethod```.
 
-With the ```spring.application.name``` property set, you can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> subtopic).
+With the ```spring.application.name``` property set, you can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> topic).
 
 <%= image_tag("service-registry/registered_service.png") %>
 
