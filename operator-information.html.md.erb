@@ -120,6 +120,16 @@ The applications are deployed in the "instances" space. Look for the backing app
 
 <%= image_tag("/spring-cloud-services/images/operator-information/instance-apps-apps-manager-space.png") %>
 
+### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
+
+By default, the SB stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the SB to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
+
+In the Installation Dashboard of Ops Manager, click the Spring Cloud Services tile. Navigate to the **Settings** tab.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/set-buildpack.png") %>
+
+Click the **Spring Cloud Services** tab and enter the name of the desired Java buildpack in the **Buildpack** field. Click **Save**, return to the Installation Dashboard, and apply your changes. The SB will now use the selected buildpack to stage service instance backing applications.
+
 ## <a id="uaa-identity-zones-and-clients"></a>UAA Identity Zones and Clients
 
 Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which have bindings to these service instances. 
