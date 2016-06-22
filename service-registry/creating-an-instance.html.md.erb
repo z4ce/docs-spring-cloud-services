@@ -5,54 +5,11 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can create a Service Registry instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
+You can create a Service Registry service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
 
-## Using the cf CLI
+<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes. This currently can only be configured through use of the cf Command Line Interface tool. (After creating a service instance using Apps Manager, you may use the cf CLI to set the number of nodes. See the <a href="/spring-cloud-services/service-registry/updating-an-instance.html">Updating an Instance</a> topic.)</p>
 
-Begin by targeting the correct org and space.
-
-<pre class="terminal">
-$ cf target -o myorg -s development
-
-API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
-User:           user
-Org:            myorg
-Space:          development
-</pre>
-
-If desired, view plan details for the Config Server product using `cf marketplace -s`.
-
-<pre class="terminal">
-$ cf marketplace
-Getting services from marketplace in org myorg / space development as user...
-OK
-
-service                       plans          description
-p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
-p-config-server               standard       Config Server for Spring Cloud Applications
-p-mysql                       100mb-dev      MySQL service for application development and testing
-p-rabbitmq                    standard       RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.
-p-service-registry            standard       Service Registry for Spring Cloud Applications
-
-TIP:  Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
-
-$ cf marketplace -s p-service-registry
-Getting service plan information for service p-service-registry as user...
-OK
-
-service plan   description     free or paid
-standard       Standard Plan   free
-</pre>
-
-Run `cf create-service`, specifying the service, plan name, and instance name.
-
-<pre class="terminal">
-$ cf create-service p-service-registry standard My\ Service\ Registry
-Creating service instance My Service Registry in org myorg / space development as user...
-OK
-</pre>
-
-## Using Apps Manager
+## <a id="using-apps-manager"></a>Using Apps Manager
 
 Log into Apps Manager as a Space Developer. In the Marketplace, select **Service Registry**.  
 
@@ -70,9 +27,86 @@ In the **Services** list, click the **Manage** link under the listing for the ne
 
 <%= image_tag("service-registry/4_service_successfully_added.png") %>
 
-It may take a few minutes to provision the service; while it is being provisioned, you will see a "The service instance is initializing" message. Once the instance is ready, its dashboard will load automatically.
+It may take a few minutes to provision the service; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
 
 <%= image_tag("service-registry/dashboard_more.png") %>
 
-The Service Registry instance is now ready to be used. For information about registering a service application with the instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
+## <a id="using-cf-cli"></a>Using the cf Command Line Interface Tool
 
+Target the correct org and space:
+
+<pre class="terminal">
+$ cf target -o myorg -s development
+
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
+User:           user
+Org:            myorg
+Space:          development
+</pre>
+
+You can view plan details for the Config Server product by running `cf marketplace -s`.
+
+<pre class="terminal">
+$ cf marketplace
+Getting services from marketplace in org myorg / space development as user...
+OK
+
+service                       plans          description
+p-circuit-breaker-dashboard   standard       Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard       Config Server for Spring Cloud Applications
+p-service-registry            standard       Service Registry for Spring Cloud Applications
+
+TIP:  Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
+
+$ cf marketplace -s p-service-registry
+Getting service plan information for service p-service-registry as user...
+OK
+
+service plan   description     free or paid
+standard       Standard Plan   free
+</pre>
+
+Run `cf create-service`, specifying the service, plan name, and instance name. Optionally, you may add the `-c` flag and provide a JSON object that specifies the number of nodes to provision as `count` (by default, the instance will be provisioned with only a single node).
+
+To create an instance with a single node, run:
+
+<pre class="terminal">
+$ cf create-service p-service-registry standard My\ Service\ Registry
+Creating service instance My Service Registry in org myorg / space development as user...
+OK
+
+Create in progress. Use 'cf services' or 'cf service My Service Registry' to check operation status.
+</pre>
+
+To create an instance with three nodes, run:
+
+<pre class="terminal">
+$ cf create-service p-service-registry standard My\ Service\ Registry -c '{"count": 3}'
+Creating service instance My Service Registry in org myorg / space development as user...
+OK
+
+Create in progress. Use 'cf services' or 'cf service My Service Registry' to check operation status.
+</pre>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the Service Registry instance is ready to be used, the `cf service` command will give a status of `create succeeded`:
+
+<pre class="terminal">
+$ cf service My\ Service\ Registry
+
+Service instance: My Service Registry
+Service: p-service-registry
+Bound apps:
+Tags:
+Plan: standard
+Description: Service Registry for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/42c16b7f-81fd-421f-9ea0-ced9ea05ded7
+
+Last Operation
+Status: create succeeded
+Message:
+Started: 2016-06-22T19:44:19Z
+Updated: 2016-06-22T19:47:24Z
+</pre>
+
+For information about registering an application with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
