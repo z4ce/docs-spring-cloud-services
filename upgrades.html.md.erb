@@ -23,7 +23,7 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
 1. Download the latest version of Spring Cloud Services from [Pivotal Network](https://network.pivotal.io/).
 
-1. In [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
+1. In the Installation Dashboard of [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
 
     <%= image_tag("./images/upgrades/pre-upload.png") %>
 
@@ -31,7 +31,11 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
     <%= image_tag("./images/upgrades/pre-upgrade.png") %>
 
-1. Click **Apply changes** on the right sidebar.
+1. If the Spring Cloud Services tile is colored orange, click the tile to configure it. In the **Stemcell** tab, click **Import Stemcell** to import the correct stemcell.
+
+    <%= image_tag("./images/upgrades/stemcell.png") %>
+
+1. In the Installation Dashboard, click **Apply changes** on the right sidebar.
 
     <%= image_tag("./images/upgrades/post-upgrade.png") %>
 
@@ -49,38 +53,90 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
 ## <a id="service-instance-upgrade-steps"></a>Service Instance Upgrade Steps
 
-<p class='note'><strong>Note</strong>: Use of <code>cf update-service</code> to upgrade service instances is available only in Spring Cloud Services 1.0.4 and later.</p>
-
-<p class='note'><strong>Important</strong>: In the current version of Spring Cloud Services, upgrading a service instance will result in downtime for the instance while the upgrade is completed.</p>
-
 After upgrading the Spring Cloud Services product, follow the below steps to upgrade an individual service instance.
 
-<p class='note'><strong>Important</strong>: If you have client applications which work with Spring Cloud Services 1.0.x service instances and are upgrading these service instances to 1.1.x, you must update your client applications to use the current version of the Spring Cloud Services client dependencies. See <a href="#client-application-changes-in-1-0-x">Client Application Changes in 1.1.x</a> below.</p>
+<p class='note'><strong>Important</strong>: If you have client applications which work with Spring Cloud Services 1.0.x service instances and are upgrading these service instances to 1.1.x, you must update your client applications to use the current version of the Spring Cloud Services client dependencies. See <a href="#client-application-changes-in-1-0-0">Client Application Changes in 1.1.0</a> below.</p>
+
+<p class='note'><strong>Important</strong>: After upgrading a Circuit Breaker Dashboard service instance from 1.0.x to 1.1.x, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.</p>
+
+### <a id="si-upgrade-using-si-dashboard"></a>Using the Service Instances Dashboard
 
 1. To see the current version of a service instance, visit the Service Instances dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic.)
 
     <%= image_tag("./images/upgrades/si-dashboard-pre-upgrade.png") %>
 
-1. Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
+1. Click **Upgrade** in the listing for the service instance. To upgrade all service instances which are not at the versions included in the currently-installed Spring Cloud Services product, you may also click **Upgrade Service Instances**.
 
-    <pre class="terminal">
-    $ cf update-service -c '{"upgrade":true}' config-server
-    Updating service instance config-server as user...
-    OK
-    </pre>
+    <%= image_tag("./images/upgrades/si-dashboard-upgrade.png") %>
 
-    <p class='note'><strong>Note</strong>: The <code>cf update-service</code> command begins the upgrade process. The actual upgrade may not have finished when the command exits.</p>
+    <%= image_tag("./images/upgrades/si-dashboard-upgrade-service-instances.png") %>
 
-1. Wait while any backing applications belonging to the service instance are upgraded. The Dashboard will show the `RESTARTING` status for the instance.
+1. Wait while any backing applications belonging to the service instance or instances are upgraded. The dashboard will show the `UPDATING` status for an instance while it is being upgraded.
 
-    <%= image_tag("./images/upgrades/si-dashboard-upgrading.png") %>
+    <%= image_tag("./images/upgrades/si-dashboard-upgrading-instances.png") %>
 
-1. When the service instance has been upgraded, the Dashboard will show the new version.
+1. When the service instances have been upgraded, the dashboard will show the new versions.
 
     <%= image_tag("./images/upgrades/si-dashboard-post-upgrade.png") %>
-
-## <a id="client-application-changes-in-1-0-x"></a>Client Application Changes in 1.1.x
     
+### <a id="si-upgrade-using-cf-cli"></a>Using the cf Command Line Interface Tool
+ 
+Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
+
+<pre class="terminal">
+$ cf update-service -c '{"upgrade": true}' My\ Config\ Server
+Updating service instance My Config Server as admin...
+OK
+
+Update in progress. Use 'cf services' or 'cf service My Config Server' to check operation status.
+</pre>
+
+As the output from the command suggests, you can use the `cf services` or `cf service` commands to check the status of the upgrade.
+
+<pre class="terminal">
+$ cf service My\ Config\ Server
+
+Service instance: My Config Server
+Service: p-config-server
+Bound apps: cook
+Tags:
+Plan: standard
+Description: Config Server for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://sprwise.com/dashboard/p-config-server/690f426b-9563-4d98-aa74-05ef3dea32c1
+
+Last Operation
+Status: update in progress
+Message:
+Started: 2016-06-22T16:13:27Z
+Updated: 2016-06-22T16:13:27Z
+</pre>
+
+You can also use the Service Instances dashboard to see the status and current version of the service instance; that dashboard will update as the instance's status changes. See the [The Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard)</a> section of the [Operator Information](/spring-cloud-services/operator-information.html).
+
+When the upgrade is complete, `cf service SERVICE_NAME` will report a `status` of `update succeeded`:
+
+<pre class="terminal">
+$ cf service My\ Config\ Server
+
+Service instance: My Config Server
+Service: p-config-server
+Bound apps: cook
+Tags:
+Plan: standard
+Description: Config Server for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-config-server/690f426b-9563-4d98-aa74-05ef3dea32c1
+
+Last Operation
+Status: update succeeded
+Message:
+Started: 2016-06-22T16:13:27Z
+Updated: 2016-06-22T16:15:28Z
+</pre>
+
+## <a id="client-application-changes-in-1-0-0"></a>Client Application Changes in 1.1.0
+
 The client dependencies for Spring Cloud Services were restructured in Spring Cloud Services version 1.1.0. In particular, the `spring-cloud-services-starter-parent` has been replaced with a `spring-cloud-services-dependencies` Maven BOM (<a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies">Bill of Materials</a>), which does not include the Spring Cloud or Spring Boot dependency BOMs.
 
-If your client applications are using dependencies corresponding to a 1.0.x version of Spring Cloud Services, you must update them to use the 1.1.0 BOM and include the other requisite dependencies. See the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic for details on the current client dependencies.
+If your client applications are using dependencies corresponding to a 1.0.x version of Spring Cloud Services, you must update them to use the 1.1.x BOM and include the other requisite dependencies. See the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic for details on the current client dependencies.
