@@ -1,0 +1,57 @@
+---
+title: Updating an Instance
+owner: Spring Cloud Services
+---
+
+You can update settings on a Service Registry service instance using the cf Command Line Interface tool.
+
+The `cf update-service` command can be given a `-c` flag with a JSON object containing parameters used to configure the service instance. Parameters accepted for the Service Registry are listed below.
+
+| Parameter             | Function                         | Example                        |
+|-----------------------|----------------------------------|--------------------------------|
+| <code>count</code>    | The number of nodes to provision | <code>'{"count": 3}'</code>      |
+| <code>upgrade</code>  | Whether to upgrade the instance  | <code>'{"upgrade": true}'</code> |
+
+To update a Service Registry service instance's settings, target the org and space of the service instance:
+
+<pre class="terminal">
+$ cf target -o myorg -s development
+
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
+User:           user
+Org:            myorg
+Space:          development
+</pre>
+
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. To update a service instance and set the count of instances for running in high-availability mode, run:
+
+<pre class="terminal">
+$ cf update-service My\ Service\ Registry -c '{"count": 3}'
+Updating service instance My Service Registry as admin...
+OK
+
+Update in progress. Use 'cf services' or 'cf service My Service Registry' to check operation status.
+</pre>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the update is complete, the `cf service` command will give a status of `update succeeded`:
+
+<pre class="terminal">
+$ cf service My\ Service\ Registry
+
+Service instance: My Service Registry
+Service: p-service-registry
+Bound apps:
+Tags:
+Plan: standard
+Description: Service Registry for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/f800ae87-4203-4586-bb7f-7bdb5bb2b931
+
+Last Operation
+Status: update succeeded
+Message:
+Started: 2016-06-22T20:32:40Z
+Updated: 2016-06-22T20:35:47Z
+</pre>
+
+The service instance is now updated and ready to be used. For information about registering an application with a Service Registry service instance or calling an application which has been registered with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
