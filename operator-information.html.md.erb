@@ -72,34 +72,32 @@ To view a backing application for a service instance in Pivotal Cloud Foundry&re
 Target the org and space of the service instance.
 
 <pre class="terminal">
-$ cf target -o myorg -s outer
+$ cf target -o myorg -s development
 
-API endpoint:   https://api.wise.com (API version: 2.41.0)
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
 User:           admin
 Org:            myorg
-Space:          outer
+Space:          development
 
 $ cf services
-Getting services in org myorg / space outer as admin...
+Getting services in org myorg / space development as admin...
 OK
 
-name             service            plan        bound apps    last operation
-config-server    p-config-server    standard    cook          create succeeded
+name               service           plan        bound apps     last operation
+My Config Server   p-config-server   standard    cook           create succeeded
 [...]
+
 </pre>
 
 Run `cf service` with the `CF_TRACE` environment variable set to `true`. Copy the value of `resources.metadata.guid`, which is the service instance GUID.
 
 <pre class="terminal">
-$ CF_TRACE=true cf service config-server
+$ CF_TRACE=true cf service My\ Config\ Server
 
-VERSION:
-6.11.3-cebadc9
-
-REQUEST: [2015-12-09T20:38:44-06:00]
+REQUEST: [2016-06-21T18:51:54-05:00]
 [...]
 
-RESPONSE: [2015-12-09T20:38:44-06:00]
+RESPONSE: [2016-06-21T18:51:55-05:00]
 [...]
 
 {
@@ -110,7 +108,7 @@ RESPONSE: [2015-12-09T20:38:44-06:00]
   "resources": [
     {
       "metadata": {
-        "guid": "7b76f84c-455c-4ee6-8687-dbd93d734406",
+        "guid": "86b38ce0-eed8-4c01-adb4-1a651a6178e2",
 [...]
 </pre>
 
@@ -124,7 +122,7 @@ The applications are deployed in the "instances" space. Look for the backing app
 
 ## <a id="uaa-identity-zones-and-clients"></a>UAA Identity Zones and Clients
 
-Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which possess bindings to such service instances. 
+Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which have bindings to these service instances. 
 
 Within the platform Identity Zone ("the UAA Identity Zone"), Spring Cloud Services creates a `p-spring-cloud-services` UAA client for the SB and a `p-spring-cloud-services-worker` UAA client for the Worker. In the Spring Cloud Services Identity Zone, it creates a `p-spring-cloud-services-worker` UAA client for the Worker.
 
@@ -146,14 +144,13 @@ To make requests directly against a Config Server service instance's Spring Clou
 
     <pre class="terminal">
     $ cf services
-    Getting services in org myorg / space outer as admin...
+    Getting services in org myorg / space development as admin...
     OK
 
-    name                    service                   plan       bound apps    last operation
-    config-server           p-config-server           standard   cook          create succeeded
-
+    name               service           plan        bound apps     last operation
+    My Config Server   p-config-server   standard    cook           create succeeded
     $ cf env cook
-    Getting env variables for app cook in org myorg / space outer as admin...
+    Getting env variables for app cook in org myorg / space development as admin...
     OK
 
     System-Provided:
@@ -163,9 +160,9 @@ To make requests directly against a Config Server service instance's Spring Clou
        {
         "credentials": {
          "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
-         "client_id": "p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b",
-         "client_secret": "DWiPkHI83ZVg",
-         "uri": "https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com"
+         "client_id": "p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73",
+         "client_secret": "rU7dMUw6bQjR",
+         "uri": "https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com"
         },
     [...]
     </pre>
@@ -176,20 +173,20 @@ To make requests directly against a Config Server service instance's Spring Clou
     $ uaac target https://p-spring-cloud-services.uaa.cf.wise.com
 
     Target: https://p-spring-cloud-services.uaa.cf.wise.com
+    Context: p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73, from client p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73
 
     </pre>
 
 3. From the service instance's entry in the application's `VCAP_SERVICES` environment variable, copy the values of `credentials.client_id` and `credentials.client_secret`. Run `uaac token client get`, providing those values:
 
     <pre class="terminal">
-    $ uaac token client get p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b -s DWiPkHI83ZVg
+    $ uaac token client get p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73 -s rU7dMUw6bQjR
 
     Successfully fetched token via client credentials grant.
     Target: https://p-spring-cloud-services.uaa.cf.wise.com
-    Context: p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b, from client p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b
+    Context: p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73, from client p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73
 
     </pre>
-
 
 4. Run `uaac context` to display the current context:
 
@@ -197,15 +194,14 @@ To make requests directly against a Config Server service instance's Spring Clou
     $ uaac context
 
     [2]*[https://p-spring-cloud-services.uaa.cf.wise.com]
-      skip_ssl_validation: true
 
-      [0]*[p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b]
-          client_id: p-config-server-7893d5ec-23e9-4fc3-a7ba-484e6c19855b
-          access_token: eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIwNWI1NWM5ZS1iZTdlLTQ5YzMtYTBhYi1lMDI5OWE2MDMyM2UiLCJzdWIiOiJwLWNvbmZpZy1zZX_a-bUNcH1ofOTHer567cHaRACtErs32iN0A23VErY1lOnG3stRiNg
+      [8]*[p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73]
+          client_id: p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73
+          access_token: TOKEN_STRING
           token_type: bearer
           expires_in: 43199
-          scope: p-config-server.7b76f84c-455c-4ee6-8687-dbd93d734406.read
-          jti: 05b55c9e-be7e-49c3-a0ab-e0299a60323e
+          scope: p-config-server.86b38ce0-eed8-4c01-adb4-1a651a6178e2.read
+          jti: 8c122f33-0d63-446d-9549-6e349ce447eb
 
     </pre>
 
@@ -216,30 +212,31 @@ With the access token, you can now make requests directly against the service in
 For a Config Server service instance:
 
 <pre class="terminal">
-$ curl -H 'Authorization: bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIwNWI1NWM5ZS1iZTdlLTQ5YzMtYTBhYi1lMDI5OWE2MDMyM2UiLCJzdWIiOiJwLWNvbmZpZy1zZX_a-bUNcH1ofOTHer567cHaRACtErs32iN0A23VErY1lOnG3stRiNg' https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
-{"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+curl -H 'Authorization: bearer TOKEN_STRING' https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
+{"name":"cook","profiles":["default"],"label":null,"version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
 </pre>
 
 For a Service Registry service instance:
 
+<%# Encoded output below because otherwise the browser can attempt to render the XML %>
+
 <pre class="terminal">
-$ curl -H 'Authorization: bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4ZjlkMTIxYy1mNjUwLTRhODMtODE0Mi02ZWNlYWYxNTNiMzEiLCJzdWIiOiJwLXNlcnZpY2UtcmVnaXN0cnktYjFlM2Q5YzgtOGM4YS00ZTk3LTllZTctZTcyN2NiMTM' https://eureka-defe7d0b-13b1-4293-83d3-57503712a0b8.apps.wise.com/eureka/apps
-<applications>
-  <versions__delta>1</versions__delta>
-  <apps__hashcode>UP_1_</apps__hashcode>
-  <application>
-    <name>COMPANY</name>
-    <instance>
-      <hostName>company.apps.wise.com</hostName>
-      <app>COMPANY</app>
-      <ipAddr>10.68.224.46</ipAddr>
-      <status>UP</status>
+$ curl -H 'Authorization: bearer TOKEN_STRING' https://eureka-493b6b17-512a-4961-8f85-6178251fe2fa.apps.wise.com/eureka/apps
+&#x3C;applications&#x3E;
+  &#x3C;versions__delta&#x3E;1&#x3C;/versions__delta&#x3E;
+  &#x3C;apps__hashcode&#x3E;UP_2_&#x3C;/apps__hashcode&#x3E;
+  &#x3C;application&#x3E;
+    &#x3C;name&#x3E;GREETER&#x3C;/name&#x3E;
+    &#x3C;instance&#x3E;
+      &#x3C;instanceId&#x3E;greeter.apps.wise.com:88e152ff-b476-44e1-4078-470b0f80eb25&#x3C;/instanceId&#x3E;
+      &#x3C;hostName&#x3E;greeter.apps.wise.com&#x3C;/hostName&#x3E;
+      &#x3C;app&#x3E;GREETER&#x3C;/app&#x3E;
+      &#x3C;ipAddr&#x3E;10.68.224.43&#x3C;/ipAddr&#x3E;
+      &#x3C;status&#x3E;UP&#x3C;/status&#x3E;
       [...]
 </pre>
 
 ## <a id="service-instances-dashboard"></a>The Service Instances Dashboard
-
-<p class='note'><strong>Note</strong>: The Service Instances dashboard is available only in Spring Cloud Services 1.0.4 and later.</p>
 
 To view the status of individual service instances, visit the Service Instances dashboard. You can access it at the following URL, where `SCS_BROKER_URL` is the URL of the SB (spring-cloud-broker):
 
@@ -249,11 +246,11 @@ SCS_BROKER_URL/admin/serviceInstances
 
 Locate the SB as described in the [Access Broker Applications in Apps Manager](#access-broker-applications-in-apps-manager) section. The Service Instances dashboard is also linked to on the main page of the SB.
 
-The dashboard shows the version and status of each service instance, as well as other information including the number of applications that are bound to the instance.
+The dashboard shows the version and status of each service instance, as well as other information including the number of applications that are bound to the instance. It also provides an **Upgrade** button for each service instance and an **Upgrade Service Instances** button; these buttons may be enabled if any service instances shown in the dashboard are not at the version included with the currently-installed Spring Cloud Services product. For more information on upgrading service instances, see the [Service Instance Upgrade Steps](/spring-cloud-services/upgrades.html#service-instance-upgrade-steps) section of the [Upgrades](/spring-cloud-services/upgrades.html) topic.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/si-dashboard.png") %>
 
-Click the **Instance Name** of a listed service instance to manage the instance. Hover over the number of an instance's **Bound Apps** to view the names of the applications that are bound to that instance.
+You can click the **Instance Name** of a listed service instance to manage the instance. Click the **+** icon beside the count of an instance's **Bound Apps** or **Service Keys** to view the names of the applications or service keys that are bound to that instance.
 
 ## <a id="application-health-and-status"></a>Application Health and Status
 
@@ -266,18 +263,17 @@ To access logs for the SB and Worker applications, target the "system" org and i
 <pre class="terminal">
 $ cf target -o system -s p-spring-cloud-services
 
-API endpoint:   https://api.cf.wise.com (API version: 2.41.0)
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
 User:           admin
 Org:            system
 Space:          p-spring-cloud-services
-
-$ cf apps
+Ben-Kleins-MacBook-Pro:Work bklein$ cf apps
 Getting apps in org system / space p-spring-cloud-services as admin...
 OK
 
 name                         requested state   instances   memory   disk   urls
-spring-cloud-broker          started           1/1         512M     1G     spring-cloud-broker.apps.wise.com
-spring-cloud-broker-worker   started           1/1         512M     1G     spring-cloud-broker-worker.apps.wise.com
+spring-cloud-broker          started           1/1         1G       1G     spring-cloud-broker.apps.wise.com
+spring-cloud-broker-worker   started           1/1         1G       1G     spring-cloud-broker-worker.apps.wise.com
 </pre>
 
 Then you can use ```cf logs``` to tail logs for either the SB:
@@ -301,29 +297,31 @@ To access logs for service instance backing applications, target the "p-spring-c
 <pre class="terminal">
 $ cf target -o p-spring-cloud-services -s instances
 
-API endpoint:   https://api.cf.wise.com (API version: 2.41.0)
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
 User:           admin
 Org:            p-spring-cloud-services
 Space:          instances
-
 $ cf apps
 Getting apps in org p-spring-cloud-services / space instances as admin...
 OK
 
 name                                           requested state   instances   memory   disk   urls
-config-7b76f84c-455c-4ee6-8687-dbd93d734406    started           1/1         1G       1G     config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com
+config-86b38ce0-eed8-4c01-adb4-1a651a6178e2    started           1/1         1G       1G     config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com
+eureka-493b6b17-512a-4961-8f85-6178251fe2fa    started           1/1         1G       1G     eureka-493b6b17-512a-4961-8f85-6178251fe2fa.apps.wise.com
+hystrix-ff835bde-5b3a-4623-a57f-8d88028b6376   started           1/1         1G       1G     hystrix-ff835bde-5b3a-4623-a57f-8d88028b6376.apps.wise.com
+turbine-ff835bde-5b3a-4623-a57f-8d88028b6376   started           1/1         1G       1G     turbine-ff835bde-5b3a-4623-a57f-8d88028b6376.apps.wise.com
 </pre>
 
 Then you can use ```cf logs``` to tail logs for a backing application.
 
 <pre class="terminal">
-$ cf logs config-7b76f84c-455c-4ee6-8687-dbd93d734406
-Connected, tailing logs for app config-7b76f84c-455c-4ee6-8687-dbd93d734406 in org p-spring-cloud-services / space instances as admin...
+$ cf logs config-86b38ce0-eed8-4c01-adb4-1a651a6178e2
+Connected, tailing logs for app config-86b38ce0-eed8-4c01-adb4-1a651a6178e2 in org p-spring-cloud-services / space instances as admin...
 </pre>
 
 ### <a id="access-actuator-endpoints"></a>Access Actuator Endpoints
 
-The SB and Worker applications, as well as backing applications for service instances, use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds [a number of endpoints](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) to these applications; some of the added endpoints are summarized below.
+The SB and Worker applications, as well as backing applications for service instances, use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds a number of endpoints to these applications; some of the added endpoints are summarized below.
 
 | ID                    | Function                                                                                                                                              |
 |-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -343,7 +341,7 @@ The SB application, the Worker application, the Service Registry's Eureka backin
 
     <%= image_tag("/spring-cloud-services/images/operator-information/hystrix.png") %>
 
-2. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint on a Circuit Breaker Dashboard service instance’s Hystrix backing application, this would be something like `https://hystrix-cbd1d860-2353-4c48-81ca-c8df9a9652ac.apps.wise.com/health`.
+2. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint on a Circuit Breaker Dashboard service instance’s Hystrix backing application, this would be something like `https://hystrix-ff835bde-5b3a-4623-a57f-8d88028b6376.apps.wise.com/health`.
 
 #### Endpoints on Config Server
 
@@ -357,7 +355,7 @@ The Config Server's Spring Cloud Config Server backing application uses HTTP Bas
 
     <%= image_tag("/spring-cloud-services/images/operator-information/config-server-env-variables.png") %>
 
-3. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint, this would be something like `config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/health`. When challenged, provide the values of `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` from Step 2.
+3. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint, this would be something like `config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/health`. When challenged, provide the values of `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` from Step 2.
 
 ### <a id="invoke-config-server-endpoints"></a>Invoke Config Server Endpoints
 
@@ -371,20 +369,20 @@ To view the configuration properties that a Config Server service instance is re
     An example request URL might look like this:
 
     ```
-    https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/production
+    https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/production
     ```
 
     Or, for the `default` profile:
 
     ```
-    https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
+    https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
     ```
 
     You can make the request using curl, providing the token---`TOKEN` in the below example---in a header with the `-H` or `--header` option:
 
     <pre class="terminal">
-    $ curl -H 'Authorization: bearer TOKEN' https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
-    {"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+    $ curl -H 'Authorization: bearer TOKEN_STRING' https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
+    {"name":"cook","profiles":["default"],"label":null,"version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
     </pre>
 
 For a list of path formats that the Config Server accepts, see the [Request Paths](/spring-cloud-services/config-server/server.html#request-paths) section of the [The Config Server](/spring-cloud-services/config-server/server.html) subtopic in the [Config Server documentation](/spring-cloud-services/config-server/).
