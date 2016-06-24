@@ -5,7 +5,9 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can create a Config Server instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
+You can create a Config Server service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
+
+<p class='note'><strong>Note</strong>: Config Server service instances can run in a high-availability mode, with an arbitrary number of nodes sharing settings. This currently can only be configured through use of the cf Command Line Interface tool. (After creating a service instance using Apps Manager, you may use the cf CLI to set the number of nodes. See the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.)</p>
 
 ## Using the cf CLI
 
@@ -20,7 +22,7 @@ Org:            myorg
 Space:          development
 </pre>
 
-If desired, view plan details for the Config Server product using `cf marketplace -s`.
+You can view plan details for the Config Server product using `cf marketplace -s`.
 
 <pre class="terminal">
 $ cf marketplace
@@ -44,17 +46,27 @@ service plan   description     free or paid
 standard       Standard Plan   free
 </pre>
 
-Create the service instance using `cf create-service`. Optionally, you may add the `-c` flag and provide a JSON object that specifies configuration parameters:
+Create the service instance using `cf create-service`. Optionally, you may add the `-c` flag and provide a JSON object that specifies configuration parameters.
 
-* `git.uri`: The URL of the Git repository
-* `git.label`: The label
-* `git.searchPaths`: The search path or paths
-* `git.username`: The username (necessary if the repository is protected by HTTP Basic authentication)
-* `git.password`: The password (necessary if the repository is protected by HTTP Basic authentication)
+Parameters used to configure the configuration source are part of a JSON object called `git`, as in `{"git": { "uri": "http://example.com/config" } }`. For more information on the purposes of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) topic. The parameters are listed below.
 
-For details on the purpose of each of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) topic.
+| Parameter                             | Function                                                                                |
+|---------------------------------------|-----------------------------------------------------------------------------------------|
+| <code>uri</code>                      | The URI of a repository that can be used as the default configuration source            |
+| <code>label</code>                    | The default "label" that can be used if a request is received without a label           |
+| <code>repos."name"</code>             | A repository object, containing repository fields                                       |
+| <code>repos."name".pattern</code>     | A pattern for the names of applications that store configuration from this repository   |
+| <code>repos."name".uri</code>         | The URI of this repository                                                              |
+| <code>repos."name".searchPaths</code> | A pattern used to search for configuration-containing subdirectories in this repository |
+| <code>repos."name".username</code>    | The username used to access this repository (if protected by HTTP Basic authentication) |
+| <code>repos."name".password</code>    | The password used to access this repository (if protected by HTTP Basic authentication) |
 
-<p class='note'><strong>Note</strong>: Use of the <code>-c</code> flag to specify Config Server settings is available only in Spring Cloud Services 1.0.4 and later.</p>
+Other parameters accepted for the Config Server are listed below.
+
+| Parameter            | Function                                                                                   | Example                          |
+|----------------------|--------------------------------------------------------------------------------------------|----------------------------------|
+| <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
+| <code>upgrade</code> | Whether to upgrade the instance                                                            | <code>'{"upgrade": true}'</code> |
 
 To create the instance by specifying only the service, plan name, and instance name:
 
@@ -62,14 +74,39 @@ To create the instance by specifying only the service, plan name, and instance n
 $ cf create-service p-config-server standard config-server
 Creating service instance config-server in org myorg / space development as user...
 OK
+
+Create in progress. Use 'cf services' or 'cf service config-server' to check operation status.
 </pre>
 
-To create the instance and specify configuration parameters:
+To create the instance, specifying settings for the configuration sources and that three nodes should be provisioned:
 
 <pre class="terminal">
-$ cf create-service -c '{ "git": { "uri": "https://github.com/spring-cloud-samples/cook-config", "label": "master" } }' p-config-server standard config-server
+$ cf create-service -c '{"git": { "uri": "https://github.com/spring-cloud-samples/config-repo", "repos": { "cook": { "pattern": "cook*", "uri": "https://github.com/spring-cloud-samples/cook-config" } } }, "count": 3 }' p-config-server standard config-server
 Creating service instance config-server in org myorg / space development as user...
 OK
+
+Create in progress. Use 'cf services' or 'cf service config-server' to check operation status.
+</pre>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the service instance is ready, the `cf service` command will give a status of `create succeeded`:
+
+<pre class="terminal">
+$ cf service config-server
+
+Service instance: config-server
+Service: p-config-server
+Bound apps:
+Tags:
+Plan: standard
+Description: Config Server for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-config-server/9281c950-9b07-495e-9af4-f9fbd277037d
+
+Last Operation
+Status: create succeeded
+Message:
+Started: 2016-06-24T21:57:21Z
+Updated: 2016-06-24T21:59:24Z
 </pre>
 
 ## Using Apps Manager
@@ -90,16 +127,8 @@ In the **Services** list, click the **Manage** link under the listing for the ne
 
    <%= image_tag("config-server/4_service_successfully_added.png") %>
 
-   Enter a repository URI. You can also enter:
-   
-   * A branch name as the default "label" to be used if the Config Server receives a request without a label.
-   * A pattern or comma-separated list of patterns which specifies how the Config Server searches for configuration-containing subdirectories in the repository (see the [Spring Cloud Config documentation on `searchPaths`](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_git_backend)).
-   * A username and password if the repository uses HTTP Basic authentication.
-   
-   When the appropriate fields are filled out, hit the **Submit** button.
+It may take a few minutes to provision the service; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
 
    <%= image_tag("config-server/dashboard.png") %>
 
-<p class='note'><strong>Important</strong>: When you submit the form, you will see the message "Config server settings saved", and the Config Server will attempt to initialize with the values that you provided. If the Server cannot initialize, you will get an error: "The Config Server cannot initialize using the configuration that has been provided in this form. Please double-check the configuration, correct any mistakes, and resubmit." <br /><br /> Be sure to double-check the fields that you filled out for accuracy and wait until the Config Server has initialized before proceeding.</p>
-
-The Config Server instance is now ready to be used. For details on how the Config Server stores and retrieves configurations, see the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> topic.
+The dashboard displays the current settings for the Config Server service instance. For information about configuring the service instance settings, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.
