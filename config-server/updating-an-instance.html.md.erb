@@ -11,15 +11,30 @@ Parameters used to configure the configuration source are part of a JSON object 
 |--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | <code>uri</code>                           | The URI of a repository that can be used as the default configuration source                                                                |
 | <code>label</code>                         | The default "label" that can be used if a request is received without a label                                                               |
-| <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
-| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository                                                       |
-| <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>ssh://</code>, or <code>git://</code>) of this repository                                              |
-| <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
 | <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
 | <code>repos."name".password</code>         | The password used to access this repository (if protected by HTTP Basic authentication)                                                     |
+| <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                |
+| <code>proxy.http.host</code>               | The HTTP proxy host                                                                                                                         |
+| <code>proxy.http.port</code>               | The HTTP proxy port                                                                                                                         |
+| <code>proxy.http.nonProxyHosts</code>      | The hosts to access outside the HTTP proxy                                                                                                  |
+| <code>proxy.http.username</code>           | The username to use with an authenticated HTTP proxy                                                                                        |
+| <code>proxy.http.password</code>           | The password to use with an authenticated HTTP proxy                                                                                        |
+| <code>proxy.https</code>                   | A proxy object, containing HTTPS proxy fields                                                                                               |
+| <code>proxy.https.host</code>              | The HTTPS proxy host                                                                                                                        |
+| <code>proxy.https.port</code>              | The HTTPS proxy port                                                                                                                        |
+| <code>proxy.https.nonProxyHosts</code>     | The hosts to access outside the HTTPS proxy                                                                                                 |
+| <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy                                                                                       |
+| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy                                                                                       |
 | <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH)                                                     |
 | <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
 | <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
+| <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
+| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository                                                       |
+| <code>repos."name".uri</code>              | The URI of this repository                                                                                                                  |
+| <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>ssh://</code>, or <code>git://</code>) of this repository                                              |
+| <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
+
+<p class='note'><strong>Important</strong>: Config Server for <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source at this time.</p>
 
 Other parameters accepted for the Config Server are listed below.
 
