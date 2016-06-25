@@ -9,18 +9,14 @@ To connect client applications to the Circuit Breaker Dashboard, Spring Cloud Se
 
 ## Service Detection
 
-The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Circuit Breaker Dashboard (edited for brevity).
+The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example excerpt of a `VCAP_SERVICES` entry for the Spring Cloud Services Circuit Breaker Dashboard (edited for brevity).
 
 ```json
 "p-circuit-breaker-dashboard": [
  {
   "credentials": {
-   "dashboard": {
-    "uri": "https://hystrix-fd3842f2-ad07-40c0-9908-a763061f332c.apps.wise.com"
-   },
-   "stream": {
-    "uri": "https://turbine-fd3842f2-ad07-40c0-9908-a763061f332c.apps.wise.com"
-   }
+   "dashboard": "https://hystrix-67b8d606-c287-4fb1-9b3f-bd5cb27a29b5.apps.wise.com",
+   "stream": "https://turbine-67b8d606-c287-4fb1-9b3f-bd5cb27a29b5.apps.wise.com"
   },
   "label": "p-circuit-breaker-dashboard",
   "name": "circuit-breaker-dashboard",
