@@ -56,12 +56,12 @@ The `MessageGenerationApplication` class also has <a href="https://github.com/sp
     }
 ```
 
-Set the ```spring.application.name``` property to the value from the application deployment. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+Set the ```spring.application.name``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
   application:
-    name: ${vcap.application.name}
+    name: message-generation
 ```
 
 <p class='note'><strong>Note</strong>: If the application name contains characters which are invalid in a hostname, the application will be registered with the Service Registry service instance using the application name with any invalid characters replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>.</p>
