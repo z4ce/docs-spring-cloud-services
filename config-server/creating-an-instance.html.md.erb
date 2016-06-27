@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 You can create a Config Server service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
 
-<p class='note'><strong>Note</strong>: Config Server service instances can run in a high-availability mode, with an arbitrary number of nodes sharing settings. This currently can only be configured through use of the cf Command Line Interface tool. (After creating a service instance using Apps Manager, you may use the cf CLI to set the number of nodes. See the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.)</p>
+<p class='note'><strong>Note</strong>: If you create a Config Server service instance using Apps Manager, you will need to use the cf CLI to update the service instance and provide settings (including one or more configuration sources) before the instance will be usable. For information on updating a Config Server service instance, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.</p>
 
 ## Using the cf CLI
 
@@ -46,7 +46,7 @@ service plan   description     free or paid
 standard       Standard Plan   free
 </pre>
 
-Create the service instance using `cf create-service`. Optionally, you may add the `-c` flag and provide a JSON object that specifies configuration parameters.
+Create the service instance using `cf create-service`, using the `-c` flag to provide a JSON object that specifies configuration parameters.
 
 Parameters used to configure the configuration source are part of a JSON object called `git`, as in `{"git": { "uri": "http://example.com/config" } }`. For more information on the purposes of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) topic. The parameters are listed below.
 
@@ -86,17 +86,7 @@ Other parameters accepted for the Config Server are listed below.
 | <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
 | <code>upgrade</code> | Whether to upgrade the instance                                                            | <code>'{"upgrade": true}'</code> |
 
-To create the instance by specifying only the service, plan name, and instance name:
-
-<pre class="terminal">
-$ cf create-service p-config-server standard config-server
-Creating service instance config-server in org myorg / space development as user...
-OK
-
-Create in progress. Use 'cf services' or 'cf service config-server' to check operation status.
-</pre>
-
-To create the instance, specifying settings for the configuration sources and that three nodes should be provisioned:
+To create an instance, specifying settings for the configuration sources and that three nodes should be provisioned:
 
 <pre class="terminal">
 $ cf create-service -c '{"git": { "uri": "https://github.com/spring-cloud-samples/config-repo", "repos": { "cook": { "pattern": "cook*", "uri": "https://github.com/spring-cloud-samples/cook-config" } } }, "count": 3 }' p-config-server standard config-server
