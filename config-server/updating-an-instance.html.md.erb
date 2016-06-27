@@ -97,4 +97,6 @@ Started: 2016-06-24T21:11:53Z
 Updated: 2016-06-24T21:13:59Z
 </pre>
 
+<p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report an <code>update succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be restarted and have an <code>update succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly after an update, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="/spring-cloud-services/config-server/using-the-dashboard.html">Using the Dashboard</a> topic.</p>
+
 The service instance is now updated and ready to be used. For information about using an application to access configuration values served by a Config Server service instance, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.
