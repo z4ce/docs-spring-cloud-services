@@ -48,21 +48,7 @@ To establish availability of the Service Registry, the Spring Cloud Cloud Foundr
 
 ## Application Configuration
 
-In a Spring Boot application which is bound to a Service Registry service instance, the connector automatically creates a [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Eureka client configuration bean and registers it in the Spring application context. The client configuration includes the discovery zone, which is configured using the URL from the service binding; this is equivalent to setting the ```eureka.client.serviceUrl.defaultZone``` property.
-
-In a Spring application which is not using Spring Boot and will be bound to a Service Registry service instance, you can explicitly invoke the Spring Service Connector's service scanning to cause the Eureka client configuration to be created and registered. See ["Scanning for Services" in the Spring Cloud Spring Service Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-spring-service-connector.html#_scanning_for_services).
-
-If you do not want to use either Spring Boot auto-configuration or service scanning, or if you want to further customize the client configuration in Java code, you can explicitly invoke the Spring Cloud Connectors configuration for Service Registry:
-
-```java
-@Configuration
-public class CloudConfig extends CloudConnectorsConfig {
-  @Bean
-  public EurekaClientConfigBean eurekaClientConfig() {
-    return connectionFactory().eurekaClientConfig();
-  }
-}
-```
+In a Spring Boot application which is bound to a Service Registry service instance, the connector automatically configures a Spring Cloud Netflix Eureka client configuration bean. The client configuration includes the discovery zone, which is configured using the URL from the service binding; this is equivalent to setting the ```eureka.client.serviceUrl.defaultZone``` property.
 
 ## See Also
 
