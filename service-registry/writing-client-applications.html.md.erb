@@ -79,14 +79,16 @@ See below for information about the ```route``` and ```direct``` registration me
 
 #### Route Registration
 
-An application deployed to Pivotal Cloud Foundry&reg; can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```application_uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
+An application deployed to Pivotal Cloud Foundry&reg; can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
 
 ```json
-{
  "VCAP_APPLICATION": {
-  "application_name": "message-generation",
-  "application_uris": [
-   "message-generation.wise.com"
+
+  "name": "message-generation",
+  "space_id": "0fa9f93a-d1fa-43c8-b11b-f95b7e36fd32",
+  "space_name": "development",
+  "uris": [
+   "message-generation.apps.wise.com"
   ],
 ```
 
