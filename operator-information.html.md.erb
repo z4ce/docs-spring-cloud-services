@@ -256,11 +256,11 @@ SCS_BROKER_URL/admin/serviceInstances
 
 Locate the SB as described in the [Access Broker Applications in Apps Manager](#access-broker-applications-in-apps-manager) section. The Service Instances dashboard is also linked to on the main page of the SB.
 
-The dashboard shows the version and status of each service instance, as well as other information including the number of applications that are bound to the instance. It also provides an **Upgrade** button for each service instance and an **Upgrade Service Instances** button; these buttons may be enabled if any service instances shown in the dashboard are not at the version included with the currently-installed Spring Cloud Services product. For more information on upgrading service instances, see the [Service Instance Upgrade Steps](/spring-cloud-services/upgrades.html#service-instance-upgrade-steps) section of the [Upgrades](/spring-cloud-services/upgrades.html) topic.
+The dashboard shows the version and status of each service instance, as well as other information including the number of applications that are bound to the instance. It also provides an **Upgrade** button for each service instance and an **Upgrade Service Instances** button; these buttons may be enabled if any service instances shown in the dashboard are not at the version included with the currently-installed Spring Cloud Services product. For more information about upgrading service instances, see the [Service Instance Upgrade Steps](/spring-cloud-services/upgrades.html#service-instance-upgrade-steps) section of the [Upgrades](/spring-cloud-services/upgrades.html) topic.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/si-dashboard.png") %>
 
-You can click the **Instance Name** of a listed service instance to manage the instance. Click the **+** icon beside the count of an instance's **Bound Apps** or **Service Keys** to view the names of the applications or service keys that are bound to that instance.
+You can click the **Instance Name** of a listed service instance to view the instance's dashboard. Click the **+** icon beside the count of an instance's **Bound Apps** or **Service Keys** to view the names of the applications or service keys that are bound to that instance.
 
 ## <a id="application-health-and-status"></a>Application Health and Status
 
@@ -336,7 +336,7 @@ The SB and Worker applications, as well as backing applications for service inst
 | ID                    | Function                                                                                                                                              |
 |-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | <code>env</code>      | Displays profiles, properties, and property sources from the application environment                                                                  |
-| <code>health</code>   | Displays information on the health and status of the application                                                                                      |
+| <code>health</code>   | Displays information about the health and status of the application                                                                                   |
 | <code>metrics</code>  | Displays metrics information from the application                                                                                                     |
 | <code>mappings</code> | Displays list of <code>@RequestMapping</code> paths in the application                                                                                |
 | <code>shutdown</code> | Allows for graceful shutdown of the application. Disabled by default; not enabled in Spring Cloud Services broker or instance-backing applications    |
