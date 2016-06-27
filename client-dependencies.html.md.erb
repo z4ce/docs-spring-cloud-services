@@ -9,6 +9,8 @@ See below for information about the dependencies required for client application
 
 ## <a id="include-dependencies"></a>Include Spring Cloud Services Dependencies
 
+<p class='note'><strong>Important</strong>: Ensure that the ordering of the Maven BOM dependencies listed below is preserved in your application's build file. Dependency resolution is affected in both Maven and Gradle by the order in which dependencies are declared.</p>
+
 To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency.
 
 If using Maven, include in `pom.xml`:
@@ -60,7 +62,9 @@ If not using the `spring-boot-starter-parent`, include in the `<dependencyManage
   </dependencyManagement>
 ```
 
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>. Include in `build.gradle`:
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>.
+
+Include in `build.gradle`:
 
 ```groovy
 buildscript {
