@@ -19,11 +19,11 @@ In the **Services** tab, click the **Bind a Service** button. Select a service f
 
 <%= image_tag("config-server/2-bind-service.png") %>
 
-Alternatively, you can use the cf Command Line Interface tool. Run the command `cf bind-service`, specifying the application name and service name.
+Alternatively, you may use the cf Command Line Interface tool. Run the command `cf bind-service`, specifying the application name and service instance name.
 
 <pre class="terminal">
-$ cf bind-service cook My\ Config\ Server
-Binding service My Config Server to app cook in org myorg / space development as user...
+$ cf bind-service cook config-server
+Binding service config-server to app cook in org myorg / space development as admin...
 OK
 TIP: Use 'cf restage cook' to ensure your env variable changes take effect
 </pre>
@@ -32,7 +32,7 @@ Then, as the command output suggests, run the command `cf restage` to restage th
 
 <pre class="terminal">
 $ cf restage cook
-Restaging app cook in org myorg / space development as user...
+Restaging app cook in org myorg / space development as admin...
 ...
 </pre>
 
@@ -42,7 +42,7 @@ After an application is bound to the service instance, the application's `VCAP_S
 
 <pre class="terminal">
 $ cf env cook
-Getting env variables for app cook in org myorg / space development as user...
+Getting env variables for app cook in org myorg / space development as admin...
 OK
 
 System-Provided:
@@ -52,12 +52,12 @@ System-Provided:
    {
     "credentials": {
      "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
-     "client_id": "p-config-server-153f2832-8f43-48f5-becd-a9cc703dac33",
-     "client_secret": "LCfcsfxxC8La",
-     "uri": "https://config-56730ed1-be91-45ce-81aa-16f78377e0d5.apps.wise.com"
+     "client_id": "p-config-server-c4a56a3d-9507-4c2f-9cd1-f858dbf9e11c",
+     "client_secret": "9aGx9K5Vx0cM",
+     "uri": "https://config-51711835-4626-4823-b5a1-e5d91012f3f2.apps.wise.com"
     },
     "label": "p-config-server",
-    "name": "My Config Server",
+    "name": "config-server",
     "plan": "standard",
     "tags": [
      "configuration",
@@ -77,20 +77,22 @@ The following is an example of a response from the Config Server to a request us
   "profiles":[
     "production"
   ],
-  "label":"master",
+  "label":null,
+  "version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3",
   "propertySources":[
     {
       "name":"https://github.com/spring-cloud-samples/cook-config/cook-production.properties",
-      "source":{
-        "cook.special":"Cake a la mode"
-    }
-  },
-  {
-    "name":"https://github.com/spring-cloud-samples/cook-config/cook.properties",
-    "source":
-      {
-        "cook.special":"Pickled Cactus"
-      }
+      "source":
+        {
+          "cook.special":"Cake a la mode"
+        }
+    },
+    {
+      "name":"https://github.com/spring-cloud-samples/cook-config/cook.properties",
+      "source":
+        {
+          "cook.special":"Pickled Cactus"
+        }
     }
   ]
 }

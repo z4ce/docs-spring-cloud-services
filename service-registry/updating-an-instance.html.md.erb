@@ -23,35 +23,35 @@ Org:            myorg
 Space:          development
 </pre>
 
-Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. To update a service instance and set the count of instances for running in high-availability mode, run:
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. To update a service instance and set the count of nodes for running in high-availability mode, run:
 
 <pre class="terminal">
-$ cf update-service My\ Service\ Registry -c '{"count": 3}'
-Updating service instance My Service Registry as admin...
+$ cf update-service service-registry -c '{"count": 3}'
+Updating service instance service-registry as admin...
 OK
 
-Update in progress. Use 'cf services' or 'cf service My Service Registry' to check operation status.
+Update in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
 </pre>
 
 As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the update is complete, the `cf service` command will give a status of `update succeeded`:
 
 <pre class="terminal">
-$ cf service My\ Service\ Registry
+$ cf service service-registry
 
-Service instance: My Service Registry
+Service instance: service-registry
 Service: p-service-registry
 Bound apps:
 Tags:
 Plan: standard
 Description: Service Registry for Spring Cloud Applications
 Documentation url: http://docs.pivotal.io/spring-cloud-services/
-Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/f800ae87-4203-4586-bb7f-7bdb5bb2b931
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/57ce88c1-6bd9-4224-b855-b4600e8e0f39
 
 Last Operation
 Status: update succeeded
 Message:
-Started: 2016-06-22T20:32:40Z
-Updated: 2016-06-22T20:35:47Z
+Started: 2016-06-28T14:09:19Z
+Updated: 2016-06-28T14:12:25Z
 </pre>
 
 The service instance is now updated and ready to be used. For information about registering an application with a Service Registry service instance or calling an application which has been registered with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.

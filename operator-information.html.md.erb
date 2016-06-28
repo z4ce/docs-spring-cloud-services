@@ -83,21 +83,19 @@ $ cf services
 Getting services in org myorg / space development as admin...
 OK
 
-name               service           plan        bound apps     last operation
-My Config Server   p-config-server   standard    cook           create succeeded
-[...]
-
+name             service             plan       bound apps   last operation
+config-server    p-config-server     standard   cook         update succeeded
 </pre>
 
 Run `cf service` with the `CF_TRACE` environment variable set to `true`. Copy the value of `resources.metadata.guid`, which is the service instance GUID.
 
 <pre class="terminal">
-$ CF_TRACE=true cf service My\ Config\ Server
+$ CF_TRACE=true cf service config-server
 
-REQUEST: [2016-06-21T18:51:54-05:00]
+REQUEST: [2016-06-27T20:45:24-05:00]
 [...]
 
-RESPONSE: [2016-06-21T18:51:55-05:00]
+RESPONSE: [2016-06-27T20:45:25-05:00]
 [...]
 
 {
@@ -108,8 +106,7 @@ RESPONSE: [2016-06-21T18:51:55-05:00]
   "resources": [
     {
       "metadata": {
-        "guid": "86b38ce0-eed8-4c01-adb4-1a651a6178e2",
-[...]
+        "guid": "51711835-4626-4823-b5a1-e5d91012f3f2",
 </pre>
 
 Log into Apps Manager as an admin user and select the "p-spring-cloud-services" org.
@@ -157,8 +154,9 @@ To make requests directly against a Config Server service instance's Spring Clou
     Getting services in org myorg / space development as admin...
     OK
 
-    name               service           plan        bound apps     last operation
-    My Config Server   p-config-server   standard    cook           create succeeded
+    name             service           plan        bound apps   last operation
+    config-server    p-config-server   standard    cook         create succeeded
+
     $ cf env cook
     Getting env variables for app cook in org myorg / space development as admin...
     OK

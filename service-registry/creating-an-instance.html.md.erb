@@ -15,11 +15,11 @@ Log into Apps Manager as a Space Developer. In the Marketplace, select **Service
 
 <%= image_tag("service-registry/1_marketplace.png") %>
 
-Select the desired plan for the new service.  
+Select the desired plan for the new service instance.  
 
 <%= image_tag("service-registry/2_select_plan.png") %>
 
-Provide a name for the service (for example, "My Service Registry"). Click the **Add** button.  
+Provide a name for the service instance (for example, "service-registry"). Click the **Add** button.  
 
 <%= image_tag("service-registry/3_instance_name.png") %>
 
@@ -27,7 +27,7 @@ In the **Services** list, click the **Manage** link under the listing for the ne
 
 <%= image_tag("service-registry/4_service_successfully_added.png") %>
 
-It may take a few minutes to provision the service; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
+It may take a few minutes to provision the service instance; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
 
 <%= image_tag("service-registry/dashboard_more.png") %>
 
@@ -71,42 +71,42 @@ Run `cf create-service`, specifying the service, plan name, and instance name. O
 To create an instance with a single node, run:
 
 <pre class="terminal">
-$ cf create-service p-service-registry standard My\ Service\ Registry
-Creating service instance My Service Registry in org myorg / space development as user...
+$ cf create-service p-service-registry standard service-registry
+Creating service instance service-registry in org myorg / space development as admin...
 OK
 
-Create in progress. Use 'cf services' or 'cf service My Service Registry' to check operation status.
+Create in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
 </pre>
 
 To create an instance with three nodes, run:
 
 <pre class="terminal">
-$ cf create-service p-service-registry standard My\ Service\ Registry -c '{"count": 3}'
-Creating service instance My Service Registry in org myorg / space development as user...
+$ cf create-service p-service-registry standard service-registry -c '{"count": 3}'
+Creating service instance service-registry in org myorg / space development as admin...
 OK
 
-Create in progress. Use 'cf services' or 'cf service My Service Registry' to check operation status.
+Create in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
 </pre>
 
 As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the Service Registry instance is ready to be used, the `cf service` command will give a status of `create succeeded`:
 
 <pre class="terminal">
-$ cf service My\ Service\ Registry
+$ cf service service-registry
 
-Service instance: My Service Registry
+Service instance: service-registry
 Service: p-service-registry
 Bound apps:
 Tags:
 Plan: standard
 Description: Service Registry for Spring Cloud Applications
 Documentation url: http://docs.pivotal.io/spring-cloud-services/
-Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/42c16b7f-81fd-421f-9ea0-ced9ea05ded7
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/50f247f4-fcb0-43c9-863c-94e21be2051c
 
 Last Operation
 Status: create succeeded
 Message:
-Started: 2016-06-22T19:44:19Z
-Updated: 2016-06-22T19:47:24Z
+Started: 2016-06-27T23:14:44Z
+Updated:
 </pre>
 
 For information about registering an application with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.

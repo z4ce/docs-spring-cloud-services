@@ -48,9 +48,32 @@ standard       Standard Plan   free
 Run `cf create-service`, specifying the service, plan name, and instance name.
 
 <pre class="terminal">
-$ cf create-service p-circuit-breaker-dashboard standard My\ Circuit\ Breaker\ Dashboard
-Creating service instance My Circuit Breaker Dashboard in org myorg / space development as user...
+$ cf create-service p-circuit-breaker-dashboard standard circuit-breaker-dashboard
+Creating service instance circuit-breaker-dashboard in org myorg / space development as admin...
 OK
+
+Create in progress. Use 'cf services' or 'cf service circuit-breaker-dashboard' to check operation status.
+</pre>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the service instance is ready, the `cf service` command will give a status of `create succeeded`:
+
+<pre class="terminal">
+$ cf service circuit-breaker-dashboard
+
+Service instance: circuit-breaker-dashboard
+Service: p-circuit-breaker-dashboard
+Bound apps:
+Tags:
+Plan: standard
+Description: Circuit Breaker Dashboard for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-circuit-breaker-dashboard/d448f3f1-28f9-4318-bffe-72f96b28d1d4
+
+Last Operation
+Status: create in progress
+Message:
+Started: 2016-06-28T01:38:47Z
+Updated: 2016-06-28T01:40:51Z
 </pre>
 
 ## Using Apps Manager
@@ -59,11 +82,11 @@ Log into Apps Manager as a Space Developer. In the Marketplace, select **Circuit
 
    <%= image_tag("circuit-breaker/1_marketplace.png") %>
 
-Select the desired plan for the new service.  
+Select the desired plan for the new service instance.  
 
    <%= image_tag("circuit-breaker/2_select_plan.png") %>
 
-Provide a name for the service (for example, "My Circuit Breaker Dashboard"). Click the **Add** button.  
+Provide a name for the service instance (for example, "circuit-breaker-dashboard"). Click the **Add** button.  
 
    <%= image_tag("circuit-breaker/3_instance_name.png") %>
 
@@ -71,6 +94,6 @@ In the **Services** list, click the **Manage** link under the listing for the ne
 
    <%= image_tag("circuit-breaker/4_service_successfully_added.png") %>
 
-It may take a few minutes to provision the service; while it is being provisioned, you will see a "The service instance is initializing" message. Once the instance is ready, its dashboard will load automatically.
+It may take a few minutes to provision the service instance; while it is being provisioned, you will see a "The service instance is initializing" message. Once the instance is ready, its dashboard will load automatically.
 
 The Circuit Breaker Dashboard instance is now ready to be used. For an example of using a circuit breaker in an application, see the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> topic.

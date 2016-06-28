@@ -12,23 +12,23 @@ To connect client applications to the Config Server, Spring Cloud Services uses 
 The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Config Server.
 
 ```json
-"p-config-server": [
- {
-  "credentials": {
-   "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
-   "client_id": "p-config-server-153f2832-8f43-48f5-becd-a9cc703dac33",
-   "client_secret": "LCfcsfxxC8La",
-   "uri": "https://config-56730ed1-be91-45ce-81aa-16f78377e0d5.apps.wise.com"
-  },
-  "label": "p-config-server",
-  "name": "My Config Server",
-  "plan": "standard",
-  "tags": [
-   "configuration",
-   "spring-cloud"
+  "p-config-server": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+     "client_id": "p-config-server-c4a56a3d-9507-4c2f-9cd1-f858dbf9e11c",
+     "client_secret": "9aGx9K5Vx0cM",
+     "uri": "https://config-51711835-4626-4823-b5a1-e5d91012f3f2.apps.wise.com"
+    },
+    "label": "p-config-server",
+    "name": "config-server",
+    "plan": "standard",
+    "tags": [
+     "configuration",
+     "spring-cloud"
+    ]
+   }
   ]
- }
-]
 ```
 
 For each service in the `VCAP_SERVICES` variable, the connector considers the following fields:

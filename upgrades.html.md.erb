@@ -84,26 +84,26 @@ After upgrading the Spring Cloud Services product, follow the below steps to upg
 Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
 
 <pre class="terminal">
-$ cf update-service -c '{"upgrade": true}' My\ Config\ Server
-Updating service instance My Config Server as admin...
+$ cf update-service -c '{"upgrade": true}' config-server
+Updating service instance config-server as admin...
 OK
 
-Update in progress. Use 'cf services' or 'cf service My Config Server' to check operation status.
+Update in progress. Use 'cf services' or 'cf service config-server' to check operation status.
 </pre>
 
 As the output from the command suggests, you can use the `cf services` or `cf service` commands to check the status of the upgrade.
 
 <pre class="terminal">
-$ cf service My\ Config\ Server
+$ cf service config-server
 
-Service instance: My Config Server
+Service instance: config-server
 Service: p-config-server
 Bound apps: cook
 Tags:
 Plan: standard
 Description: Config Server for Spring Cloud Applications
 Documentation url: http://docs.pivotal.io/spring-cloud-services/
-Dashboard: https://sprwise.com/dashboard/p-config-server/690f426b-9563-4d98-aa74-05ef3dea32c1
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-config-server/690f426b-9563-4d98-aa74-05ef3dea32c1
 
 Last Operation
 Status: update in progress
@@ -117,9 +117,9 @@ You can also use the Service Instances dashboard to see the status and current v
 When the upgrade is complete, `cf service SERVICE_NAME` will report a `status` of `update succeeded`:
 
 <pre class="terminal">
-$ cf service My\ Config\ Server
+$ cf service config-server
 
-Service instance: My Config Server
+Service instance: config-server
 Service: p-config-server
 Bound apps: cook
 Tags:
