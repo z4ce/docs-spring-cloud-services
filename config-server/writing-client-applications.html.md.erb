@@ -148,7 +148,7 @@ compile("org.springframework.boot:spring-boot-starter-actuator")
 You can now visit `/env` to see the application environment's properties (the following shows an excerpt of an example response):
 
 <pre class="terminal">
-$ curl http://cookie.wise.com/env
+$ curl http://cookie.apps.wise.com/env
 {
   "profiles":[
     "dev","cloud"
@@ -158,9 +158,9 @@ $ curl http://cookie.wise.com/env
   },
   "vcap":{
     "vcap.application.limits.mem":"512",
-    "vcap.application.application_uris":"cookie.wise.com",
+    "vcap.application.application_uris":"cookie.apps.wise.com",
     "vcap.services.config-server.name":"config-server",
-    "vcap.application.uris":"cookie.wise.com",
+    "vcap.application.uris":"cookie.apps.wise.com",
     "vcap.application.application_version":"179de3f9-38b6-4939-bff5-41a14ce4e700",
     "vcap.services.config-server.tags[0]":"configuration",
     "vcap.application.space_name":"development",
@@ -190,7 +190,7 @@ public class Menu {
 This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class's `menu` with a refresh event triggered on the application:
 
 <pre class="terminal">
-$ curl http://cookie.wise.com/restaurant
+$ curl http://cookie.apps.wise.com/restaurant
 Today's special is: Pickled Cactus
 
 $ git commit -am "new special"
@@ -199,10 +199,10 @@ $ git commit -am "new special"
 
 $ git push
 
-$ curl -X POST http://cookie.wise.com/refresh
+$ curl -X POST http://cookie.apps.wise.com/refresh
 ["cook.special"]
 
-$ curl http://cookie.wise.com/restaurant
+$ curl http://cookie.apps.wise.com/restaurant
 Today's special is: Birdfeather Tea
 </pre>
 
