@@ -17,8 +17,7 @@ Parameters used to configure the configuration source are part of a JSON object 
 | <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
 | <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
 | <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
-| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository                                                       |
-| <code>repos."name".uri</code>              | The URI of this repository                                                                                                                  |
+| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)        |
 | <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>ssh://</code>, or <code>git://</code>) of this repository                                              |
 | <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
 | <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                |
