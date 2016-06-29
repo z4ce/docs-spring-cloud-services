@@ -104,11 +104,13 @@ This registration method is compatible with all deployments of Pivotal Cloud Fou
 
 #### Direct Registration
 
+<p class='note'><strong>Important</strong>: On PCF 1.7, network communication between containers in the same cell is not allowed. This makes direct registration unreliable, since applications registering to the service registry and client applications discovering the registered applications may be deployed to the same cell. Use of the direct registration method is therefore not recommended or supported on PCF 1.7.</p>
+
 An application running on Pivotal Cloud Foundry&reg; is provided with an externally-accessible IP address and port, which are made available in two environment variables: ```CF_INSTANCE_IP``` and ```CF_INSTANCE_PORT```. If you specify the ```direct``` registration method, the application will be registered with the Service Registry instance using this IP address and port.
 
 Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry&reg; Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
 
-To enable direct registration in PCF 1.6, visit the Pivotal Cloud Foundry® Operations Manager&reg;, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. To enable direct registration in PCF 1.7, you must create or update application security groups to allow direct communication between applications across cells; see the [Application Security Groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) topic in the Pivotal Cloud Foundry&reg; documentation for more information.
+To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry® Operations Manager&reg;, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
 
 #### Specify a Registration Method
 
