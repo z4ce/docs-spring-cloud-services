@@ -5,7 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.0.4">"greeting" repository</a> to follow along with the code in this topic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.1">"greeting" repository</a> to follow along with the code in this topic._
 
 To register your application with a Service Registry service instance or use it to consume a service that is registered with a Service Registry service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#service-registry">Service Registry</a> as well.
 
@@ -33,7 +33,7 @@ Follow the below instructions to register an application with a Service Registry
 
 ### <a id="identify-the-application"></a>Identify the Application
 
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -43,7 +43,7 @@ public class MessageGenerationApplication {
     //...
 ```
 
-The `MessageGenerationApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
+The `MessageGenerationApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
 
 ```java
     @RequestMapping("/greeting")
@@ -56,7 +56,7 @@ The `MessageGenerationApplication` class also has <a href="https://github.com/sp
     }
 ```
 
-Set the ```spring.application.name``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+Set the ```spring.application.name``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -79,7 +79,7 @@ See below for information about the ```route``` and ```direct``` registration me
 
 #### Route Registration
 
-An application deployed to Pivotal Cloud Foundry&reg; can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
+An application deployed to PCF can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
 
 ```json
  "VCAP_APPLICATION": {
@@ -100,7 +100,7 @@ Requests from client applications to this registered application go through the 
 ```
 -->
 
-This registration method is compatible with all deployments of Pivotal Cloud Foundry&reg;.
+This registration method is compatible with all deployments of PCF.
 
 #### Direct Registration
 
@@ -114,12 +114,12 @@ To enable direct registration, you must configure the PCF environment to allow t
 
 #### Specify a Registration Method
 
-If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/message-generation/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
+If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
 
 ```yml
 spring:
   application:
-    name: ${vcap.application.name}
+    name: message-generation
   cloud:
     services:
       registrationMethod: route
@@ -137,29 +137,9 @@ Follow the below instructions to consume a service that is registered with a Ser
 
 ### <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
 
-A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/greeter/src/main/java/greeter/GreeterApplication.java#L19-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+A consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/greeter/src/main/java/greeter/GreeterApplication.java#L22-L34">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
-package greeter;
-
-import java.net.URI;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
@@ -180,7 +160,7 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 <p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with any invalid characters replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>.</p>
 
-<p class='note'><strong>Important</strong>: If your <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry&reg;</a> installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
+<p class='note'><strong>Important</strong>: If your PCF installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 
 By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you have two options:
 
@@ -194,7 +174,7 @@ ribbon:
   IsSecure: false
 ```
 
-The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/greeter/src/main/java/greeter/GreeterApplication.java#L31-L41">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```http://message-generation``` to get a greeting message from Message Generation.
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/greeter/src/main/java/greeter/GreeterApplication.java#L40-L50">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```http://message-generation``` to get a greeting message from Message Generation.
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
@@ -213,7 +193,7 @@ The Message Generation application is registered with the Service Registry insta
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/greeter/src/main/java/greeter/GreeterApplication.java#L43-L56">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/greeter/src/main/java/greeter/GreeterApplication.java#L52-L65">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
 
 ```java
     private static class Greeting {
@@ -246,26 +226,9 @@ Hello, John!
 
 If you wish to use [Feign](https://github.com/Netflix/feign) to consume a service that is registered with a Service Registry instance, your application must declare ```spring-cloud-starter-feign``` as a dependency. In order to have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation.
 
-Your consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. In the Greeter application, the ```GreeterApplication``` class contains a ```MessageGenerationClient``` interface, which is a Feign client for the Message Generation application.
+Your consuming application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/feign-greeter/src/main/java/greeter/GreeterApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. In the Greeter application, the ```GreeterApplication``` class contains a ```MessageGenerationClient``` interface, which is a Feign client for the Message Generation application.
 
 ```java
-package greeter;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
@@ -281,7 +244,7 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 <p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with any invalid characters replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>.</p>
 
-<p class='note'><strong>Important</strong>: If your Pivotal Cloud Foundry installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
+<p class='note'><strong>Important</strong>: If your PCF installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 
 By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you have two options:
 
@@ -295,7 +258,7 @@ ribbon:
   IsSecure: false
 ```
 
-The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```http://message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```http://message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
 
 ```java
     @FeignClient("http://message-generation")
@@ -305,7 +268,7 @@ The Message Generation application is registered with the Service Registry insta
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L37-L50">The Greeter `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/feign-greeter/src/main/java/greeter/GreeterApplication.java#L37-L50">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
 
 ```java
     private static class Greeting {
@@ -324,7 +287,7 @@ The Message Generation application is registered with the Service Registry insta
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.0.4/feign-greeter/src/main/java/greeter/GreeterApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```MessageGenerationClient``` to get a greeting.
+<a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/feign-greeter/src/main/java/greeter/GreeterApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```MessageGenerationClient``` to get a greeting.
 
 ```java
     @RequestMapping(value = "/hello", method = GET)
