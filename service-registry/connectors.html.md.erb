@@ -12,25 +12,27 @@ To connect client applications to the Service Registry, Spring Cloud Services us
 The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Service Registry.
 
 ```json
-"p-service-registry": [
- {
-  "credentials": {
-   "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
-   "client_id": "p-service-registry-57bdc399-5b2e-4131-b941-d0a4275c2da4",
-   "client_secret": "GAmFDRU4KGnS",
-   "uri": "https://eureka-32fb7386-2d57-4054-91b4-9fd4dcbac221.apps.wise.com"
-  },
-  "label": "p-service-registry",
-  "name": "service-registry",
-  "plan": "standard",
-  "tags": [
-   "eureka",
-   "discovery",
-   "registry",
-   "spring-cloud"
+{
+ "VCAP_SERVICES": {
+  "p-service-registry": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+     "client_id": "p-service-registry-57bdc399-5b2e-4131-b941-d0a4275c2da4",
+     "client_secret": "GAmFDRU4KGnS",
+     "uri": "https://eureka-32fb7386-2d57-4054-91b4-9fd4dcbac221.apps.wise.com"
+    },
+    "label": "p-service-registry",
+    "name": "service-registry",
+    "plan": "standard",
+    "tags": [
+     "eureka",
+     "discovery",
+     "registry",
+     "spring-cloud"
+    ]
+   }
   ]
- }
-]
 ```
 
 For each service in the `VCAP_SERVICES` variable, the connector considers the following fields:

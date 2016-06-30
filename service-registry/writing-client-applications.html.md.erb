@@ -82,6 +82,7 @@ See below for information about the ```route``` and ```direct``` registration me
 An application deployed to PCF can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
 
 ```json
+{
  "VCAP_APPLICATION": {
 
   "name": "message-generation",
