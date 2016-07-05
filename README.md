@@ -26,17 +26,18 @@ rbenv global 2.0.0-p481
 gem install bookbindery
   ```
   
-1. Clone this repo and the main Pivotal CF docs repo (its folder should be sibling to this repo):
+1. Clone this repo, `docs-book-pcfservices`, and `docs-layout-repo`.
   
   ```
 git clone git@github.com:pivotal-cf/docs-spring-cloud-services.git
-git clone git@github.com:pivotal-cf/docs-book-pivotalcf.git
+git clone git@github.com:pivotal-cf/docs-book-pcfservices.git
+git clone git@github.com:pivotal-cf/docs-layout-repo.git
   ```
 
 1. Update the main docs site:
   
   ```
-cd docs-book-pivotalcf
+cd docs-book-pcfservices
 bookbinder bind local
   ```
   
@@ -51,7 +52,7 @@ rackup
 
 ## Files to change
 
-In docs-book-pivotalcf:
+In docs-book-pcfservices:
 - /master_middleman/source/subnavs/spring_cloud_subnav.erb
 
 In docs-spring-cloud-services:
