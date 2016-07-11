@@ -35,7 +35,7 @@ If using Maven, include in `pom.xml`:
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
-            <version>Brixton.RELEASE</version>
+            <version>Brixton.SR1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -83,7 +83,7 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
         mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.1.0.RELEASE"
     }
 }
