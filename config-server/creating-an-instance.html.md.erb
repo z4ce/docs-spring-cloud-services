@@ -5,9 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can create a Config Server service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
-
-<p class='note'><strong>Note</strong>: If you create a Config Server service instance using Apps Manager, you will need to use the cf CLI to update the service instance and provide settings (including one or more configuration sources) before the instance will be usable. For information on updating a Config Server service instance, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.</p>
+You can create a Config Server service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager (you cannot configure a service instance using Apps Manager).
 
 ## Using the cf CLI
 
@@ -123,6 +121,8 @@ Updated: 2016-06-24T21:59:24Z
 
 ## Using Apps Manager
 
+<p class='note'><strong>Note</strong>: If you create a Config Server service instance using Apps Manager, you will need to use the cf CLI to update the service instance and provide settings (including one or more configuration sources) before the instance will be usable. For information on updating a Config Server service instance, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.</p>
+
 Log into Apps Manager as a Space Developer. In the Marketplace, select **Config Server**.
 
    <%= image_tag("config-server/1_marketplace.png") %>
@@ -143,4 +143,4 @@ It may take a few minutes to provision the service instance; while it is being p
 
    <%= image_tag("config-server/dashboard-new.png") %>
 
-The dashboard displays the current settings for the Config Server service instance. For information about configuring the service instance settings, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.
+The dashboard displays the current settings for the Config Server service instance. Before you can use this service instance, you must update it using the cf CLI to supply it with a configuration source. For information about configuring the service instance's settings, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.
