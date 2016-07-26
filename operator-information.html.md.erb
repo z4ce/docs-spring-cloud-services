@@ -5,11 +5,11 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-See below for information about Spring Cloud Services' deployment model and other information which may be useful in operating its services or client applications.
+See below for information about Spring Cloud&reg; Services' deployment model and other information which may be useful in operating its services or client applications.
 
 ## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
 
-Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/ops1.png") %>
 
@@ -20,12 +20,12 @@ The service broker's functionality is divided between the following two Spring B
 * spring-cloud-broker ("the SB"): Implements the Service Broker API.
 * spring-cloud-broker-worker ("the Worker"): Acts on provision, deprovision, bind, and unbind requests.
 
-The broker relies on two other Pivotal Cloud Foundry&reg; products, [MySQL for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/p-mysql) and [RabbitMQ for Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-rabbitmq-service), for the following service instances.
+The broker relies on two other Pivotal Cloud Foundry products, [MySQL for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-mysql) and [RabbitMQ&reg; for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service), for the following service instances.
 
 * **spring-cloud-broker-db**: A MySQL database used by the SB.
 * **spring-cloud-broker-rmq**: A RabbitMQ queue used for communication between the SB and the Worker.
 
-You can obtain the broker username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry&reg; Operations Manager. Click the Spring Cloud Services tile, and in the **Credentials** tab, copy the Broker Credentials.
+You can obtain the broker username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry Operations Manager. Click the Spring Cloud Services tile, and in the **Credentials** tab, copy the Broker Credentials.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/broker-credentials.png") %>
 
@@ -37,7 +37,7 @@ The SB application and the Worker application are deployed using a [blue-green d
 
 #### <a id="access-broker-applications-in-apps-manager"></a>Access Broker Applications in Apps Manager
 
-To view the broker applications in Pivotal Cloud Foundry&reg; Apps Manager, log into Apps Manager as an admin user and select the "system" org.
+To view the broker applications in Pivotal Cloud Foundry Apps Manager, log into Apps Manager as an admin user and select the "system" org.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/broker-apps-apps-manager-org.png") %>
 
@@ -67,7 +67,7 @@ A service instance is assigned a GUID at provision time. Backing applications fo
 
 #### Access Service Instance Backing Applications in Apps Manager
 
-To view a backing application for a service instance in Pivotal Cloud Foundry&reg; Apps Manager, get the service instance's GUID and look for the corresponding application in the "instances" space.
+To view a backing application for a service instance in Pivotal Cloud Foundry Apps Manager, get the service instance's GUID and look for the corresponding application in the "instances" space.
 
 Target the org and space of the service instance.
 
@@ -129,7 +129,7 @@ Click the **Spring Cloud Services** tab and enter the name of the desired Java b
 
 ## <a id="uaa-identity-zones-and-clients"></a>UAA Identity Zones and Clients
 
-Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which have bindings to these service instances. 
+Spring Cloud Services uses the multi-tenancy capabilities of the Cloud Foundry User Account and Authentication server (UAA). It creates a new Identity Zone ("the Spring Cloud Services Identity Zone") for all authorization from Config Server and Service Registry service instances to client applications which have bindings to these service instances.
 
 Within the platform Identity Zone ("the UAA Identity Zone"), Spring Cloud Services creates a `p-spring-cloud-services` UAA client for the SB and a `p-spring-cloud-services-worker` UAA client for the Worker. In the Spring Cloud Services Identity Zone, it creates a `p-spring-cloud-services-worker` UAA client for the Worker.
 
@@ -405,5 +405,5 @@ Below are usage requirements of the applications backing a single service instan
 | Service Registry          | 1 GB                | 1 GB             |
 | Circuit Breaker Dashboard | 2 GB                | 2 GB             |
 
-Spring Cloud Services service types may also be backed by non-SCS service instances. For example, a Circuit Breaker Dashboard service instance uses a [RabbitMQ for Pivotal Cloud Foundry&reg;](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance for communication between its two backing applications.
+Spring Cloud Services service types may also be backed by non-SCS service instances. For example, a Circuit Breaker Dashboard service instance uses a [RabbitMQ for Pivotal Cloud Foundry](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance for communication between its two backing applications.
 

@@ -1,5 +1,5 @@
 ---
-title: Upgrading Spring Cloud Services for Pivotal Cloud Foundry&reg;
+title: Upgrading Spring Cloud&reg; Services for Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
@@ -7,15 +7,15 @@ owner: Spring Cloud Services
 
 ## <a id="product-upgradeability"></a>Product Upgradeability
 
-Please see the relevant section below for important information regarding upgrades of the Spring Cloud Services product on your version of Pivotal Cloud Foundry&reg;.
+Please see the relevant section below for important information regarding upgrades of the Spring Cloud Services product on your version of Pivotal Cloud Foundry.
 
-### Upgrades on Pivotal Cloud Foundry&reg; 1.6
+### Upgrades on Pivotal Cloud Foundry 1.6
 
-When upgrading to a patch version of the Spring Cloud Services (SCS) product on Pivotal Cloud Foundry&reg; 1.6, you must consecutively apply all patch versions between your currently-installed SCS version and the version to which you wish to upgrade, and you may not skip a patch version. For example, you may not upgrade SCS 1.0.6 directly to SCS 1.0.8; instead, to upgrade SCS 1.0.6 to SCS 1.0.8, you must upgrade SCS 1.0.6 to SCS 1.0.7, then upgrade SCS 1.0.7 to SCS 1.0.8.
+When upgrading to a patch version of the Spring Cloud Services (SCS) product on Pivotal Cloud Foundry 1.6, you must consecutively apply all patch versions between your currently-installed SCS version and the version to which you wish to upgrade, and you may not skip a patch version. For example, you may not upgrade SCS 1.0.6 directly to SCS 1.0.8; instead, to upgrade SCS 1.0.6 to SCS 1.0.8, you must upgrade SCS 1.0.6 to SCS 1.0.7, then upgrade SCS 1.0.7 to SCS 1.0.8.
 
-### Upgrades on Pivotal Cloud Foundry&reg; 1.7
+### Upgrades on Pivotal Cloud Foundry 1.7
 
-On Pivotal Cloud Foundry&reg; 1.7, you may not upgrade any version of the Spring Cloud Services product between 1.0.0 and 1.0.8 to any version older than 1.0.9 (e.g., you may not upgrade SCS 1.0.1 to SCS 1.0.2); however, you may upgrade any of these versions directly to 1.0.9 or later. You may upgrade any patch version of SCS after 1.0.9 directly to any later patch version and need not apply any intervening patch versions.
+On Pivotal Cloud Foundry 1.7, you may not upgrade any version of the Spring Cloud Services product between 1.0.0 and 1.0.8 to any version older than 1.0.9 (e.g., you may not upgrade SCS 1.0.1 to SCS 1.0.2); however, you may upgrade any of these versions directly to 1.0.9 or later. You may upgrade any patch version of SCS after 1.0.9 directly to any later patch version and need not apply any intervening patch versions.
 
 ## <a id="product-upgrade-steps"></a>Product Upgrade Steps
 
@@ -23,7 +23,7 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
 1. Download the latest version of Spring Cloud Services from [Pivotal Network](https://network.pivotal.io/).
 
-1. In the Installation Dashboard of [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
+1. In the Installation Dashboard of [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
 
     <%= image_tag("./images/upgrades/pre-upload.png") %>
 
@@ -82,9 +82,9 @@ After upgrading the Spring Cloud Services product, follow the below steps to upg
 1. When the service instances have been upgraded, the dashboard will show the new versions.
 
     <%= image_tag("./images/upgrades/si-dashboard-post-upgrade.png") %>
-    
+
 ### <a id="si-upgrade-using-cf-cli"></a>Using the cf Command Line Interface Tool
- 
+
 Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
 
 <pre class="terminal">

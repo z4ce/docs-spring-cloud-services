@@ -1,11 +1,11 @@
 ---
-title: Prerequisites to Installing Spring Cloud Services for Pivotal Cloud Foundry&reg;
+title: Prerequisites to Installing Spring Cloud&reg; Services for Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
 <strong><%= modified_date %></strong>
 
-Please ensure that your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation meets the below requirements before installing Spring Cloud Services.
+Please ensure that your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) installation meets the below requirements before installing Spring Cloud Services.
 
 ## <a id="platform-and-product-requirements"></a>Platform and Product Requirements
 
@@ -22,22 +22,22 @@ nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v
 go_buildpack             4          true      false    go_buildpack-cached-v1.6.3.zip
 </pre>
 
-If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry&reg; by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
+If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
 
-If the default Java buildpack on the Pivotal Cloud Foundry&reg; platform is not at version 2.5 or later, you must specify an alternate buildpack that is at version 2.5 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
+If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 2.5 or later, you must specify an alternate buildpack that is at version 2.5 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
 
-Spring Cloud Services also requires the following Pivotal Cloud Foundry&reg; products:
+Spring Cloud Services also requires the following Pivotal Cloud Foundry products:
 
 * [MySQL](https://network.pivotal.io/products/p-mysql)
 * [RabbitMQ](https://network.pivotal.io/products/pivotal-rabbitmq-service)
 
 If they are not already installed, you can follow the steps listed in the <a href="/spring-cloud-services/installation.html">Installation</a> topic to install them along with Spring Cloud Services.
 
-<p class='note'><strong>Important</strong>: If you enable the RabbitMQ for Pivotal Cloud Foundry&reg; product's SSL support by providing it with SSL keys and certificates, you must enable the RabbitMQ product's TLS 1.0 support; otherwise, the Spring Cloud Services service broker will fail to create or update service instances. See the <a href="http://docs.pivotal.io/rabbitmq-cf/configuring.html">Configuring the RabbitMQ Service</a> topic in the <a href="http://docs.pivotal.io/rabbitmq-cf/index.html">RabbitMQ for Pivotal Cloud Foundry&reg; documentation</a>.</p>
+<p class='note'><strong>Important</strong>: If you enable the RabbitMQ&reg; for Pivotal Cloud Foundry product's SSL support by providing it with SSL keys and certificates, you must enable the RabbitMQ product's TLS 1.0 support; otherwise, the Spring Cloud Services service broker will fail to create or update service instances. See the <a href="http://docs.pivotal.io/rabbitmq-cf/configuring.html">Configuring the RabbitMQ Service</a> topic in the <a href="http://docs.pivotal.io/rabbitmq-cf/index.html">RabbitMQ for Pivotal Cloud Foundry documentation</a>.</p>
 
 ## <a id="security-requirements"></a>Security Requirements
 
-You will need to update your Elastic Runtime SSL certificate as described in the [Pivotal Cloud Foundry&reg; documentation](http://docs.pivotal.io/pivotalcf/opsguide/security_config.html). Generate one single certificate that includes all of the domains listed below, replacing `SYSTEM_DOMAIN.TLD` with your system domain and `APPLICATION_DOMAIN.TLD` with your application domain:
+You will need to update your Elastic Runtime SSL certificate as described in the [Pivotal Cloud Foundry documentation](http://docs.pivotal.io/pivotalcf/opsguide/security_config.html). Generate one single certificate that includes all of the domains listed below, replacing `SYSTEM_DOMAIN.TLD` with your system domain and `APPLICATION_DOMAIN.TLD` with your application domain:
 
 * `*.SYSTEM_DOMAIN.TLD`
 * `*.APPLICATION_DOMAIN.TLD`
@@ -53,11 +53,11 @@ Requirements section of the Spring Cloud Services prerequisites documentation.
 
 ### <a id="self-signed-certificates-and-internal-cas"></a>Self-Signed Certificates and Internal CAs
 
-If your Pivotal Cloud Foundry&reg; installation is using its own self-signed SSL certificate, you must enable the "Ignore SSL certificate verification" or "Disable SSL certificate verification for this environment" option in the **Networking** section of the Pivotal Elastic Runtime tile **Settings** tab. See "Configuring Elastic Runtime for vSphere and vCloud" in the Pivotal Cloud Foundry&reg; documentation ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/customizing/config-er-vmware.html#security-config), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/customizing/config-er-vmware.html#networking)).
+If your Pivotal Cloud Foundry installation is using its own self-signed SSL certificate, you must enable the "Ignore SSL certificate verification" or "Disable SSL certificate verification for this environment" option in the **Networking** section of the Pivotal Elastic Runtime tile **Settings** tab. See "Configuring Elastic Runtime for vSphere and vCloud" in the Pivotal Cloud Foundry documentation ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/customizing/config-er-vmware.html#security-config), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/customizing/config-er-vmware.html#networking)).
 
 If you are using an SSL certificate signed by an internal root Certificate Authority (CA), you must use a custom Java buildpack whose keystore contains the internal root CA. Follow the below steps to create and add the custom buildpack.
 
 1. Create a fork of the [Cloud Foundry Java buildpack](https://github.com/cloudfoundry/java-buildpack).
 1. Add your `cacerts` file to `resources/open_jdk_jre/lib/security/cacerts`.
-1. Following the instructions in the "Adding Buildpacks to Cloud Foundry" topic ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/adminguide/buildpacks.html), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/adminguide/buildpacks.html)), add your custom buildpack to Pivotal Cloud Foundry&reg;.
+1. Following the instructions in the "Adding Buildpacks to Cloud Foundry" topic ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/adminguide/buildpacks.html), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/adminguide/buildpacks.html)), add your custom buildpack to Pivotal Cloud Foundry.
 1. Using the cf CLI as discussed in the <a href="/spring-cloud-services/prerequisites.html#platform-and-product-requirements">Platform and Product Requirements</a> section above, verify that the custom buildpack is now the default Java buildpack.

@@ -5,7 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can create a Circuit Breaker Dashboard service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
+You can create a Circuit Breaker Dashboard service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
 
 ## Using the cf CLI
 
@@ -20,7 +20,7 @@ Org:            myorg
 Space:          development
 </pre>
 
-If desired, view plan details for the Circuit Breaker Dashboard product using  
+If desired, view plan details for the Circuit Breaker Dashboard product using
 `cf marketplace -s`.
 
 <pre class="terminal">
@@ -65,7 +65,7 @@ Service: p-circuit-breaker-dashboard
 Bound apps:
 Tags:
 Plan: standard
-Description: Circuit Breaker Dashboard for Spring Cloud Applications
+Description: Circuit Breaker Dashboard for Spring Cloud&reg; Applications
 Documentation url: http://docs.pivotal.io/spring-cloud-services/
 Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-circuit-breaker-dashboard/97869d78-5d4e-410b-9c71-bb622ca49f7d
 
@@ -78,19 +78,19 @@ Updated: 2016-06-29T19:16:19Z
 
 ## Using Apps Manager
 
-Log into Apps Manager as a Space Developer. In the Marketplace, select **Circuit Breaker**.  
+Log into Apps Manager as a Space Developer. In the Marketplace, select **Circuit Breaker**.
 
    <%= image_tag("circuit-breaker/1_marketplace.png") %>
 
-Select the desired plan for the new service instance.  
+Select the desired plan for the new service instance.
 
    <%= image_tag("circuit-breaker/2_select_plan.png") %>
 
-Provide a name for the service instance (for example, "circuit-breaker-dashboard"). Click the **Add** button.  
+Provide a name for the service instance (for example, "circuit-breaker-dashboard"). Click the **Add** button.
 
    <%= image_tag("circuit-breaker/3_instance_name.png") %>
 
-In the **Services** list, click the **Manage** link under the listing for the new service instance.  
+In the **Services** list, click the **Manage** link under the listing for the new service instance.
 
    <%= image_tag("circuit-breaker/4_service_successfully_added.png") %>
 

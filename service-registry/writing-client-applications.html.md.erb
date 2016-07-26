@@ -13,7 +13,7 @@ To register your application with a Service Registry service instance or use it 
 
 ## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
 
-Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your application can be registered with a Service Registry service instance or consume a service that is registered with a Service Registry service instance.
+Spring Cloud&reg; Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your application can be registered with a Service Registry service instance or consume a service that is registered with a Service Registry service instance.
 
 Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your application to the API endpoint of your Elastic Runtime instance:
 
@@ -93,7 +93,7 @@ An application deployed to PCF can have one or more URLs, or "routes," bound to 
   ],
 ```
 
-Requests from client applications to this registered application go through the Pivotal Cloud Foundry&reg; Router, and the Router provides load balancing between the clients and registered applications.
+Requests from client applications to this registered application go through the Pivotal Cloud Foundry Router, and the Router provides load balancing between the clients and registered applications.
 
 <!---
 ```java
@@ -107,11 +107,11 @@ This registration method is compatible with all deployments of PCF.
 
 <p class='note'><strong>Important</strong>: On PCF 1.7, network communication between containers in the same cell is not allowed. This makes direct registration unreliable, since applications registering to the service registry and client applications discovering the registered applications may be deployed to the same cell. Use of the direct registration method is therefore not recommended or supported on PCF 1.7.</p>
 
-An application running on Pivotal Cloud Foundry&reg; is provided with an externally-accessible IP address and port, which are made available in two environment variables: ```CF_INSTANCE_IP``` and ```CF_INSTANCE_PORT```. If you specify the ```direct``` registration method, the application will be registered with the Service Registry instance using this IP address and port.
+An application running on Pivotal Cloud Foundry is provided with an externally-accessible IP address and port, which are made available in two environment variables: ```CF_INSTANCE_IP``` and ```CF_INSTANCE_PORT```. If you specify the ```direct``` registration method, the application will be registered with the Service Registry instance using this IP address and port.
 
-Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry&reg; Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
+Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
 
-To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry® Operations Manager&reg;, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
+To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry Operations Manager, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
 
 #### Specify a Registration Method
 
