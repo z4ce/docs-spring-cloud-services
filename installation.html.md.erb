@@ -11,17 +11,15 @@ Make sure that you have or have completed all products and requirements listed i
 
 1. Download Spring Cloud Services from [Pivotal Network](https://network.pivotal.io/).
 
-1. In [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file. 
-
-1. When the installation completes, **Spring Cloud Services** appears in your product list. Add the **Spring Cloud Services** product tile to your dashboard by clicking the green plus sign icon.
+1. In [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) Operations Manager, click **Import a Product** on the left sidebar to upload the `p-spring-cloud-services-<version>.pivotal` file.
 
     <%= image_tag("./images/installation/pre-upload.png") %>
 
-1. When the **Spring Cloud Services** tile appears in the **Installation Dashboard**, click it.
+1. Hover over **Spring Cloud Services** in the **Available Products** list and click the **Add &#187;** button.
 
     <%= image_tag("./images/installation/pre-add.png") %>
 
-1. In the **Settings** tab, click **Spring Cloud Services** to configure the **Service Instance Limit** setting. The value of this setting is the maximum number of service instances that the Spring Cloud Services service broker will allow to be provisioned (the default value is 100). This setting's value is also used to determine the memory quota for the org in which service instances are deployed; that org's quota will be equal to 1.5G times the configured service instance limit.
+1. When the **Spring Cloud Services** tile appears in the **Installation Dashboard**, click it. In the **Settings** tab, click **Spring Cloud Services** to configure the **Service Instance Limit** setting. The value of this setting is the maximum number of service instances that the Spring Cloud Services service broker will allow to be provisioned (the default value is 100). This setting's value is also used to determine the memory quota for the org in which service instances are deployed; that org's quota will be equal to 1.5G times the configured service instance limit.
 
     <%= image_tag("./images/installation/service-instance-limit.png") %>
 
