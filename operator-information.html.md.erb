@@ -260,6 +260,8 @@ The dashboard shows the version and status of each service instance, as well as 
 
 You can click the **Instance Name** of a listed service instance to view the instance's dashboard. Click the **+** icon beside the count of an instance's **Bound Apps** or **Service Keys** to view the names of the applications or service keys that are bound to that instance.
 
+<p class='note'><strong>Note</strong>: The Service Instances dashboard is updated frequently (close to real-time). If using the cf Command Line Interface tool, you may notice a discrepancy between the status given for a service instance by the cf CLI (e.g., by the <code>cf service</code> command) versus that given by the Service Instances dashboard. The status retrieved by the cf CLI is not updated as frequently and may take time to match that shown on the Service Instances dashboard.</p>
+
 ## <a id="application-health-and-status"></a>Application Health and Status
 
 For more visibility into how Spring Cloud Services service instances and the broker applications are behaving, or for troubleshooting purposes, you may wish to access those applications directly. See below for information about accessing their output.
