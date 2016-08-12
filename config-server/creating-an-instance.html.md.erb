@@ -119,6 +119,8 @@ Updated: 2016-06-24T21:59:24Z
 
 <p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report a <code>create succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be created and have a <code>create succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="/spring-cloud-services/config-server/using-the-dashboard.html">Using the Dashboard</a> topic.</p>
 
+<p class='note'><strong>Note</strong>: You may notice a discrepancy between the status given for a service instance by the cf CLI (e.g., by the <code>cf service</code> command) versus that shown on the <a href="/spring-cloud-services/operator-information.html#service-instances-dashboard">Service Instances dashboard</a>. The dashboard is updated frequently (close to real-time); the status retrieved by the cf CLI is not updated as frequently and may take time to match the dashboard.</p>
+
 ## Using Apps Manager
 
 <p class='note'><strong>Note</strong>: If you create a Config Server service instance using Apps Manager, you will need to use the cf CLI to update the service instance and provide settings (including one or more configuration sources) before the instance will be usable. For information on updating a Config Server service instance, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.</p>
