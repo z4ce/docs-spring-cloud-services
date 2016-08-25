@@ -5,6 +5,30 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
+### 1.1.2
+
+**Release Date: 24th August 2016**
+
+This release updates the stemcell and adds enhancements to the Config Server and Circuit Breaker Dashboard services. It also contains bug fixes.
+
+Features included in this release:
+
+* The stemcell has been updated to 3232.17. This resolves the following issues:
+  * [[USN-3064-1]](http://www.ubuntu.com/usn/usn-3064-1/): GnuPG vulnerability
+
+Enhancements included in this release:
+
+* Config Server support for placeholders in repository URIs has been improved.
+* Config Server can now be configured to clone configuration source repositories on startup (as opposed to the default behavior of cloning a repository when configuration is first requested from the associated configuration source). See the [Configuration Parameters](/spring-cloud-services/config-server/creating-an-instance.html#configuration-parameters) section of the [Creating an Instance](/spring-cloud-services/config-server/creating-an-instance.html) topic in the [Config Server documentation](/spring-cloud-services/config-server/index.html) for more information.
+* Circuit Breaker Dashboard's Spring Cloud Stream configuration now uses all URIs provided for the associated [RabbitMQ for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance.
+* The tile install and uninstall processes are now more resilient to errors encountered during the relevant errands.
+
+Fixes included in this release:
+
+* If the service broker worker fails to update a service instance when the service broker receives a provision or update request, the request to the service broker will now time out and the service instance status will be changed from PENDING to FAILED.
+* Applications unbound from a Service Registry service instance will no longer remain in the service instance's registry and will be removed from that registry shortly after being unbound from the service instance.
+* Fixed a problem where the service broker's authentication to the Cloud Controller would expire if the broker remained inactive for a long period of time.
+
 ### 1.1.1
 
 **Release Date: 1st July 2016**
@@ -13,7 +37,7 @@ Features included in this release:
 
 * The stemcell has been updated to 3232.12. This resolves the following issues:
   * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
-
+  
 ### 1.0.11
 
 **Release Date: 1st July 2016**
