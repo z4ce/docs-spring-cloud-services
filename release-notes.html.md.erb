@@ -5,7 +5,9 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
-### 1.1.2
+## <a id="1-1"></a>1.1
+
+### <a id="1-1-2"></a>1.1.2
 
 **Release Date: 24th August 2016**
 
@@ -29,18 +31,7 @@ Fixes included in this release:
 * Applications unbound from a Service Registry service instance will no longer remain in the service instance's registry and will be removed from that registry shortly after being unbound from the service instance.
 * Fixed a problem where the service broker's authentication to the Cloud Controller would expire if the broker remained inactive for a long period of time.
 
-### 1.0.12
-
-**Release Date: 24th August 2016**
-
-This release updates the stemcell.
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.17. This resolves the following issues:
-  * [[USN-3064-1]](http://www.ubuntu.com/usn/usn-3064-1/): GnuPG vulnerability
-
-### 1.1.1
+### <a id="1-1-1"></a>1.1.1
 
 **Release Date: 1st July 2016**
 
@@ -49,16 +40,7 @@ Features included in this release:
 * The stemcell has been updated to 3232.12. This resolves the following issues:
   * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
   
-### 1.0.11
-
-**Release Date: 1st July 2016**
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.12. This resolves the following issues:
-  * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
-
-### 1.1.0
+### <a id="1-1-0"></a>1.1.0
 
 **Release Date: 28th June 2016**
 
@@ -97,7 +79,29 @@ In 1.1.0, the Spring Cloud Services client dependencies have been restructured a
 
 For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/upgrades.html#service-instance-upgrade-steps">Service Instance Upgrade Steps</a> section of <a href="/spring-cloud-services/upgrades.html">Upgrades</a>. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
 
-### 1.0.10
+## <a id="1-0"></a>1.0
+
+### <a id="1-0-12"></a>1.0.12
+
+**Release Date: 24th August 2016**
+
+This release updates the stemcell.
+
+Features included in this release:
+
+* The stemcell has been updated to 3232.17. This resolves the following issues:
+  * [[USN-3064-1]](http://www.ubuntu.com/usn/usn-3064-1/): GnuPG vulnerability
+
+### <a id="1-0-11"></a>1.0.11
+
+**Release Date: 1st July 2016**
+
+Features included in this release:
+
+* The stemcell has been updated to 3232.12. This resolves the following issues:
+  * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
+
+### <a id="1-0-10"></a>1.0.10
 
 **Release Date: 14th June 2016**
 
@@ -106,7 +110,7 @@ Features included in this release:
 * The stemcell has been updated to 3232.8. This resolves the following issues:
   * [[USN-3001-1]](http://www.ubuntu.com/usn/usn-3001-1/): Linux kernel (Vivid HWE) vulnerabilities
 
-### 1.0.9
+### <a id="1-0-9"></a>1.0.9
 
 **Release Date: 6th May 2016**
 
@@ -115,7 +119,7 @@ Features included in this release:
 * The stemcell has been updated to 3232.2. This resolves the following issues:
   * [[USN-2959-1]](http://www.ubuntu.com/usn/usn-2959-1/): OpenSSL vulnerabilities
 
-### 1.0.8
+### <a id="1-0-8"></a>1.0.8
 
 **Release Date: 18th April 2016**
 
@@ -123,7 +127,7 @@ Fixes included in this release:
 
 * The Config Server now applies the values of its "Git Branch" and "Search Paths" configuration form fields when retrieving configuration for an application. These values were not applied from version 1.0.4 of Spring Cloud Services.
 
-### 1.0.7
+### <a id="1-0-7"></a>1.0.7
 
 **Release Date: 16th March 2016**
 
@@ -132,7 +136,7 @@ Features included in this release:
 * The stemcell has been updated to 3146.10. This resolves the following issues:
   * [[USN-2929-1]](http://www.ubuntu.com/usn/usn-2929-1/): Linux kernel vulnerabilities
 
-### 1.0.6
+### <a id="1-0-6"></a>1.0.6
 
 **Release Date: 16th March 2016**
 
@@ -140,7 +144,7 @@ Fixes included in this release:
 
 * 1.0.4 was inadvertently released with a version number in its product metadata that prevented upgrades to 1.0.5. This release corrects that.
 
-### 1.0.5
+### <a id="1-0-5"></a>1.0.5
 
 **Release Date: 25th February 2016**
 
@@ -152,7 +156,7 @@ Features included in this release:
   * [[USN-2897-1]](http://www.ubuntu.com/usn/usn-2897-1/): Nettle vulnerabilities
   * [[USN-2896-1]](http://www.ubuntu.com/usn/usn-2896-1/): Libgcrypt vulnerability
 
-### 1.0.4
+### <a id="1-0-4"></a>1.0.4
 
 **Release Date: 2nd February 2016**
 
@@ -184,7 +188,7 @@ Fixes included in this release:
 * Restart of the backing application for Service Registry service instances will no longer cause a temporary return of empty registry information to clients.
 * The Circuit Breaker Dashboard now displays correctly in Safari and Firefox.
 
-### 1.0.3
+### <a id="1-0-3"></a>1.0.3
 
 **Release Date: 7th January 2016**
 
@@ -200,7 +204,7 @@ Features included in this release:
   * [[USN-2829-1]](http://www.ubuntu.com/usn/usn-2829-1/): Linux kernel vulnerabilities
 
 
-### 1.0.2
+### <a id="1-0-2"></a>1.0.2
 
 **Release Date: 1st December 2015**
 
@@ -211,7 +215,7 @@ Features included in this release:
   * [[USN-2812-1]](http://www.ubuntu.com/usn/usn-2812-1/): libxml2 vulnerabilities
   * [[USN-2810-1]](http://www.ubuntu.com/usn/usn-2810-1/): Kerberos vulnerabilities
 
-### 1.0.1
+### <a id="1-0-1"></a>1.0.1
 
 **Release Date: 12th November 2015**
 
@@ -222,7 +226,7 @@ Features included in this release:
   * [[USN-2798-1]](http://www.ubuntu.com/usn/usn-2798-1/): Linux kernel (Vivid HWE) vulnerabilities
 * Removed SVN support from Config Server due to licensing issues
 
-### 1.0.0
+### <a id="1-0-0"></a>1.0.0
 
 **Release Date: 26th October 2015**
 
