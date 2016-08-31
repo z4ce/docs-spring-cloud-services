@@ -7,6 +7,19 @@ owner: Spring Cloud Services
 
 You can update settings on a Config Server service instance using the cf Command Line Interface tool. The `cf update-service` command can be given a `-c` flag with a JSON object containing parameters used to configure the service instance.
 
+To update a Config Server service instance's settings, target the org and space of the service instance:
+
+<pre class="terminal">
+$ cf target -o myorg -s development
+
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
+User:           user
+Org:            myorg
+Space:          development
+</pre>
+
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. For information about supported parameters, see the next section.
+
 ## <a id="configuration-parameters"></a>Configuration Parameters
 
 Parameters used to configure configuration sources are part of a JSON object called `git`, as in `{"git": { "uri": "http://example.com/config" } }`. For more information on the purposes of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) topic.
@@ -67,19 +80,6 @@ Other parameters accepted for the Config Server are listed below.
 | <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
 | <code>upgrade</code> | Whether to upgrade the instance                                                            | <code>'{"upgrade": true}'</code> |
 
-To update a Config Server service instance's settings, target the org and space of the service instance:
-
-<pre class="terminal">
-$ cf target -o myorg -s development
-
-API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
-User:           user
-Org:            myorg
-Space:          development
-</pre>
-
-Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter.
-
 To update a service instance, setting the configuration sources and specifying that the default configuration source Git repository should be cloned when the Config Server starts up, run:
 
 <pre class="terminal">
@@ -124,3 +124,39 @@ Updated: 2016-06-24T21:13:59Z
 <p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report an <code>update succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be restarted and have an <code>update succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly after an update, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="/spring-cloud-services/config-server/using-the-dashboard.html">Using the Dashboard</a> topic.</p>
 
 The service instance is now updated and ready to be used. For information about using an application to access configuration values served by a Config Server service instance, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.
+
+### <a id="ssh-repository-access"></a>SSH Repository Access
+
+You can configure a Config Server configuration source so that the Config Server accesses it using the Secure Shell (SSH) protocol. To do so, you must specify a URI using the `ssh://` URI scheme or the Secure Copy Protocol (SCP) style URI format, and you must supply a private key. You may also supply a host key with which the server will be identified. If you do not provide a host key, the Config Server will not verify the host key of the configuration source's server.
+
+A SSH URI must include a username, host, and repository path. This might be specified as shown in the following JSON:
+
+```
+'{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git"} }'
+```
+
+An equivalent SCP-style URI might be specified as shown in the following JSON:
+
+```
+'{"git": { "uri": "git@github.com:spring-cloud-samples/cook-config.git"} }'
+```
+
+The parameters used to configure SSH for a Config Server configuration source's URI are listed below.
+
+| Parameter                      | Function                                                                                                                                                |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>hostKey</code>           | The host key corresponding to <code>privateKey</code> (optional)                                                                                        |
+| <code>hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" (required if supplying <code>hostKey</code>)            |
+| <code>privateKey</code>        | The private key, with all newline characters replaced by <code>\n</code>                     |
+
+To create a Config Server service instance that uses SSH to access a configuration source, allowing for host key verification, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git", "hostKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7+mgZfOyxx6MX/yG+d9R2ogcm76...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+</pre>
+
+To create a Config Server service instance that uses SSH to access a configuration source, without host key verification, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+</pre>
