@@ -57,22 +57,6 @@ General parameters used to configure the Config Server's default configuration s
 | <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 | <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 
-The parameters used to configure the Config Server's specific configuration sources are listed below.
-
-| Parameter                                  | Function                                                                                                                                    |
-|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
-| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)        |
-| <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of this repository                                            |
-| <code>repos."name".label</code>            | The default "label" to use with this repository if a request is received without a label                                                    |
-| <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
-| <code>repos."name".cloneOnStart</code>     | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
-| <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
-| <code>repos."name".password</code>         | The password used to access this repository (if protected by HTTP Basic authentication)                                                     |
-| <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH)                                                     |
-| <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
-| <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
-
 The parameters used to configure any proxy settings for the Config Server are listed below.
 
 | Parameter                                  | Function                                                                                                                                    |
@@ -168,6 +152,52 @@ To create a Config Server service instance that uses SSH to access a configurati
 
 <pre class="terminal">
 $ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+</pre>
+
+### <a id="multiple-repositories"></a>Multiple Repositories
+
+You can configure a Config Server service instance to use multiple configuration sources, which will be used only for specific applications or for applications which are using specific profiles. To do so, you must provide parameters in repository objects within the `git.repos` JSON object. Most parameters set in the `git` object for the default configuration source are also available for specific configuration sources and can be set in repository objects within the `git.repos` object.
+
+Each repository object in the `git.repos` object has a name. In the repository specified in the following JSON, the name is "cookie":
+
+```
+'{ "git": { "repos": { "cookie": { "uri": "https://github.com/spring-cloud-samples/cook-config" } } } }'
+```
+
+Each repository object also has a `pattern`, which is a comma-separated list of application and profile names separated with forward slashes (`/`, as in `app/profile`) and potentially including wildcards (`*`, as in `app*/profile*`). If you do not supply a pattern, the repository object's name will be used as the pattern. In the repository specified in the following JSON, the pattern is `co*/dev*` (matching any application whose name begins with `co` and which is using a profile whose name begins with `dev`), and the default pattern would be `cookie`:
+
+```
+'{"git": { "repos": { "cookie": { "pattern": "co*/dev*", "uri": "https://github.com/spring-cloud-samples/cook-config" } } } }'
+```
+
+For more information about the pattern format, see ["Pattern Matching and Multiple Repositories"](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_pattern_matching_and_multiple_repositories) in the [Spring Cloud Config documentation](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html).
+
+The parameters used to configure specific configuration sources for the Config Server are listed below.
+
+| Parameter                                  | Function                                                                                                                                    |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
+| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)        |
+| <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of this repository                                            |
+| <code>repos."name".label</code>            | The default "label" to use with this repository if a request is received without a label                                                    |
+| <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
+| <code>repos."name".cloneOnStart</code>     | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
+| <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
+| <code>repos."name".password</code>         | The password used to access this repository (if protected by HTTP Basic authentication)                                                     |
+| <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH)                                                     |
+| <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
+| <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
+
+To create a Config Server service instance with a default repository and a repository specific to an application named "cook", run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "cook", "uri": "https://github.com/spring-cloud-samples/cook-config" } } } }'
+</pre>
+
+To create a Config Server service instance with a default repository and a repository specific to applications using the "dev" profile, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "*/dev", "uri": "https://github.com/spring-cloud-samples/cook-config" } } } }'
 </pre>
 
 ## <a id="using-apps-manager"></a>Using Apps Manager
