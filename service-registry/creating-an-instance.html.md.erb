@@ -5,9 +5,9 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can create a Service Registry service instance using either the cf Command Line Interface tool or [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
+You can create a Service Registry service instance using either the Cloud Foundry Command Line Interface tool (cf CLI) or [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
 
-<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes. This currently can only be configured through use of the cf Command Line Interface tool. (After creating a service instance using Apps Manager, you may use the cf CLI to set the number of nodes. See the <a href="/spring-cloud-services/service-registry/updating-an-instance.html">Updating an Instance</a> topic.)</p>
+<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes. This currently can only be configured through use of the cf CLI. (After creating a service instance using Apps Manager, you can use the cf CLI to set the number of nodes. See the <a href="/spring-cloud-services/service-registry/updating-an-instance.html">Updating an Instance</a> topic.)</p>
 
 ## <a id="using-apps-manager"></a>Using Apps Manager
 
@@ -31,7 +31,7 @@ It may take a few minutes to provision the service instance; while it is being p
 
 <%= image_tag("service-registry/dashboard_more.png") %>
 
-## <a id="using-cf-cli"></a>Using the cf Command Line Interface Tool
+## <a id="using-cf-cli"></a>Using the cf CLI
 
 Target the correct org and space:
 
