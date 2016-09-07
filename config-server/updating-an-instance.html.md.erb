@@ -24,6 +24,8 @@ Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `
 
 Parameters used to configure configuration sources are part of a JSON object called `git`, as in `{"git": { "uri": "http://example.com/config" } }`. For more information on the purposes of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) topic.
 
+<a id="general-configuration-parameters"></a>
+
 General parameters used to configure the Config Server's default configuration source are listed below.
 
 | Parameter                      | Function                                                                                                                                                |
@@ -172,7 +174,7 @@ The parameters used to configure specific configuration sources for the Config S
 | <code>repos."name".cloneOnStart</code>     | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
 | <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
 | <code>repos."name".password</code>         | The password used to access this repository (if protected by HTTP Basic authentication)                                                     |
-| <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH)                                                     |
+| <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/updating-an-instance.html#ssh-repository-access) section for more information                           |
 | <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
 | <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
 
@@ -182,8 +184,45 @@ To update a Config Server service instance to have a default repository and a re
 $ cf update-service config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "cook", "uri": "https://github.com/spring-cloud-samples/cook-config" } } } }'
 </pre>
 
-To update a Config Server service instance to have a default repository and a repository specific to applications using the "dev" profile, run:
+To update a Config Server service instance to have a default repository and a repository specific to applications using the `dev` profile, run:
 
 <pre class="terminal">
 $ cf update-service config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "*/dev", "uri": "https://github.com/spring-cloud-samples/cook-config" } } } }'
+</pre>
+
+### <a id="placeholders-in-repository-uris"></a>Placeholders in Repository URIs
+
+The URIs for configuration source Git repositories can include a couple of special strings as placeholders:
+
+* `{application}`: the name set in the `spring.application.name` property on an application
+* `{profile}`: a profile listed in the `spring.profiles.active` property on an application
+
+You can use these placeholders to (for example) set a single URI which maps one repository each to multiple applications that use the same Config Server, or to set a single URI which maps one repository each to multiple profiles.
+
+<p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="/spring-cloud-services/config-server/updating-an-instance.html#general-configuration-parameters">general configuration parameters.</a></p>
+
+A repository URI that enables use of one repository per application might be expressed as shown in the following JSON. For an application named "cook", this would locate the repository named `cook-config`:
+
+```
+'{"git": { "uri": "https://github.com/spring-cloud-samples/{application}-config"  } }'
+```
+
+A repository URI that enables use of one repository per profile might be expressed as shown in the following JSON. For an application using the `dev` profile, this would locate a repository named `config-dev`:
+
+```
+'{"git": { "uri": "https://github.com/spring-cloud-samples/config-{profile}"  } }'
+```
+
+For more information about using placeholders, see ["Placeholders in Git URI"](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_placeholders_in_git_uri) in the [Spring Cloud Config documentation](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html).
+
+To update a Config Server service instance to have a repository URI that enables one repository per application, run:
+
+<pre class="terminal">
+$ cf update-service config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/{application}-config" } }'
+</pre>
+
+To update a Config Server service instance to have a repository URI that enables one repository per profile, run:
+
+<pre class="terminal">
+$ cf update-service config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/config-{profile}" } }'
 </pre>
