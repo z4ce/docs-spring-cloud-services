@@ -192,7 +192,12 @@ $ cf update-service config-server -c '{"git": { "uri": "https://github.com/sprin
 
 ### <a id="placeholders-in-repository-uris"></a>Placeholders in Repository URIs
 
-The URIs for configuration source Git repositories can include the strings `{application}` and `{profile}` as placeholders, in place of actual application or profile names. You can use these placeholders to (for example) set a single URI which maps one repository each to multiple applications that use the same Config Server, or to set a single URI which maps one repository each to multiple profiles.
+The URIs for configuration source Git repositories can include a couple of special strings as placeholders:
+
+* `{application}`: the name set in the `spring.application.name` property on an application
+* `{profile}`: a profile listed in the `spring.profiles.active` property on an application
+
+You can use these placeholders to (for example) set a single URI which maps one repository each to multiple applications that use the same Config Server, or to set a single URI which maps one repository each to multiple profiles.
 
 <p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="/spring-cloud-services/config-server/updating-an-instance.html#general-configuration-parameters">general configuration parameters.</a></p>
 
