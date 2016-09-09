@@ -1,0 +1,72 @@
+---
+title: Troubleshooting Spring Cloud&reg; Services for Pivotal Cloud Foundry
+owner: Spring Cloud Services
+---
+
+See this topic for suggestions if you encounter problems with Spring Cloud Services service instances or with configuring your client applications to work with these service instances.
+
+## <a id="product-setup"></a>Product Setup
+
+See below for information about problems related to your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) platform configuration or Spring Cloud Services or other product installation.
+
+### <a id="no-san-matching"></a>"No subject alternative DNS name matching p-spring-cloud-services.uaa.example.com found"
+
+If you encounter an exception message similar to the following:
+
+```
+org.springframework.web.client.ResourceAccessException: I/O error on POST request for
+"https://p-spring-cloud-services.uaa.example.com/oauth/token":
+java.security.cert.CertificateException: No subject alternative DNS name matching
+p-spring-cloud-services.uaa.example.com found.; nested exception is
+javax.net.ssl.SSLHandshakeException: java.security.cert.CertificateException: No
+subject alternative DNS name matching p-spring-cloud-services.uaa.example.com found.
+```
+
+Ensure that your PCF installation meets the requirements described in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. Be sure that your Elastic Runtime SSL certificate includes all wildcards listed in that section and has a separate wildcard for each subdomain.
+
+### <a id="protocol-version"></a>"javax.net.ssl.SSLException: Received fatal alert: protocol_version"
+
+The Cloud Foundry Command Line Interface tool (cf CLI) `create-service` command may return an error similar to the following:
+
+```
+Server error, status code: 502, error code: 10001, message: Service broker error:
+javax.net.ssl.SSLException: Received fatal alert: protocol_version
+```
+
+Spring Cloud Services requires the [RabbitMQ for PCF](https://network.pivotal.io/products/pivotal-rabbitmq-service) product. If you have provided SSL certificates and keys to RabbitMQ for PCF, you must also enable its TLS 1.0 support in order to use it with Spring Cloud Services. See the note at the end of the [Platform and Product Requirements](/spring-cloud-services/prerequisites.html#platform-and-product-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic.
+
+## <a id="client-applications"></a>Client Applications
+
+See below for information about troubleshooting problems in client applications which are bound to Spring Cloud Services service instances.
+
+### <a id="pkix"></a>"Can't contact any eureka nodes - possibly a security group issue?"
+
+A client application bound to a Service Registry service instance may log an error such as the following:
+
+```
+2015-10-01T11:33:38.43-0500 [App/0]      OUT 2015-10-01 16:33:38.433  WARN 29 ---
+[           main] com.netflix.discovery.DiscoveryClient    : Action: Refresh  =>
+returned status of 401 from https://eureka-aa9d8079f0f3.example.com/eureka/apps/
+2015-10-01T11:33:38.43-0500 [App/0]      OUT 2015-10-01 16:33:38.438 ERROR 29 ---
+[           main] com.netflix.discovery.DiscoveryClient    : Can't get a response from
+https://eureka-aa9d8079f0f3.example.com/eureka/apps/
+2015-10-01T11:33:38.43-0500 [App/0]      OUT Can't contact any eureka nodes - possibly a
+security group issue?
+2015-10-01T11:33:38.43-0500 [App/0]      OUT java.lang.RuntimeException: Bad status: 401
+2015-10-01T11:33:38.43-0500 [App/0]      OUT 	at
+com.netflix.discovery.DiscoveryClient.makeRemoteCall(DiscoveryClient.java:1155)
+```
+
+If your PCF environment is using a self-signed certificate (such as a certificate generated in Elastic Runtime), you must set the `CF_TARGET` environment variable on your application to the API endpoint of Elastic Runtime. See the [Add Self-Signed SSL Certificate to JVM Truststore](/spring-cloud-services/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](/spring-cloud-services/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
+
+### <a id="pkix"></a>"sun.security.validator.ValidatorException: PKIX path building failed"
+
+If you encounter the following exception:
+
+```
+sun.security.validator.ValidatorException: PKIX path building failed:
+sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid
+certification path to requested target
+```
+
+If your PCF environment is using self-signed certificates, make sure that you have set the `CF_TARGET` environment variable on the application to the Elastic Runtime API endpoint as described in the [Add Self-Signed SSL Certificate to JVM Truststore](/spring-cloud-services/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](/spring-cloud-services/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
