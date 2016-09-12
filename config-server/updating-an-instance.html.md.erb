@@ -37,25 +37,6 @@ General parameters used to configure the Config Server's default configuration s
 | <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 | <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 
-The parameters used to configure any proxy settings for the Config Server are listed below.
-
-| Parameter                                  | Function                                                                                                                                    |
-|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                |
-| <code>proxy.http.host</code>               | The HTTP proxy host                                                                                                                         |
-| <code>proxy.http.port</code>               | The HTTP proxy port                                                                                                                         |
-| <code>proxy.http.nonProxyHosts</code>      | The hosts to access outside the HTTP proxy                                                                                                  |
-| <code>proxy.http.username</code>           | The username to use with an authenticated HTTP proxy                                                                                        |
-| <code>proxy.http.password</code>           | The password to use with an authenticated HTTP proxy                                                                                        |
-| <code>proxy.https</code>                   | A proxy object, containing HTTPS proxy fields                                                                                               |
-| <code>proxy.https.host</code>              | The HTTPS proxy host                                                                                                                        |
-| <code>proxy.https.port</code>              | The HTTPS proxy port                                                                                                                        |
-| <code>proxy.https.nonProxyHosts</code>     | The hosts to access outside the HTTPS proxy                                                                                                 |
-| <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy                                                                                       |
-| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy                                                                                       |
-
-<p class='note'><strong>Important</strong>: Config Server for <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry</a> does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source at this time.</p>
-
 Other parameters accepted for the Config Server are listed below.
 
 | Parameter            | Function                                                                                   | Example                          |
@@ -225,4 +206,52 @@ To update a Config Server service instance to have a repository URI that enables
 
 <pre class="terminal">
 $ cf update-service config-server -c '{"git": { "uri": "https://github.com/spring-cloud-samples/config-{profile}" } }'
+</pre>
+
+### <a id="proxy-repository-access"></a>HTTP(S) Proxy Repository Access
+
+You can configure a Config Server service instance to access configuration sources using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `git.proxy.http` or `git.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
+
+<p class='note'><strong>Important</strong>: Config Server for <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry</a> does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source at this time.</p>
+
+Settings for an HTTP proxy are set in the `git.proxy.http` object. These might be set as shown in the following JSON:
+
+```
+'{"git": { "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+```
+
+Settings for an HTTPS proxy are set in the `git.proxy.https` object. These might be set as shown in the following JSON:
+
+```
+'{"git": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
+```
+
+The parameters used to configure HTTP or HTTPS proxy settings for the Config Server are listed below.
+
+| Parameter                                  | Function                                                                                                                                            |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                        |
+| <code>proxy.http.host</code>               | The HTTP proxy host                                                                                                                                 |
+| <code>proxy.http.port</code>               | The HTTP proxy port                                                                                                                                 |
+| <code>proxy.http.nonProxyHosts</code>      | The hosts to access outside the HTTP proxy                                                                                                          |
+| <code>proxy.http.username</code>           | The username to use with an authenticated HTTP proxy                                                                                                |
+| <code>proxy.http.password</code>           | The password to use with an authenticated HTTP proxy                                                                                                |
+| <code>proxy.https</code>                   | A proxy object, containing HTTPS proxy fields                                                                                                       |
+| <code>proxy.https.host</code>              | The HTTPS proxy host                                                                                                                                |
+| <code>proxy.https.port</code>              | The HTTPS proxy port                                                                                                                                |
+| <code>proxy.https.nonProxyHosts</code>     | The hosts to access outside the HTTPS proxy (if <code>proxy.http.nonProxyHosts</code> is also provided, <code>http.nonProxyHosts</code> will be used instead of <code>https.nonProxyHosts</code>)      |
+| <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy (if <code>proxy.http.username</code> is also provided, <code>http.username</code> will be used instead of <code>https.username</code>) |
+| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy (if <code>proxy.http.password</code> is also provided, <code>http.password</code> will be used instead of <code>https.password</code>) |
+| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy                                                                                               |
+
+To update a Config Server service instance to use an HTTP proxy to access configuration sources, run:
+
+<pre class="terminal">
+$ cf update-service config-server -c '{"git": {"uri": "https://github.com/spring-cloud-samples/cook-config", "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+</pre>
+
+To update a Config Server service instance to use an authenticated HTTPS proxy to access configuration sources, specifying that `example.com` should be accessed outside of the proxy, run:
+
+<pre class="terminal">
+$ cf update-service config-server -c '{"git": {"uri": "https://github.com/spring-cloud-samples/cook-config", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
 </pre>
