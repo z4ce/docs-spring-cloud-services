@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 To connect client applications to the Service Registry, Spring Cloud Services uses [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html), including the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
 
-## Service Detection
+## <a id="service-detection"></a>Service Detection
 
 The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Service Registry.
 
@@ -42,17 +42,17 @@ For each service in the `VCAP_SERVICES` variable, the connector considers the fo
 * `credentials.uri`: A URI pertaining to the service instance.
 * `credentials.uris`: URIs pertaining to the service instance.
 
-### Service Registry Detection Criteria
+### <a id="service-registry-detection-criteria"></a>Service Registry Detection Criteria
 
 To establish availability of the Service Registry, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
 
 * `tags` including `eureka`
 
-## Application Configuration
+## <a id="application-configuration"></a>Application Configuration
 
 In a Spring Boot application which is bound to a Service Registry service instance, the connector automatically configures a Spring Cloud Netflix Eureka client configuration bean. The client configuration includes the discovery zone, which is configured using the URL from the service binding; this is equivalent to setting the ```eureka.client.serviceUrl.defaultZone``` property.
 
-## See Also
+## <a id="see-also"></a>See Also
 
 For more information about Spring Cloud Connectors, see the following:
 
