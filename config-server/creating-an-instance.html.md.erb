@@ -53,11 +53,13 @@ General parameters used to configure the Config Server's default configuration s
 | Parameter                      | Function                                                                                                                                                |
 |--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | <code>uri</code>               | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of a repository that can be used as the default configuration source      |
-| <code>label</code>             | The default "label" that can be used with the default repository if a request is received without a label                                               |
+| <code>label</code>             | The default "label" that can be used with the default repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application) |
 | <code>searchPaths</code>       | A pattern used to search for configuration-containing subdirectories in the default repository                                                          |
 | <code>cloneOnStart</code>      | Whether the Config Server should clone the default repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
 | <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 | <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
+
+The `uri` setting is required; you cannot create a Config Server service instance without including a `uri`. The default value of the `label` setting is `master`. Within a client application, you can override the Config Server's `label` setting by setting the `spring.cloud.config.label` property (for example, in `bootstrap.yml`).
 
 Other parameters accepted for the Config Server are listed below.
 
@@ -162,7 +164,7 @@ The parameters used to configure specific configuration sources for the Config S
 | <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
 | <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)        |
 | <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of this repository                                            |
-| <code>repos."name".label</code>            | The default "label" to use with this repository if a request is received without a label                                                    |
+| <code>repos."name".label</code>            | The default "label" to use with this repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application)                                                    |
 | <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
 | <code>repos."name".cloneOnStart</code>     | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
 | <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
@@ -170,6 +172,8 @@ The parameters used to configure specific configuration sources for the Config S
 | <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/creating-an-instance.html#ssh-repository-access) section for more information                           |
 | <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
 | <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
+
+The `uri` setting is required; you cannot define a configuration source for the Config Server without including a `uri`. The default value of the `label` setting is `master`. Within a client application, you can override this `label` setting's value by setting the `spring.cloud.config.label` property (for example, in `bootstrap.yml`).
 
 To create a Config Server service instance with a default repository and a repository specific to an application named "cook", run:
 
