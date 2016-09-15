@@ -3,6 +3,17 @@ title: Troubleshooting Spring Cloud&reg; Services for Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
+<style>
+    .note.warning {
+        background-color: #fdd;
+        border-color: #fbb
+    }
+
+    .note.warning:before {
+        color: #f99;
+     }
+</style>
+
 See this topic for suggestions if you encounter problems with Spring Cloud Services service instances or with configuring your client applications to work with these service instances.
 
 ## <a id="product-setup"></a>Product Setup
@@ -34,6 +45,49 @@ javax.net.ssl.SSLException: Received fatal alert: protocol_version
 ```
 
 Spring Cloud Services requires the [RabbitMQ for PCF](https://network.pivotal.io/products/pivotal-rabbitmq-service) product. If you have provided SSL certificates and keys to RabbitMQ for PCF, you must also enable its TLS 1.0 support in order to use it with Spring Cloud Services. See the note at the end of the [Platform and Product Requirements](/spring-cloud-services/prerequisites.html#platform-and-product-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic.
+
+### <a id="rabbitmq-authentication-failure-exception"></a>"com.rabbitmq.client.AuthenticationFailureException: ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN"
+
+If you encounter the following exception message in Spring Cloud Services broker logs:
+
+```
+org.springframework.amqp.AmqpAuthenticationException:
+com.rabbitmq.client.AuthenticationFailureException: ACCESS_REFUSED - Login was
+refused using authentication mechanism PLAIN. For details see the broker
+logfile.
+```
+
+The credentials used by the Spring Cloud Services broker to access its RabbitMQ for PCF service instance may be invalid. This can happen after restoring a backup of Pivotal Cloud Foundry&reg; Elastic Runtime, as a restored RabbitMQ for PCF service instance may not accept the restored credentials used by the Spring Cloud Services broker. You can update the Spring Cloud Services broker's credentials by unbinding the RabbitMQ service instance from the broker applications (the `spring-cloud-broker` and `spring-cloud-broker-worker` applications) and then rebinding.
+
+To unbind the RabbitMQ service instance from the Spring Cloud Services broker applications and rebind it, run the following cf CLI commands:
+
+<pre class="terminal">
+$ cf target -o system -s p-spring-cloud-services
+$ cf unbind-service spring-cloud-broker spring-cloud-broker-rmq
+$ cf unbind-service spring-cloud-broker-worker spring-cloud-broker-rmq
+$ cf bind-service spring-cloud-broker spring-cloud-broker-rmq
+$ cf restage spring-cloud-broker
+$ cf bind-service spring-cloud-broker-worker spring-cloud-broker-rmq
+$ cf restage spring-cloud-broker-worker
+</pre>
+
+If the PCF environment is newly restored and the RabbitMQ service instance's queues are empty, you may also unbind the RabbitMQ service instance from the broker applications, delete it, create a new instance, and then bind that instance to the Spring Cloud Services broker applications.
+
+<p class="note warning"><strong>WARNING: </strong> Deleting and replacing the RabbitMQ service instance will destroy the original instance's virtual host and any data in the instance's queues. If the RabbitMQ service instance contains messages and is on a production system, unbind and rebind it instead.</p>
+
+To delete and replace the RabbitMQ service instance used by the Spring Cloud Services broker applications, run the following cf CLI commands:
+
+<pre class="terminal">
+$ cf target -o system -s p-spring-cloud-services
+$ cf unbind-service spring-cloud-broker spring-cloud-broker-rmq
+$ cf unbind-service spring-cloud-broker-worker spring-cloud-broker-rmq
+$ cf delete-service -f spring-cloud-broker-rmq
+$ cf create-service p-rabbitmq standard spring-cloud-broker-rmq
+$ cf bind-service spring-cloud-broker spring-cloud-broker-rmq
+$ cf restage spring-cloud-broker
+$ cf bind-service spring-cloud-broker-worker spring-cloud-broker-rmq
+$ cf restage spring-cloud-broker-worker
+</pre>
 
 ## <a id="client-applications"></a>Client Applications
 
