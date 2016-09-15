@@ -45,6 +45,12 @@ To establish availability of the Circuit Breaker Dashboard, the Spring Cloud Clo
 
 * `tags` including `hystrix-amqp`
 
+## <a id="metrics-collection-with-spring-cloud-stream"></a>Metrics Collection with Spring Cloud Stream
+
+A Circuit Breaker Dashboard service instance uses [Spring Cloud Stream](https://cloud.spring.io/spring-cloud-stream/) to collect Netflix Hystrix metrics from a client application. The connector creates a `hystrix` configuration of the Spring Cloud Stream [RabbitMQ binder](http://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_rabbitmq_binder) and configures a `hystrixStreamOutput` channel, over which a client application sends Hystrix metrics.
+
+The `defaultCandidate` property on the `hystrix` RabbitMQ binder configuration is set to `false`, so that this binder configuration will not affect any default binder configuration in the client application and you can freely configure Spring Cloud Stream binders (including the RabbitMQ binder) in the client application. For more information, see ["Connecting to Multiple Systems" in the Spring Cloud Stream Reference Guide](http://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#multiple-systems).
+
 ## <a id="see-also"></a>See Also
 
 For more information about Spring Cloud Connectors, see the following:
