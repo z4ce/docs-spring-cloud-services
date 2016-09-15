@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 To connect client applications to the Circuit Breaker Dashboard, Spring Cloud Services uses [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html), including the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
 
-## Service Detection
+## <a id="service-detection"></a>Service Detection
 
 The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example excerpt of a `VCAP_SERVICES` entry for the Spring Cloud Services Circuit Breaker Dashboard (edited for brevity).
 
@@ -39,13 +39,13 @@ For each service in the `VCAP_SERVICES` variable, the connector considers the fo
 * `credentials.uri`: A URI pertaining to the service instance.
 * `credentials.uris`: URIs pertaining to the service instance.
 
-### Circuit Breaker Dashboard Detection Criteria
+### <a id="circuit-breaker-dashboard-detection-criteria"></a>Circuit Breaker Dashboard Detection Criteria
 
 To establish availability of the Circuit Breaker Dashboard, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
 
 * `tags` including `hystrix-amqp`
 
-## See Also
+## <a id="see-also"></a>See Also
 
 For more information about Spring Cloud Connectors, see the following:
 
