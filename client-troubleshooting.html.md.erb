@@ -1,0 +1,38 @@
+---
+title: Troubleshooting Client Applications
+owner: Spring Cloud Services
+---
+
+See below for information about troubleshooting problems in client applications which are bound to Spring Cloud Services service instances.
+
+## <a id="pkix"></a>"Can't contact any eureka nodes - possibly a security group issue?"
+
+A client application bound to a Service Registry service instance may log an error such as the following:
+
+```
+2015-10-01T11:33:38.43-0500 [App/0]      OUT 2015-10-01 16:33:38.433  WARN 29 ---
+[           main] com.netflix.discovery.DiscoveryClient    : Action: Refresh  =>
+returned status of 401 from https://eureka-aa9d8079f0f3.example.com/eureka/apps/
+2015-10-01T11:33:38.43-0500 [App/0]      OUT 2015-10-01 16:33:38.438 ERROR 29 ---
+[           main] com.netflix.discovery.DiscoveryClient    : Can't get a response from
+https://eureka-aa9d8079f0f3.example.com/eureka/apps/
+2015-10-01T11:33:38.43-0500 [App/0]      OUT Can't contact any eureka nodes - possibly a
+security group issue?
+2015-10-01T11:33:38.43-0500 [App/0]      OUT java.lang.RuntimeException: Bad status: 401
+2015-10-01T11:33:38.43-0500 [App/0]      OUT 	at
+com.netflix.discovery.DiscoveryClient.makeRemoteCall(DiscoveryClient.java:1155)
+```
+
+If your PCF environment is using a self-signed certificate (such as a certificate generated in Elastic Runtime), you must set the `CF_TARGET` environment variable on your application to the API endpoint of Elastic Runtime. See the [Add Self-Signed SSL Certificate to JVM Truststore](/spring-cloud-services/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](/spring-cloud-services/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
+
+## <a id="pkix"></a>"sun.security.validator.ValidatorException: PKIX path building failed"
+
+If you encounter the following exception:
+
+```
+sun.security.validator.ValidatorException: PKIX path building failed:
+sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid
+certification path to requested target
+```
+
+If your PCF environment is using self-signed certificates, make sure that you have set the `CF_TARGET` environment variable on the application to the Elastic Runtime API endpoint as described in the [Add Self-Signed SSL Certificate to JVM Truststore](/spring-cloud-services/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](/spring-cloud-services/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
