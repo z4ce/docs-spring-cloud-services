@@ -56,9 +56,18 @@ The `MessageGenerationApplication` class also has <a href="https://github.com/sp
     }
 ```
 
-The application's Eureka instance name (the name by which it will be registered in Eureka) can be derived from the value of the ```spring.application.name``` property on the application. If you do not provide a value for this property, the application's Eureka instance name can be derived from its Cloud Foundry application name (as set in `manifest.yml`).
+The application's Eureka instance name (the name by which it will be registered in Eureka) will be derived from the value of the ```spring.application.name``` property on the application. If you do not provide a value for this property, the application's Eureka instance name will be derived from its Cloud Foundry application name, as set in `manifest.yml`:
 
-In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+```yml
+---
+instances: 1
+memory: 1G
+applications:
+  - name: message-generation
+  ...
+```
+
+Set the `spring.application.name` property in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
