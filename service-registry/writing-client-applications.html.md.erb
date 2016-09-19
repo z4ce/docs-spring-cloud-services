@@ -113,7 +113,7 @@ An application running on Pivotal Cloud Foundry is provided with an externally-a
 
 Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
 
-To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry Operations Manager, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
+To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry&reg; Operations Manager, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
 
 #### Specify a Registration Method
 
