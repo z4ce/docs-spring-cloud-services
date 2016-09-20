@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 To connect client applications to the Config Server, Spring Cloud Services uses [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html), including the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
 
-## Service Detection
+## <a id="service-detection"></a>Service Detection
 
 The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Config Server.
 
@@ -40,17 +40,17 @@ For each service in the `VCAP_SERVICES` variable, the connector considers the fo
 * `credentials.uri`: A URI pertaining to the service instance.
 * `credentials.uris`: URIs pertaining to the service instance.
 
-### Config Server Detection Criteria
+### <a id="config-server-detection-criteria"></a>Config Server Detection Criteria
 
 To establish availability of the Config Server, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
 
 * `tags` including `configuration`
 
-## Application Configuration
+## <a id="application-configuration"></a>Application Configuration
 
 When the connector detects a Config Server service instance which has been bound to the application, it will automatically set the ```spring.cloud.config.uri``` property in the client application's environment, using the URL provided in the Config Server instance's ```credentials``` object. The connector will also set additional security properties to allow the client application to access the Config Server service instance.
 
-## See Also
+## <a id="see-also"></a>See Also
 
 For more information about Spring Cloud Connectors, see the following:
 

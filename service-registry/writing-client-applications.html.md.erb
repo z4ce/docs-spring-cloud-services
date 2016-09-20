@@ -56,9 +56,18 @@ The `MessageGenerationApplication` class also has <a href="https://github.com/sp
     }
 ```
 
-The application's Eureka instance name (the name by which it will be registered in Eureka) can be derived from the value of the ```spring.application.name``` property on the application. If you do not provide a value for this property, the application's Eureka instance name can be derived from its Cloud Foundry application name (as set in `manifest.yml`).
+The application's Eureka instance name (the name by which it will be registered in Eureka) will be derived from the value of the ```spring.application.name``` property on the application. If you do not provide a value for this property, the application's Eureka instance name will be derived from its Cloud Foundry application name, as set in `manifest.yml`:
 
-In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+```yml
+---
+instances: 1
+memory: 1G
+applications:
+  - name: message-generation
+  ...
+```
+
+Set the `spring.application.name` property in <a href="https://github.com/spring-cloud-samples/greeting/blob/1.1/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -66,7 +75,7 @@ spring:
     name: message-generation
 ```
 
-<p class='note'><strong>Note</strong>: If the application name contains characters which are invalid in a hostname, the application will be registered with the Service Registry service instance using the application name with any invalid characters replaced by a hyphen (<code>-</code>) character (for example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>). See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
+<p class='note'><strong>Note</strong>: If the application name contains characters which are invalid in a hostname, the application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character (for example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>). See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
 ### <a id="register-the-application"></a>Register the Application
 
@@ -113,7 +122,7 @@ An application running on Pivotal Cloud Foundry is provided with an externally-a
 
 Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
 
-To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry Operations Manager, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
+To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry&reg; Operations Manager, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
 
 #### Specify a Registration Method
 
@@ -161,7 +170,7 @@ public class GreeterApplication {
 
 To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application's actual URL; the Registry will take care of finding and routing to the service.
 
-<p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with any invalid characters replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
+<p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
 <p class='note'><strong>Important</strong>: If your PCF installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 
@@ -245,7 +254,7 @@ public class GreeterApplication {
 
 To call a registered service, a consuming application can use a URI with a hostname matching the name with which the service is registered in the Service Registry. This way, the consuming application does not need to know the service application's actual URL; the Registry will take care of finding and routing to the service.
 
-<p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with any invalid characters replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
+<p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
 <p class='note'><strong>Important</strong>: If your PCF installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 

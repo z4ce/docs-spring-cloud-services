@@ -7,6 +7,33 @@ owner: Spring Cloud Services
 
 <p class='note'><strong>Note</strong>: Service Registry for Pivotal Cloud Foundry is currently based on Spring Cloud&reg; OSS Brixton. If binding a Spring Cloud OSS Angel application to a Service Registry service instance, you may see irregular behavior in the Service Registry service instance dashboard's listing for the application. <br /><br /> For information on current client dependencies provided for use with Spring Cloud Services service instances, see the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic.</p>
 
+To find the dashboard, navigate in Pivotal Cloud Foundry&reg; Apps Manager to the Service Registry service instance's space and click **Manage** in the listing for the service instance.
+
+<%= image_tag("service-registry/service-registry-manage-link.png") %>
+
+If you are using version 6.8.0 or later of the Cloud Foundry Command Line Interface tool (cf CLI), you can also use `cf service SERVICE_NAME`, where `SERVICE_NAME` is the name of the Service Registry service instance:
+
+<pre class="terminal">
+$ cf service service registry
+
+Service instance: service-registry
+Service: p-service-registry
+Bound apps:
+Tags:
+Plan: standard
+Description: Service Registry for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.wise.com/dashboard/p-service-registry/a9bcaf09-ba0a-4650-bdfc-75784882245e
+
+Last Operation
+Status: create succeeded
+Message:
+Started: 2016-09-19T21:05:32Z
+Updated:
+</pre>
+
+Visit the URL given for "Dashboard".
+
 Before you have bound any applications to a Service Registry instance, the Service Registry dashboard will reflect that there are "No applications registered".
 
 <%= image_tag("service-registry/dashboard_no_applications.png") %>

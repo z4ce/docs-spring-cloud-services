@@ -7,8 +7,7 @@ owner: Spring Cloud Services
 
 The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
 
-<a id="configuration-sources"></a>
-## Configuration Sources
+## <a id="configuration-sources"></a>Configuration Sources
 
 A configuration source contains one or more configuration files used by one or more applications. Each file applies to an _application_ and can optionally apply to a specific _profile_ and / or _label_.
 
@@ -34,8 +33,7 @@ In this example, the configuration source defines configurations for the `myapp`
 
 ```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. You can reconfigure the default label (see the <a href="/spring-cloud-services/config-server/creating-an-instance.html">Creating an Instance</a> topic).
 
-<a id="request-paths"></a>
-## Request Paths ##
+## <a id="request-paths"></a>Request Paths
 
 Configuration requests use one of the following path formats:
 
