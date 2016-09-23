@@ -5,6 +5,23 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
+## <a id="1-2"></a>1.2
+
+### <a id="1-2-0"></a>1.2.0
+
+**Release Date: 2nd October 2016**
+
+<p class='note'><strong>Note</strong>: Spring Cloud Services 1.2.0 is compatible with <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry</a> (PCF) versions 1.6.x, 1.7.x, and 1.8.x. PCF 1.8 is recommended for optimum experience with this release.</p>
+
+Enhancements included in this release:
+
+* Service Registry service instances can now be configured to replicate service registrations across multiple PCF installations and availability zones.
+* Service Registry service instances can now be configured to replicate service registrations across PCF organization and space boundaries.
+* Service Registry service instances now allow multiple applications within a space to register with the same application name, so that registered applications can use a blue / green deployment strategy.
+* Service Registry service instance dashboards now display the URI and, if a service instance is operating in high-availability (HA) mode, the local node count of the service instance.
+* The Spring Cloud Services broker has been upgraded to Spring Boot 1.3.7 and Spring Cloud Brixton.SR5.
+* The RabbitMQ Java client used by the Spring Cloud Services service broker has been upgraded to version 3.6.5. This resolves an issue where the Spring Cloud Services service broker could not provision service instances when the RabbitMQ for PCF product was using TLS and had its TLS 1.0 support disabled.
+
 ## <a id="1-1"></a>1.1
 
 ### <a id="1-1-3"></a>1.1.3
