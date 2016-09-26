@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 You can create a Service Registry service instance using either the Cloud Foundry Command Line Interface tool (cf CLI) or [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) Apps Manager.
 
-<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes. This currently can only be configured through use of the cf CLI. (After creating a service instance using Apps Manager, you can use the cf CLI to set the number of nodes. See the <a href="/spring-cloud-services/service-registry/updating-an-instance.html">Updating an Instance</a> topic.)</p>
+<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes, and can replicate service registrations with peers in other PCF spaces, organizations, or deployments. These behaviors can only be configured through use of the cf CLI. (After creating a service instance using Apps Manager, you can use the cf CLI to configure the instance. See the <a href="/spring-cloud-services/service-registry/updating-an-instance.html">Updating an Instance</a> topic.)</p>
 
 ## <a id="using-cf-cli"></a>Using the cf CLI
 
@@ -44,23 +44,30 @@ service plan   description     free or paid
 standard       Standard Plan   free
 </pre>
 
-Run `cf create-service`, specifying the service, plan name, and instance name. Optionally, you may add the `-c` flag and provide a JSON object that specifies the number of nodes to provision as `count` (by default, the instance will be provisioned with only a single node).
+Run `cf create-service`, specifying the service, plan name, and instance name. Optionally, you may add the `-c` flag and provide a JSON object that specifies configuration parameters.
 
-To create an instance with a single node, run:
+General parameters used to configure the Service Registry are listed below.
+
+| Parameter            | Function                                                                                   | Example                          |
+|----------------------|--------------------------------------------------------------------------------------------|----------------------------------|
+| <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
+| <code>upgrade</code> | Whether to upgrade the instance                                                            | <code>'{"upgrade": true}'</code> |
+
+To create an instance with the default of a single node, run:
 
 <pre class="terminal">
 $ cf create-service p-service-registry standard service-registry
-Creating service instance service-registry in org myorg / space development as admin...
+Creating service instance service-registry in org myorg / space development as user...
 OK
 
 Create in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
 </pre>
 
-To create an instance with three nodes, run:
+To create an instance, specifying that three nodes should be provisioned, run:
 
 <pre class="terminal">
 $ cf create-service p-service-registry standard service-registry -c '{"count": 3}'
-Creating service instance service-registry in org myorg / space development as admin...
+Creating service instance service-registry in org myorg / space development as user...
 OK
 
 Create in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
@@ -88,6 +95,57 @@ Updated:
 </pre>
 
 <p class='note'><strong>Note</strong>: You may notice a discrepancy between the status given for a service instance by the cf CLI (e.g., by the <code>cf service</code> command) versus that shown on the <a href="/spring-cloud-services/operator-information.html#service-instances-dashboard">Service Instances dashboard</a>. The dashboard is updated frequently (close to real-time); the status retrieved by the cf CLI is not updated as frequently and may take time to match the dashboard.</p>
+
+### <a id="peer-replication-across-pcf-deployments"></a>Peer Replication Across PCF Deployments
+
+You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF deployment (e.g. a PCF deployment in another datacenter). To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer.
+
+A Service Registry peer can be expressed as shown in the following JSON:
+
+```
+'{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
+```
+
+Spring Cloud Services will by default validate the SSL certificate on each peer. You can disable this validation for a given peer by setting the `skipSslValidation` parameter to `true` for that peer, as shown in the following JSON:
+
+```
+'{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
+```
+
+The parameters used to configure a peer for the Service Registry are listed below.
+
+| Parameter                                  | Function                                                                                                                                              |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>peers[i].uri</code>                  | The URI of the Service Registry peer                                                                                                                  |
+| <code>peers[i].skipSslValidation</code>    | Whether to skip SSL validation for the Service Registry peer. Valid values are <code>true</code> and <code>false</code> (default: <code>false</code>) |
+
+To create a Service Registry service instance that replicates a registry with a peer in another PCF deployment, allowing for validation of the peer's SSL certificate, run:
+
+<pre class="terminal">
+$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
+</pre>
+
+To create a Service Registry service instance that replicates a registry with a peer in another PCF deployment, skipping validation of the peer's SSL certificate, run:
+
+<pre class="terminal">
+$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
+</pre>
+
+### <a id="peer-replication-across-orgs-or-spaces"></a>Peer Replication Across Orgs or Spaces 
+
+You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF organization or space. To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. The URI is set in the `peers[i].uri` parameter.
+
+A Service Registry peer can be expressed as shown in the following JSON:
+
+```
+'{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
+```
+
+To create a Service Registry service instance that replicates a registry with a peer in another PCF organization, run:
+
+<pre class="terminal">
+$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
+</pre>
 
 ## <a id="using-apps-manager"></a>Using Apps Manager
 

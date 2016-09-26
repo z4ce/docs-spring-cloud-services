@@ -7,13 +7,6 @@ owner: Spring Cloud Services
 
 You can update settings on a Service Registry service instance using the Cloud Foundry Command Line Interface tool (cf CLI). The `cf update-service` command can be given a `-c` flag with a JSON object containing parameters used to configure the service instance.
 
-Parameters accepted for the Service Registry are listed below.
-
-| Parameter               | Function                         | Example                          |
-|-------------------------|----------------------------------|----------------------------------|
-| <code>count</code>      | The number of nodes to provision | <code>'{"count": 3}'</code>      |
-| <code>upgrade</code>    | Whether to upgrade the instance  | <code>'{"upgrade": true}'</code> |
-
 To update a Service Registry service instance's settings, target the org and space of the service instance:
 
 <pre class="terminal">
@@ -25,11 +18,22 @@ Org:            myorg
 Space:          development
 </pre>
 
-Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. To update a service instance and set the count of nodes for running in high-availability mode, run:
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. For information about supported parameters, see the next section.
+
+## <a id="configuration-parameters"></a>Configuration Parameters
+
+General parameters accepted for the Service Registry are listed below.
+
+| Parameter               | Function                         | Example                          |
+|-------------------------|----------------------------------|----------------------------------|
+| <code>count</code>      | The number of nodes to provision | <code>'{"count": 3}'</code>      |
+| <code>upgrade</code>    | Whether to upgrade the instance  | <code>'{"upgrade": true}'</code> |
+
+To update a service instance and set the count of nodes for running in high-availability mode, run:
 
 <pre class="terminal">
 $ cf update-service service-registry -c '{"count": 3}'
-Updating service instance service-registry as admin...
+Updating service instance service-registry as user...
 OK
 
 Update in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
@@ -57,3 +61,54 @@ Updated: 2016-06-28T14:12:25Z
 </pre>
 
 The service instance is now updated and ready to be used. For information about registering an application with a Service Registry service instance or calling an application which has been registered with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
+
+### <a id="peer-replication-across-pcf-deployments"></a>Peer Replication Across PCF Deployments
+
+You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF deployment (e.g. a PCF deployment in another datacenter). To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer.
+
+A Service Registry peer can be expressed as shown in the following JSON:
+
+```
+'{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
+```
+
+Spring Cloud Services will by default validate the SSL certificate on each peer. You can disable this validation for a given peer by setting the `skipSslValidation` parameter to `true` for that peer, as shown in the following JSON:
+
+```
+'{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
+```
+
+The parameters used to configure a peer for the Service Registry are listed below.
+
+| Parameter                                  | Function                                                                                                                                              |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>peers[i].uri</code>                  | The URI of the Service Registry peer                                                                                                                  |
+| <code>peers[i].skipSslValidation</code>    | Whether to skip SSL validation for the Service Registry peer. Valid values are <code>true</code> and <code>false</code> (default: <code>false</code>) |
+
+To update a Service Registry service instance so that it replicates a registry with a peer in another PCF deployment, allowing for validation of the peer's SSL certificate, run:
+
+<pre class="terminal">
+$ cf update-service service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
+</pre>
+
+To update a Service Registry service instance so that it replicates a registry with a peer in another PCF deployment, skipping validation of the peer's SSL certificate, run:
+
+<pre class="terminal">
+$ cf update-service service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
+</pre>
+
+### <a id="peer-replication-across-orgs-or-spaces"></a>Peer Replication Across Orgs or Spaces 
+
+You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF organization or space. To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. The URI is set in the `peers[i].uri` parameter.
+
+A Service Registry peer can be expressed as shown in the following JSON:
+
+```
+'{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
+```
+
+To update a Service Registry service instance so that it replicates a registry with a peer in another PCF organization, run:
+
+<pre class="terminal">
+$ cf update-service service-registry -c '{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
+</pre>
