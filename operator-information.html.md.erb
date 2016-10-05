@@ -145,104 +145,58 @@ In the Spring Cloud Services Identity Zone, it also creates the following client
 
 ### <a id="get-access-token-for-direct-requests-to-a-service-instance"></a>Get Access Token for Direct Requests to a Service Instance
 
-To make requests directly against a Config Server service instance's Spring Cloud Config Server backing application or a Service Registry service instance's Eureka backing application, you can get an access token using the binding credentials of an application that is bound to the service instance. To do this, you must have [uaac](https://github.com/cloudfoundry/cf-uaac) installed.
+To make requests directly against a Config Server service instance's Spring Cloud Config Server backing application or a Service Registry service instance's Spring Cloud Netflix Eureka backing application, you can get an access token using the binding credentials of an application that is bound to the service instance. 
 
-1. Run `cf env`, giving the name of an application that is bound to the service instance:
+<p class='note'><strong>Note</strong>: The following procedure uses the <a href="https://stedolan.github.io/jq/">jq</a> command-line JSON processing tool.</p>
 
-    <pre class="terminal">
-    $ cf services
-    Getting services in org myorg / space development as admin...
-    OK
-
-    name             service           plan        bound apps   last operation
-    config-server    p-config-server   standard    cook         create succeeded
-
-    $ cf env cook
-    Getting env variables for app cook in org myorg / space development as admin...
-    OK
-
-    System-Provided:
-    {
-     "VCAP_SERVICES": {
-      "p-config-server": [
-       {
-        "credentials": {
-         "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
-         "client_id": "p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73",
-         "client_secret": "rU7dMUw6bQjR",
-         "uri": "https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com"
-        },
-    [...]
-    </pre>
-
-2. From the service instance's entry in the application's `VCAP_SERVICES` environment variable, copy the URL in `credentials.access_token_uri`. Remove the `/oauth/token` path from that URL and target it using `uaac target`:
-
-    <pre class="terminal">
-    $ uaac target https://p-spring-cloud-services.uaa.cf.wise.com
-
-    Target: https://p-spring-cloud-services.uaa.cf.wise.com
-    Context: p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73, from client p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73
-
-    </pre>
-
-3. From the service instance's entry in the application's `VCAP_SERVICES` environment variable, copy the values of `credentials.client_id` and `credentials.client_secret`. Run `uaac token client get`, providing those values:
-
-    <pre class="terminal">
-    $ uaac token client get p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73 -s rU7dMUw6bQjR
-
-    Successfully fetched token via client credentials grant.
-    Target: https://p-spring-cloud-services.uaa.cf.wise.com
-    Context: p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73, from client p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73
-
-    </pre>
-
-4. Run `uaac context` to display the current context:
-
-    <pre class="terminal">
-    $ uaac context
-
-    [2]*[https://p-spring-cloud-services.uaa.cf.wise.com]
-
-      [8]*[p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73]
-          client_id: p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73
-          access_token: TOKEN_STRING
-          token_type: bearer
-          expires_in: 43199
-          scope: p-config-server.86b38ce0-eed8-4c01-adb4-1a651a6178e2.read
-          jti: 8c122f33-0d63-446d-9549-6e349ce447eb
-
-    </pre>
-
-    Copy the value of `access_token`.
-
-With the access token, you can now make requests directly against the service instance, e.g. using curl. Use the URL in `credentials.uri` from the service instance's entry in the application's `VCAP_SERVICES` environment variable.
-
-For a Config Server service instance:
+Run `cf env`, giving the name of an application that is bound to the service instance:
 
 <pre class="terminal">
-curl -H 'Authorization: bearer TOKEN_STRING' https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
-{"name":"cook","profiles":["default"],"label":null,"version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+$ cf services
+Getting services in org myorg / space development as admin...
+OK
+
+name             service           plan        bound apps   last operation
+config-server    p-config-server   standard    cook         create succeeded
+
+$ cf env cook
+Getting env variables for app cook in org myorg / space development as admin...
+OK
+
+System-Provided:
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+     "client_id": "p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73",
+     "client_secret": "rU7dMUw6bQjR",
+     "uri": "https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com"
+    },
+[...]
 </pre>
 
-For a Service Registry service instance:
+Then run the following Bash script, which fetches a token and uses the token to access an endpoint on a service instance backing application:
 
-<%# Encoded output below because otherwise the browser can attempt to render the XML %>
+```sh
+TOKEN=$(curl -k ACCESS_TOKEN_URI -u CLIENT_ID:CLIENT_SECRET -d
+grant_type=client_credentials | jq -r .access_token); curl -k -H
+"Authorization: bearer $TOKEN" -H "Accept: application/json"
+URI/ENDPOINT | jq
+```
 
-<pre class="terminal">
-$ curl -H 'Authorization: bearer TOKEN_STRING' https://eureka-493b6b17-512a-4961-8f85-6178251fe2fa.apps.wise.com/eureka/apps
-&#x3C;applications&#x3E;
-  &#x3C;versions__delta&#x3E;1&#x3C;/versions__delta&#x3E;
-  &#x3C;apps__hashcode&#x3E;UP_2_&#x3C;/apps__hashcode&#x3E;
-  &#x3C;application&#x3E;
-    &#x3C;name&#x3E;GREETER&#x3C;/name&#x3E;
-    &#x3C;instance&#x3E;
-      &#x3C;instanceId&#x3E;greeter.apps.wise.com:88e152ff-b476-44e1-4078-470b0f80eb25&#x3C;/instanceId&#x3E;
-      &#x3C;hostName&#x3E;greeter.apps.wise.com&#x3C;/hostName&#x3E;
-      &#x3C;app&#x3E;GREETER&#x3C;/app&#x3E;
-      &#x3C;ipAddr&#x3E;10.68.224.43&#x3C;/ipAddr&#x3E;
-      &#x3C;status&#x3E;UP&#x3C;/status&#x3E;
-      [...]
-</pre>
+In this script, replace the following placeholders using values from the `cf env` command above:
+
+* `ACCESS_TOKEN_URI` with the value of `credentials.access_token_uri`
+* `CLIENT_ID` with the value of `credentials.client_id`
+* `CLIENT_SECRET` with the value of `credentials.client_secret`
+* `URI` with the value of `credentials.uri`
+
+Replace `ENDPOINT` with the relevant endpoint:
+
+* `application/profile` to retrieve configuration from a Config Server service instance
+* `eureka/apps` to retrieve the registry from a Service Registry service instance
 
 ## <a id="service-instances-dashboard"></a>The Service Instances Dashboard
 
