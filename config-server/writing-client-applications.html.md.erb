@@ -15,16 +15,18 @@ To use a Spring Boot application as a client for a Config Server instance, you m
 
 Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can consume properties from a Config Server service instance.
 
-Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the ```CF_TARGET``` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
+Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the `TRUST_CERTS` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
 
 <pre class="terminal">
-$ cf set-env cook CF_TARGET https://api.cf.wise.com
-Setting env variable 'CF_TARGET' to 'https://api.cf.wise.com' for app cook in org myorg / space development as user...
+$ cf set-env cook TRUST_CERTS api.cf.wise.com
+Setting env variable 'TRUST_CERTS' to 'api.cf.wise.com' for app cook in org myorg / space development as user...
 OK
 TIP: Use 'cf restage' to ensure your env variable changes take effect
 
 $ cf restage cook
 </pre>
+
+<p class='note'><strong>Note</strong>: The <code>CF_TARGET</code> environment variable was formerly recommended for configuring Spring Cloud Services to add a certificate to the truststore. <code>CF_TARGET</code> is still supported for this purpose, but <code>TRUST_CERTS</code> is more flexible and is now recommended instead.</p>
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
 
