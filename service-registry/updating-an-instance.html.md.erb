@@ -78,6 +78,8 @@ Spring Cloud Services will by default validate the SSL certificate on each peer.
 '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
 ```
 
+<p class='note'><strong>Note</strong>: If you disable certificate validation for a Service Registry service instance's peer, you must set the <code>TRUST_CERTS</code> environment variable on each application bound to that Service Registry service instance or to the peer. See the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#self-signed-ssl-certificate">Add Self-Signed SSL Certificate to JVM Truststore</a> section of the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic for more information.</p>
+
 The parameters used to configure a peer for the Service Registry are listed below.
 
 | Parameter                                  | Function                                                                                                                                              |

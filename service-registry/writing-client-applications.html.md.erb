@@ -29,6 +29,20 @@ $ cf restage message-generation
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
 
+### <a id="peers-with-self-signed-certificates"></a>Service Registry Peers with Self-Signed Certificates
+
+If binding your application to a Service Registry service instance that has one or more peers in another PCF deployment which uses self-signed certificates, you must set the `TRUST_CERTS` environment variable on your application to a hostname on the other PCF deployment in order for your application to communicate with applications bound to those Service Registry peers:
+
+<pre class="terminal">
+$ cf set-env message-generation TRUST_CERTS api.cf.otherwise.com
+Setting env variable 'TRUST_CERTS' to 'api.cf.otherwise.com' for app message-generation in org myorg / space development as user...
+OK
+TIP: Use 'cf restage message-generation' to ensure your env variable changes take effect
+$ cf restage message-generation
+</pre>
+
+As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
+
 ## <a id="register-a-service"></a>Register a Service
 
 Follow the below instructions to register an application with a Service Registry service instance.
