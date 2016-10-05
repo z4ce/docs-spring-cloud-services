@@ -35,7 +35,7 @@ The SSL certificate used by the CF environment must also include Subject Alterna
 
 ## <a id="multi-tenant-uaa"></a>A Note on Multi-Tenant UAA
 
-SCS uses the multi-tenancy features of UAA to implement ["the principle of least privilege"](https://en.wikipedia.org/wiki/Principle_of_least_privilege). This is required because SCS creates and deletes OAuth clients when applications bind and unbind to service instances. These clients must also have non-empty authorities. In order to create create clients with arbitrary authorities, the actor must have the scopes ```uaa.admin``` and ```clients.write```; essentially they must be the admin.
+SCS uses the multi-tenancy features of UAA to implement ["the principle of least privilege"](https://en.wikipedia.org/wiki/Principle_of_least_privilege). This is required because SCS creates and deletes OAuth clients when applications bind and unbind to service instances. These clients must also have non-empty authorities. In order to create clients with arbitrary authorities, the actor must have the scopes ```uaa.admin``` and ```clients.write```; essentially they must be the admin.
 
 Making admin-level credentials (e.g. the UAA admin client) accessible to an application is dangerous and should be avoided. For example, if one were to break into that application and get those credentials, the credentials could be used to affect the entire CF environment. This is why SCS operates in two UAA domains (also called Identity Zones).
 
