@@ -38,10 +38,22 @@ $ cf set-env message-generation TRUST_CERTS api.cf.otherwise.com
 Setting env variable 'TRUST_CERTS' to 'api.cf.otherwise.com' for app message-generation in org myorg / space development as user...
 OK
 TIP: Use 'cf restage message-generation' to ensure your env variable changes take effect
-$ cf restage message-generation
+</pre>
+
+The `TRUST_CERTS` environment variable can contain multiple hostnames, in case (e.g.) the Service Registry has peers in multiple alternate PCF deployments with self-signed certificates. Hostnames are comma-separated:
+
+<pre class="terminal">
+$ cf set-env message-generation TRUST_CERTS api.cf.otherwise.com,api.verywise.com
+Setting env variable 'TRUST_CERTS' to 'api.cf.otherwise.com,api.verywise.com' for app message-generation in org myorg / space development as user...
+OK
+TIP: Use 'cf restage message-generation' to ensure your env variable changes take effect
 </pre>
 
 As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
+
+<pre class="terminal">
+$ cf restage message-generation
+</pre>
 
 ## <a id="register-a-service"></a>Register a Service
 
