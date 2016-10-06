@@ -34,10 +34,14 @@ Updated:
 
 Visit the URL given for "Dashboard".
 
-Before you have bound any applications to a Service Registry instance, the Service Registry dashboard will reflect that there are "No applications registered".
+The dashboard shows the URL of the Service Registry service instance, the count of backing applications for the service instance (the High Availability or HA count), and the URLs of any peer service instances, as well as the applications currently registered with the service instance or with any peer service instances.
 
-<%= image_tag("service-registry/dashboard_no_applications.png") %>
+<%= image_tag("service-registry/empty-dashboard-top.png") %>
 
-To see applications listed in the dashboard, bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic). Once you have restaged the application and it has registered with Eureka, the dashboard will display it under **Registered Apps**.
+If the Service Registry service instance has been configured to replicate its registry with any peers, peers are listed according to their status in the "replicas" fields under **General Info**. Peers which are registered with this service instance are listed in "registered-replicas" and, if currently in service, will be listed in "available-replicas". Peers which have been configured for this service instance but have not registered will be listed in "unavailable-replicas".
+
+<%= image_tag("service-registry/empty-dashboard-middle.png") %>
+
+Before you have bound any applications to the Service Registry instance, the Service Registry dashboard displays only `EUREKA-SERVER` (the Service Registry backing application itself) under "Registered Apps". If you bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic), restage the application, and wait for it to register with Eureka, you will see it listed in the dashboard.
 
 <%= image_tag("service-registry/registered_service.png") %>
