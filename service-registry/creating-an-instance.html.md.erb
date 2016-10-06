@@ -98,7 +98,7 @@ Updated:
 
 ### <a id="peer-replication-across-pcf-deployments"></a>Peer Replication Across PCF Deployments
 
-You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF deployment (e.g. a PCF deployment in another datacenter). To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer.
+You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF deployment (e.g. a PCF deployment in another datacenter). To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](/spring-cloud-services/service-registry/using-the-dashboard.html) topic).
 
 A Service Registry peer can be expressed as shown in the following JSON:
 
@@ -135,7 +135,8 @@ $ cf create-service p-service-registry standard service-registry -c '{ "peers": 
 
 ### <a id="peer-replication-across-orgs-or-spaces"></a>Peer Replication Across Orgs or Spaces 
 
-You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF organization or space. To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. The URI is set in the `peers[i].uri` parameter.
+You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF organization or space. To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. The URI is set in the `peers[i].uri` parameter. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](/spring-cloud-services/service-registry/using-the-dashboard.html) topic).
+
 
 A Service Registry peer can be expressed as shown in the following JSON:
 
