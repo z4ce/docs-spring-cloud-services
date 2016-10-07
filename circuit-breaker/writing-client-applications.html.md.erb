@@ -5,13 +5,13 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.1">&#8220;traveler&#8221; repository</a> to follow along with the code in this topic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/traveler/tree/1.2">&#8220;traveler&#8221; repository</a> to follow along with the code in this topic._
 
 To use a circuit breaker in a Spring application with a Circuit Breaker Dashboard service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#circuit-breaker-dashboard">Circuit Breaker Dashboard</a> as well.
 
 ## <a id="use-a-circuit-breaker"></a>Use a Circuit Breaker
 
-To work with a Circuit Breaker Dashboard instance, your application must <a href="https://github.com/spring-cloud-samples/traveler/blob/1.1/agency/src/main/java/agency/AgencyApplication.java#L7-L15">include the ```@EnableCircuitBreaker``` annotation on a configuration class</a>.
+To work with a Circuit Breaker Dashboard instance, your application must <a href="https://github.com/spring-cloud-samples/traveler/blob/1.2/agency/src/main/java/agency/AgencyApplication.java#L7-L15">include the ```@EnableCircuitBreaker``` annotation on a configuration class</a>.
 
 ```java
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -25,7 +25,7 @@ public class AgencyApplication {
     //...
 ```
 
-To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud-samples/traveler/blob/1.1/agency/src/main/java/agency/TravelAgent.java#L25-L28">annotate the method with ```@HystrixCommand```</a>, giving the annotation the name of a ```fallbackMethod```.
+To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud-samples/traveler/blob/1.2/agency/src/main/java/agency/TravelAgent.java#L25-L28">annotate the method with ```@HystrixCommand```</a>, giving the annotation the name of a ```fallbackMethod```.
 
 ```java
     @HystrixCommand(fallbackMethod = "getBackupGuide")
@@ -36,7 +36,7 @@ To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud
 
 The `getGuide()` method uses a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">`RestTemplate`</a> to obtain a guide name from another application called Company, which is registered with a Service Registry instance. (See the <a href="/spring-cloud-services/service-registry/index.html">Service Registry documentation</a>, specifically the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.) The method thus relies on the Company application to return a response, and if the Company application fails to do so, calls to `getGuide()` will fail. When the failures exceed the threshold, the breaker on `getGuide()` will open the circuit.
 
-While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-samples/traveler/blob/1.1/agency/src/main/java/agency/TravelAgent.java#L30-L32">`getBackupGuide()`</a>.
+While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-samples/traveler/blob/1.2/agency/src/main/java/agency/TravelAgent.java#L30-L32">`getBackupGuide()`</a>.
 
 ```java
     String getBackupGuide() {
@@ -50,7 +50,7 @@ If you wish, you may also annotate fallback methods themselves with ```@HystrixC
 
 You cannot apply `@HystrixCommand` directly to a [Feign](https://github.com/Netflix/feign)</a> client interface at this time. Instead, you can call Feign client methods from a service class that is autowired as a Spring bean (either through the <a href="http://docs.spring.io/autorepo/docs/spring-framework/current/javadoc-api/org/springframework/stereotype/Service.html"><code>@Service</code></a> or <a href="http://docs.spring.io/autorepo/docs/spring-framework/current/javadoc-api/org/springframework/stereotype/Component.html"><code>@Component</code></a> annotations or by being declared as a <code>@Bean</code> in a configuration class) and then annotate the service class methods with `@HystrixCommand`.
 
-In the [Feign version of the Agency application](https://github.com/spring-cloud-samples/traveler/tree/1.1/feign-agency), the `AgencyApplication` class is [annotated with `@EnableFeignClients`](https://github.com/spring-cloud-samples/traveler/blob/1.1/feign-agency/src/main/java/agency/AgencyApplication.java#L10-L17).
+In the [Feign version of the Agency application](https://github.com/spring-cloud-samples/traveler/tree/1.2/feign-agency), the `AgencyApplication` class is [annotated with `@EnableFeignClients`](https://github.com/spring-cloud-samples/traveler/blob/1.2/feign-agency/src/main/java/agency/AgencyApplication.java#L10-L17).
 
 ```java
 //...
@@ -65,7 +65,7 @@ public class AgencyApplication {
     // ...
 ```
 
-The application has a Feign client called [`CompanyClient`](https://github.com/spring-cloud-samples/traveler/blob/1.1/feign-agency/src/main/java/agency/CompanyClient.java).
+The application has a Feign client called [`CompanyClient`](https://github.com/spring-cloud-samples/traveler/blob/1.2/feign-agency/src/main/java/agency/CompanyClient.java).
 
 ```java
 package agency;
@@ -83,7 +83,7 @@ interface CompanyClient {
 }
 ```
 
-The [`TravelAgent` class](https://github.com/spring-cloud-samples/traveler/blob/1.1/feign-agency/src/main/java/agency/TravelAgent.java) is annotated as a `@Service` class. The `CompanyClient` class is injected through autowiring, and the `getGuide()` method uses the `CompanyClient` to access the Company application. `@HystrixCommand` is applied to the service method:
+The [`TravelAgent` class](https://github.com/spring-cloud-samples/traveler/blob/1.2/feign-agency/src/main/java/agency/TravelAgent.java) is annotated as a `@Service` class. The `CompanyClient` class is injected through autowiring, and the `getGuide()` method uses the `CompanyClient` to access the Company application. `@HystrixCommand` is applied to the service method:
 
 ```java
 package agency;
