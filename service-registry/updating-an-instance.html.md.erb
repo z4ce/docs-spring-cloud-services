@@ -72,6 +72,8 @@ A Service Registry peer can be expressed as shown in the following JSON:
 '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
 ```
 
+Peer URIs must use the HTTPS URI scheme (as `https://`) and must follow the format `https://eureka-GUID.APPLICATION_DOMAIN.TLD`, where `GUID` is the GUID assigned to a Service Registry service instance and `APPLICATION_DOMAIN.TLD` is the application domain of the PCF deployment where that Service Registry service instance is running.
+
 Spring Cloud Services will by default validate the SSL certificate on each peer. You can disable this validation for a given peer by setting the `skipSslValidation` parameter to `true` for that peer, as shown in the following JSON:
 
 ```
@@ -99,6 +101,8 @@ To update a Service Registry service instance so that it replicates a registry w
 $ cf update-service service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
 </pre>
 
+<p class='note'><strong>Important</strong>: If you provide a peer URI which does not correspond to an available Service Registry service instance (e.g. if there is a typo in the peer URI) or if you do not disable SSL certificate validation for a peer and the associated SSL certificate cannot be verified, the <code>cf update-service</code> command may run successfully and the service instance status may be set to <code>update succeeded</code>, but the peer will not be used by the Service Registry service instance. In such a case, an error will appear on the Service Registry dashboard. See the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html#error-conditions">Error Conditions</a> section of the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> topic for more information.</p>
+
 ### <a id="peer-replication-across-orgs-or-spaces"></a>Peer Replication Across Orgs or Spaces 
 
 You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another PCF organization or space. To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. The URI is set in the `peers[i].uri` parameter. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](/spring-cloud-services/service-registry/using-the-dashboard.html) topic).
@@ -110,8 +114,12 @@ A Service Registry peer can be expressed as shown in the following JSON:
 '{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
 ```
 
+Peer URIs must use the HTTPS URI scheme (as `https://`) and must follow the format `https://eureka-GUID.APPLICATION_DOMAIN.TLD`, where `GUID` is the GUID assigned to a Service Registry service instance and `APPLICATION_DOMAIN.TLD` is the application domain of the PCF deployment where that Service Registry service instance is running.
+
 To update a Service Registry service instance so that it replicates a registry with a peer in another PCF organization, run:
 
 <pre class="terminal">
 $ cf update-service service-registry -c '{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
 </pre>
+
+<p class='note'><strong>Important</strong>: If you provide a peer URI which does not correspond to an available Service Registry service instance (e.g. if there is a typo in the peer URI) or if you do not disable SSL certificate validation for a peer and the associated SSL certificate cannot be verified, the <code>cf update-service</code> command may run successfully and the service instance status may be set to <code>update succeeded</code>, but the peer will not be used by the Service Registry service instance. In such a case, an error will appear on the Service Registry dashboard. See the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html#error-conditions">Error Conditions</a> section of the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> topic for more information.</p>
