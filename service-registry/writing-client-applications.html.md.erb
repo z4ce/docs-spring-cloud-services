@@ -200,9 +200,21 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 <p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
-By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you can use a schemeless URI (as `//message-generation`) to access the service. Spring Cloud Netflix Ribbon will default to accessing the service using an HTTPS route if one is available and will fall back to an HTTP route otherwise. (This behavior requires Spring Cloud Brixton.SR3 or later.)
+<p class='note'><strong>Important</strong>: If your PCF installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
 
-The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/greeter/src/main/java/greeter/GreeterApplication.java#L40-L50">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```//message-generation``` to get a greeting message from Message Generation.
+By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you have two options:
+
+1. Use the ```https://``` URI scheme to access the service.
+1. In your application configuration, set the ```ribbon.IsSecure``` property to ```false```, and use the ```http://``` URI scheme to access the service.
+
+If you wish to use HTTP rather than HTTPS, set ```ribbon.IsSecure``` first. In ```application.yml```:
+
+```yml
+ribbon:
+  IsSecure: false
+```
+
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/greeter/src/main/java/greeter/GreeterApplication.java#L40-L50">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```http://message-generation``` to get a greeting message from Message Generation.
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
@@ -210,7 +222,7 @@ The Message Generation application is registered with the Service Registry insta
                                         defaultValue="Hello") String salutation,
                         @RequestParam(value="name",
                                         defaultValue="Bob") String name) {
-        URI uri = UriComponentsBuilder.fromUriString("//message-generation/greeting")
+        URI uri = UriComponentsBuilder.fromUriString("http://message-generation/greeting")
             .queryParam("salutation", salutation)
             .queryParam("name", name)
             .build()
@@ -272,10 +284,24 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 <p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
-The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```//message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
+<p class='note'><strong>Important</strong>: If your PCF installation is configured to only allow HTTPS traffic, you must specify the <code>https://</code> scheme in the base URI used by your client application. For the below example, this means that you must change the base URI from <code>http://message-generation/greeting</code> to <code>https://message-generation/greeting</code>.</p>
+
+By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you have two options:
+
+1. Use the ```https://``` URI scheme to access the service.
+1. In your application configuration, set the ```ribbon.IsSecure``` property to ```false```, and use the ```http://``` URI scheme to access the service.
+
+If you wish to use HTTP rather than HTTPS, set ```ribbon.IsSecure``` first. In ```application.yml```:
+
+```yml
+ribbon:
+  IsSecure: false
+```
+
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```http://message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
 
 ```java
-    @FeignClient("//message-generation")
+    @FeignClient("http://message-generation")
     interface MessageGenerationClient {
       @RequestMapping(value = "/greeting", method = GET)
       Greeting greeting(@RequestParam("name") String name, @RequestParam("salutation") String salutation);
