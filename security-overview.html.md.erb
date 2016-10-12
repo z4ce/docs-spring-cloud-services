@@ -244,7 +244,7 @@ To provide access to bound applications, each SB bind request creates the follow
 <dd><strong>Grant Type</strong>: Client Credentials</dd>
 <dd><strong>Scopes</strong>: <code>uaa.none</code></dd>
 <dd><strong>Authorities</strong>: <code>p-config-server-[guid].read</code></dd>
-<dd><strong>Token expiry</strong>: default (12 hours)</dd>
+<dd><strong>Token expiry</strong>: 30 seconds</dd>
 </dl>
 
 The client ID and client secret for this client are provided to the bound application via the binding credentials in the ```VCAP_SERVICES``` environment variable. Only a Space Developer in the space that contains the bound application would have access to this.
@@ -286,6 +286,7 @@ The ```uaa.resource``` authority allows the config-server application to access 
 #### <a id="app-eureka"></a>app eureka-{guid}
 
 The Eureka application is a backing application for Service Registry service instances. The GUID in the application name is the service instance ID. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Registry.
+
 
 ##### Entry Points
 
@@ -334,7 +335,7 @@ To provide access to the Eureka REST API for bound applications, each SB bind re
 <dd><strong>Grant Type</strong>: Client Credentials</dd>
 <dd><strong>Scopes</strong>: <code>uaa.none</code></dd>
 <dd><strong>Authorities</strong>: <code>p-service-registry-[guid].read</code>, <code>p-service-registry-[guid].write</code></dd>
-<dd><strong>Token expiry</strong>: default (12 hours)</dd>
+<dd><strong>Token expiry</strong>: 30 seconds</dd>
 </dl>
 
 The client ID and client secret for this client is provided to the bound application via the binding credentials in the ```VCAP_SERVICES``` environment variable. Only a Space Developer in the space that contains the bound application would have access to this.
@@ -378,11 +379,11 @@ This client is used for Dashboard SSO with UAA. The scopes allow the Eureka appl
 <dd><strong>Identity Zone</strong>: Spring Cloud Services</dd>
 <dd><strong>Grant Type</strong>: Client Credentials</dd>
 <dd><strong>Scopes</strong>: <code>uaa.none</code></dd>
-<dd><strong>Authorities</strong>: <code>uaa.resource</code></dd>
+<dd><strong>Authorities</strong>: <code>p-service-registry-[guid].read</code>, <code>p-service-registry-[guid].write</code>, <code>uaa.resource</code></dd>
 <dd><strong>Token expiry</strong>: default (12 hours)</dd>
 </dl>
 
-The ```uaa.resource``` authority allows the Eureka application to access the token verification endpoints on UAA. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Eureka application via environment variables set at provision time. The credentials are the same as the [corresponding client](#service-registry-oauth-client-uaa) in the UAA Identity Zone.
+The ```uaa.resource``` authority allows the Eureka application to access the token verification endpoints on UAA. The other authorities allow it to access other members of the cluster. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Eureka application via environment variables set at provision time. The credentials are the same as the [corresponding client](#service-registry-oauth-client-uaa) in the UAA Identity Zone.
 
 ### <a id="circuit-breaker-dashboard-service-instances"></a>Circuit Breaker Dashboard Service Instances
 
