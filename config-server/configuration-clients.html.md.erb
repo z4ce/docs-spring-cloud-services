@@ -11,13 +11,13 @@ To be given a base URI and client credentials for accessing a Config Server inst
 
 ## Bind an Application to a Service Instance ##
 
-Visit the appropriate org and space in Apps Manager, and select an application from the **Applications** list.
+Click the service instance's listing in Apps Manager. Under **App Bindings**, click **Bind Apps**.
 
-<%= image_tag("config-server/clients-select-application.png") %>
+<%= image_tag("config-server/bind-apps.png") %>
 
-In the **Services** tab, click the **Bind a Service** button. Select a service from the dropdown list and click **Bind**.
+Select an application and click **Save**.
 
-<%= image_tag("config-server/clients-bind-service.png") %>
+<%= image_tag("config-server/save-binding.png") %>
 
 Alternatively, you can use the Cloud Foundry Command Line Interface tool (cf CLI). Run the command `cf bind-service`, specifying the application name and service instance name.
 
