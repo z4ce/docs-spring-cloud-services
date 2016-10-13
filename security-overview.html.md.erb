@@ -13,9 +13,13 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * *CC DB*: The Cloud Controller database.
 
+* *CF Application*: An application in Cloud Foundry, e.g. something you ```cf push```.
+
 * *Dashboard SSO*: [Cloud Foundry's Dashboard Single Sign-On](http://docs.cloudfoundry.org/services/dashboard-sso.html).
 
 * *domain.com*: The value configured by an administrator for the Cloud Foundry system domain.
+
+* *Instance Record*: The core domain object in Eureka, which represents a CF Application that has registered with Eureka. Instance Records are used to map Virtual Hostnames to physical routes, e.g. hostname, IP address, and port. Instance Records can have metadata associated with them.
 
 * *Operator*: A user of Pivotal Cloud Foundry&reg; Operations Manager.
 
@@ -24,6 +28,8 @@ The following abbreviations, example values, and terms are used in this topic as
 * *SCS*: Spring Cloud Services.
 
 * *UAA*: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
+
+* *Virtual Hostname*: The identifier used by CF Applications to look up other CF Applications that are registered with SCS Service Registry. CF Applications that register with Eureka will use their ```spring.application.name``` for this value by default. 
 
 ## <a id="https"></a>A Note on HTTPS
 
@@ -334,21 +340,33 @@ These remainder of the REST endpoints can be found in the [Netflix Eureka docume
 
 **Record Level Access Control**
 
-In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, we enforce restrictions on the registration of appIDs within a Eureka cluster (i.e. a service instance and its configured peers, if any). Before continuing, we should define the following Eureka domain objects:
-
-* <strong>Application</strong>: This is identified by appID. CF Applications that register with Eureka will use their ```spring.application.name``` for this value. When looking up a service, CF Applications will look up Instances via their appID.
-* <strong>Instance</strong>: Applications have one or more Instances. CF applications that register with Eureka are actually registering themselves as Instances of an Application. An Application does not exist without Instances; in other words, an Application exists only because an Instance refers to one by appID. Instances can have metadata associated with them.
+In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, we enforce restrictions on the registration of Virtual Hostnames within a Eureka cluster (i.e. a service instance and its configured peers, if any).
 
 *Instance Record Ownership*
 
-The Eureka server enforces ownership of instance records to prevent binding credentials from being misused to affect other instance records, especially those originating from CF Applications in other spaces. To ensure that a Eureka Instance can only be modified the CF Application that created it, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the  OAuth 2 Bearer token. This value is saved in the Instance metadata under the key ```registrant_principal```. Any request to modify an instance record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the instance record is created. 
+The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the  OAuth 2 Bearer token. This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
 
-*AppID Ownership*
+*Virtual Hostname Ownership*
 
-Eureka servers enforce the ownership of appIDs within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular appID. This is enforced to ensure CF Applications in other spaces cannot register and draw traffic away from a given app, as a form of man-in-the-middle attack. However, a service instance in a different PCF installation can still register the same appID. This is allowed so that CF Applications in other PCFs can be used for failover, in case all instances with a given appID are down in a particular PCF. 
+Eureka servers enforce the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure CF Applications in other spaces cannot register and draw traffic away from a given app, as a form of man-in-the-middle attack. However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCFs can be used for failover, in case all instances with a given Virtual Hostname are down in a particular PCF. 
 
-To enforce appID ownership, the uri of the Eureka server that registers the instance record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF application registers with the server by submitting an instance record, all other instance records with the same appID are inspected. If an instance record already exists in the same PCF installation as the server receiving the registration request, and this instance record's ```registrar_uri``` doesn't match the server's, the registration request is rejected.
-The ownership of appIDs by a service instance parallels the ownership of routes by a space in CF. However, appIDs cannot be reserved by a service instance at this time, in contrast to creation of a route in a space that isn't yet bound to a CF application. If one service instance were to host instances of a particular appID and then all such instances became de-registered, another CF Application (in a different space) could register with that same appID by binding with a peer service instance. This would prevent the original instances from registering again when they come back online. 
+To enforce Virtual Hostname ownership, the uri of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` doesn't match the server's, the registration request is rejected.
+
+The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to creation of a route in a space that isn't yet bound to a CF application. If one service instance were to host instances of a particular Virtual Hostname and then all such instances became de-registered, another CF Application (in a different space) could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original instances from registering again when they come back online.
+
+*Virtual Hostname Ownership Example*
+
+PCF West is a PCF installation with Service Registry service instances in different Orgs. These service instances are configured to peer replicate with one another. One space hosts a CF Application ```accounting``` and the other hosts ```inventory``` They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
+
+<%= image_tag("./images/security-overview/app-id-ownership-before.png") %>
+
+Later on, the accounting-west/production space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed accounting-blue, but its Virtual Hostname stays the same. Then accounting-green is pushed, bound to the registry and started. On startup it sucessully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
+
+<%= image_tag("./images/security-overview/app-id-ownership-after.png") %>
+
+A space developer with access to the inventory-west/production space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF. 
+
+PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
 
 *OAuth 2 Clients for Bound Applications*
 
