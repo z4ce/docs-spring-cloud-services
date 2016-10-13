@@ -287,43 +287,68 @@ The ```uaa.resource``` authority allows the config-server application to access 
 
 The Eureka application is a backing application for Service Registry service instances. The GUID in the application name is the service instance ID. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Registry.
 
+##### Roles
+
+Clients are categorized into three roles, and the authorization model is designed around these three roles.
+
+**Node**
+
+When a Service Registry is deployed in High Availability mode, the Node role represents other Eureka servers in the same HA cluster. For an incoming request to be identified as coming from a Node, the request must contain a token with the following claims:
+
+* ```iss```: must be the same issuer as this server
+* ```sub```: must be the same ```client_id``` as this server
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```
+
+**Peer**
+
+When a Service Registry is configured for [peer replication](http://docs.pivotal.io/spring-cloud-services/1-2/service-registry/creating-an-instance.html#peer-replication-across-pcf-deployments) with other service instances, the Peer role represents one of the Eureka servers of a configured peer service instance.  For an incoming request to be identified as coming from a Peer, the request must contain a token with the following claims:
+
+* ```iss```: must be the issuer as reported by the peer's ```/info``` endpoint
+* ```sub```: must be the hostname portion of the configured peer's FQDN
+* ```scope```: must equal ```p-service-registry-[peer-guid].read```, ```p-service-registry-[peer-guid].write``` where ```[peer-guid]``` is the guid contained in the peer's hostname
+
+**Bound Application**
+
+A Bound Application is a CF Application bound to this service instance. It does not represent a CF Application bound to a Peer service instance, as Bound Applications are only authorized to communicate with the service instance they are bound to.  For an incoming request to be identified as coming from a Bound Application, the request must contain a token with the following claims:
+
+* ```iss```: must be the same issuer as this server
+* ```sub```: must start with ```p-service-registry```
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write``` where ```[guid]``` is the service instance ID of this server
 
 ##### Entry Points
 
 **Eureka REST endpoints**
 
-These entry points are defined by [Netflix Eureka](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). Instead of enumerating every endpoint, we will explain the differences in securing the HTTP verbs.
+*GET /info*
 
-*GET*
+This endpoint returns basic information about the server's configuration as part of the handshake process to allow other peers to connect to it. Authentication is not required to access this endpoint. The endpoint returns the URIs of its configured peers, the URI of its token issuer, its node count, and its version.   
 
-All GET endpoints must be authenticated with an OAuth 2 Bearer token issued by the Spring Cloud Services Identity Zone. The following claims are checked:
+*POST /eureka/peerreplication/batch/*
 
-* ```aud```: must equal ```p-service-registry-[guid]```
-* ```iss```: must equal ```https://p-spring-cloud-services.uaa.domain.com/oauth/token```
-* ```scope```: must equal ```p-service-registry-[guid].read```
+This endpoint receives replicated updates from other Eureka servers. Only requests from Nodes and Peers are accepted.
 
-The GUID in the ```aud``` and ```scope``` values must match the ```SERVICE_INSTANCE_ID``` environment variable that is set in the Eureka application at provision time.
+*(all other endpoints)*
 
-*POST|PUT|DELETE*
+These remainder of the REST endpoints can be found in the [Netflix Eureka documentation](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). These endpoints can only be accessed by Nodes or Bound Applications.
 
-All POST, PUT, and DELETE endpoints must be authenticated with an OAuth 2 Bearer token issued by the Spring Cloud Services Identity Zone. The following claims are checked:
 
-* ```aud```: must equal ```p-service-registry-[guid]```
-* ```iss```: must equal ```https://p-spring-cloud-services.uaa.domain.com/oauth/token```
-* ```scope```: ```must equal p-service-registry-[guid].write```
+**Record Level Access Control**
 
-The GUID in the ```aud``` and ```scope``` values must match the ```SERVICE_INSTANCE_ID``` environment variable that is set in the Eureka application at provision time.
-
-*Record Level Access Control*
-
-In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Application can only be created or modified by a single CF Application. Before continuing, we should define the following Eureka domain objects:
+In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, we enforce restrictions on the registration of appIDs within a Eureka cluster (i.e. a service instance and its configured peers, if any). Before continuing, we should define the following Eureka domain objects:
 
 * <strong>Application</strong>: This is identified by appID. CF Applications that register with Eureka will use their ```spring.application.name``` for this value. When looking up a service, CF Applications will look up Instances via their appID.
-* <strong>Instance</strong>: Applications have one or more Instances. CF applications that register with Eureka are actually registering themselves as Instances of an Application. An Application does not exist without Instances; in other words, an Application exists only because an Instance refers to one by appID.
+* <strong>Instance</strong>: Applications have one or more Instances. CF applications that register with Eureka are actually registering themselves as Instances of an Application. An Application does not exist without Instances; in other words, an Application exists only because an Instance refers to one by appID. Instances can have metadata associated with them.
 
-To ensure that a Eureka Application can only be registered by a single CF Application, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the  OAuth 2 Bearer token. This value is saved in the Instance metadata under the key ```registrant_principal```. When an Instance is registered (or for any other modification request), if there are other Instances for the same Application, the ```registrant_principal``` values of the other Instances are checked and must equal the principal of the incoming request; otherwise, the request is rejected.
+*Instance Record Ownership*
 
-This scheme could allow multiple CF Applications to register themselves under the same Application ID, if at first there are no other Instances for that Application. In this case, each registration request would be received and handled as if they are the first Instances for that Application. Due to how the ```registrant_principal``` values are looked up (no locks are placed for performance reasons), this race condition is possible. However, once this state is saved, resulting in multiple ```registrant_principal``` values for the same Application, any further modification requests made for that application will fail, regardless of who makes the request. The Eureka server will also log this specific error. Because no state modification requests, including heartbeat requests, would be accepted, these Instances would eventually expire.
+The Eureka server enforces ownership of instance records to prevent binding credentials from being misused to affect other instance records, especially those originating from CF Applications in other spaces. To ensure that a Eureka Instance can only be modified the CF Application that created it, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the  OAuth 2 Bearer token. This value is saved in the Instance metadata under the key ```registrant_principal```. Any request to modify an instance record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the instance record is created. 
+
+*AppID Ownership*
+
+Eureka servers enforce the ownership of appIDs within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular appID. This is enforced to ensure CF Applications in other spaces cannot register and draw traffic away from a given app, as a form of man-in-the-middle attack. However, a service instance in a different PCF installation can still register the same appID. This is allowed so that CF Applications in other PCFs can be used for failover, in case all instances with a given appID are down in a particular PCF. 
+
+To enforce appID ownership, the uri of the Eureka server that registers the instance record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF application registers with the server by submitting an instance record, all other instance records with the same appID are inspected. If an instance record already exists in the same PCF installation as the server receiving the registration request, and this instance record's ```registrar_uri``` doesn't match the server's, the registration request is rejected.
+The ownership of appIDs by a service instance parallels the ownership of routes by a space in CF. However, appIDs cannot be reserved by a service instance at this time, in contrast to creation of a route in a space that isn't yet bound to a CF application. If one service instance were to host instances of a particular appID and then all such instances became de-registered, another CF Application (in a different space) could register with that same appID by binding with a peer service instance. This would prevent the original instances from registering again when they come back online. 
 
 *OAuth 2 Clients for Bound Applications*
 
