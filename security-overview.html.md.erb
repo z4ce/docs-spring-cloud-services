@@ -19,7 +19,7 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * *domain.com*: The value configured by an administrator for the Cloud Foundry system domain.
 
-* *Instance Record*: The core domain object in Eureka, which represents a CF Application that has registered with Eureka. Instance Records are used to map Virtual Hostnames to physical routes, e.g. hostname, IP address, and port. Instance Records can have metadata associated with them.
+* *Instance Record*: The core domain object in Eureka, which represents a CF Application that has registered with SCS Service Registry. Instance Records are used to map Virtual Hostnames to physical routes, e.g. hostname, IP address, and port. Instance Records can have metadata associated with them.
 
 * *Operator*: A user of Pivotal Cloud Foundry&reg; Operations Manager.
 
@@ -29,7 +29,7 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * *UAA*: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
 
-* *Virtual Hostname*: The identifier used by CF Applications to look up other CF Applications that are registered with SCS Service Registry. CF Applications that register with Eureka will use their ```spring.application.name``` for this value by default. 
+* *Virtual Hostname*: The identifier used by CF Applications to look up other CF Applications that are registered with SCS Service Registry. CF Applications that register with SCS Service Registry will use their ```spring.application.name``` for this value by default. 
 
 ## <a id="https"></a>A Note on HTTPS
 
@@ -299,11 +299,11 @@ Clients are categorized into three roles, and the authorization model is designe
 
 **Node**
 
-When a Service Registry is deployed in High Availability mode, the Node role represents other Eureka servers in the same HA cluster. For an incoming request to be identified as coming from a Node, the request must contain a token with the following claims:
+When a Service Registry is deployed in High Availability mode, the Node role represents other Eureka servers that are part of the same service instance as this server. For an incoming request to be identified as coming from a Node, the request must contain a token with the following claims:
 
 * ```iss```: must be the same issuer as this server
 * ```sub```: must be the same ```client_id``` as this server
-* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write``` where ```[guid]``` is the service instance ID of this server
 
 **Peer**
 
@@ -313,7 +313,7 @@ When a Service Registry is configured for [peer replication](http://docs.pivotal
 * ```sub```: must be the hostname portion of the configured peer's FQDN
 * ```scope```: must equal ```p-service-registry-[peer-guid].read```, ```p-service-registry-[peer-guid].write``` where ```[peer-guid]``` is the guid contained in the peer's hostname
 
-**Bound Application**
+<a id="service-registry-roles-bound-application"></a>**Bound Application**
 
 A Bound Application is a CF Application bound to this service instance. It does not represent a CF Application bound to a Peer service instance, as Bound Applications are only authorized to communicate with the service instance they are bound to.  For an incoming request to be identified as coming from a Bound Application, the request must contain a token with the following claims:
 
@@ -327,13 +327,13 @@ A Bound Application is a CF Application bound to this service instance. It does 
 
 *GET /info*
 
-This endpoint returns basic information about the server's configuration as part of the handshake process to allow other peers to connect to it. Authentication is not required to access this endpoint. The endpoint returns the URIs of its configured peers, the URI of its token issuer, its node count, and its version.   
+This endpoint returns basic information about the server's configuration as part of the handshake process before Peers can replicate state with it. Authentication is not required to access this endpoint. The endpoint returns the URIs of its configured peers, the URI of its token issuer, its node count, and its version.
 
 *POST /eureka/peerreplication/batch/*
 
-This endpoint receives replicated updates from other Eureka servers. Only requests from Nodes and Peers are accepted.
+This endpoint receives batches of replicated requests from other Eureka servers. Only requests from Nodes and Peers are accepted.
 
-*(all other endpoints)*
+*GET|POST|PUT|DELETE /eureka/** (all other endpoints)*
 
 These remainder of the REST endpoints can be found in the [Netflix Eureka documentation](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). These endpoints can only be accessed by Nodes or Bound Applications.
 
@@ -344,15 +344,15 @@ In addition to checking token claims, further checks are done on POST, PUT, and 
 
 *Instance Record Ownership*
 
-The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the  OAuth 2 Bearer token. This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
+The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the [Bound Application's token](#service-registry-roles-bound-application). This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
 
 *Virtual Hostname Ownership*
 
 Eureka servers enforce the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure CF Applications in other spaces cannot register and draw traffic away from a given app, as a form of man-in-the-middle attack. However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCFs can be used for failover, in case all instances with a given Virtual Hostname are down in a particular PCF. 
 
-To enforce Virtual Hostname ownership, the uri of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` doesn't match the server's, the registration request is rejected.
+To enforce Virtual Hostname ownership, the uri of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF Application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` doesn't match the server's, the registration request is rejected.
 
-The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to creation of a route in a space that isn't yet bound to a CF application. If one service instance were to host instances of a particular Virtual Hostname and then all such instances became de-registered, another CF Application (in a different space) could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original instances from registering again when they come back online.
+The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to the creation of a route in a space, where the route isn't yet bound to a CF Application. If one service instance were to register Instance Records with a particular Virtual Hostname and then all such Instance Records became de-registered (through either planned or unplanned outages), another CF Application in a different space could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original CF Application(s) from registering again when they come back online.
 
 *Virtual Hostname Ownership Example*
 
@@ -360,13 +360,13 @@ PCF West is a PCF installation with Service Registry service instances in differ
 
 <%= image_tag("./images/security-overview/app-id-ownership-before.png") %>
 
-Later on, the accounting-west/production space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed accounting-blue, but its Virtual Hostname stays the same. Then accounting-green is pushed, bound to the registry and started. On startup it sucessully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
+Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Virtual Hostname stays the same. Then ```accounting-green``` is pushed, bound to the registry and started. On startup it sucessully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
 
 <%= image_tag("./images/security-overview/app-id-ownership-after.png") %>
 
-A space developer with access to the inventory-west/production space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF. 
+A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF. 
 
-PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
+PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostnames ```accounting``` or ```inventory```.
 
 *OAuth 2 Clients for Bound Applications*
 
