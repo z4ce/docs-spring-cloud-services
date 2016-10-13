@@ -9,167 +9,22 @@ See below for information about the dependencies required for client application
 
 ## <a id="include-dependencies"></a>Include Spring Cloud Services Dependencies
 
-<p class='note'><strong>Important</strong>: Ensure that the ordering of the Maven BOM dependencies listed below is preserved in your application's build file. Dependency resolution is affected in both Maven and Gradle by the order in which dependencies are declared.</p>
-
-To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency.
-
-If using Maven, include in `pom.xml`:
-
-```xml
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.3.5.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
-
-  <dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>io.pivotal.spring.cloud</groupId>
-            <artifactId>spring-cloud-services-dependencies</artifactId>
-            <version>1.2.0.RELEASE</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>Brixton.SR6</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-  </dependencyManagement>
-```
-
-If not using the `spring-boot-starter-parent`, include in the `<dependencyManagement>` block of `pom.xml`:
-
-```
-  <dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-dependencies</artifactId>
-            <version>1.3.5.RELEASE</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-
-        <!-- ... -->
-
-    </dependencies>
-  </dependencyManagement>
-```
-
-If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>.
-
-Include in `build.gradle`:
-
-```groovy
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
-    }
-}
-
-apply plugin: "java"
-apply plugin: "spring-boot"
-apply plugin: "io.spring.dependency-management"
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR6"
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.2.0.RELEASE"
-    }
-}
-
-repositories {
-    maven {
-        url "https://repo.spring.io/plugins-release"
-    }
-}
-```
-
-If not using the Spring Boot Gradle plugin, include in the `dependencyManagement` block of `build.gradle`:
-
-```groovy
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:1.3.5.RELEASE"
-    }
-}
-```
+<%= partial 'general-dependencies' %>
 
 ### <a id="config-server"></a>Config Server
 
 Your application must declare `spring-cloud-services-starter-config-client` as a dependency.
 
-If using Maven, include in `pom.xml`:
-
-```
-  <dependencies>
-    <dependency>
-      <groupId>io.pivotal.spring.cloud</groupId>
-      <artifactId>spring-cloud-services-starter-config-client</artifactId>
-    </dependency>
-  </dependencies>
-```
-
-If using Gradle, include in `build.gradle`:
-
-```
-dependencies {
-    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-config-client")
-}
-```
+<%= partial 'config-server-dependency' %>
 
 ### <a id="service-registry"></a>Service Registry
 
 Your application must declare `spring-cloud-services-starter-service-registry` as a dependency.
 
-If using Maven, include in `pom.xml`:
-
-```
-  <dependencies>
-    <dependency>
-      <groupId>io.pivotal.spring.cloud</groupId>
-      <artifactId>spring-cloud-services-starter-service-registry</artifactId>
-    </dependency>
-  </dependencies>
-```
-
-If using Gradle, include in `build.gradle`:
-
-```
-dependencies {
-    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
-}
-```
+<%= partial 'service-registry-dependency' %>
 
 ### <a id="circuit-breaker-dashboard"></a>Circuit Breaker Dashboard
 
 Your application must declare `spring-cloud-services-starter-circuit-breaker` as a dependency.
 
-If using Maven, include in `pom.xml`:
-
-```
-  <dependencies>
-    <dependency>
-      <groupId>io.pivotal.spring.cloud</groupId>
-      <artifactId>spring-cloud-services-starter-circuit-breaker</artifactId>
-    </dependency>
-  </dependencies>
-```
-
-If using Gradle, include in `build.gradle`:
-
-```
-dependencies {
-    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker")
-}
-```
+<%= partial 'circuit-breaker-dashboard-dependency' %>
