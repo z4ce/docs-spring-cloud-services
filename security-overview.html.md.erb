@@ -3,33 +3,45 @@ title: Security Overview for Spring Cloud Services
 owner: Spring Cloud Services
 ---
 
+<style>
+h2, .h2 {
+  font-size: 2em; }
+h3, .h3 {
+  font-size: 1.7em; }
+h4, .h4 {
+  font-size: 1.45em; }
+h5, .h5 {
+  margin: 20px 0 0.5em;
+  font-size: 1.2em; }
+</style>
+
 <strong><%= modified_date %></strong>
 
 ## <a id="glossary"></a>Glossary
 
 The following abbreviations, example values, and terms are used in this topic as defined below.
 
-* *CC*: The [Cloud Foundry Cloud Controller](https://docs.cloudfoundry.org/concepts/architecture/cloud-controller.html).
+* **CC**: The [Cloud Foundry Cloud Controller](https://docs.cloudfoundry.org/concepts/architecture/cloud-controller.html).
 
-* *CC DB*: The Cloud Controller database.
+* **CC DB**: The Cloud Controller database.
 
-* *CF Application*: An application in Cloud Foundry, e.g. something you ```cf push```.
+* **CF Application**: An application in Cloud Foundry, e.g. something you ```cf push```.
 
-* *Dashboard SSO*: [Cloud Foundry's Dashboard Single Sign-On](http://docs.cloudfoundry.org/services/dashboard-sso.html).
+* **Dashboard SSO**: [Cloud Foundry's Dashboard Single Sign-On](http://docs.cloudfoundry.org/services/dashboard-sso.html).
 
-* *domain.com*: The value configured by an administrator for the Cloud Foundry system domain.
+* **domain.com**: The value configured by an administrator for the Cloud Foundry system domain.
 
-* *Instance Record*: The core domain object in Eureka, which represents a CF Application that has registered with SCS Service Registry. Instance Records are used to map Virtual Hostnames to physical routes, e.g. hostname, IP address, and port. Instance Records can have metadata associated with them.
+* **Instance Record**: The core domain object in Eureka, which represents a CF Application that has registered with SCS Service Registry. Instance Records are used to map Virtual Hostnames to physical routes, e.g. hostname, IP address, and port. Instance Records can have metadata associated with them.
 
-* *Operator*: A user of Pivotal Cloud Foundry&reg; Operations Manager.
+* **Operator**: A user of Pivotal Cloud Foundry&reg; Operations Manager.
 
-* *SB*: The Spring Cloud Services Service Broker.
+* **SB**: The Spring Cloud Services Service Broker.
 
-* *SCS*: Spring Cloud Services.
+* **SCS**: Spring Cloud Services.
 
-* *UAA*: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
+* **UAA**: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
 
-* *Virtual Hostname*: The identifier used by CF Applications to look up other CF Applications that are registered with SCS Service Registry. CF Applications that register with SCS Service Registry will use their ```spring.application.name``` for this value by default. 
+* **Virtual Hostname**: The identifier used by CF Applications to look up other CF Applications that are registered with SCS Service Registry. CF Applications that register with SCS Service Registry will use their ```spring.application.name``` for this value by default. 
 
 ## <a id="https"></a>A Note on HTTPS
 
@@ -73,9 +85,17 @@ The installation file is downloaded from [https://network.pivotal.io](https://ne
 
 To install Spring Cloud Services, the installation file must be uploaded to Pivotal Cloud Foundry&reg; Operations Manager. Ops Manager can only be accessed over HTTPS by persons knowing the username and password for Ops Manager.
 
-#### <a id="spring-cloud-broker"></a>app spring-cloud-broker
+#### <a id="spring-cloud-broker"></a>Spring Cloud Service Broker
 
-The spring-cloud-broker application (the SB) is responsible for receiving Service Broker API requests from the Cloud Controller (CC), and hosts the primary dashboard UI for all service types.
+The Spring Cloud Service Broker is responsible for receiving Service Broker API requests from the Cloud Controller (CC), and hosts the primary dashboard UI for all service types.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>system</code></dd>
+<dd><strong>Space</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>CF Application Name</strong>: <code>spring-cloud-broker</code></dd>
+</dl>
 
 ##### Entry Points
 
@@ -146,9 +166,17 @@ The SB communicates with UAA via HTTPS to enable Dashboard SSO. All requests to 
 
 This client is used for SSO with UAA. The scopes allow the SB to access the Cloud Controller API on the user's behalf, and are auto-approved. The ```uaa.resource``` authority allows the SB to access the token verification endpoints on UAA. The client ID and client secret are made available to the SB via environment variables, which are set at installation time and are stored in encrypted form in the CC DB.
 
-#### <a id="spring-cloud-broker-worker"></a>app spring-cloud-broker-worker
+#### <a id="spring-cloud-broker-worker"></a>Spring Cloud Service Broker Worker
 
-The spring-cloud-broker-worker application (the Worker) is responsible for managing service instance backing apps. Some of this work is done asynchronously from the requests that initiate it.
+The Spring Cloud Service Broker Worker (the Worker) is responsible for managing service instance backing apps. Some of this work is done asynchronously from the requests that initiate it.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>system</code></dd>
+<dd><strong>Space</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>CF Application Name</strong>: <code>spring-cloud-broker-worker</code></dd>
+</dl>
 
 ##### Entry Points
 
@@ -216,9 +244,17 @@ This user is a Space Developer in the "p-spring-cloud-services" org, "instances"
 
 ### <a id="config-server-service-instances"></a>Config Server Service Instances
 
-#### <a id="app-config-server"></a>app config-server-{guid}
+#### <a id="app-config-server"></a>Config Server
 
-The config-server application is a backing application for Config Server service instances. The GUID in the application name is the service instance ID. This application is responsible for handling requests for configuration values from bound applications.
+The Config Server CF Application is a backing application for Config Server service instances. This application is responsible for handling requests for configuration values from bound applications.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>config-[guid]</code> where <code>[guid]</code> is the service instance ID</dd>
+</dl>
 
 ##### Entry Points
 
@@ -289,9 +325,17 @@ The ```uaa.resource``` authority allows the config-server application to access 
 
 ### <a id="service-registry-service-instances"></a>Service Registry Service Instances
 
-#### <a id="app-eureka"></a>app eureka-{guid}
+#### <a id="app-eureka"></a>Eureka
 
-The Eureka application is a backing application for Service Registry service instances. The GUID in the application name is the service instance ID. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Registry.
+The Eureka CF Application is a backing application for Service Registry service instances. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Service Registry.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances/code></dd>
+<dd><strong>CF Application Name</strong>: <code>eureka-[guid](-node[n])</code> where <code>[guid]</code> is the service instance ID. When running in HA mode, <code>(-node[n])</code> uniquiely identifies the application node.</dd>
+</dl>
 
 ##### Roles
 
@@ -430,9 +474,17 @@ The ```uaa.resource``` authority allows the Eureka application to access the tok
 
 ### <a id="circuit-breaker-dashboard-service-instances"></a>Circuit Breaker Dashboard Service Instances
 
-#### <a id="app-hystrix"></a>app hystrix-{guid}
+#### <a id="app-hystrix"></a>Hystrix
 
-The Hystrix application is one of the two backing applications for Circuit Breaker Dashboard service instances. The GUID in the application name is the service instance ID. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
+The Hystrix application is one of the two backing applications for Circuit Breaker Dashboard service instances. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>hystrix-[guid]</code> where <code>[guid]</code> is the service instance ID</dd>
+</dl>
 
 ##### Entry Points
 
@@ -446,7 +498,7 @@ Actuator endpoints require the same [Actuator SSO](#sb-entry-point-actuator-endp
 
 ##### External Dependencies
 
-**The Turbine App**
+**Turbine**
 
 The Hystrix Dashboard UI uses an EventSource in the browser to listen to [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) emitted by the Turbine application. Because the Turbine application's origin differs from the Hystrix application, and EventSources do not support CORS, the Hystrix application must handle the EventSource request and proxy this request to the Turbine application.
 
@@ -474,9 +526,17 @@ The Hystrix application communicates to the CC via HTTPS to perform permission c
 
 This client is used for SSO with UAA. The scopes allow the Hystrix application to access the Cloud Controller API on the user's behalf, and are auto-approved. The ```uaa.resource``` authority allows the Hystrix application to access the token verification endpoints on UAA. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Hystrix application via environment variables set at provision time.
 
-#### <a id="app-turbine"></a>app turbine-{guid}
+#### <a id="app-turbine"></a>Turbine
 
-The Turbine application is the other backing application for Circuit Breaker Dashboard service instances. The GUID in the application name is the service instance ID. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
+The Turbine application is the other backing application for Circuit Breaker Dashboard service instances. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>turbine-[guid]</code> where <code>[guid]</code> is the service instance ID</dd>
+</dl>
 
 ##### Entry Points
 
