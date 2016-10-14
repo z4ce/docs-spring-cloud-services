@@ -377,7 +377,7 @@ This endpoint returns basic information about the server's configuration as part
 
 This endpoint receives batches of replicated requests from other Eureka servers. Only requests from Nodes and Peers are accepted.
 
-*GET|POST|PUT|DELETE /eureka/** (all other endpoints)*
+*GET|POST|PUT|DELETE /eureka/\*\* (all other endpoints)*
 
 These remainder of the REST endpoints can be found in the [Netflix Eureka documentation](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). These endpoints can only be accessed by Nodes or Bound Applications.
 
@@ -400,7 +400,7 @@ The ownership of Virtual Hostnames by a service instance parallels the ownership
 
 *Virtual Hostname Ownership Example*
 
-PCF West is a PCF installation with Service Registry service instances in different Orgs. These service instances are configured to peer replicate with one another. One space hosts a CF Application ```accounting``` and the other hosts ```inventory``` They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
+PCF West is a PCF installation with Service Registry service instances in different Orgs. These service instances are configured to peer replicate with one another. One space hosts a CF Application ```accounting``` and the other hosts ```inventory```. They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
 
 <%= image_tag("./images/security-overview/app-id-ownership-before.png") %>
 
