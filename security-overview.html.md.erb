@@ -25,13 +25,17 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * **CC DB**: The Cloud Controller database.
 
-* **CF Application**: An application in Cloud Foundry, e.g. something you ```cf push```.
+* **CF**: Cloud Foundry.
+
+* **CF Application**: An application in Cloud Foundry; the `application` in ```cf push application```.
 
 * **Dashboard SSO**: [Cloud Foundry's Dashboard Single Sign-On](http://docs.cloudfoundry.org/services/dashboard-sso.html).
 
 * **domain.com**: The value configured by an administrator for the Cloud Foundry system domain.
 
-* **Instance Record**: The core domain object in Eureka, which represents a CF Application that has registered with SCS Service Registry. Instance Records are used to map Virtual Hostnames to physical routes, e.g. hostname, IP address, and port. Instance Records can have metadata associated with them.
+* **FQDN**: Fully Qualified Domain Name.
+
+* **Instance Record**: In Eureka, the core domain object; represents a CF Application that has registered with a Spring Cloud Services Service Registry service instance. An Instance Record is used to map a Virtual Hostname to a physical route (e.g. hostname, IP address, and port). An Instance Record can have metadata associated with it.
 
 * **Operator**: A user of Pivotal Cloud Foundry&reg; Operations Manager.
 
@@ -41,7 +45,7 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * **UAA**: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
 
-* **Virtual Hostname**: The identifier used by CF Applications to look up other CF Applications that are registered with SCS Service Registry. CF Applications that register with SCS Service Registry will use their ```spring.application.name``` for this value by default. 
+* **Virtual Hostname**: The identifier used by a CF Application to look up other CF Applications that are registered with a Spring Cloud Services Service Registry service instance. A CF Application that registers with a Spring Cloud Services Service Registry service instance will use the value of its ```spring.application.name``` property for this value by default. 
 
 ## <a id="https"></a>A Note on HTTPS
 
@@ -141,7 +145,7 @@ The SB uses a [p-mysql](https://network.pivotal.io/products/p-mysql) service ins
 
 <a id="sb-dependency-p-rabbitmq"></a>**p-rabbitmq**
 
-The SB uses a [p-rabbitmq](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance to communicate with spring-cloud-broker-worker (Worker). The messages passed propagate the provision, deprovision, bind, and unbind requests received by the [SB API](https://docs.cloudfoundry.org/services/api.html) to the Worker, as well as getting and setting application environment variables for service instance backing applications in the "instances" space. The credentials for accessing the p-rabbitmq service instance are provided through the SB's ```VCAP_SERVICES``` environment variable as a result of binding to the service instance. The credentials would only be visible to a Space Developer in the "p-spring-cloud-services" space, and only the Operator would have this access.
+The SB uses a [p-rabbitmq](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance to communicate with the spring-cloud-broker-worker application (the Worker). The messages passed propagate the provision, deprovision, bind, and unbind requests received by the [SB API](https://docs.cloudfoundry.org/services/api.html) to the Worker, as well as getting and setting application environment variables for service instance backing applications in the "instances" space. The credentials for accessing the p-rabbitmq service instance are provided through the SB's ```VCAP_SERVICES``` environment variable as a result of binding to the service instance. The credentials would only be visible to a Space Developer in the "p-spring-cloud-services" space, and only the Operator would have this access.
 
 <a id="sb-dependency-cloud-controller"></a>**The Cloud Controller**
 
@@ -168,7 +172,7 @@ This client is used for SSO with UAA. The scopes allow the SB to access the Clou
 
 #### <a id="spring-cloud-broker-worker"></a>Spring Cloud Service Broker Worker
 
-The Spring Cloud Service Broker Worker (the Worker) is responsible for managing service instance backing apps. Some of this work is done asynchronously from the requests that initiate it.
+The Spring Cloud Service Broker Worker (the Worker) is responsible for managing service instance backing applications. Some of this work is done asynchronously from the requests that initiate it.
 
 #####Deployment Details#####
 
@@ -182,7 +186,7 @@ The Spring Cloud Service Broker Worker (the Worker) is responsible for managing 
 
 **The RabbitMQ Message Listener**
 
-The Worker listens for messages posted to the p-rabbitmq service instance. The SB posts these messages as described in [app spring-cloud-broker > External Dependencies > p-rabbitmq](#sb-dependency-p-rabbitmq). Only the Operator, the SB, and the Worker can access this instance of p-rabbitmq.
+The Worker listens for messages posted to the p-rabbitmq service instance. The SB posts these messages as described in [Spring Cloud Service Broker > External Dependencies > p-rabbitmq](#sb-dependency-p-rabbitmq). Only the Operator, the SB, and the Worker can access this instance of p-rabbitmq.
 
 **Actuator Endpoints**
 
@@ -246,14 +250,14 @@ This user is a Space Developer in the "p-spring-cloud-services" org, "instances"
 
 #### <a id="app-config-server"></a>Config Server
 
-The Config Server CF Application is a backing application for Config Server service instances. This application is responsible for handling requests for configuration values from bound applications.
+The Config Server CF Application is a backing application for a Config Server service instance. This application is responsible for handling requests for configuration values from bound applications.
 
 #####Deployment Details#####
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
 <dd><strong>Space</strong>: <code>instances</code></dd>
-<dd><strong>CF Application Name</strong>: <code>config-[guid]</code> where <code>[guid]</code> is the service instance ID</dd>
+<dd><strong>CF Application Name</strong>: <code>config-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
 </dl>
 
 ##### Entry Points
@@ -334,7 +338,7 @@ The Eureka CF Application is a backing application for Service Registry service 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
 <dd><strong>Space</strong>: <code>instances</code></dd>
-<dd><strong>CF Application Name</strong>: <code>eureka-[guid](-node[n])</code> where <code>[guid]</code> is the service instance ID. When running in HA mode, <code>(-node[n])</code> uniquiely identifies the application node.</dd>
+<dd><strong>CF Application Name</strong>: <code>eureka-[guid](-node[n])</code>, where <code>[guid]</code> is the service instance ID. When running in HA mode, <code>(-node[n])</code> uniquely identifies the application node.</dd>
 </dl>
 
 ##### Roles
@@ -343,27 +347,33 @@ Clients are categorized into three roles, and the authorization model is designe
 
 **Node**
 
-When a Service Registry is deployed in High Availability mode, the Node role represents other Eureka servers that are part of the same service instance as this server. For an incoming request to be identified as coming from a Node, the request must contain a token with the following claims:
+When a Service Registry is deployed in High Availability mode, the Node role represents other Eureka servers that are part of the same service instance as this server.
+
+For an incoming request to be identified as coming from a Node, the request must contain a token with the following claims:
 
 * ```iss```: must be the same issuer as this server
 * ```sub```: must be the same ```client_id``` as this server
-* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write``` where ```[guid]``` is the service instance ID of this server
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```, where ```[guid]``` is the service instance ID of this server
 
 **Peer**
 
-When a Service Registry is configured for [peer replication](http://docs.pivotal.io/spring-cloud-services/1-2/service-registry/creating-an-instance.html#peer-replication-across-pcf-deployments) with other service instances, the Peer role represents one of the Eureka servers of a configured peer service instance.  For an incoming request to be identified as coming from a Peer, the request must contain a token with the following claims:
+When a Service Registry is configured for [peer replication](http://docs.pivotal.io/spring-cloud-services/service-registry/creating-an-instance.html#peer-replication-across-pcf-deployments) with other service instances, the Peer role represents one of the Eureka servers of a configured peer service instance.
+
+For an incoming request to be identified as coming from a Peer, the request must contain a token with the following claims:
 
 * ```iss```: must be the issuer as reported by the peer's ```/info``` endpoint
 * ```sub```: must be the hostname portion of the configured peer's FQDN
-* ```scope```: must equal ```p-service-registry-[peer-guid].read```, ```p-service-registry-[peer-guid].write``` where ```[peer-guid]``` is the guid contained in the peer's hostname
+* ```scope```: must equal ```p-service-registry-[peer-guid].read```, ```p-service-registry-[peer-guid].write```, where ```[peer-guid]``` is the GUID contained in the peer's hostname
 
 <a id="service-registry-roles-bound-application"></a>**Bound Application**
 
-A Bound Application is a CF Application bound to this service instance. It does not represent a CF Application bound to a Peer service instance, as Bound Applications are only authorized to communicate with the service instance they are bound to.  For an incoming request to be identified as coming from a Bound Application, the request must contain a token with the following claims:
+A Bound Application is a CF Application bound to this service instance. It does not represent a CF Application bound to a Peer service instance, as a Bound Application is only authorized to communicate with the service instance to which it is bound.
+
+For an incoming request to be identified as coming from a Bound Application, the request must contain a token with the following claims:
 
 * ```iss```: must be the same issuer as this server
 * ```sub```: must start with ```p-service-registry```
-* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write``` where ```[guid]``` is the service instance ID of this server
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```, where ```[guid]``` is the service instance ID of this server
 
 ##### Entry Points
 
@@ -371,7 +381,7 @@ A Bound Application is a CF Application bound to this service instance. It does 
 
 *GET /info*
 
-This endpoint returns basic information about the server's configuration as part of the handshake process before Peers can replicate state with it. Authentication is not required to access this endpoint. The endpoint returns the URIs of its configured peers, the URI of its token issuer, its node count, and its version.
+This endpoint returns basic information about the server's configuration as part of the handshake process before a Peer can replicate state with the service instance. Authentication is not required to access this endpoint. The endpoint returns the URIs of the service instance's configured peers, the URI of the service instance's token issuer, the service instance's node count, and the service instance's version.
 
 *POST /eureka/peerreplication/batch/*
 
@@ -381,34 +391,33 @@ This endpoint receives batches of replicated requests from other Eureka servers.
 
 These remainder of the REST endpoints can be found in the [Netflix Eureka documentation](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). These endpoints can only be accessed by Nodes or Bound Applications.
 
-
 **Record Level Access Control**
 
-In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, we enforce restrictions on the registration of Virtual Hostnames within a Eureka cluster (i.e. a service instance and its configured peers, if any).
+In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, Spring Cloud Services enforces restrictions on the registration of Virtual Hostnames within a Eureka cluster (i.e. a service instance and its configured peers, if any).
 
 *Instance Record Ownership*
 
-The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the [Bound Application's token](#service-registry-roles-bound-application). This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
+The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server has been modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the [Bound Application's token](#service-registry-roles-bound-application). This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
 
 *Virtual Hostname Ownership*
 
-Eureka servers enforce the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure CF Applications in other spaces cannot register and draw traffic away from a given app, as a form of man-in-the-middle attack. However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCFs can be used for failover, in case all instances with a given Virtual Hostname are down in a particular PCF. 
+The Eureka server enforces the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure that CF Applications in other spaces cannot register and draw traffic away from a given application, as a form of [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCF installations can be used for failover, in case all instances with a given Virtual Hostname in a particular PCF are down. 
 
-To enforce Virtual Hostname ownership, the uri of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF Application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` doesn't match the server's, the registration request is rejected.
+To enforce Virtual Hostname ownership, the URI of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF Application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` does not match the server's, the registration request is rejected.
 
-The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to the creation of a route in a space, where the route isn't yet bound to a CF Application. If one service instance were to register Instance Records with a particular Virtual Hostname and then all such Instance Records became de-registered (through either planned or unplanned outages), another CF Application in a different space could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original CF Application(s) from registering again when they come back online.
+The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to the creation of a route in a space, where the route is not yet bound to a CF Application. If one service instance were to register Instance Records with a particular Virtual Hostname and then all such Instance Records became de-registered (through either planned or unplanned outages), another CF Application in a different space could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original CF Application(s) from registering again when they came back online.
 
 *Virtual Hostname Ownership Example*
 
-PCF West is a PCF installation with Service Registry service instances in different Orgs. These service instances are configured to peer replicate with one another. One space hosts a CF Application ```accounting``` and the other hosts ```inventory```. They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
+PCF West is a PCF installation with Service Registry service instances in different organizations. These service instances are configured for peer replication with one another. One space hosts a CF Application ```accounting``` and the other hosts a CF Application ```inventory```. They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
 
 <%= image_tag("./images/security-overview/app-id-ownership-before.png") %>
 
-Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Virtual Hostname stays the same. Then ```accounting-green``` is pushed, bound to the registry and started. On startup it sucessully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
+Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Virtual Hostname stays the same. Then ```accounting-green``` is pushed, bound to the Service Registry service instance, and started. On startup it successully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
 
 <%= image_tag("./images/security-overview/app-id-ownership-after.png") %>
 
-A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF. 
+A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF installation. 
 
 PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostnames ```accounting``` or ```inventory```.
 
@@ -476,14 +485,14 @@ The ```uaa.resource``` authority allows the Eureka application to access the tok
 
 #### <a id="app-hystrix"></a>Hystrix
 
-The Hystrix application is one of the two backing applications for Circuit Breaker Dashboard service instances. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
+The Hystrix application is one of two backing applications for a Circuit Breaker Dashboard service instance. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
 
 #####Deployment Details#####
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
 <dd><strong>Space</strong>: <code>instances</code></dd>
-<dd><strong>CF Application Name</strong>: <code>hystrix-[guid]</code> where <code>[guid]</code> is the service instance ID</dd>
+<dd><strong>CF Application Name</strong>: <code>hystrix-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
 </dl>
 
 ##### Entry Points
@@ -528,14 +537,14 @@ This client is used for SSO with UAA. The scopes allow the Hystrix application t
 
 #### <a id="app-turbine"></a>Turbine
 
-The Turbine application is the other backing application for Circuit Breaker Dashboard service instances. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
+The Turbine application is the other backing application for a Circuit Breaker Dashboard service instance. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
 
 #####Deployment Details#####
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
 <dd><strong>Space</strong>: <code>instances</code></dd>
-<dd><strong>CF Application Name</strong>: <code>turbine-[guid]</code> where <code>[guid]</code> is the service instance ID</dd>
+<dd><strong>CF Application Name</strong>: <code>turbine-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
 </dl>
 
 ##### Entry Points
