@@ -3,27 +3,49 @@ title: Security Overview for Spring Cloud Services
 owner: Spring Cloud Services
 ---
 
+<style>
+h2, .h2 {
+  font-size: 2em; }
+h3, .h3 {
+  font-size: 1.7em; }
+h4, .h4 {
+  font-size: 1.45em; }
+h5, .h5 {
+  margin: 20px 0 0.5em;
+  font-size: 1.2em; }
+</style>
+
 <strong><%= modified_date %></strong>
 
 ## <a id="glossary"></a>Glossary
 
 The following abbreviations, example values, and terms are used in this topic as defined below.
 
-* *CC*: The [Cloud Foundry Cloud Controller](https://docs.cloudfoundry.org/concepts/architecture/cloud-controller.html).
+* **CC**: The [Cloud Foundry Cloud Controller](https://docs.cloudfoundry.org/concepts/architecture/cloud-controller.html).
 
-* *CC DB*: The Cloud Controller database.
+* **CC DB**: The Cloud Controller database.
 
-* *Dashboard SSO*: [Cloud Foundry's Dashboard Single Sign-On](http://docs.cloudfoundry.org/services/dashboard-sso.html).
+* **CF**: Cloud Foundry.
 
-* *domain.com*: The value configured by an administrator for the Cloud Foundry system domain.
+* **CF Application**: An application in Cloud Foundry; the `application` in ```cf push application```.
 
-* *Operator*: A user of Pivotal Cloud Foundry&reg; Operations Manager.
+* **Dashboard SSO**: [Cloud Foundry's Dashboard Single Sign-On](http://docs.cloudfoundry.org/services/dashboard-sso.html).
 
-* *SB*: The Spring Cloud Services Service Broker.
+* **domain.com**: The value configured by an administrator for the Cloud Foundry system domain.
 
-* *SCS*: Spring Cloud Services.
+* **FQDN**: Fully Qualified Domain Name.
 
-* *UAA*: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
+* **Instance Record**: In Eureka, the core domain object; represents a CF Application that has registered with a Spring Cloud Services Service Registry service instance. An Instance Record is used to map a Virtual Hostname to a physical route (e.g. hostname, IP address, and port). An Instance Record can have metadata associated with it.
+
+* **Operator**: A user of Pivotal Cloud Foundry&reg; Operations Manager.
+
+* **SB**: The Spring Cloud Services Service Broker.
+
+* **SCS**: Spring Cloud Services.
+
+* **UAA**: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
+
+* **Virtual Hostname**: The identifier used by a CF Application to look up other CF Applications that are registered with a Spring Cloud Services Service Registry service instance. A CF Application that registers with a Spring Cloud Services Service Registry service instance will use the value of its ```spring.application.name``` property for this value by default. 
 
 ## <a id="https"></a>A Note on HTTPS
 
@@ -35,7 +57,7 @@ The SSL certificate used by the CF environment must also include Subject Alterna
 
 ## <a id="multi-tenant-uaa"></a>A Note on Multi-Tenant UAA
 
-SCS uses the multi-tenancy features of UAA to implement ["the principle of least privilege"](https://en.wikipedia.org/wiki/Principle_of_least_privilege). This is required because SCS creates and deletes OAuth clients when applications bind and unbind to service instances. These clients must also have non-empty authorities. In order to create create clients with arbitrary authorities, the actor must have the scopes ```uaa.admin``` and ```clients.write```; essentially they must be the admin.
+SCS uses the multi-tenancy features of UAA to implement ["the principle of least privilege"](https://en.wikipedia.org/wiki/Principle_of_least_privilege). This is required because SCS creates and deletes OAuth clients when applications bind and unbind to service instances. These clients must also have non-empty authorities. In order to create clients with arbitrary authorities, the actor must have the scopes ```uaa.admin``` and ```clients.write```; essentially they must be the admin.
 
 Making admin-level credentials (e.g. the UAA admin client) accessible to an application is dangerous and should be avoided. For example, if one were to break into that application and get those credentials, the credentials could be used to affect the entire CF environment. This is why SCS operates in two UAA domains (also called Identity Zones).
 
@@ -67,9 +89,17 @@ The installation file is downloaded from [https://network.pivotal.io](https://ne
 
 To install Spring Cloud Services, the installation file must be uploaded to Pivotal Cloud Foundry&reg; Operations Manager. Ops Manager can only be accessed over HTTPS by persons knowing the username and password for Ops Manager.
 
-#### <a id="spring-cloud-broker"></a>app spring-cloud-broker
+#### <a id="spring-cloud-broker"></a>Spring Cloud Service Broker
 
-The spring-cloud-broker application (the SB) is responsible for receiving Service Broker API requests from the Cloud Controller (CC), and hosts the primary dashboard UI for all service types.
+The Spring Cloud Service Broker is responsible for receiving Service Broker API requests from the Cloud Controller (CC), and hosts the primary dashboard UI for all service types.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>system</code></dd>
+<dd><strong>Space</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>CF Application Name</strong>: <code>spring-cloud-broker</code></dd>
+</dl>
 
 ##### Entry Points
 
@@ -115,7 +145,7 @@ The SB uses a [p-mysql](https://network.pivotal.io/products/p-mysql) service ins
 
 <a id="sb-dependency-p-rabbitmq"></a>**p-rabbitmq**
 
-The SB uses a [p-rabbitmq](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance to communicate with spring-cloud-broker-worker (Worker). The messages passed propagate the provision, deprovision, bind, and unbind requests received by the [SB API](https://docs.cloudfoundry.org/services/api.html) to the Worker, as well as getting and setting application environment variables for service instance backing applications in the "instances" space. The credentials for accessing the p-rabbitmq service instance are provided through the SB's ```VCAP_SERVICES``` environment variable as a result of binding to the service instance. The credentials would only be visible to a Space Developer in the "p-spring-cloud-services" space, and only the Operator would have this access.
+The SB uses a [p-rabbitmq](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance to communicate with the spring-cloud-broker-worker application (the Worker). The messages passed propagate the provision, deprovision, bind, and unbind requests received by the [SB API](https://docs.cloudfoundry.org/services/api.html) to the Worker, as well as getting and setting application environment variables for service instance backing applications in the "instances" space. The credentials for accessing the p-rabbitmq service instance are provided through the SB's ```VCAP_SERVICES``` environment variable as a result of binding to the service instance. The credentials would only be visible to a Space Developer in the "p-spring-cloud-services" space, and only the Operator would have this access.
 
 <a id="sb-dependency-cloud-controller"></a>**The Cloud Controller**
 
@@ -140,15 +170,23 @@ The SB communicates with UAA via HTTPS to enable Dashboard SSO. All requests to 
 
 This client is used for SSO with UAA. The scopes allow the SB to access the Cloud Controller API on the user's behalf, and are auto-approved. The ```uaa.resource``` authority allows the SB to access the token verification endpoints on UAA. The client ID and client secret are made available to the SB via environment variables, which are set at installation time and are stored in encrypted form in the CC DB.
 
-#### <a id="spring-cloud-broker-worker"></a>app spring-cloud-broker-worker
+#### <a id="spring-cloud-broker-worker"></a>Spring Cloud Service Broker Worker
 
-The spring-cloud-broker-worker application (the Worker) is responsible for managing service instance backing apps. Some of this work is done asynchronously from the requests that initiate it.
+The Spring Cloud Service Broker Worker (the Worker) is responsible for managing service instance backing applications. Some of this work is done asynchronously from the requests that initiate it.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>system</code></dd>
+<dd><strong>Space</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>CF Application Name</strong>: <code>spring-cloud-broker-worker</code></dd>
+</dl>
 
 ##### Entry Points
 
 **The RabbitMQ Message Listener**
 
-The Worker listens for messages posted to the p-rabbitmq service instance. The SB posts these messages as described in [app spring-cloud-broker > External Dependencies > p-rabbitmq](#sb-dependency-p-rabbitmq). Only the Operator, the SB, and the Worker can access this instance of p-rabbitmq.
+The Worker listens for messages posted to the p-rabbitmq service instance. The SB posts these messages as described in [Spring Cloud Service Broker > External Dependencies > p-rabbitmq](#sb-dependency-p-rabbitmq). Only the Operator, the SB, and the Worker can access this instance of p-rabbitmq.
 
 **Actuator Endpoints**
 
@@ -210,9 +248,17 @@ This user is a Space Developer in the "p-spring-cloud-services" org, "instances"
 
 ### <a id="config-server-service-instances"></a>Config Server Service Instances
 
-#### <a id="app-config-server"></a>app config-server-{guid}
+#### <a id="app-config-server"></a>Config Server
 
-The config-server application is a backing application for Config Server service instances. The GUID in the application name is the service instance ID. This application is responsible for handling requests for configuration values from bound applications.
+The Config Server CF Application is a backing application for a Config Server service instance. This application is responsible for handling requests for configuration values from bound applications.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>config-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
+</dl>
 
 ##### Entry Points
 
@@ -244,7 +290,7 @@ To provide access to bound applications, each SB bind request creates the follow
 <dd><strong>Grant Type</strong>: Client Credentials</dd>
 <dd><strong>Scopes</strong>: <code>uaa.none</code></dd>
 <dd><strong>Authorities</strong>: <code>p-config-server-[guid].read</code></dd>
-<dd><strong>Token expiry</strong>: default (12 hours)</dd>
+<dd><strong>Token expiry</strong>: 30 seconds</dd>
 </dl>
 
 The client ID and client secret for this client are provided to the bound application via the binding credentials in the ```VCAP_SERVICES``` environment variable. Only a Space Developer in the space that contains the bound application would have access to this.
@@ -283,46 +329,97 @@ The ```uaa.resource``` authority allows the config-server application to access 
 
 ### <a id="service-registry-service-instances"></a>Service Registry Service Instances
 
-#### <a id="app-eureka"></a>app eureka-{guid}
+#### <a id="app-eureka"></a>Eureka
 
-The Eureka application is a backing application for Service Registry service instances. The GUID in the application name is the service instance ID. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Registry.
+The Eureka CF Application is a backing application for Service Registry service instances. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Service Registry.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>eureka-[guid](-node[n])</code>, where <code>[guid]</code> is the service instance ID. When running in HA mode, <code>(-node[n])</code> uniquely identifies the application node.</dd>
+</dl>
+
+##### Roles
+
+Clients are categorized into three roles, and the authorization model is designed around these three roles.
+
+**Node**
+
+When a Service Registry is deployed in High Availability mode, the Node role represents other Eureka servers that are part of the same service instance as this server.
+
+For an incoming request to be identified as coming from a Node, the request must contain a token with the following claims:
+
+* ```iss```: must be the same issuer as this server
+* ```sub```: must be the same ```client_id``` as this server
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```, where ```[guid]``` is the service instance ID of this server
+
+**Peer**
+
+When a Service Registry is configured for [peer replication](http://docs.pivotal.io/spring-cloud-services/service-registry/creating-an-instance.html#peer-replication-across-pcf-deployments) with other service instances, the Peer role represents one of the Eureka servers of a configured peer service instance.
+
+For an incoming request to be identified as coming from a Peer, the request must contain a token with the following claims:
+
+* ```iss```: must be the issuer as reported by the peer's ```/info``` endpoint
+* ```sub```: must be the hostname portion of the configured peer's FQDN
+* ```scope```: must equal ```p-service-registry-[peer-guid].read```, ```p-service-registry-[peer-guid].write```, where ```[peer-guid]``` is the GUID contained in the peer's hostname
+
+<a id="service-registry-roles-bound-application"></a>**Bound Application**
+
+A Bound Application is a CF Application bound to this service instance. It does not represent a CF Application bound to a Peer service instance, as a Bound Application is only authorized to communicate with the service instance to which it is bound.
+
+For an incoming request to be identified as coming from a Bound Application, the request must contain a token with the following claims:
+
+* ```iss```: must be the same issuer as this server
+* ```sub```: must start with ```p-service-registry```
+* ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```, where ```[guid]``` is the service instance ID of this server
 
 ##### Entry Points
 
 **Eureka REST endpoints**
 
-These entry points are defined by [Netflix Eureka](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). Instead of enumerating every endpoint, we will explain the differences in securing the HTTP verbs.
+*GET /info*
 
-*GET*
+This endpoint returns basic information about the server's configuration as part of the handshake process before a Peer can replicate state with the service instance. Authentication is not required to access this endpoint. The endpoint returns the URIs of the service instance's configured peers, the URI of the service instance's token issuer, the service instance's node count, and the service instance's version.
 
-All GET endpoints must be authenticated with an OAuth 2 Bearer token issued by the Spring Cloud Services Identity Zone. The following claims are checked:
+*POST /eureka/peerreplication/batch/*
 
-* ```aud```: must equal ```p-service-registry-[guid]```
-* ```iss```: must equal ```https://p-spring-cloud-services.uaa.domain.com/oauth/token```
-* ```scope```: must equal ```p-service-registry-[guid].read```
+This endpoint receives batches of replicated requests from other Eureka servers. Only requests from Nodes and Peers are accepted.
 
-The GUID in the ```aud``` and ```scope``` values must match the ```SERVICE_INSTANCE_ID``` environment variable that is set in the Eureka application at provision time.
+*GET|POST|PUT|DELETE /eureka/\*\* (all other endpoints)*
 
-*POST|PUT|DELETE*
+These remainder of the REST endpoints can be found in the [Netflix Eureka documentation](https://github.com/Netflix/eureka/wiki/Eureka-REST-operations). These endpoints can only be accessed by Nodes or Bound Applications.
 
-All POST, PUT, and DELETE endpoints must be authenticated with an OAuth 2 Bearer token issued by the Spring Cloud Services Identity Zone. The following claims are checked:
+**Record Level Access Control**
 
-* ```aud```: must equal ```p-service-registry-[guid]```
-* ```iss```: must equal ```https://p-spring-cloud-services.uaa.domain.com/oauth/token```
-* ```scope```: ```must equal p-service-registry-[guid].write```
+In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, Spring Cloud Services enforces restrictions on the registration of Virtual Hostnames within a Eureka cluster (i.e. a service instance and its configured peers, if any).
 
-The GUID in the ```aud``` and ```scope``` values must match the ```SERVICE_INSTANCE_ID``` environment variable that is set in the Eureka application at provision time.
+*Instance Record Ownership*
 
-*Record Level Access Control*
+The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server has been modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the [Bound Application's token](#service-registry-roles-bound-application). This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
 
-In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Application can only be created or modified by a single CF Application. Before continuing, we should define the following Eureka domain objects:
+*Virtual Hostname Ownership*
 
-* <strong>Application</strong>: This is identified by appID. CF Applications that register with Eureka will use their ```spring.application.name``` for this value. When looking up a service, CF Applications will look up Instances via their appID.
-* <strong>Instance</strong>: Applications have one or more Instances. CF applications that register with Eureka are actually registering themselves as Instances of an Application. An Application does not exist without Instances; in other words, an Application exists only because an Instance refers to one by appID.
+The Eureka server enforces the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure that CF Applications in other spaces cannot register and draw traffic away from a given application, as a form of [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCF installations can be used for failover, in case all instances with a given Virtual Hostname in a particular PCF are down. 
 
-To ensure that a Eureka Application can only be registered by a single CF Application, the Eureka server was modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the  OAuth 2 Bearer token. This value is saved in the Instance metadata under the key ```registrant_principal```. When an Instance is registered (or for any other modification request), if there are other Instances for the same Application, the ```registrant_principal``` values of the other Instances are checked and must equal the principal of the incoming request; otherwise, the request is rejected.
+To enforce Virtual Hostname ownership, the URI of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF Application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` does not match the server's, the registration request is rejected.
 
-This scheme could allow multiple CF Applications to register themselves under the same Application ID, if at first there are no other Instances for that Application. In this case, each registration request would be received and handled as if they are the first Instances for that Application. Due to how the ```registrant_principal``` values are looked up (no locks are placed for performance reasons), this race condition is possible. However, once this state is saved, resulting in multiple ```registrant_principal``` values for the same Application, any further modification requests made for that application will fail, regardless of who makes the request. The Eureka server will also log this specific error. Because no state modification requests, including heartbeat requests, would be accepted, these Instances would eventually expire.
+The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to the creation of a route in a space, where the route is not yet bound to a CF Application. If one service instance were to register Instance Records with a particular Virtual Hostname and then all such Instance Records became de-registered (through either planned or unplanned outages), another CF Application in a different space could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original CF Application(s) from registering again when they came back online.
+
+*Virtual Hostname Ownership Example*
+
+PCF West is a PCF installation with Service Registry service instances in different organizations. These service instances are configured for peer replication with one another. One space hosts a CF Application ```accounting``` and the other hosts a CF Application ```inventory```. They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
+
+<%= image_tag("./images/security-overview/app-id-ownership-before.png") %>
+
+Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Virtual Hostname stays the same. Then ```accounting-green``` is pushed, bound to the Service Registry service instance, and started. On startup it successully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
+
+<%= image_tag("./images/security-overview/app-id-ownership-after.png") %>
+
+A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF installation. 
+
+PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostnames ```accounting``` or ```inventory```.
 
 *OAuth 2 Clients for Bound Applications*
 
@@ -334,7 +431,7 @@ To provide access to the Eureka REST API for bound applications, each SB bind re
 <dd><strong>Grant Type</strong>: Client Credentials</dd>
 <dd><strong>Scopes</strong>: <code>uaa.none</code></dd>
 <dd><strong>Authorities</strong>: <code>p-service-registry-[guid].read</code>, <code>p-service-registry-[guid].write</code></dd>
-<dd><strong>Token expiry</strong>: default (12 hours)</dd>
+<dd><strong>Token expiry</strong>: 30 seconds</dd>
 </dl>
 
 The client ID and client secret for this client is provided to the bound application via the binding credentials in the ```VCAP_SERVICES``` environment variable. Only a Space Developer in the space that contains the bound application would have access to this.
@@ -378,17 +475,25 @@ This client is used for Dashboard SSO with UAA. The scopes allow the Eureka appl
 <dd><strong>Identity Zone</strong>: Spring Cloud Services</dd>
 <dd><strong>Grant Type</strong>: Client Credentials</dd>
 <dd><strong>Scopes</strong>: <code>uaa.none</code></dd>
-<dd><strong>Authorities</strong>: <code>uaa.resource</code></dd>
+<dd><strong>Authorities</strong>: <code>p-service-registry-[guid].read</code>, <code>p-service-registry-[guid].write</code>, <code>uaa.resource</code></dd>
 <dd><strong>Token expiry</strong>: default (12 hours)</dd>
 </dl>
 
-The ```uaa.resource``` authority allows the Eureka application to access the token verification endpoints on UAA. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Eureka application via environment variables set at provision time. The credentials are the same as the [corresponding client](#service-registry-oauth-client-uaa) in the UAA Identity Zone.
+The ```uaa.resource``` authority allows the Eureka application to access the token verification endpoints on UAA. The other authorities allow it to access other members of the cluster. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Eureka application via environment variables set at provision time. The credentials are the same as the [corresponding client](#service-registry-oauth-client-uaa) in the UAA Identity Zone.
 
 ### <a id="circuit-breaker-dashboard-service-instances"></a>Circuit Breaker Dashboard Service Instances
 
-#### <a id="app-hystrix"></a>app hystrix-{guid}
+#### <a id="app-hystrix"></a>Hystrix
 
-The Hystrix application is one of the two backing applications for Circuit Breaker Dashboard service instances. The GUID in the application name is the service instance ID. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
+The Hystrix application is one of two backing applications for a Circuit Breaker Dashboard service instance. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>hystrix-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
+</dl>
 
 ##### Entry Points
 
@@ -402,7 +507,7 @@ Actuator endpoints require the same [Actuator SSO](#sb-entry-point-actuator-endp
 
 ##### External Dependencies
 
-**The Turbine App**
+**Turbine**
 
 The Hystrix Dashboard UI uses an EventSource in the browser to listen to [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) emitted by the Turbine application. Because the Turbine application's origin differs from the Hystrix application, and EventSources do not support CORS, the Hystrix application must handle the EventSource request and proxy this request to the Turbine application.
 
@@ -430,9 +535,17 @@ The Hystrix application communicates to the CC via HTTPS to perform permission c
 
 This client is used for SSO with UAA. The scopes allow the Hystrix application to access the Cloud Controller API on the user's behalf, and are auto-approved. The ```uaa.resource``` authority allows the Hystrix application to access the token verification endpoints on UAA. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Hystrix application via environment variables set at provision time.
 
-#### <a id="app-turbine"></a>app turbine-{guid}
+#### <a id="app-turbine"></a>Turbine
 
-The Turbine application is the other backing application for Circuit Breaker Dashboard service instances. The GUID in the application name is the service instance ID. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
+The Turbine application is the other backing application for a Circuit Breaker Dashboard service instance. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
+
+#####Deployment Details#####
+
+<dl>
+<dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
+<dd><strong>Space</strong>: <code>instances</code></dd>
+<dd><strong>CF Application Name</strong>: <code>turbine-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
+</dl>
 
 ##### Entry Points
 
