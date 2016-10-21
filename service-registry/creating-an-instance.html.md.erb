@@ -103,7 +103,7 @@ You can configure a Service Registry service instance to replicate service regis
 A Service Registry peer can be expressed as shown in the following JSON:
 
 ```
-'{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
+'{ "peers": [ {"uri": "https://eureka-e280160b-d3e3-41ad-93a6-479f9b298ca6.wise2.com"} ] }'
 ```
 
 Peer URIs must use the HTTPS URI scheme (as `https://`) and must follow the format `https://eureka-GUID.APPLICATION_DOMAIN.TLD`, where `GUID` is the GUID assigned to a Service Registry service instance and `APPLICATION_DOMAIN.TLD` is the application domain of the PCF deployment where that Service Registry service instance is running.
@@ -111,7 +111,7 @@ Peer URIs must use the HTTPS URI scheme (as `https://`) and must follow the form
 Spring Cloud Services will by default validate the SSL certificate on each peer. You can disable this validation for a given peer by setting the `skipSslValidation` parameter to `true` for that peer, as shown in the following JSON:
 
 ```
-'{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
+'{ "peers": [ {"uri": "https://eureka-41561ac7-b6a6-4dc2-8a34-c1f94e82c83d.wise2.com", "skipSslValidation": true} ] }'
 ```
 
 <p class='note'><strong>Note</strong>: If you disable certificate validation for a Service Registry service instance's peer, you may need to set the <code>TRUST_CERTS</code> environment variable on applications bound to that Service Registry service instance or to the peer. See the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#peers-with-self-signed-certificates">Service Registry Peers with Self-Signed Certificates</a> section of the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic for more information.</p>
@@ -126,13 +126,13 @@ The parameters used to configure a peer for the Service Registry are listed belo
 To create a Service Registry service instance that replicates a registry with a peer in another PCF deployment, allowing for validation of the peer's SSL certificate, run:
 
 <pre class="terminal">
-$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com"} ] }'
+$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-e280160b-d3e3-41ad-93a6-479f9b298ca6.wise2.com"} ] }'
 </pre>
 
 To create a Service Registry service instance that replicates a registry with a peer in another PCF deployment, skipping validation of the peer's SSL certificate, run:
 
 <pre class="terminal">
-$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-c9b8c.wise2.com", "skipSslValidation": true} ] }'
+$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-e280160b-d3e3-41ad-93a6-479f9b298ca6.wise2.com", "skipSslValidation": true} ] }'
 </pre>
 
 <p class='note'><strong>Important</strong>: If you provide a peer URI which does not correspond to an available Service Registry service instance (e.g. if there is a typo in the peer URI) or if you do not disable SSL certificate validation for a peer and the associated SSL certificate cannot be verified, the <code>cf create-service</code> command may run successfully and the service instance status may be set to <code>create succeeded</code>, but the peer will not be used by the Service Registry service instance. In such a case, an error will appear on the Service Registry dashboard. See the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html#error-conditions">Error Conditions</a> section of the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> topic for more information.</p>
@@ -144,7 +144,7 @@ You can configure a Service Registry service instance to replicate service regis
 A Service Registry peer can be expressed as shown in the following JSON:
 
 ```
-'{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
+'{ "peers": [ {"uri": "https://eureka-41561ac7-b6a6-4dc2-8a34-c1f94e82c83d.wise.com"} ] }'
 ```
 
 Peer URIs must use the HTTPS URI scheme (as `https://`) and must follow the format `https://eureka-GUID.APPLICATION_DOMAIN.TLD`, where `GUID` is the GUID assigned to a Service Registry service instance and `APPLICATION_DOMAIN.TLD` is the application domain of the PCF deployment where that Service Registry service instance is running.
@@ -152,7 +152,7 @@ Peer URIs must use the HTTPS URI scheme (as `https://`) and must follow the form
 To create a Service Registry service instance that replicates a registry with a peer in another PCF organization, run:
 
 <pre class="terminal">
-$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-beed72e2.wise.com"} ] }'
+$ cf create-service p-service-registry standard service-registry -c '{ "peers": [ {"uri": "https://eureka-41561ac7-b6a6-4dc2-8a34-c1f94e82c83d.wise.com"} ] }'
 </pre>
 
 <p class='note'><strong>Important</strong>: If you provide a peer URI which does not correspond to an available Service Registry service instance (e.g. if there is a typo in the peer URI) or if you do not disable SSL certificate validation for a peer and the associated SSL certificate cannot be verified, the <code>cf create-service</code> command may run successfully and the service instance status may be set to <code>create succeeded</code>, but the peer will not be used by the Service Registry service instance. In such a case, an error will appear on the Service Registry dashboard. See the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html#error-conditions">Error Conditions</a> section of the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> topic for more information.</p>
