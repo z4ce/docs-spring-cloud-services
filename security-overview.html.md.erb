@@ -395,11 +395,11 @@ These remainder of the REST endpoints can be found in the [Netflix Eureka docume
 
 In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, Spring Cloud Services enforces restrictions on the registration of Virtual Hostnames within a Eureka cluster (i.e. a service instance and its configured peers, if any).
 
-*Instance Record Ownership*
+<a id="service-registry-instance-record-ownership"></a>*Instance Record Ownership*
 
 The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server has been modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the [Bound Application's token](#service-registry-roles-bound-application). This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
 
-*Virtual Hostname Ownership*
+<a id="service-registry-virtual-hostname-ownership"></a>*Virtual Hostname Ownership*
 
 The Eureka server enforces the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure that CF Applications in other spaces cannot register and draw traffic away from a given application, as a form of [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCF installations can be used for failover, in case all instances with a given Virtual Hostname in a particular PCF are down. 
 
