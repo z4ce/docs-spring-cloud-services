@@ -16,6 +16,20 @@ owner: Spring Cloud Services
 
 See below for information about problems related to your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) platform configuration or Spring Cloud Services or other product installation.
 
+## <a id="service-registry-authentication-failed"></a>Service Registry: "Authentication Failed: Could not obtain access token"
+
+If you encounter a message similar to the following when attempting to access a Service Registry dashboard:
+
+<%= image_tag("./images/sr-authentication-failed.png") %>
+
+with the following text:
+
+> **401 (Unauthorized)**
+
+> Authentication Failed: Could not obtain access token
+
+If your PCF deployment is using a self-signed certificate, ensure that it includes all of the domains listed in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. (See the [Providing a Certificate for your SSL Termination Point](/pivotalcf/1-8/opsguide/security_config.html) topic in the [Pivotal Cloud Foundry documentation](/pivotalcf/) for more information about configuring the certificate.) If you update the certificate, you will need to either restart the service instance's backing application(s) or recreate the service instance, or you may continue to see this message and be unable to access the Service Registry dashboard.
+
 ## <a id="no-san-matching"></a>"No subject alternative DNS name matching p-spring-cloud-services.uaa.example.com found"
 
 If you encounter an exception message similar to the following:
