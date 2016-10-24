@@ -28,7 +28,7 @@ with the following text:
 
 > Authentication Failed: Could not obtain access token
 
-If your PCF deployment is using a self-signed certificate, ensure that it includes all of the domains listed in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. (See the [Providing a Certificate for your SSL Termination Point](/pivotalcf/1-8/opsguide/security_config.html) topic in the [Pivotal Cloud Foundry documentation](/pivotalcf/) for more information about configuring the certificate.) If you update the certificate, you will need to either restart the service instance's backing application(s) or recreate the service instance, or you may continue to see this message and be unable to access the Service Registry dashboard.
+If your PCF deployment is using a self-signed certificate, ensure that it includes all of the domains listed in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. (See the [Providing a Certificate for your SSL Termination Point](http://docs.pivotal.io/pivotalcf/opsguide/security_config.html) topic in the [Pivotal Cloud Foundry documentation](/pivotalcf/) for more information about configuring the certificate.) If you update the certificate, you will need to either restart the service instance's backing application(s) or recreate the service instance, or you may continue to see this message and be unable to access the Service Registry dashboard.
 
 ## <a id="no-san-matching"></a>"No subject alternative DNS name matching p-spring-cloud-services.uaa.example.com found"
 
