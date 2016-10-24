@@ -7,7 +7,124 @@ owner: Spring Cloud Services
 
 _Refer to the sample applications in the <a href="https://github.com/spring-cloud-samples/greeting/tree/1.2">"greeting" repository</a> to follow along with the code in this topic._
 
-To register your application with a Service Registry service instance or use it to consume a service that is registered with a Service Registry service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#service-registry">Service Registry</a> as well.
+## <a id="add-application-dependencies"></a>Add Application Dependencies for Service Registry
+
+<p class='note'><strong>Important</strong>: Ensure that the ordering of the Maven BOM dependencies listed below is preserved in your application's build file. Dependency resolution is affected in both Maven and Gradle by the order in which dependencies are declared.</p>
+
+To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency.
+
+If using Maven, include in `pom.xml`:
+
+```xml
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.3.5.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.pivotal.spring.cloud</groupId>
+            <artifactId>spring-cloud-services-dependencies</artifactId>
+            <version>1.2.0.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Brixton.SR6</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+If not using the `spring-boot-starter-parent`, include in the `<dependencyManagement>` block of `pom.xml`:
+
+```
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>1.3.5.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+        <!-- ... -->
+
+    </dependencies>
+  </dependencyManagement>
+```
+
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>.
+
+Include in `build.gradle`:
+
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "spring-boot"
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR6"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.2.0.RELEASE"
+    }
+}
+
+repositories {
+    maven {
+        url "https://repo.spring.io/plugins-release"
+    }
+}
+```
+
+If not using the Spring Boot Gradle plugin, include in the `dependencyManagement` block of `build.gradle`:
+
+```groovy
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:1.3.5.RELEASE"
+    }
+}
+```
+
+To register your application with a Service Registry service instance or use it to consume a service that is registered with a Service Registry service instance, you must add the `spring-cloud-services-starter-service-registry` dependency.
+
+If using Maven, include in `pom.xml`:
+
+```
+  <dependencies>
+    <dependency>
+      <groupId>io.pivotal.spring.cloud</groupId>
+      <artifactId>spring-cloud-services-starter-service-registry</artifactId>
+    </dependency>
+  </dependencies>
+```
+
+If using Gradle, include in `build.gradle`:
+
+```
+dependencies {
+    compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
+}
+```
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
@@ -57,11 +174,7 @@ $ cf restage message-generation
 
 ## <a id="register-a-service"></a>Register a Service
 
-Follow the below instructions to register an application with a Service Registry service instance.
-
-### <a id="identify-the-application"></a>Identify the Application
-
-Your service application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+To register with a Service Registry service instance, your application must <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -69,19 +182,6 @@ Your service application must <a href="https://github.com/spring-cloud-samples/g
 @RestController
 public class MessageGenerationApplication {
     //...
-```
-
-The `MessageGenerationApplication` class also has <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L24-L28">a `/greeting` endpoint</a> which gives a JSON `Greeting` object.
-
-```java
-    @RequestMapping("/greeting")
-    public Greeting greeting(@RequestParam(value="salutation",
-                              defaultValue="Hello") String salutation,
-                             @RequestParam(value="name",
-                              defaultValue="Bob") String name) {
-        //...
-        return new Greeting(salutation, name);
-    }
 ```
 
 The application's Eureka instance name (the name by which it will be registered in Eureka) will be derived from the value of the ```spring.application.name``` property on the application. If you do not provide a value for this property, the application's Eureka instance name will be derived from its Cloud Foundry application name, as set in `manifest.yml`:
@@ -104,72 +204,6 @@ spring:
 ```
 
 <p class='note'><strong>Note</strong>: If the application name contains characters which are invalid in a hostname, the application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character (for example, given an application name of "message_generation", the virtual hostname used to register the application with the Service Registry service instance will be <code>message-generation</code>). See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-virtual-hostname-configuration">Eureka Virtual Hostname Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
-
-### <a id="register-the-application"></a>Register the Application
-
-Optionally, you may also specify the registration method that you wish to use for the application, using the `spring.cloud.services.registrationMethod` property. It can take either of two values:
-
-* ```route```: The application will be registered using its Cloud Foundry route.
-* ```direct```: The application will be registered using its host IP and port.
-
-The default value for the ```registrationMethod``` property is ```route```. You may also provide configuration using properties under ```eureka.instance```, such as ```eureka.instance.hostname``` and ```eureka.instance.nonSecurePort``` (see the [Spring Cloud Netflix documentation](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html#_service_discovery_eureka_clients)); if you do, those properties will override the value of ```registrationMethod```.
-
-See below for information about the ```route``` and ```direct``` registration methods.
-
-#### Route Registration
-
-An application deployed to PCF can have one or more URLs, or "routes," bound to it. If you specify the ```route``` registration method, the application will be registered with the Service Registry instance using the first of these routes from the ```uris``` list in the application's ```VCAP_APPLICATION``` environment variable.
-
-```json
-{
- "VCAP_APPLICATION": {
-
-  "name": "message-generation",
-  "space_id": "0fa9f93a-d1fa-43c8-b11b-f95b7e36fd32",
-  "space_name": "development",
-  "uris": [
-   "message-generation.apps.wise.com"
-  ],
-```
-
-Requests from client applications to this registered application go through the Pivotal Cloud Foundry Router, and the Router provides load balancing between the clients and registered applications.
-
-<!---
-```java
-// TODO: diagram showing Router use?
-```
--->
-
-This registration method is compatible with all deployments of PCF.
-
-#### Direct Registration
-
-<p class='note'><strong>Important</strong>: On PCF 1.7, network communication between containers in the same cell is not allowed. This makes direct registration unreliable, since applications registering to the service registry and client applications discovering the registered applications may be deployed to the same cell. Use of the direct registration method is therefore not recommended or supported on PCF 1.7.</p>
-
-An application running on Pivotal Cloud Foundry is provided with an externally-accessible IP address and port, which are made available in two environment variables: ```CF_INSTANCE_IP``` and ```CF_INSTANCE_PORT```. If you specify the ```direct``` registration method, the application will be registered with the Service Registry instance using this IP address and port.
-
-Requests from client applications to this registered application will not go through the Pivotal Cloud Foundry Router. You can provide client-side load balancing using [Spring Cloud and Netflix Ribbon](http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#spring-cloud-ribbon).
-
-To enable direct registration, you must configure the PCF environment to allow traffic across containers or cells. In PCF 1.6, visit the Pivotal Cloud Foundry&reg; Operations Manager, click the **Pivotal Elastic Runtime** tile, and in the **Security Config** tab, ensure that the "Enable cross-container traffic" option is enabled. In PCF 1.7, [application security groups](http://docs.cloudfoundry.org/adminguide/app-sec-groups.html) must be configured to allow direct communication between applications across cells. Direct cross-cell communication is allowed by the default security groups created during Elastic Runtime installation.
-
-#### Specify a Registration Method
-
-If you do wish to specify a registration method, set the ```spring.cloud.services.registrationMethod``` property. In <a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/message-generation/src/main/resources/application.yml#L1-L6">`application.yml`</a>:
-
-```yml
-spring:
-  application:
-    name: message-generation
-  cloud:
-    services:
-      registrationMethod: route
-```
-
-As mentioned above, the ```route``` method is the default; it will be used if you do not specify ```registrationMethod```.
-
-With the ```spring.application.name``` property set, you can now bind the application to a Service Registry instance. Once it has been bound and restaged and has successfully registered with the Registry, you will see it listed in the Service Registry dashboard (see the <a href="/spring-cloud-services/service-registry/using-the-dashboard.html">Using the Dashboard</a> topic).
-
-<%= image_tag("service-registry/registered_service.png") %>
 
 ## <a id="consume-a-service"></a>Consume a Service
 
@@ -221,35 +255,6 @@ The Message Generation application is registered with the Service Registry insta
     }
 ```
 
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/greeter/src/main/java/greeter/GreeterApplication.java#L52-L65">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
-
-```java
-    private static class Greeting {
-
-        private String message;
-
-        @JsonCreator
-        public Greeting(@JsonProperty("message") String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return this.message;
-        }
-
-    }
-```
-
-The Greeter application now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
-
-<pre class="terminal">
-$ curl http://greeter.apps.wise.com/hello
-Hello, Bob!
-
-$ curl http://greeter.apps.wise.com/hello?name=John
-Hello, John!
-</pre>
-
 ### <a id="discover-and-consume-a-service-using-feign"></a>Discover and Consume a Service Using Feign
 
 If you wish to use [Feign](https://github.com/Netflix/feign) to consume a service that is registered with a Service Registry instance, your application must declare ```spring-cloud-starter-feign``` as a dependency. In order to have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation.
@@ -281,45 +286,6 @@ The Message Generation application is registered with the Service Registry insta
       Greeting greeting(@RequestParam("name") String name, @RequestParam("salutation") String salutation);
     }
 ```
-
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/feign-greeter/src/main/java/greeter/GreeterApplication.java#L37-L50">Greeter's `Greeting` class</a> uses Jackson's <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonCreator.html">`@JsonCreator`</a> and <a href="http://fasterxml.github.io/jackson-annotations/javadoc/2.1.0/com/fasterxml/jackson/annotation/JsonProperty.html">`@JsonProperty`</a> to read in the JSON response from Message Generation.
-
-```java
-    private static class Greeting {
-
-        private String message;
-
-        @JsonCreator
-        public Greeting(@JsonProperty("message") String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return this.message;
-        }
-
-    }
-```
-
-<a href="https://github.com/spring-cloud-samples/greeting/blob/1.2/feign-greeter/src/main/java/greeter/GreeterApplication.java#L27-L31">Its ```greeting()``` method</a> is mapped to the ```/hello``` endpoint and calls the ```greeting()``` method on ```MessageGenerationClient``` to get a greeting.
-
-```java
-    @RequestMapping(value = "/hello", method = GET)
-    public String greeting(@RequestParam(value="salutation", defaultValue="Hello") String salutation, @RequestParam(value="name", defaultValue="Bob") String name) {
-      Greeting greeting =  messageGeneration.greeting(name, salutation);
-      return greeting.getMessage();
-    }
-```
-
-The Greeter application now responds with a customizable ```Greeting``` when you access its ```/hello``` endpoint.
-
-<pre class="terminal">
-$ curl http://greeter.apps.wise.com/hello
-Hello, Bob!
-
-$ curl http://greeter.apps.wise.com/hello?name=John
-Hello, John!
-</pre>
 
 ## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
 
