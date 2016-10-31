@@ -1,0 +1,50 @@
+---
+title: Background Information
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+The Spring Cloud Services Service Registry is based on the Spring Cloud Netflix Eureka project. See below for information about the open-source Spring Cloud project.
+
+## <a id="the-spring-cloud-oss-project"></a>The Spring Cloud OSS Project
+
+The Spring Cloud Netflix Eureka project, like the rest of Spring Cloud, builds on Spring Boot. It provides a wrapper around Eureka, Netflix’s open-sourced service registry.
+
+<%= image_tag("service-registry/Netflix-Eureka-d1.png") %>
+
+The servers in a Eureka cluster replicate a registry of application instances. Registered applications use the Eureka client to fetch connection and status information about other registered applications, and use this information to connect to instances of other applications.
+
+<%= image_tag("service-registry/Netflix-Eureka-d2.png") %>
+
+A client application (here “Producer”) instance registers with a *Eureka server* and provides metadata, including host, port, and instance ID. The Producer instance then sends a “heartbeat” message to the Eureka server every 30 seconds. If an application instance fails to send several consecutive heartbeats, the Eureka server removes that instance from its registry.
+
+<%= image_tag("service-registry/Netflix-Eureka-d3.png") %>
+
+Each client application (here Consumer) instance also uses the *Eureka client* to fetch the registry from the Eureka server once every 30 seconds (by default). The Consumer instance caches the registry and uses this cache to locate instances of other applications. The Eureka client uses a round-robin load balancing strategy to select a specific instance for each request.
+
+### <a id="spring-cloud-eureka-server"></a>Spring Cloud Eureka Server
+
+Spring Cloud Netflix Eureka provides an embeddable Eureka server, which can be enabled in a Spring Boot application using the `@EnableEurekaServer` annotation. When the Spring Cloud Eureka Server starter (`spring-cloud-starter-eureka-server`) dependency is included, the application becomes a Spring Cloud Netflix Eureka server.
+
+In a Spring Cloud Netflix Eureka server application, a Eureka server configuration can be set using the `eureka.instance` properties in `application.yml` (or `application.properties`).
+
+```yml
+eureka:
+  instance:
+    hostname: localhost
+    nonSecurePort: 80
+```
+
+### <a id="spring-cloud-eureka-client"></a>Spring Cloud Eureka Client
+
+The Spring Cloud Commons module includes the `DiscoveryClient` abstraction and `@EnableDiscoveryClient` annotation for applications to use in discovering services, and Spring Cloud Netflix Eureka provides a `DiscoveryClient` implementation for Eureka. When the Spring Cloud Eureka starter (`spring-cloud-starter-eureka`) dependency is included, the application becomes a client of a Spring Cloud Netflix Eureka server.
+
+In a Spring Cloud Netflix Eureka client application, Eureka client configuration can be set using the `eureka.client` properties in `application.yml` (or `application.properties`).
+
+```yml
+eureka:
+  client:
+    register-with-eureka: true
+    leaseRenewalIntervalInSeconds=10
+```
