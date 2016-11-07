@@ -1,6 +1,13 @@
 <p class='note'><strong>Important</strong>: Ensure that the ordering of the Maven BOM dependencies listed below is preserved in your application's build file. Dependency resolution is affected in both Maven and Gradle by the order in which dependencies are declared.</p>
 
-To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency.
+To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency. See below for compatible Spring Boot and Spring Cloud versions to use with a given Spring Cloud Services release.
+
+| Spring Cloud Services | Spring Boot  | Spring Cloud |
+|-----------------------|--------------|--------------|
+| 1.0.x                 | 1.2.x        | Angel.x      |
+| 1.1.x                 | 1.3.x--1.4.x | Brixton.x    |
+| 1.2.x                 | 1.3.x--1.4.x | Brixton.x    |
+| 1.3.x                 | 1.3.x--1.4.x | Camden.x     |
 
 If using Maven, include in `pom.xml`:
 
@@ -8,7 +15,7 @@ If using Maven, include in `pom.xml`:
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.3.5.RELEASE</version>
+    <version>1.4.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -17,14 +24,14 @@ If using Maven, include in `pom.xml`:
         <dependency>
             <groupId>io.pivotal.spring.cloud</groupId>
             <artifactId>spring-cloud-services-dependencies</artifactId>
-            <version>1.2.0.RELEASE</version>
+            <version>1.3.0.RELEASE</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
-            <version>Brixton.SR6</version>
+            <version>Camden.SR2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -40,7 +47,7 @@ If not using the `spring-boot-starter-parent`, include in the `<dependencyManage
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
-            <version>1.3.5.RELEASE</version>
+            <version>1.4.1.RELEASE</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -61,8 +68,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
     }
 }
 
@@ -72,8 +79,8 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR6"
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.2.0.RELEASE"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR2"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.3.0.RELEASE"
     }
 }
 
@@ -89,7 +96,7 @@ If not using the Spring Boot Gradle plugin, include in the `dependencyManagement
 ```groovy
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:1.3.5.RELEASE"
+        mavenBom "org.springframework.boot:spring-boot-dependencies:1.4.1.RELEASE"
     }
 }
 ```
