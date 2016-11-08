@@ -9,22 +9,22 @@ Please ensure that your [Pivotal Cloud Foundry](https://network.pivotal.io/produ
 
 ## <a id="platform-and-product-requirements"></a>Platform and Product Requirements
 
-Spring Cloud Services requires version 2.5 or later of the Java buildpack. You can use the Cloud Foundry Command Line Interface tool (cf CLI) to see the version of the Java buildpack that is currently installed.
+Spring Cloud Services requires version 3.8 or later of the Java buildpack. You can use the Cloud Foundry Command Line Interface tool (cf CLI) to see the version of the Java buildpack that is currently installed.
 
 <pre class="terminal">
 $ cf buildpacks
 Getting buildpacks...
 
 buildpack                position   enabled   locked   filename
-java_buildpack_offline   1          true      false    java-buildpack-offline-v3.5.1.zip
-ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.6.8.zip
-nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.5.2.zip
-go_buildpack             4          true      false    go_buildpack-cached-v1.6.3.zip
+java_buildpack_offline   1          true      false    java-buildpack-offline-v3.8.1.zip
+ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.6.19.zip
+nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.5.15.zip
+go_buildpack             4          true      false    go_buildpack-cached-v1.7.10.zip
 </pre>
 
-If the default Java buildpack is older than version 2.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
+If the default Java buildpack is older than version 3.8, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
 
-If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 2.5 or later, you must specify an alternate buildpack that is at version 2.5 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
+If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 3.8 or later, you must specify an alternate buildpack that is at version 3.8 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
 
 Spring Cloud Services also requires the following Pivotal Cloud Foundry products:
 
