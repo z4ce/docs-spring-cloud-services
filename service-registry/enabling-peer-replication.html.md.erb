@@ -78,7 +78,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 <%= image_tag("service-registry/dashboard-cert-not-verified.png") %>
 
-To enable the Service Registry service instance to replicate a registry with this peer service instance without a secure connection, you can update the configuration for this Service Registry service instance to disable SSL certificate validation for the peer. See the [Peer Replication Across PCF Deployments](/spring-cloud-services/service-registry/updating-an-instance.html#peer-replication-across-pcf-deployments) section of the [Updating an Instance](/spring-cloud-services/service-registry/updating-an-instance.html) topic for more information.
+To enable the Service Registry service instance to replicate a registry with this peer service instance without a secure connection, you can update the configuration for this Service Registry service instance to disable SSL certificate validation for the peer. See the above information on configuring peer replication and the `skipSslValidation` configuration parameter.
 
 <a id="peer-node-count-difference"></a>
 ### Peer Service Instance Node Count Difference
@@ -96,7 +96,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 <%= image_tag("service-registry/dashboard-different-peer-list.png") %>
 
-You can update the configuration for this Service Registry service instance or for the peer instance to give them consistent peer lists. See the [Peer Replication Across PCF Deployments](/spring-cloud-services/service-registry/updating-an-instance.html#peer-replication-across-pcf-deployments) or [Peer Replication Across Orgs or Spaces](/spring-cloud-services/service-registry/updating-an-instance.html##peer-replication-across-orgs-or-spaces) sections of the [Updating an Instance](/spring-cloud-services/service-registry/updating-an-instance.html) topic for more information.
+Update the configuration for this Service Registry service instance or for the peer instance to give them consistent peer lists.
 
 <a id="peer-version-difference"></a>
 ### Peer Service Instance Version Difference
