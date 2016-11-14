@@ -11,6 +11,8 @@ After an upgrade of the Spring Cloud Services product, follow the below steps to
 
 <p class='note'><strong>Important</strong>: After upgrading a Circuit Breaker Dashboard service instance from 1.0.x to 1.1.x, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.</p>
 
+You can obtain the current version of a service instance using either the Service Instances dashboard or the `info` endpoint on a service instance's backing application. See the [The Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) or [Get Service Instance Information](/spring-cloud-services/operator-information.html#get-service-instance-information) sections of the [Operator Information](/spring-cloud-services/operator-information.html) topic for more information.
+
 Run `cf update-service -c '{"upgrade":true}' SERVICE_NAME`, where `SERVICE_NAME` is the name of a service instance:
 
 <pre class="terminal">

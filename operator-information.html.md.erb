@@ -85,6 +85,7 @@ A service instance is assigned a GUID at provision time. Backing applications fo
 * turbine-[GUID]: A [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) Turbine application.
 * **rabbitmq-[GUID]**: A [RabbitMQ for PCF](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance.
 
+<a id="access-service-instance-backing-applications-in-apps-manager"></a>
 #### Access Service Instance Backing Applications in Apps Manager
 
 To view a backing application for a service instance in Pivotal Cloud Foundry&reg; Apps Manager, get the service instance's GUID and look for the corresponding application in the "instances" space.
@@ -137,15 +138,57 @@ Look for the backing application named as described above, with the prefix speci
 
 <%= image_tag("/spring-cloud-services/images/operator-information/instance-apps-apps-manager-space.png") %>
 
-### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
+<a id="get-service-instance-information"></a>
+#### Get Service Instance Information
 
-By default, the SB stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the SB to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
+Each backing application for a service instance has the [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready) `info` endpoint enabled and accessible at `/info`. You can obtain version and other information about a service instance by accessing this endpoint.
 
-In the Installation Dashboard of Ops Manager, click the Spring Cloud Services tile. Navigate to the **Settings** tab.
+Locate a backing application for a service instance as described in the [Access Service Instance Backing Applications in Apps Manager](#access-service-instance-backing-applications-in-apps-manager) section. In Apps Manager, on the page for the backing application, click the **Route** tab and copy the route for the application.
 
-<%= image_tag("/spring-cloud-services/images/operator-information/set-buildpack.png") %>
+<%= image_tag("/spring-cloud-services/images/operator-information/backing-application-route.png") %>
 
-Click the **Spring Cloud Services** tab and enter the name of the desired Java buildpack in the **Buildpack** field. Click **Save**, return to the Installation Dashboard, and apply your changes. The SB will now use the selected buildpack to stage service instance backing applications.
+Append `/info` to the route for the application. In the example above, the resulting URI would be:
+
+```
+https://config-021b3d73-3ffc-4cb8-a105-26f5aaa54dff.wise.com/info
+```
+
+Visit the URI in a browser or request it from another client (e.g. curl at a command line). The response is JSON, as in the following example for a Config Server service instance:
+
+```json
+{
+  "version":"5",
+  "git":{
+    "commit":{
+      "time":1478639430000,
+      "id":"6e139ee"
+    },
+    "branch":"HEAD"
+  }
+}
+```
+
+The response may include additional fields depending on the service type, as in the following example for a Service Registry service instance:
+
+```
+{
+  "issuer": "https://p-spring-cloud-services.uaa.wise.com/oauth/token",
+  "version": "5",
+  "nodeCount": "1",
+  "git": {
+    "commit": {
+      "time": 1478639430000,
+      "id": "6e139ee"
+    },
+    "branch": "HEAD"
+  },
+  "peers": []
+}
+```
+
+In addition to the version of the service instance (`version`), this response includes the OAuth 2 token issuer URI for the service instance (`issuer`), the number of nodes provisioned for the service instance (`nodeCount`), the list of peer service instances, if any (`peers`), and information about the Spring Cloud Services Git repository at build time for the service instance (`git`).
+
+<p class='note'><strong>Note</strong>: Fields such as those for Git repository information are for diagnostic purposes and intended to provide <a href="https://pivotal.io/support">Pivotal Support</a> with information to help in troubleshooting.</p>
 
 ## <a id="uaa-identity-zones-and-clients"></a>UAA Identity Zones and Clients
 
