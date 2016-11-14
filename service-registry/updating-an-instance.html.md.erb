@@ -29,6 +29,8 @@ General parameters accepted for the Service Registry are listed below.
 | <code>count</code>      | The number of nodes to provision | <code>'{"count": 3}'</code>      |
 | <code>upgrade</code>    | Whether to upgrade the instance  | <code>'{"upgrade": true}'</code> |
 
+A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](/spring-cloud-services/service-registry/enabling-peer-replication.html) topic.
+
 To update a service instance and set the count of nodes for running in high-availability mode, run:
 
 <pre class="terminal">
