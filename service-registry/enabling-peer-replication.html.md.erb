@@ -5,7 +5,9 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can configure a Service Registry service instance to replicate service registrations with a Service Registry service instance in another [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) deployment (e.g. a PCF deployment in another datacenter) or in another organization or space within the same PCF deployment. To do so, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](/spring-cloud-services/service-registry/using-the-dashboard.html) topic).
+You can configure a Service Registry service instance to replicate service registrations with a peer Service Registry service instance within a [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) deployment or across PCF deployments. For access to services across PCF deployments (e.g. deployments in separate datacenters), you could configure peer replication between Service Registry service instances in each deployment. You can use the same approach to enable access between services in separate organizations or spaces within a single PCF deployment.
+
+To enable peer replication for a Service Registry service instance, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](/spring-cloud-services/service-registry/using-the-dashboard.html) topic).
 
 A Service Registry peer can be expressed as shown in the following JSON:
 
