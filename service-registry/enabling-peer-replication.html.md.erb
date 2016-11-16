@@ -5,7 +5,12 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can configure a Service Registry service instance to replicate service registrations with a peer Service Registry service instance. Peer replication can work across separate [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) deployments: you can use it to access services registered with a Service Registry service instance in a PCF deployment located in a separate datacenter. Peer replication can also work across PCF organizations and spaces: you can use it to access services registered with a Service Registry service instance in another organization or space within the same PCF deployment.
+You can configure a Service Registry service instance to replicate service registrations with a peer Service Registry service instance. This functionality supports two models:
+
+* **Peer replication across separate [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) deployments:** you can configure peer replication to allow access to services registered with a Service Registry service instance in a PCF deployment located in a separate datacenter.
+* **Peer replication across PCF organizations and spaces:** you can configure peer replication to allow access to services registered with a Service Registry service instance in another organization or space within the same PCF deployment.
+
+For information about the configuration parameters used to enable peer replication for a Service Registry service instance, see the [Configuration Parameters](#configuration-parameters) section.
 
 ## <a id="configuration-parameters"></a>Configuration Parameters
 
