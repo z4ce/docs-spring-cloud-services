@@ -5,7 +5,9 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-You can configure a Service Registry service instance to replicate service registrations with a peer Service Registry service instance within a [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) deployment or across PCF deployments. For access to services across PCF deployments (e.g. deployments in separate datacenters), you could configure peer replication between Service Registry service instances in each deployment. You can use the same approach to enable access between services in separate organizations or spaces within a single PCF deployment.
+You can configure a Service Registry service instance to replicate service registrations with a peer Service Registry service instance. Peer replication can work across separate [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) deployments: you can use it to access services registered with a Service Registry service instance in a PCF deployment located in a separate datacenter. Peer replication can also work across PCF organizations and spaces: you can use it to access services registered with a Service Registry service instance in another organization or space within the same PCF deployment.
+
+## <a id="configuration-parameters"></a>Configuration Parameters
 
 To enable peer replication for a Service Registry service instance, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](/spring-cloud-services/service-registry/using-the-dashboard.html) topic).
 
@@ -57,15 +59,49 @@ $ cf create-service p-service-registry standard service-registry -c '{ "peers": 
 $ cf update-service service-registry -c '{ "peers": [ {"uri": "https://eureka-e280160b-d3e3-41ad-93a6-479f9b298ca6.wise2.com", "skipSslValidation": true} ] }'
 </pre>
 
+For an example of configuring peer replication across two Service Registry service instances, see the [Setting Up Peer Service Instances](#setting-up-peer-service-instances) section.
+
 <p class='note'><strong>Important</strong>: If you provide a peer URI which does not correspond to an available Service Registry service instance (e.g. if there is a typo in the URI) or do not disable SSL certificate validation for a peer whose certificate cannot be verified, the <code>cf create-service</code> or <code>cf update-service</code> command may run successfully and the service instance status may be set to <code>create succeeded</code> or <code>update succeeded</code>, but the peer will not be used by the Service Registry service instance. In such a case, an error will appear on the Service Registry dashboard. See the <a href="#error-conditions">Error Conditions</a> section for more information.</p>
 
-<a id="error-conditions"></a>
-## Error Conditions
+## <a id="setting-up-peer-service-instances"></a>Setting Up Peer Service Instances
+
+If you wish to have two Service Registry service instances replicate a registry, you must configure each to have the other as a peer. If one service instance Service Registry A has a Service Registry B configured as a peer and B has no peers configured, A will share service registrations with B but B will not share registrations with A.
+
+To configure two-way peer replication for two Service Registry service instances, follow the steps below.
+
+1. Create a Service Registry service instance A, without peers.
+
+    ```
+    $ cf create-service p-service-registry standard service-registry
+    ```
+
+1. Visit A's dashboard and copy its server URL.
+
+    <%= image_tag("service-registry/pr-copy-url.png") %>
+
+1. In the other PCF deployment, organization, or space, create a Service Registry service instance B, with A as a peer.
+
+    ```
+    $ cf create-service p-service-registry-2 standard service-registry -c '{ "peers": [ { "uri": "https://eureka-dda7d2ac-8f9f-4d06-b8e3-9ce5b82b930e.wise.com" } ] }'
+    ```
+
+1. Visit B's dashboard and copy its server URL. You will see a warning message on B's dashboard, because B currently has A as a peer and A currently has no peers.
+
+    <%= image_tag("service-registry/pr-copy-peer-url.png") %>
+
+1. Update A, providing B as a peer.
+
+    ```
+    $ cf update-service service-registry -c '{ "peers": [ { "uri": "https://eureka-5b251b82-672f-467b-8171-68e7948e6964.otherwise.com" } ] }'
+    ```
+
+    A and B are now configured to replicate service registrations with each other.
+
+## <a id="error-conditions"></a>Error Conditions
 
 The Service Registry dashboard may show error or warning messages depending on the configuration and status of the service instance's peer configuration. See the below sections for more information.
 
-<a id="peer-not-found"></a>
-### Peer Service Instance Not Found (404)
+### <a id="peer-not-found"></a>Peer Service Instance Not Found (404)
 
 If you have configured a Service Registry service instance with a peer service instance URI that does not correspond to an available Service Registry service instance, you may see the following error message on the dashboard:
 
@@ -73,8 +109,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 Double-check the URI of the peer listed in the error message. This can occur (e.g.) when there is a mistyped URI or when the service instance corresponding to the URI has been deleted.
 
-<a id="peer-cert-not-verified"></a>
-### Peer Service Instance SSL Certificate Not Verified
+### <a id="peer-cert-not-verified"></a>Peer Service Instance SSL Certificate Not Verified
 
 If you have configured a Service Registry service instance with a peer service instance that uses a self-signed SSL certificate and have not disabled certificate validation for the peer service instance, you may see the following error message on the dashboard:
 
@@ -82,8 +117,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 To enable the Service Registry service instance to replicate a registry with this peer service instance without a secure connection, you can update the configuration for this Service Registry service instance to disable SSL certificate validation for the peer. See the above information on configuring peer replication and the `skipSslValidation` configuration parameter.
 
-<a id="peer-node-count-difference"></a>
-### Peer Service Instance Node Count Difference
+### <a id="peer-node-count-difference"></a>Peer Service Instance Node Count Difference
 
 If you have configured a Service Registry service instance with a peer service instance and the two service instances have differing High Availability (HA) node counts, you may see the following error message on the dashboard:
 
@@ -91,8 +125,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 You can update one of the service instances to add or remove nodes so that the two service instances have consistent node counts. See the [Configuration Parameters](/spring-cloud-services/service-registry/updating-an-instance.html#configuration-parameters) section of the [Updating an Instance](/spring-cloud-services/service-registry/updating-an-instance.html) topic for more information.
 
-<a id="peer-list-difference"></a>
-### Peer Service Instance Peer List Difference
+### <a id="peer-list-difference"></a>Peer Service Instance Peer List Difference
 
 If you have configured a Service Registry service instance with a peer service instance and the two service instances have differing lists of peer service instances, you may see the following message on the dashboard:
 
@@ -100,8 +133,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 Update the configuration for this Service Registry service instance or for the peer instance to give them consistent peer lists.
 
-<a id="peer-version-difference"></a>
-### Peer Service Instance Version Difference
+### <a id="peer-version-difference"></a>Peer Service Instance Version Difference
 
 If you have configured a Service Registry service instance with a peer service instance that is at a different version (e.g. that has not been upgraded after an upgrade of the Spring Cloud Services product), you may see the following message on the dashboard:
 
