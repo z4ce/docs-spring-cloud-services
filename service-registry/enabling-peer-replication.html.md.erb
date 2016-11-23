@@ -68,6 +68,21 @@ For an example of configuring peer replication across two Service Registry servi
 
 <p class='note'><strong>Important</strong>: If you provide a peer URI which does not correspond to an available Service Registry service instance (e.g. if there is a typo in the URI) or do not disable SSL certificate validation for a peer whose certificate cannot be verified, the <code>cf create-service</code> or <code>cf update-service</code> command may run successfully and the service instance status may be set to <code>create succeeded</code> or <code>update succeeded</code>, but the peer will not be used by the Service Registry service instance. In such a case, an error will appear on the Service Registry dashboard. See the <a href="#error-conditions">Error Conditions</a> section for more information.</p>
 
+## <a id="configuration-validation"></a>Configuration Validation
+
+A peer service instance URI is expected to meet the following criteria:
+
+* Use the HTTPS URI scheme (begin with `https://`). You cannot create or update a Service Registry service instance with a peer URI which does not use the HTTPS URI scheme.
+* Follow the pattern `https://eureka-GUID.APPLICATION_DOMAIN.TLD`, where `GUID` is the GUID belonging to the peer service instance and `APPLICATION_DOMAIN.TLD` is the application domain of the PCF deployment on which that service instance is hosted. You cannot create or update a Service Registry service instance with a peer URI which does not follow this pattern.
+* Correspond to an available Service Registry service instance. If you create or update a Service Registry service instance with a peer URI which does not correspond to another available service instance, you will see an error message on the Service Registry dashboard.
+
+A peer service instance is expected to meet the following criteria:
+
+* Have the same High Availability (HA) node count as its peer service instance. If you create or update a Service Registry service instance with a peer which has a different HA node count, you will see an error message on the Service Registry dashboard. See the [Configuration Parameters](/spring-cloud-services/service-registry/updating-an-instance.html#configuration-parameters) section of the [Updating an Instance](/spring-cloud-services/service-registry/updating-an-instance.html) topic for more information about setting the HA node count for a Service Registry service instance.
+
+* Have a peer list equivalent to its peer service instance's peer list. If you create or update a Service Registry service instance with a peer that does has not have an equivalent peer list, you will see a warning message on the Service Registry dashboard.
+* Be at the same Service Registry version as its peer service instance. If you create or update a Service Registry service instance with a peer which is at a different Service Registry version, you will see a warning message on the Service Registry dashboard.
+
 ## <a id="setting-up-peer-service-instances"></a>Setting Up Peer Service Instances
 
 If you wish to have two Service Registry service instances replicate a registry, you must configure each to have the other as a peer. If one service instance Service Registry A has a Service Registry B configured as a peer and B has no peers configured, A will share service registrations with B but B will not share registrations with A.
