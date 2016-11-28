@@ -13,11 +13,11 @@ The Spring Cloud Services tile includes settings for various options. You can co
 
 ### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
 
-By default, the SB stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the SB to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
+By default, the Spring Cloud Services service broker stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the broker to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/set-buildpack.png") %>
 
-In the **Buildpack** field, enter the name of the desired Java buildpack. Click **Save**, return to the Installation Dashboard, and apply your changes. The SB will now use the selected buildpack to stage service instance backing applications.
+In the **Buildpack** field, enter the name of the desired Java buildpack. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker will now use the selected buildpack to stage service instance backing applications.
 
 ### <a id="skip-ssl-certificate-validation"></a>Skip SSL Certificate Validation
 
