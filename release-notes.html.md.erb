@@ -33,7 +33,7 @@ Enhancements included in this release:
 
 * For increased security, the Service Registry now requires that a client application's `eureka.instance.secureVirtualHostname` and `eureka.instance.virtualHostname` properties, if set, match the client application's `eureka.instance.appname` property.
 
-<p class='note'><strong>Note</strong>: We recommend that client applications do not set either of the <code>eureka.instance.secureVirtualHostname</code> or <code>eureka.instance.virtualHostname</code> properties.</p>
+<p class='note'><strong>Note</strong>: Pivotal recommends that client applications do not set either of the <code>eureka.instance.secureVirtualHostname</code> or <code>eureka.instance.virtualHostname</code> properties.</p>
 
 ### <a id="1-2-2"></a>1.2.2
 
@@ -159,7 +159,7 @@ Features included in this release:
 * The service broker now supports asynchronous service operations. For more information, see the <a href="/spring-cloud-services/operator-information.html#the-service-broker">The Service Broker</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
 * Operators can now explicitly choose the Java buildpack that will be used to deploy service instances. For more information, see the <a href="/spring-cloud-services/operator-information.html#set-buildpack">Set Buildpack for Service Instances</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
 * Operators can now upgrade either individual service instances or all non-upgraded service instances directly from the Service Instances dashboard. For more information, see the <a href="/spring-cloud-services/operator-information.html#service-instances-dashboard">The Service Instances Dashboard</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
-* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/upgrades.html">Upgrades</a>.
+* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a>.
 * Updates to Config Server settings now result in zero downtime for the Config Server service instance. For more information about updating a Config Server instance's settings, see <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/config-server/">Config Server documentation</a>.
 * Config Server can now access a Git repository that uses self-signed SSL certificates with HTTPS. For more information about supported configuration sources, see <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> in the <a href="/spring-cloud-services/config-server/">Config Server documentation</a>.
 * Config Server can now access a Git repository via a proxy server when using HTTP or HTTPS.
@@ -183,7 +183,7 @@ Known issues:
 
 In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
 
-For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/upgrades.html#service-instance-upgrade-steps">Service Instance Upgrade Steps</a> section of <a href="/spring-cloud-services/upgrades.html">Upgrades</a>. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
+For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrade Steps</a> topic. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
 
 ## <a id="1-0"></a>1.0
 
