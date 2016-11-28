@@ -11,7 +11,7 @@ Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://netw
 
 **Release Date: 10th November 2016**
 
-<p class='note'><strong>Important</strong>: Spring Cloud Services 1.3.0 requires version 3.8 or later of the Cloud Foundry Java buildpack. If your Pivotal Cloud Foundry deployment is using an older version of the Java buildpack, upgrade it before installing this release.</p>
+<p class='note'><strong>Important</strong>: Spring Cloud Services 1.3.0 requires version 3.8 or later of the Cloud Foundry Java buildpack. If your Pivotal Cloud Foundry deployment is using an older version of the Java buildpack, upgrade it before installing this release. <br /><br /> If upgrading to 1.3.0 or later from a previous release of Spring Cloud Services, see the relevant section: <a href="#1-3-0-migrating-from-1-2-x">Migrating from 1.2.x</a>, <a href="#1-3-0-migrating-from-1-1-x">Migrating from 1.1.x</a>, <a href="#1-3-0-migrating-from-1-0-x">Migrating from 1.0.x</a>.</p>
 
 Enhancements included in this release:
 
@@ -22,6 +22,20 @@ Enhancements included in this release:
 * Service instances are now based on Spring Cloud Camden.SR2, and client applications can use Spring Boot 1.3.x--1.4.1 and Spring Cloud Brixton.x--Camden.SR2. For more information about client application dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
 
 <p class='note'><strong>Note</strong>: Spring Cloud Services 1.3.0 is compatible with Spring Boot versions 1.3.x--1.4.x, but is based on Spring Cloud Camden, which builds on Spring Boot 1.4. In client applications, Spring Boot 1.4.x is recommended for optimum experience with this release.</p>
+
+#### <a id="1-3-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
+
+If you are upgrading from a 1.2.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+#### <a id="1-3-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+
+If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+#### <a id="1-3-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+
+The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3.0, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.3.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
+
+After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
 ## <a id="1-2"></a>1.2
 
