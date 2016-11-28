@@ -11,6 +11,14 @@ See below for information about Spring Cloud&reg; Services' deployment model and
 
 The Spring Cloud Services tile includes settings for various options. You can configure these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Spring Cloud Services** tab.
 
+### <a id="configure-service-instance-limit"></a>Configure Service Instance Limit
+
+By default, the Spring Cloud Services broker will only provision up to 100 service instances. This service instance limit is also used to determine the memory quota for the org in which service instance backing applications are deployed; the org's memory quota will be equal to 1.5G times the service instance limit. You can configure this limit in the Spring Cloud Services tile settings.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/configure-service-instance-limit.png") %>
+
+In the **Service Instance Limit** field, enter the new service instance limit. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker now can provision up to as many service instances as you specified.
+
 ### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
 
 By default, the SB stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the SB to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
