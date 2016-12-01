@@ -42,7 +42,7 @@ To see the circuit breaker in action, use curl, <a href="http://jmeter.apache.or
 $ while true; do curl agency.wise.com; done
 </pre>
 
-With the Company application running and available via the Service Registry instance (see the <a href="/spring-cloud-services/circuit-breaker/using-a-circuit-breaker.html">Using a Circuit Breaker</a> subtopic), the Agency application responds with a guide name, indicating a successful service call. If you stop Company, Agency will respond with a "None available" message, indicating that the call to its `getGuide()` method failed and was redirected to the fallback method.
+With the Company application running and available via the Service Registry instance (see the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> subtopic), the Agency application responds with a guide name, indicating a successful service call. If you stop Company, Agency will respond with a "None available" message, indicating that the call to its `getGuide()` method failed and was redirected to the fallback method.
 
 When service calls are succeeding, the circuit is closed, and the dashboard graph shows the rate of calls per second and successful calls per 10 seconds.
 
