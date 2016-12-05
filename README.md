@@ -1,6 +1,17 @@
 # docs-spring-cloud-services
 Documentation for Spring Cloud Services Product
 
+# Branches
+
+Docs for a particular minor release are in version branches:
+
+* 1.0: [v1.0](https://github.com/pivotal-cf/docs-spring-cloud-services/tree/v1.0)
+* 1.1: [v1.1](https://github.com/pivotal-cf/docs-spring-cloud-services/tree/v1.1)
+* 1.2: [v1.2](https://github.com/pivotal-cf/docs-spring-cloud-services/tree/v1.2)
+* 1.3: [v1.3](https://github.com/pivotal-cf/docs-spring-cloud-services/tree/v1.3)
+
+In-progress docs for the current release are in master. The default / base branch is the branch for the current version of Spring Cloud Services.
+
 # Running Locally
 
 (See also: [&#8220;Streamlined Development Workflow&#8221;](https://github.com/pivotal-cf/docs-book-pivotalcf#streamlined-development-workflow) in [pivotal-cf/docs-book-pivotalcf](https://github.com/pivotal-cf/docs-book-pivotalcf).)
