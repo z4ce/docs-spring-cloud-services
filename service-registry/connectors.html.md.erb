@@ -52,23 +52,34 @@ To establish availability of the Service Registry, the Spring Cloud Cloud Foundr
 
 In a Spring Boot application which is bound to a Service Registry service instance, the connector automatically configures a Spring Cloud Netflix Eureka client configuration bean. The client configuration includes the discovery zone, which is configured using the URL from the service binding; this is equivalent to setting the ```eureka.client.serviceUrl.defaultZone``` property.
 
-### <a id="eureka-virtual-hostname-configuration"></a>Eureka Virtual Hostname Configuration
+### <a id="eureka-application-name-configuration"></a>Eureka Application Name Configuration
 
-Each Netflix Eureka client application has a Eureka application name, which is set on the application using the `eureka.instance.appname` property, as well as insecure and secure virtual hostnames, which are set on the application using the `eureka.instance.virtualHostName` and `eureka.instance.secureVirtualHostName` properties. In an application which registers with a Spring Cloud Services Service Registry service instance, these three fields are not allowed to be set to differing non-null values.
+A client application registers with the Spring Cloud Services Service Registry using an _application name_. This value is used by Netflix Eureka to look up instances of an application and to set Eureka's _virtual hostname_ and _secure virtual hostname_ for the application. In an application that registers with a Spring Cloud Netflix Eureka server, the Eureka application name is by default the value of the application's `spring.application.name` property. If the value of the application's `spring.application.name` property is used for the Eureka application name and contains one or more characters which are invalid in a hostname, the Spring Cloud Services connector for Service Registry sanitizes that value by using a hyphen (`-`) to replace each invalid character.
 
-If either of the two virtual hostname properties are not set, Spring Cloud Netflix Eureka sets the corresponding virtual hostname to the value of the `spring.application.name` property on the client application. The Spring Cloud Services connector for Service Registry supplies missing hostnames in the same way; however, if a hostname is not explicitly provided and the connector must derive one from the value of the `spring.application.name` property, the connector sanitizes that value by using a - (hyphen) character to replace any character which is invalid in a hostname.
+You can register a client application with the Service Registry using an application name that differs from `spring.application.name`. To do so, you must set the `eureka.instance.appname` property. If set, this value will be used verbatim for the application's Eureka application name, virtual hostname, and secure virtual hostname; it therefore must contain only characters which are valid in a hostname.
 
-<p class='note'><strong>Important</strong>: If you provide a value for either of the <code>eureka.instance.virtualHostName</code> or <code>eureka.instance.secureVirtualHostName</code> properties, it will not be sanitized, and you must ensure that the value is a valid hostname. The connector sanitizes only virtual hostnames which are derived from the <code>spring.application.name</code> property.</p>
+Examples of values provided for the `eureka.instance.appname` property, values provided for the `spring.application.name` property, and the Eureka application names resulting from combinations of these values or from providing a given value for `spring.application.name` but none for `eureka.instance.appname` are listed below.
 
-Examples of values provided for the `eureka.instance` virtual hostname properties, values provided for the `spring.application.name` property, and the virtual hostnames resulting from combinations of these values or from providing a given value for `spring.application.name` but none for a `eureka.instance` property are listed below.
-
-| <code>eureka.instance</code> property | <code>spring.application.name</code> | Resultant virtual hostname |
+| <code>eureka.instance.appname</code> | <code>spring.application.name</code>  | Resultant application name |
 |---------------------------------------|--------------------------------------|----------------------------|
 | vhn                                   | san                                  | vhn                        |
 | v_hn                                  | san                                  | v_hn                       |
 | <em>(not provided)</em>               | san                                  | san                        |
 | <em>(not provided)</em>               | s_an                                 | s-an                       |
 | x_y                                   | x_y                                  | x_y                        |
+
+#### Application Name Property Restrictions
+
+To identify instances of an application, Netflix Eureka uses three `eureka.instance` properties: `appname`, `virtualHostName`, and `secureVirtualHostName`. For consistency with Spring Cloud features such as [Spring Cloud Netflix Zuul](http://cloud.spring.io/spring-cloud-static/Camden.SR3/#_router_and_filter_zuul)</a>'s automatic routing to registered applications and the [load-balanced `RestTemplate`](http://cloud.spring.io/spring-cloud-static/Camden.SR3/#_spring_resttemplate_as_a_load_balancer_client) using [Spring Cloud Netflix Ribbon](http://cloud.spring.io/spring-cloud-static/Camden.SR3/#spring-cloud-ribbon), and to secure ownership of Eureka application names, the Spring Cloud Services Service Registry rejects a registration that includes different non-null values for any of these three properties.
+
+If you set only the `spring.application.name` property or the `eureka.instance.appname` property, the Spring Cloud Services connector will set the `eureka.instance.virtualHostName` and `eureka.instance.secureVirtualHostname` properties to the same value. If you explicitly set different values for `eureka.instance.appname`, `eureka.instance.virtualHostName`, and `eureka.instance.secureVirtualHostName`, the Spring Cloud Services connector will prevent the application from starting, and you will see an error message in the application logs:
+
+```
+eureka.instance.virtualHostName 'foo' is set to a different value than
+eureka.instance.appname 'bar', and is disallowed in Spring Cloud Services.
+Try only setting eureka.instance.appname. Please refer to our documentation
+and reach out to us if you think you require different values.
+```
 
 ## <a id="see-also"></a>See Also
 
