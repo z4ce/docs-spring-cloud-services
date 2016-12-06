@@ -21,6 +21,20 @@ The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3
 
 After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
+### <a id="1-3-1"></a>1.3.1
+
+**Release Date: 7th December 2016**
+
+Enhancements included in this release:
+
+* The Spring Cloud Services broker has been upgraded to Spring Cloud Camden.SR3.
+* Spring Cloud Services service instance backing applications now print a custom Spring Boot banner on startup.
+* If a Service Registry client application's `eureka.instance.secureVirtualHostname` or `eureka.instance.virtualHostname` properties are set and do not match the application's `eureka.instance.appname` property, the Spring Cloud Services connector for Service Registry now prevents application startup and logs an error message. For more information, see the [Eureka Application Name Configuration](/spring-cloud-services/service-registry/connectors.html#eureka-application-name-configuration) section of the [Spring Cloud Connectors](/spring-cloud-services/service-registry/connectors.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
+
+Fixes included in this release:
+
+* The Service Registry now supports servers which use Server Name Indication (SNI) to serve multiple SSL certificates.
+
 ### <a id="1-3-0"></a>1.3.0
 
 **Release Date: 10th November 2016**
