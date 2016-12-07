@@ -27,6 +27,8 @@ After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x ve
 
 Enhancements included in this release:
 
+* The stemcell has been updated to 3263.12. This resolves the following issues:
+  * [[USN-3151-2]](https://www.ubuntu.com/usn/usn-3151-2/): Linux kernel (Xenial HWE) vulnerability
 * The Spring Cloud Services broker has been upgraded to Spring Cloud Camden.SR3.
 * Spring Cloud Services service instance backing applications now print a custom Spring Boot banner on startup.
 * If a Service Registry client application's `eureka.instance.secureVirtualHostname` or `eureka.instance.virtualHostname` properties are set and do not match the application's `eureka.instance.appname` property, the Spring Cloud Services connector for Service Registry now prevents application startup and logs an error message. For more information, see the [Eureka Application Name Configuration](/spring-cloud-services/service-registry/connectors.html#eureka-application-name-configuration) section of the [Spring Cloud Connectors](/spring-cloud-services/service-registry/connectors.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
