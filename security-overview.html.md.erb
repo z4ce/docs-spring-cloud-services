@@ -33,6 +33,8 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * **domain.com**: The value configured by an administrator for the Cloud Foundry system domain.
 
+* **Eureka Application Name**: The identifier used by a CF Application to look up other CF Applications that are registered with a Spring Cloud Services Service Registry service instance. A CF Application that registers with a Spring Cloud Services Service Registry service instance will use the value of its ```spring.application.name``` property for this value by default. 
+
 * **FQDN**: Fully Qualified Domain Name.
 
 * **Instance Record**: In Eureka, the core domain object; represents a CF Application that has registered with a Spring Cloud Services Service Registry service instance. An Instance Record is used to map a Virtual Hostname to a physical route (e.g. hostname, IP address, and port). An Instance Record can have metadata associated with it.
@@ -44,8 +46,6 @@ The following abbreviations, example values, and terms are used in this topic as
 * **SCS**: Spring Cloud Services.
 
 * **UAA**: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
-
-* **Virtual Hostname**: The identifier used by a CF Application to look up other CF Applications that are registered with a Spring Cloud Services Service Registry service instance. A CF Application that registers with a Spring Cloud Services Service Registry service instance will use the value of its ```spring.application.name``` property for this value by default. 
 
 ## <a id="https"></a>A Note on HTTPS
 
@@ -393,33 +393,33 @@ These remainder of the REST endpoints can be found in the [Netflix Eureka docume
 
 **Record Level Access Control**
 
-In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, Spring Cloud Services enforces restrictions on the registration of Virtual Hostnames within a Eureka cluster (i.e. a service instance and its configured peers, if any).
+In addition to checking token claims, further checks are done on POST, PUT, and DELETE requests to ensure that a Eureka Instance Record can only be modified or deleted by the CF Application that created it. In addition, Spring Cloud Services enforces restrictions on the registration of Eureka Application Names within a Eureka cluster (i.e. a service instance and its configured peers, if any).
 
 <a id="service-registry-instance-record-ownership"></a>*Instance Record Ownership*
 
 The Eureka server enforces ownership of Instance Records to prevent binding credentials from being misused to affect other Instance Records, especially those originating from CF Applications in other spaces. To ensure that a Instance Record can only be modified by the CF Application that created it, the Eureka server has been modified to record the CF Application's identity, which is conveyed by the ```sub``` claim of the [Bound Application's token](#service-registry-roles-bound-application). This value is saved in the Instance Record's metadata under the key ```registrant_principal``` upon registration. Any request to modify an Instance Record must contain a token whose ```sub``` claim matches the ```registrant_principal```. Also, the ```registrant_principal``` metadata field cannot be modified after the Instance Record is created. 
 
-<a id="service-registry-virtual-hostname-ownership"></a>*Virtual Hostname Ownership*
+<a id="service-registry-application-name-ownership"></a>*Application Name Ownership*
 
-The Eureka server enforces the ownership of Virtual Hostnames within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Virtual Hostname. This is enforced to ensure that CF Applications in other spaces cannot register and draw traffic away from a given application, as a form of [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). However, a service instance in a different PCF installation can still register the same Virtual Hostname. This is allowed so that CF Applications in other PCF installations can be used for failover, in case all instances with a given Virtual Hostname in a particular PCF are down. 
+The Eureka server enforces the ownership of Eureka Application Names within a cluster. For a given Eureka cluster, possibly comprised of peers spanning multiple PCF installations, only one service instance in a PCF installation may register instances with a particular Eureka Application Name. This is enforced to ensure that CF Applications in other spaces cannot register and draw traffic away from a given application, as a form of [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). However, a service instance in a different PCF installation can still register the same Eureka Application Name. This is allowed so that CF Applications in other PCF installations can be used for failover, in case all instances with a given Eureka Application Name in a particular PCF are down. 
 
-To enforce Virtual Hostname ownership, the URI of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF Application registers with the server by submitting an Instance Record, all other Instance Records with the same Virtual Hostname are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` does not match the server's, the registration request is rejected.
+To enforce Eureka Application Name ownership, the URI of the Eureka server that registers the Instance Record is recorded under the metadata key ```registrar_uri```. A portion of this URI is used to identity the PCF installation that hosts the Eureka server. When a CF Application registers with the server by submitting an Instance Record, all other Instance Records with the same Eureka Application Name are inspected. If an Instance Record already exists in the same PCF installation as the server receiving the registration request, and this Instance Record's ```registrar_uri``` does not match the server's, the registration request is rejected.
 
-The ownership of Virtual Hostnames by a service instance parallels the ownership of routes by a space in CF. However, Virtual Hostnames cannot be reserved by a service instance at this time, in contrast to the creation of a route in a space, where the route is not yet bound to a CF Application. If one service instance were to register Instance Records with a particular Virtual Hostname and then all such Instance Records became de-registered (through either planned or unplanned outages), another CF Application in a different space could register with that same Virtual Hostname by binding with a peer service instance. This would prevent the original CF Application(s) from registering again when they came back online.
+The ownership of Eureka Application Names by a service instance parallels the ownership of routes by a space in CF. However, Eureka Application Names cannot be reserved by a service instance at this time, in contrast to the creation of a route in a space, where the route is not yet bound to a CF Application. If one service instance were to register Instance Records with a particular Eureka Application Name and then all such Instance Records became de-registered (through either planned or unplanned outages), another CF Application in a different space could register with that same Eureka Application Name by binding with a peer service instance. This would prevent the original CF Application(s) from registering again when they came back online.
 
-*Virtual Hostname Ownership Example*
+*Eureka Application Name Ownership Example*
 
-PCF West is a PCF installation with Service Registry service instances in different organizations. These service instances are configured for peer replication with one another. One space hosts a CF Application ```accounting``` and the other hosts a CF Application ```inventory```. They both register with Virtual Hostnames ```accounting``` and ```inventory``` as underlined, respectively.
+PCF West is a PCF installation with Service Registry service instances in different organizations. These service instances are configured for peer replication with one another. One space hosts a CF Application ```accounting``` and the other hosts a CF Application ```inventory```. They both register with Eureka Application Names ```accounting``` and ```inventory``` as underlined, respectively.
 
 <%= image_tag("./images/security-overview/app-id-ownership-before.png") %>
 
-Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Virtual Hostname stays the same. Then ```accounting-green``` is pushed, bound to the Service Registry service instance, and started. On startup it successully registers with the Virtual Hostname ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostname ```accounting```.
+Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Eureka Application Name stays the same. Then ```accounting-green``` is pushed, bound to the Service Registry service instance, and started. On startup it successully registers with the Eureka Application Name ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Eureka Application Name ```accounting```.
 
 <%= image_tag("./images/security-overview/app-id-ownership-after.png") %>
 
-A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Virtual Hostname ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Virtual Hostname ```accounting``` has already been registered with another service instance in the cluster, in the same PCF installation. 
+A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Eureka Application Name ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Eureka Application Name ```accounting``` has already been registered with another service instance in the cluster, in the same PCF installation. 
 
-PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Virtual Hostnames ```accounting``` or ```inventory```.
+PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Eureka Application Names ```accounting``` or ```inventory```.
 
 *OAuth 2 Clients for Bound Applications*
 
