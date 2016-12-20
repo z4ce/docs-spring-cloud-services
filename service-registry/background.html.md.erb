@@ -48,3 +48,13 @@ eureka:
     register-with-eureka: true
     leaseRenewalIntervalInSeconds: 10
 ```
+
+## <a id="the-spring-cloud-services-offering"></a>The Spring Cloud Services Offering
+
+Spring Cloud Services packages the Spring Cloud Netflix Eureka server application, provisioning one or more instances per Service Registry service instance: one by default, more if the service instance has been created to run in High Availability (HA) mode. This provides operational benefits atop the open-source Spring Cloud library:
+
+* **Application-level registry High Availability (HA).** When creating or updating a Spring Cloud Services Service Registry using the Cloud Foundry Command Line Interface tool (cf CLI), operators can specify a `count` parameter given to the CLI command. The Spring Cloud Services service broker provisions `count` number of Spring Cloud Netflix Eureka server applications for the service instance. These server applications replicate one registry.
+
+* **Zero-downtime blue / green application deployments and upgrades.** The Spring Cloud Services Service Registry permits multiple client applications to register using the same Eureka application name (see [docs page]). Operators can take advantage of this and of Netflix Eureka's instance statuses to deploy updates to applications with zero downtime, using (for example) a [blue / green deployment strategy](Martin Fowler page link--probably good general-purpose place to link to for B/G D intro purposes).
+
+* **Peer replication across PCFs / datacenters.** When creating or updating a Spring Cloud Services Service Registry using the cf CLI, operators can specify URIs of other Service Registry service instances in a `peers` parameter given to the CLI command, and the Service Registry service instance replicates its registry with the other service instances. This works for service instances across Pivotal Cloud Foundry spaces, orgs, or deployments, and can be used to provide another level of high availability.
