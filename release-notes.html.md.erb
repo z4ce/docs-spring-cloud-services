@@ -7,6 +7,36 @@ Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://netw
 
 ## <a id="1-3"></a>1.3
 
+### <a id="1-3-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
+
+If you are upgrading from a 1.2.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+### <a id="1-3-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+
+If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+### <a id="1-3-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+
+The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3.x, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.3.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
+
+After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
+
+### <a id="1-3-1"></a>1.3.1
+
+**Release Date: 7th December 2016**
+
+<p class='note'><strong>Important</strong>: If you upgrade to this release of Spring Cloud Services, you must ensure that your client applications which use the Service Registry do not set the <code>eureka.instance.virtualHostName</code> or <code>eureka.instance.secureVirtualHostName</code> properties to different values from that of the <code>eureka.instance.appname</code> property.</p>
+
+Enhancements included in this release:
+
+* The Spring Cloud Services broker has been upgraded to Spring Cloud Camden.SR3.
+* Spring Cloud Services service instance backing applications now print a custom Spring Boot banner on startup.
+* If a Service Registry client application's `eureka.instance.secureVirtualHostname` or `eureka.instance.virtualHostname` properties are set and do not match the application's `eureka.instance.appname` property, the Spring Cloud Services connector for Service Registry now prevents application startup and logs an error message. For more information, see the [Eureka Application Name Configuration](/spring-cloud-services/service-registry/connectors.html#eureka-application-name-configuration) section of the [Spring Cloud Connectors](/spring-cloud-services/service-registry/connectors.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
+
+Fixes included in this release:
+
+* The Service Registry now supports servers which use Server Name Indication (SNI) to serve multiple SSL certificates.
+
 ### <a id="1-3-0"></a>1.3.0
 
 **Release Date: 10th November 2016**
@@ -17,12 +47,43 @@ Enhancements included in this release:
 
 * Spring Cloud Services now supports Pivotal Cloud Foundry versions 1.7 and later.
 * Spring Cloud Services now uses a floating stemcell for enhanced security. For more information, see the [Understanding Floating Stemcells](https://docs.pivotal.io/pivotalcf/customizing/understanding-stemcells.html) topic in the [Pivotal Cloud Foundry documentation](https://docs.pivotal.io/pivotalcf/).
+* The validation normally performed by Spring Cloud Services for the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate can now be disabled by operators in the tile's settings. See step 5 of the Installation Steps in the [Installation](/spring-cloud-services/installation.html) topic for more information.
 * The Spring Cloud Services broker has been upgraded to Spring Boot 1.4.1 and Spring Cloud Camden.SR2.
 * Service instances are now based on Spring Cloud Camden.SR2, and client applications can use Spring Boot 1.3.x--1.4.1 and Spring Cloud Brixton.x--Camden.SR2. For more information about client application dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
 
 <p class='note'><strong>Note</strong>: Spring Cloud Services 1.3.0 is compatible with Spring Boot versions 1.3.x--1.4.x, but is based on Spring Cloud Camden, which builds on Spring Boot 1.4. In client applications, Spring Boot 1.4.x is recommended for optimum experience with this release.</p>
 
 ## <a id="1-2"></a>1.2
+
+### <a id="1-2-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+
+If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+### <a id="1-2-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+
+The Spring Cloud Services client dependencies were restructured in 1.1.0. To ensure compatibility of your client applications with Spring Cloud Services 1.2.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
+
+After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.2.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
+
+### <a id="1-2-5"></a>1.2.5
+
+**Release Date: 14th December 2016**
+
+Enhancements included in this release:
+
+* The stemcell has been updated to 3263.13. This resolves the following issues:
+  * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
+
+### <a id="1-2-4"></a>1.2.4
+
+**Release Date: 7th December 2016**
+
+Enhancements included in this release:
+
+* The stemcell has been updated to 3263.12. This resolves the following issues:
+  * [[USN-3151-2]](https://www.ubuntu.com/usn/usn-3151-2/): Linux kernel (Xenial HWE) vulnerability
+* The Spring Cloud Services broker has been upgraded to Spring Cloud Brixton.SR7.
+* The validation normally performed by Spring Cloud Services for the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate can now be disabled by operators in the tile's settings.
 
 ### <a id="1-2-3"></a>1.2.3
 
@@ -32,7 +93,7 @@ Enhancements included in this release:
 
 * For increased security, the Service Registry now requires that a client application's `eureka.instance.secureVirtualHostname` and `eureka.instance.virtualHostname` properties, if set, match the client application's `eureka.instance.appname` property.
 
-<p class='note'><strong>Note</strong>: We recommend that client applications do not set either of the <code>eureka.instance.secureVirtualHostname</code> or <code>eureka.instance.virtualHostname</code> properties.</p>
+<p class='note'><strong>Note</strong>: Pivotal recommends that client applications do not set either of the <code>eureka.instance.secureVirtualHostname</code> or <code>eureka.instance.virtualHostname</code> properties.</p>
 
 ### <a id="1-2-2"></a>1.2.2
 
@@ -67,6 +128,15 @@ Enhancements included in this release:
 * The RabbitMQ Java client used by the Spring Cloud Services service broker has been upgraded to version 3.6.5. This resolves an issue where the Spring Cloud Services service broker could not provision service instances when the RabbitMQ for PCF product was using TLS and had its TLS 1.0 support disabled.
 
 ## <a id="1-1"></a>1.1
+
+### <a id="1-1-9"></a>1.1.9
+
+**Release Date: 14th December 2016**
+
+Enhancements included in this release:
+
+* The stemcell has been updated to 3263.13. This resolves the following issues:
+  * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
 
 ### <a id="1-1-8"></a>1.1.8
 
@@ -158,7 +228,7 @@ Features included in this release:
 * The service broker now supports asynchronous service operations. For more information, see the <a href="/spring-cloud-services/operator-information.html#the-service-broker">The Service Broker</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
 * Operators can now explicitly choose the Java buildpack that will be used to deploy service instances. For more information, see the <a href="/spring-cloud-services/operator-information.html#set-buildpack">Set Buildpack for Service Instances</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
 * Operators can now upgrade either individual service instances or all non-upgraded service instances directly from the Service Instances dashboard. For more information, see the <a href="/spring-cloud-services/operator-information.html#service-instances-dashboard">The Service Instances Dashboard</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
-* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/upgrades.html">Upgrades</a>.
+* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a>.
 * Updates to Config Server settings now result in zero downtime for the Config Server service instance. For more information about updating a Config Server instance's settings, see <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/config-server/">Config Server documentation</a>.
 * Config Server can now access a Git repository that uses self-signed SSL certificates with HTTPS. For more information about supported configuration sources, see <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> in the <a href="/spring-cloud-services/config-server/">Config Server documentation</a>.
 * Config Server can now access a Git repository via a proxy server when using HTTP or HTTPS.
@@ -182,7 +252,7 @@ Known issues:
 
 In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
 
-For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/upgrades.html#service-instance-upgrade-steps">Service Instance Upgrade Steps</a> section of <a href="/spring-cloud-services/upgrades.html">Upgrades</a>. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
+For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrade Steps</a> topic. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
 
 ## <a id="1-0"></a>1.0
 

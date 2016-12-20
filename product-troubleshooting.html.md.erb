@@ -27,6 +27,16 @@ org/springframework/context/ApplicationContextInitializer
 
 You may need to update the Java buildpack on your PCF deployment. Spring Cloud Services 1.3.x is based on Spring Boot 1.4 and is compatible with the Cloud Foundry Java buildpack version 3.8 or later. If the Java buildpack on your PCF deployment is older than 3.8, update it and continue the installation of Spring Cloud Services.
 
+## <a id="timeout-exception-180000-ms"></a>"java.util.concurrent.TimeoutException: Execution took longer than 180000 MILLISECONDS"
+
+If the broker fails to provision a service instance and the logs for the `spring-cloud-broker-worker` application (see the [Read Broker Application Logs](/spring-cloud-services/operator-information.html#broker-application-logs) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic) contain the following:
+
+```
+java.util.concurrent.TimeoutException: Execution took longer than 180000 MILLISECONDS
+```
+
+This is due to a problem encountered during application deployments to your PCF deployment. Verify that you can deploy applications without issues to your PCF deployment (see ["Starting or staging an application results in an InsufficientResources error"](https://discuss.pivotal.io/hc/en-us/articles/221251847-Starting-or-staging-an-application-results-in-an-InsufficientResources-error) in the PCF Knowledge Base).
+
 ## <a id="service-registry-authentication-failed"></a>Service Registry: "Authentication Failed: Could not obtain access token"
 
 If you encounter a message similar to the following when attempting to access a Service Registry dashboard:
