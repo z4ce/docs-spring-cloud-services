@@ -21,7 +21,7 @@ In the **Buildpack** field, enter the name of the desired Java buildpack. Click 
 
 ### <a id="skip-ssl-certificate-validation"></a>Skip SSL Certificate Validation
 
-By default, Spring Cloud Services checks the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate for the domains included in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. You can disable this validation by checking the **Do not validate that SSL certificates are properly configured** checkbox.
+By default, Spring Cloud Services checks the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate for the domains included in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. You may have an unusually complex certificate configuration in your load balancers or in your deployment of [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). In such cases, you can disable this validation by checking the **Do not validate that SSL certificates are properly configured** checkbox.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/disable-ssl-certificate-validation.png") %>
 
@@ -29,7 +29,7 @@ Click **Save** and return to the Installation Dashboard, then apply your changes
 
 ## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
 
-Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on PCF. It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/ops1.png") %>
 
