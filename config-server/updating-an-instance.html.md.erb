@@ -134,14 +134,14 @@ The parameters used to configure SSH for a Config Server configuration source's 
 
 | Parameter                      | Function                                                                                                                                                |
 |--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <code>hostKey</code>           | The host key corresponding to <code>privateKey</code> (optional)                                                                                        |
-| <code>hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" (required if supplying <code>hostKey</code>)            |
-| <code>privateKey</code>        | The private key, with all newline characters replaced by <code>\n</code>                     |
+| <code>hostKey</code>           | The host key of the Git server. If you've connected to the server via Git command line, this will be in your .ssh/known_hosts. Do not include the algorithm prefix, this is specified in <code>hostKeyAlgorithm</code>. (optional)                                                                                        |
+| <code>hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521". (required if supplying <code>hostKey</code>)            |
+| <code>privateKey</code>        | The private key that identifies the Git user, with all newline characters replaced by <code>\n</code>. Passphrase encrypted private keys are not supported.                     |
 
 To update a Config Server service instance to use SSH to access a configuration source, allowing for host key verification, run:
 
 <pre class="terminal">
-$ cf update-service config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git", "hostKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7+mgZfOyxx6MX/yG+d9R2ogcm76...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+$ cf update-service config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git", "hostKey": "AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
 </pre>
 
 To update a Config Server service instance to use SSH to access a configuration source, without host key verification, run:
