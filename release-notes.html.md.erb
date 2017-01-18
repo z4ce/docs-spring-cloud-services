@@ -178,7 +178,7 @@ Features included in this release:
 * The service broker now supports asynchronous service operations. For more information, see the <a href="/spring-cloud-services/operator-information.html#the-service-broker">The Service Broker</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
 * Operators can now explicitly choose the Java buildpack that will be used to deploy service instances. For more information, see the <a href="/spring-cloud-services/operator-information.html#set-buildpack">Set Buildpack for Service Instances</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
 * Operators can now upgrade either individual service instances or all non-upgraded service instances directly from the Service Instances dashboard. For more information, see the <a href="/spring-cloud-services/operator-information.html#service-instances-dashboard">The Service Instances Dashboard</a> section of the <a href="/spring-cloud-services/operator-information.html">Operator Information</a>.
-* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/upgrades.html">Upgrades</a>.
+* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/serivce-instance-upgrades.html">Service Instance Upgrades</a>.
 * Updates to Config Server settings now result in zero downtime for the Config Server service instance. For more information about updating a Config Server instance's settings, see <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/config-server/">Config Server documentation</a>.
 * Config Server can now access a Git repository that uses self-signed SSL certificates with HTTPS. For more information about supported configuration sources, see <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> in the <a href="/spring-cloud-services/config-server/">Config Server documentation</a>.
 * Config Server can now access a Git repository via a proxy server when using HTTP or HTTPS.
@@ -202,7 +202,7 @@ Known issues:
 
 In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
 
-For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/upgrades.html#service-instance-upgrade-steps">Service Instance Upgrade Steps</a> section of <a href="/spring-cloud-services/upgrades.html">Upgrades</a>. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
+For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/product-upgrades.html#service-instance-upgrade-steps">Service Instance Upgrade Steps</a> section of <a href="/spring-cloud-services/product-upgrades.html">Product Upgrades</a>. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a>.
 
 ## <a id="1-0"></a>1.0
 
@@ -324,7 +324,7 @@ Features included in this release:
 Features included in this release:
 
 * A new Service Instances dashboard is accessible to operators of Spring Cloud Services. The dashboard provides an overview of all service instances and shows their org/space locations, version, status, and bound applications. For more details, see the [The Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html).
-* Service instances can now be individually upgraded to the latest version using the cf CLI. For more details, see the [Service Instance Upgrade Steps](/spring-cloud-services/upgrades.html#service-instance-upgrade-steps) section of [Upgrades](/spring-cloud-services/upgrades.html).
+* Service instances can now be individually upgraded to the latest version using the cf CLI. For more details, see the [Service Instance Upgrade Steps](/spring-cloud-services/product-upgrades.html#service-instance-upgrade-steps) section of [Product Upgrades](/spring-cloud-services/product-upgrades.html).
 * Config Server instance settings (i.e. Git repository configuration) can now be provided using arbitrary parameters via "cf create-service." They can also be updated via "cf update-service."
 * The stemcell has been updated to 3146.6. This resolves the following issues:
   * [[USN-2882-1]](http://www.ubuntu.com/usn/usn-2882-1/): curl vulnerability
