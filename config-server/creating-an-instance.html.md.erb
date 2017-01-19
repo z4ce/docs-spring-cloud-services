@@ -146,9 +146,9 @@ The parameters used to configure SSH for a Config Server configuration source's 
 
 | Parameter                      | Function                                                                                                                                                |
 |--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <code>hostKey</code>           | The host key of the Git server. If you've connected to the server via Git command line, this will be in your .ssh/known_hosts. Do not include the algorithm prefix, this is specified in <code>hostKeyAlgorithm</code>. (optional)                                                                                        |
-| <code>hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521". (required if supplying <code>hostKey</code>)            |
-| <code>privateKey</code>        | The private key that identifies the Git user, with all newline characters replaced by <code>\n</code>. Passphrase encrypted private keys are not supported.                     |
+| <code>hostKey</code>           | The host key of the Git server. If you have connected to the server via git on the command line, this is in your <code>.ssh/known_hosts</code>. Do not include the algorithm prefix; this is specified in <code>hostKeyAlgorithm</code>. (Optional.)                                                                                        |
+| <code>hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521". (Required if supplying <code>hostKey</code>.)            |
+| <code>privateKey</code>        | The private key that identifies the Git user, with all newline characters replaced by <code>\n</code>. Passphrase-encrypted private keys are not supported.                     |
 
 To create a Config Server service instance that uses SSH to access a configuration source, allowing for host key verification, run:
 
