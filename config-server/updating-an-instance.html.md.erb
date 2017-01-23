@@ -37,6 +37,8 @@ General parameters used to configure the Config Server's default configuration s
 | <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 | <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 
+<p class='note'><strong>Important</strong>: If you set <code>cloneOnStart</code> to <code>true</code> for a service instance that uses a repository which is secured with HTTP Basic authentication, you must set the <code>username</code> and <code>password</code> at the same time as you set <code>cloneOnStart</code>. Otherwise, the Config Server will be unable to access the repository and the service instance may fail to initialize.</p>
+
 The `uri` setting is required; you cannot define a Config Server configuration source without including a `uri`.
 
 The default value of the `label` setting is `master`. You can set `label` to a branch name, a tag name, or a specific Git commit hash.
@@ -183,6 +185,8 @@ The parameters used to configure specific configuration sources for the Config S
 | <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/updating-an-instance.html#ssh-repository-access) section for more information                           |
 | <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
 | <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
+
+<p class='note'><strong>Important</strong>: If you set <code>cloneOnStart</code> to <code>true</code> for a repository which is secured with HTTP Basic authentication, you must set the <code>username</code> and <code>password</code> at the same time as you set <code>cloneOnStart</code>. Otherwise, the Config Server will be unable to access the repository and the service instance may fail to initialize.</p>
 
 The `uri` setting is required; you cannot define a Config Server configuration source without including a `uri`.
 
