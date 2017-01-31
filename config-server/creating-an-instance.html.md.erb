@@ -86,6 +86,8 @@ spring:
       label: v1.2
 ```
 
+Passwords are masked in the Config Server dashboard.
+
 Other parameters accepted for the Config Server are listed below.
 
 | Parameter            | Function                                                                                   | Example                          |
@@ -164,6 +166,8 @@ To create a Config Server service instance that uses SSH to access a configurati
 $ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-samples/cook.git", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
 </pre>
 
+Host and private keys are masked in the Config Server dashboard.
+
 ### <a id="multiple-repositories"></a>Multiple Repositories
 
 You can configure a Config Server service instance to use multiple configuration sources, which will be used only for specific applications or for applications which are using specific profiles. To do so, you must provide parameters in repository objects within the `git.repos` JSON object. Most parameters set in the `git` object for the default configuration source are also available for specific configuration sources and can be set in repository objects within the `git.repos` object.
@@ -224,6 +228,8 @@ spring:
     config:
       label: v1.2
 ```
+
+Passwords are masked in the Config Server dashboard.
 
 To create a Config Server service instance with a default repository and a repository specific to an application named "cook", run:
 
