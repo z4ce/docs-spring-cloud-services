@@ -128,7 +128,7 @@ Updated: 2016-06-24T21:59:24Z
 
 <p class='note'><strong>Note</strong>: You may notice a discrepancy between the status given for a service instance by the cf CLI (e.g., by the <code>cf service</code> command) versus that shown on the <a href="/spring-cloud-services/operator-information.html#service-instances-dashboard">Service Instances dashboard</a>. The dashboard is updated frequently (close to real-time); the status retrieved by the cf CLI is not updated as frequently and may take time to match the dashboard.</p>
 
-### <a id="server-side-decryption"></a>Server-Side Encryption
+### <a id="server-side-encryption"></a>Server-Side Encryption
 
 The Config Server exposes an `/encrypt` endpoint, which can be used to encrypt property values. To use the endpoint, you must configure the Config Server with a symmetric key, and your PCF deployment must have the Cloud Foundry Java buildpack version 3.7.1 or later installed.
 
@@ -168,6 +168,8 @@ To create a Config Server service instance that can encrypt property values, run
 <pre class="terminal">
 $ cf create-service p-config-server standard config-server -c '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "KEY" }}'
 </pre>
+
+The encryption key is masked in the Config Server dashboard.
 
 ### <a id="ssh-repository-access"></a>SSH Repository Access
 

@@ -116,7 +116,7 @@ Updated: 2016-06-24T21:13:59Z
 
 The service instance is now updated and ready to be used. For information about using an application to access configuration values served by a Config Server service instance, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.
 
-### <a id="server-side-decryption"></a>Server-Side Encryption
+### <a id="server-side-encryption"></a>Server-Side Encryption
 
 The Config Server exposes an `/encrypt` endpoint, which can be used to encrypt property values. To use the endpoint, you must configure the Config Server with a symmetric key, and your PCF deployment must have the Cloud Foundry Java buildpack version 3.7.1 or later installed.
 
@@ -156,6 +156,8 @@ To update a Config Server service instance so that it can encrypt property value
 <pre class="terminal">
 $ cf update-service config-server -c '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "KEY" }}'
 </pre>
+
+The encryption key is masked in the Config Server dashboard.
 
 ### <a id="ssh-repository-access"></a>SSH Repository Access
 
