@@ -134,10 +134,10 @@ The Config Server can serve encrypted property values from a configuration file.
 
 To use these features in a client application, you must use a Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. These files are contained in the Cloud Foundry Java buildpack from version 3.7.1.
 
-When the Config Server has been configured to encrypt values, you can make a POST request to the `/encrypt` endpoint following the procedure described in the [Get Access Token for Direct Requests to a Service Instance](/spring-cloud-services/operator-information.html#get-access-token-for-direct-requests-to-a-service-instance) section of the [Operator Information](/spring-cloud-services/1-3/operator-information.html) topic. Include the property value in the request. Omitting the header used to provide the OAuth 2.0 token, a curl command line might be something like the following, where `SERVER` is the URL of the Config Server:
+When the Config Server has been configured to encrypt values, you can make a POST request to the `/encrypt` endpoint following the procedure described in the [Get Access Token for Direct Requests to a Service Instance](/spring-cloud-services/operator-information.html#get-access-token-for-direct-requests-to-a-service-instance) section of the [Operator Information](/spring-cloud-services/1-3/operator-information.html) topic. Include the property value in the request. A curl command line might be something like the following, where `TOKEN_STRING` is an OAuth 2.0 token and `SERVER` is the URL of the Config Server:
 
 ```
-curl http://SERVER/encrypt -d 'Value to be encrypted'
+curl -H 'Authorization: bearer TOKEN_STRING' http://SERVER/encrypt -d 'Value to be encrypted'
 ```
 
 The Config Server returns the encrypted value. Use the encrypted value in a configuration file, prefixing the value with the string `{cipher}`.
