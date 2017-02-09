@@ -217,7 +217,7 @@ For a Config Server service instance:
 
 <pre class="terminal">
 $ curl -H 'Authorization: bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIwNWI1NWM5ZS1iZTdlLTQ5YzMtYTBhYi1lMDI5OWE2MDMyM2UiLCJzdWIiOiJwLWNvbmZpZy1zZX_a-bUNcH1ofOTHer567cHaRACtErs32iN0A23VErY1lOnG3stRiNg' https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
-{"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+{"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
 </pre>
 
 For a Service Registry service instance:
@@ -384,7 +384,7 @@ To view the configuration properties that a Config Server service instance is re
 
     <pre class="terminal">
     $ curl -H 'Authorization: bearer TOKEN' https://config-7b76f84c-455c-4ee6-8687-dbd93d734406.apps.wise.com/cook/default
-    {"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
+    {"name":"cook","profiles":["default"],"label":"master","propertySources":[{"name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
     </pre>
 
 For a list of path formats that the Config Server accepts, see the [Request Paths](/spring-cloud-services/config-server/server.html#request-paths) section of the [The Config Server](/spring-cloud-services/config-server/server.html) subtopic in the [Config Server documentation](/spring-cloud-services/config-server/).
