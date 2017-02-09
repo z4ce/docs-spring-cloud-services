@@ -85,7 +85,7 @@ and reach out to us if you think you require different values.
 
 As of the 1.4.0 release, the Spring Cloud Services Connectors now include the Cloud Foundry application GUID and instance ID in Ribbon request headers when these values are available. This allows Ribbon to specify a particular instance of an application when making a request. In Pivotal Cloud Foundry 1.8 or later, the Gorouter will respect such instance-specific routing decisions as made by Ribbon.
 
-Instance-specific routing is performed by Ribbon in the Spring Cloud Services Connectors automatically. For example, if an application instance has three instances A, B, and C, and A has a Eureka status other than `UP`, Ribbon specifies another instance---either B or C---when making a request to that application, and the Gorouter respects this specific choice by Ribbon even if the Gorouter considers instance A healthy. The application GUID and instance ID metadata now included in Ribbon requests can also be used to write custom routing logic in Ribbon clients within applications using the Spring Cloud Services Services Connectors.
+Instance-specific routing is performed by Ribbon in the Spring Cloud Services Connectors automatically. For example, if an application has three instances A, B, and C, and A has a Eureka status other than `UP`, Ribbon specifies another instance---either B or C---when making a request to that application, and the Gorouter respects this specific choice by Ribbon even if the Gorouter considers A healthy. The application GUID and instance ID metadata included in Ribbon requests can also be used to write custom routing logic in Ribbon clients within applications using the Spring Cloud Services Services Connectors.
 
 ## <a id="see-also"></a>See Also
 
