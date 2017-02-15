@@ -24,7 +24,7 @@ nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v
 go_buildpack             4          true      false    go_buildpack-cached-v1.7.10.zip
 </pre>
 
-If the default Java buildpack is older than version 3.8, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Adding Buildpacks to Cloud Foundry](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
+If the default Java buildpack is older than version 3.8, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Managing Custom Buildpacks](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
 
 If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 3.8 or later, you must specify an alternate buildpack that is at version 3.8 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
 
@@ -63,5 +63,5 @@ If you are using an SSL certificate signed by an internal root Certificate Autho
 
 1. Create a fork of the [Cloud Foundry Java buildpack](https://github.com/cloudfoundry/java-buildpack).
 1. Add your `cacerts` file to `resources/open_jdk_jre/lib/security/cacerts`.
-1. Following the instructions in the "Adding Buildpacks to Cloud Foundry" topic ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/adminguide/buildpacks.html), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/adminguide/buildpacks.html)), add your custom buildpack to Pivotal Cloud Foundry.
+1. Following the instructions in the "Managing Custom Buildpacks" topic ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/adminguide/buildpacks.html), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/adminguide/buildpacks.html)), add your custom buildpack to Pivotal Cloud Foundry.
 1. Using the cf CLI as discussed in the <a href="/spring-cloud-services/prerequisites.html#platform-and-product-requirements">Platform and Product Requirements</a> section above, verify that the custom buildpack is now the default Java buildpack.
