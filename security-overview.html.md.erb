@@ -419,7 +419,7 @@ Later on, the ```accounting-west/production``` space wants to deploy ```accounti
 
 A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Eureka Application Name ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Eureka Application Name ```accounting``` has already been registered with another service instance in the cluster, in the same PCF installation. 
 
-PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Eureka Application Names ```accounting``` or ```inventory```.
+PCF East comes online, and provides failover for ```accounting``` and ```inventory``` apps. This is allowed because there are no other service instances in this cluster, in PCF East, that have registered the Eureka Application Names ```accounting``` or ```inventory```.
 
 *OAuth 2 Clients for Bound Applications*
 
