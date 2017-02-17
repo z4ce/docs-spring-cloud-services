@@ -214,7 +214,7 @@ On the Config Server, the decryption features are disabled, so encrypted propert
 
 To use the decryption features in a client application, you must use a Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. These files are contained in the Cloud Foundry Java buildpack from version 3.7.1.
 
-<p class="tip">If you cannot use version 3.7.1 or later, you can add the JCE Unlimited Strength policy files to an earlier version of the Cloud Foundry Java buildpack. Fork the <a href="https://github.com/cloudfoundry/java-buildpack">buildpack on GitHub</a>, then download the policy files from Oracle and place them in the buildpack's <code>resources/open_jdk_jre/lib/security</code> directory. Follow the instructions in the <a href="http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html">Adding Buildpacks to Cloud Foundry</a> topic to add this buildpack to Pivotal Cloud Foundry. Be sure that it has the lowest position of all enabled Java buildpacks.</p>
+<p class="tip">If you cannot use version 3.7.1 or later, you can add the JCE Unlimited Strength policy files to an earlier version of the Cloud Foundry Java buildpack. Fork the <a href="https://github.com/cloudfoundry/java-buildpack">buildpack on GitHub</a>, then download the policy files from Oracle and place them in the buildpack's <code>resources/open_jdk_jre/lib/security</code> directory. Follow the instructions in the <a href="http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html">Managing Custom Buildpacks</a> topic to add this buildpack to Pivotal Cloud Foundry. Be sure that it has the lowest position of all enabled Java buildpacks.</p>
 
 You must also include [Spring Security RSA](https://github.com/dsyer/spring-security-rsa) as a dependency.
 
