@@ -13,90 +13,29 @@ To be given a base URI and client credentials for accessing a Config Server inst
 
 Click the service instance's listing in Apps Manager. Under **App Bindings**, click **Bind Apps**.
 
-<%= image_tag("config-server/bind-apps.png") %>
+<%= image_tag(vars.scs_cs_configuration_clients_img_bind_apps) %>
 
 Select an application and click **Save**.
 
-<%= image_tag("config-server/save-binding.png") %>
+<%= image_tag(vars.scs_cs_configuration_clients_img_save_binding) %>
 
 Alternatively, you can use the Cloud Foundry Command Line Interface tool (cf CLI). Run the command `cf bind-service`, specifying the application name and service instance name.
 
-<pre class="terminal">
-$ cf bind-service cook config-server
-Binding service config-server to app cook in org myorg / space development as admin...
-OK
-TIP: Use 'cf restage cook' to ensure your env variable changes take effect
-</pre>
+<%= partial vars.scs_cs_configuration_clients_bind_service %>
 
 Then, as the command output suggests, run the command `cf restage` to restage the application before proceeding. (See the next section for information about the environment variable to which the command output refers.)
 
-<pre class="terminal">
-$ cf restage cook
-Restaging app cook in org myorg / space development as admin...
-...
-</pre>
+<%= partial vars.scs_cs_configuration_clients_restage %>
 
 ## Configuration Requests and Responses
 
 After an application is bound to the service instance, the application's `VCAP_SERVICES` environment variable will contain an entry under the key ```p-config-server```. You can view the application's environment variables using the cf CLI:
 
-<pre class="terminal">
-$ cf env cook
-Getting env variables for app cook in org myorg / space development as admin...
-OK
-
-System-Provided:
-{
- "VCAP_SERVICES": {
-  "p-config-server": [
-   {
-    "credentials": {
-     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
-     "client_id": "p-config-server-c4a56a3d-9507-4c2f-9cd1-f858dbf9e11c",
-     "client_secret": "9aGx9K5Vx0cM",
-     "uri": "https://config-51711835-4626-4823-b5a1-e5d91012f3f2.apps.wise.com"
-    },
-    "label": "p-config-server",
-    "name": "config-server",
-    "plan": "standard",
-    "tags": [
-     "configuration",
-     "spring-cloud"
-    ]
-   }
-  ]
- }
-}
-</pre>
+<%= partial vars.scs_cs_configuration_clients_env %>
 
 The following is an example of a response from the Config Server to a request using the path ```/cook/production``` (where the application is ```cook``` and the profile is ```production```).
 
-```
-{
-  "name":"cook",
-  "profiles":[
-    "production"
-  ],
-  "label":null,
-  "version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3",
-  "propertySources":[
-    {
-      "name":"https://github.com/spring-cloud-services-samples/cook-config/cook-production.properties",
-      "source":
-        {
-          "cook.special":"Cake a la mode"
-        }
-    },
-    {
-      "name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties",
-      "source":
-        {
-          "cook.special":"Pickled Cactus"
-        }
-    }
-  ]
-}
-```
+<%= partial vars.scs_cs_configuration_clients_response %>
 
 As shown in the above example, the Config Server may include multiple values for the same property in its response. In that case, the client application must decide how to interpret the response; the intent is that the first value in the list should take precedence over the others. Spring applications will do this for you automatically.
 

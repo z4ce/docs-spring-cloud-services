@@ -1,0 +1,48 @@
+---
+title: Configuration Files
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+The Config Server serves configuration from files in either YAML or Java .properties formats. (Anything else that would be good to have in the intro to the page? Should there be more than one paragraph in the intro?) See below for information about the formatting of configuration files for use with the Config Server.
+
+* profile-specific settings
+* application-specific, profile-specific, or label-specific filenames
+* **Mention** "global" configuration applied to all applications (based on filename? So `application.yml` gets used for _all_ applications, etc.)
+    * hierarchy in which configuration is applied
+    * "You can use resources with these file names to configure global defaults and have them overridden by application-specific files as necessary." http://cloud.spring.io/spring-cloud-static/spring-cloud-config/1.2.2.RELEASE/#_sharing_configuration_with_all_applications
+    * "overrides" feature
+
+## <a id="using-a-yaml-file"></a>Using a YAML File
+
+[intro paragraphs]
+
+Below is an example of a configuration file written in YAML.
+
+```yml
+hi: there
+```
+
+Hi. See the [YAML website](http://www.yaml.org) for more information about the format.
+
+## <a id="using-a-properties-file"></a>Using a Properties File
+
+[intro paragraphs]
+
+Below is an example of a configuration file written in Java .properties format.
+
+```properties
+hi=there
+```
+
+[reference for Java .properties format]
+
+## <a id="encrypted-configuration"></a>Encrypted Configuration
+
+Should this be its own section? If so, what else would be good as separate sections at this level?
+
+## <a id="anything-else"></a>Anything Else
+
+What other info would possibly be useful to have that relates to writing configuration files / what you can do with them (maybe look through OSS docs, only applying the info that's relevant to SCS Config Server)?
+
