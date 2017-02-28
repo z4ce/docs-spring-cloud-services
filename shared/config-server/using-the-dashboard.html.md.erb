@@ -5,9 +5,9 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-To find the dashboard, navigate in Pivotal Cloud Foundry&reg; Apps Manager to the Config Server service instance's space, click the listing for the service instance, and then click **Manage**.
+To find the dashboard, navigate in <%= vars.scs_platform_name %> Apps Manager to the Config Server service instance's space, click the listing for the service instance, and then click **Manage**.
 
-<%= image_tag("config-server/cs_manage_link.png") %>
+<%= image_tag(vars.scs_cs_using_dashboard_manage_link) %>
 
 If you are using version 6.8.0 or later of the Cloud Foundry Command Line Interface tool (cf CLI), you can also use `cf service SERVICE_NAME`, where `SERVICE_NAME` is the name of the Config Server service instance:
 
@@ -34,7 +34,7 @@ Visit the URL given for "Dashboard".
 
 The dashboard shows the JSON object used to configure Config Server settings. You can click the **Copy to clipboard** button to obtain this object in a string format suitable for use in command lines.
 
-<%= image_tag("config-server/updated-dashboard.png") %>
+<%= image_tag(vars.scs_cs_using_dashboard_updated_dashboard) %>
 
 For the settings shown in the above figure, the button copies the following to the clipboard:
 

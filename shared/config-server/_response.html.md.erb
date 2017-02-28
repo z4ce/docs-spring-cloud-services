@@ -1,25 +1,28 @@
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"cook"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"profiles"</span><span class="p">:[</span><span class="w">
-    </span><span class="s2">"production"</span><span class="w">
-  </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"label"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"version"</span><span class="p">:</span><span class="s2">"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"propertySources"</span><span class="p">:[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"https://github.com/spring-cloud-services-samples/cook-config/cook-production.properties"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"source"</span><span class="p">:</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nt">"cook.special"</span><span class="p">:</span><span class="s2">"Cake a la mode"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"https://github.com/spring-cloud-services-samples/cook-config/cook.properties"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"source"</span><span class="p">:</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nt">"cook.special"</span><span class="p">:</span><span class="s2">"Pickled Cactus"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+<pre>
+<code>
+{
+  "name":"cook",
+  "profiles":[
+    "production"
+  ],
+  "label":null,
+  "version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3",
+  "propertySources":[
+    {
+      "name":"https://github.com/spring-cloud-services-samples/cook-config/cook-production.properties",
+      "source":
+        {
+          "cook.special":"Cake a la mode"
+        }
+    },
+    {
+      "name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties",
+      "source":
+        {
+          "cook.special":"Pickled Cactus"
+        }
+    }
+  ]
+}
+</code>
+</pre>
