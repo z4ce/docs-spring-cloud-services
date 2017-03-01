@@ -11,24 +11,7 @@ To use a Spring Boot application as a client for a Config Server instance, you m
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud&reg; Config Client starter will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
-## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
-
-Spring Cloud Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your client application can consume properties from a Config Server service instance.
-
-Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the `TRUST_CERTS` environment variable on your client application to the API endpoint of your Elastic Runtime instance:
-
-<pre class="terminal">
-$ cf set-env cook TRUST_CERTS api.cf.wise.com
-Setting env variable 'TRUST_CERTS' to 'api.cf.wise.com' for app cook in org myorg / space development as user...
-OK
-TIP: Use 'cf restage' to ensure your env variable changes take effect
-
-$ cf restage cook
-</pre>
-
-<p class='note'><strong>Note</strong>: The <code>CF_TARGET</code> environment variable was formerly recommended for configuring Spring Cloud Services to add a certificate to the truststore. <code>CF_TARGET</code> is still supported for this purpose, but <code>TRUST_CERTS</code> is more flexible and is now recommended instead.</p>
-
-As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
+<%= partial vars.scs_cs_self_signed_cert %>
 
 ## <a id="use-configuration-values"></a>Use Configuration Values
 
@@ -214,7 +197,7 @@ On the Config Server, the decryption features are disabled, so encrypted propert
 
 To use the decryption features in a client application, you must use a Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. These files are contained in the Cloud Foundry Java buildpack from version 3.7.1.
 
-<p class="tip">If you cannot use version 3.7.1 or later, you can add the JCE Unlimited Strength policy files to an earlier version of the Cloud Foundry Java buildpack. Fork the <a href="https://github.com/cloudfoundry/java-buildpack">buildpack on GitHub</a>, then download the policy files from Oracle and place them in the buildpack's <code>resources/open_jdk_jre/lib/security</code> directory. Follow the instructions in the <a href="http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html">Managing Custom Buildpacks</a> topic to add this buildpack to Pivotal Cloud Foundry. Be sure that it has the lowest position of all enabled Java buildpacks.</p>
+<%= vars.scs_cs_writing_client_applications_add_buildpack %>
 
 You must also include [Spring Security RSA](https://github.com/dsyer/spring-security-rsa) as a dependency.
 
