@@ -23,4 +23,8 @@ Spring Cloud Services currently provides the following services.
 | <a href="./service-registry/index.html">Service Registry</a>         | 7                   |
 | <a href="./circuit-breaker/index.html">Circuit Breaker Dashboard</a> | 7                   |
 
-<%= partial vars.scs_details %>
+
+<% if vars.product_name == 'PCF' %>
+ <%= partial vars.scs_details %>
+<% end %>
+
