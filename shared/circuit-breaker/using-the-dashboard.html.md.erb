@@ -1,0 +1,44 @@
+---
+title: Using the Dashboard 
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+To find the dashboard, navigate in <%=vars.scs_platform_name%> Apps Manager to the Circuit Breaker Dashboard service instance's space, click the listing for the service instance, and then click **Manage**.
+
+<%= image_tag(vars.scs_cbd_using_dashboard_img_manage_link) %>
+
+If you are using version 6.8.0 or later of the Cloud Foundry Command Line Interface (cf CLI), you can also use `cf service SERVICE_NAME`, where `SERVICE_NAME` is the name of the Circuit Breaker Dashboard service instance:
+
+<%= partial vars.scs_cbd_creating_instance_service %>
+
+Visit the URL given for "Dashboard".
+
+To see breaker statuses on the dashboard, configure an application as described in the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> topic, using ```@HystrixCommand``` annotations to apply circuit breakers. Then push the application and bind it to the Circuit Breaker Dashboard service instance. Once bound and restaged, the application will update the dashboard with metrics that describe the health of its monitored service calls. 
+
+With the &#8220;Agency&#8221; example application (see the <a href="https://github.com/spring-cloud-services-samples/traveler/tree/1.3.x">&#8220;traveler&#8221; repository</a>) receiving no load, the dashboard displays the following:
+
+<%= image_tag(vars.scs_cbd_using_dashboard_img_dashboard_start) %>
+
+To see the circuit breaker in action, use curl, <a href="http://jmeter.apache.org/">JMeter</a>, <a href="http://httpd.apache.org/docs/2.2/programs/ab.html">Apache Bench</a>, or similar to simulate load.
+
+<pre class="terminal">
+$ while true; do curl agency.wise.com; done
+</pre>
+
+With the Company application running and available via the Service Registry instance (see the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> topic), the Agency application responds with a guide name, indicating a successful service call. If you stop Company, Agency will respond with a "None available" message, indicating that the call to its `getGuide()` method failed and was redirected to the fallback method.
+
+When service calls are succeeding, the circuit is closed, and the dashboard graph shows the rate of calls per second and successful calls per 10 seconds.
+
+<%= image_tag(vars.scs_cbd_using_dashboard_img_dashboard_closed) %>
+
+When calls begin to fail, the graph shows the rate of failed calls in red.
+
+<%= image_tag(vars.scs_cbd_using_dashboard_img_dashboard_opening) %>
+
+When failures exceed the configured threshold (the default is 20 failures in 5 seconds), the breaker opens the circuit. The dashboard shows the rate of short-circuited calls---calls which are going straight to the fallback method---in blue. The application is still allowing calls to the failing method at a rate of 1 every 5 seconds, as indicated in red; this is necessary to determine if calls are succeeding again and if the circuit can be closed.
+
+<%= image_tag(vars.scs_cbd_using_dashboard_img_dashboard_open) %>
+
+With the circuit breaker in place on its `getGuide()` method, the Agency example application never returns an HTTP status code other than `200` to the requester.

@@ -1,0 +1,357 @@
+---
+title: Creating an Instance
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+You can create a Config Server service instance using either the Cloud Foundry Command Line Interface tool (cf CLI) or <%= vars.scs_platform_name %> Apps Manager (you cannot configure a service instance using Apps Manager).
+
+## <a id="using-cf-cli"></a>Using the cf CLI
+
+Begin by targeting the correct org and space.
+
+<%= partial vars.scs_cs_creating_instance_target %>
+
+You can view plan details for the Config Server product using `cf marketplace -s`.
+
+<%= partial vars.scs_cs_creating_instance_marketplace %>
+
+Create the service instance using `cf create-service`, using the `-c` flag to provide a JSON object that specifies the configuration parameters. Parameters used to configure configuration sources are part of a JSON object called `git`, as in `{"git": { "uri": "http://example.com/config" } }`. For more information on the purposes of these fields, see the [The Config Server](/spring-cloud-services/config-server/server.html) topic.
+
+<a id="general-configuration-parameters"></a>
+
+General parameters used to configure the Config Server's default configuration source are listed below.
+
+| Parameter                      | Function                                                                                                                                                |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>uri</code>               | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of a repository that can be used as the default configuration source      |
+| <code>label</code>             | The default "label" that can be used with the default repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application) |
+| <code>searchPaths</code>       | A pattern used to search for configuration-containing subdirectories in the default repository                                                          |
+| <code>cloneOnStart</code>      | Whether the Config Server should clone the default repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
+| <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
+| <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
+
+<p class='note'><strong>Important</strong>: If you set <code>cloneOnStart</code> to <code>true</code> for a service instance that uses a repository which is secured with HTTP Basic authentication, you must set the <code>username</code> and <code>password</code> at the same time as you set <code>cloneOnStart</code>. Otherwise, the Config Server will be unable to access the repository and the service instance may fail to initialize.</p>
+
+The `uri` setting is required; you cannot define a Config Server configuration source without including a `uri`.
+
+The default value of the `label` setting is `master`. You can set `label` to a branch name, a tag name, or a specific Git commit hash.
+
+To set `label` to point to the `develop` branch of a repository, you might configure settings as shown in the following JSON:
+
+```
+'{"git": { "uri": "https://github.com/myorg/config-repo", "label": "develop" } }'
+```
+
+To set `label` to point to the `v1.1` tag in a repository, you might configure settings as shown in the following JSON:
+
+```
+'{"git": { "uri": "https://github.com/myorg/config-repo", "label": "v1.1" } }'
+```
+
+Within a client application, you can override the Config Server's `label` setting by setting the `spring.cloud.config.label` property (for example, in `bootstrap.yml`).
+
+```yml
+spring:
+  cloud:
+    config:
+      label: v1.2
+```
+
+Passwords are masked in the Config Server dashboard.
+
+Other parameters accepted for the Config Server are listed below.
+
+| Parameter            | Function                                                                                   | Example                          |
+|----------------------|--------------------------------------------------------------------------------------------|----------------------------------|
+| <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
+| <code>upgrade</code> | Whether to upgrade the instance                                                            | <code>'{"upgrade": true}'</code> |
+
+To create an instance, specifying settings for the configuration sources, that the default configuration source Git repository should be cloned when the Config Server starts up, and that three nodes should be provisioned:
+
+<%= partial vars.scs_cs_creating_instance_create %>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the service instance is ready, the `cf service` command will give a status of `create succeeded`:
+
+<%= partial vars.scs_cs_creating_instance_service %>
+
+<p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report a <code>create succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be created and have a <code>create succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="/spring-cloud-services/config-server/using-the-dashboard.html">Using the Dashboard</a> topic.</p>
+
+<%= vars.scs_creating_instance_discrepancy %>
+
+### <a id="encryption-and-encrypted-values"></a>Encryption and Encrypted Values
+
+The Config Server can serve encrypted property values from a configuration file. If the Config Server is configured with a symmetric or asymmetric encryption key and the encrypted values are prefixed with the string `{cipher}`, the Config Server will decrypt the values before serving them to client applications. The Config Server has an `/encrypt` endpoint, which can be used to encrypt property values.
+
+To use these features in a client application, you must use a Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. These files are contained in the Cloud Foundry Java buildpack from version 3.7.1.
+
+<%= vars.scs_cs_writing_client_applications_add_buildpack %>
+
+If you wish to use public-key (or asymmetric) encryption, you must configure the Config Server to use a PEM-encoded keypair. You might generate such a keypair using, for example, [OpenSSL](https://www.openssl.org/) on the command line:
+
+```
+$ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048
+```
+
+When the Config Server has been configured to encrypt values, you can make a POST request to the `/encrypt` endpoint following the procedure described in the [Get Access Token for Direct Requests to a Service Instance](/spring-cloud-services/operator-information.html#get-access-token-for-direct-requests-to-a-service-instance) section of the [Operator Information](/spring-cloud-services/1-3/operator-information.html) topic. Include the property value in the request. A request to encrypt a value might look something like the following (using curl), where `TOKEN_STRING` is an OAuth 2.0 token and `SERVER` is the URL of the Config Server:
+
+```
+curl -H 'Authorization: bearer TOKEN_STRING' http://SERVER/encrypt -d 'Value to be encrypted'
+```
+
+The Config Server returns the encrypted value. You can use the encrypted value, prefixed with the string `{cipher}`, in a configuration file.
+
+If using a YAML file, surround the complete value with single quotes:
+
+```
+special:
+  surprise: '{cipher}PT63fqnrFn2fW3zS4HKfEnf36AuIYOSTqYkaBnjQZmC9dxatMNl99GYXjA8zmnXkV7l
+            K7Ed3mAddYEYdTSsSQtpIcSVrEgvQTNsa7VWrtH4XiR//9zwhk2unF1Vn/d335AhCYN9aw/hOl1q
+            0Hha5vV1bV6vUyWikb7mS16plrTg='
+```
+
+If using a properties file, do not use quotes:
+
+```
+special.surprise: {cipher}PT63fqnrFn2fW3zS4HKfEnf36AuIYOSTqYkaBnjQZmC9dxatMNl99GYXjA8zmn
+                  XkV7lK7Ed3mAddYEYdTSsSQtpIcSVrEgvQTNsa7VWrtH4XiR//9zwhk2unF1Vn/d335AhC
+                  YN9aw/hOl1q0Hha5vV1bV6vUyWikb7mS16plrTg=
+```
+
+The parameters used to configure server-side encryption for a Config Server are listed below.
+
+| Parameter                      | Function                                                                                                                                                |
+|--------------------------------|--------------------------------|
+| <code>encrypt.key</code>       | The key to use for encryption. |
+
+To create a Config Server service instance that can encrypt property values, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "KEY" }}'
+</pre>
+
+The encryption key is masked in the Config Server dashboard.
+
+### <a id="ssh-repository-access"></a>SSH Repository Access
+
+You can configure a Config Server configuration source so that the Config Server accesses it using the Secure Shell (SSH) protocol. To do so, you must specify a URI using the `ssh://` URI scheme or the Secure Copy Protocol (SCP) style URI format, and you must supply a private key. You may also supply a host key with which the server will be identified. If you do not provide a host key, the Config Server will not verify the host key of the configuration source's server.
+
+A SSH URI must include a username, host, and repository path. This might be specified as shown in the following JSON:
+
+```
+'{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git"} }'
+```
+
+An equivalent SCP-style URI might be specified as shown in the following JSON:
+
+```
+'{"git": { "uri": "git@github.com:spring-cloud-services-samples/cook-config.git"} }'
+```
+
+The parameters used to configure SSH for a Config Server configuration source's URI are listed below.
+
+| Parameter                      | Function                                                                                                                                                |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>hostKey</code>           | The host key of the Git server. If you have connected to the server via git on the command line, this is in your <code>.ssh/known_hosts</code>. Do not include the algorithm prefix; this is specified in <code>hostKeyAlgorithm</code>. (Optional.)                                                                                        |
+| <code>hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521". (Required if supplying <code>hostKey</code>.)            |
+| <code>privateKey</code>        | The private key that identifies the Git user, with all newline characters replaced by <code>\n</code>. Passphrase-encrypted private keys are not supported.                     |
+
+To create a Config Server service instance that uses SSH to access a configuration source, allowing for host key verification, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "hostKey": "AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+</pre>
+
+To create a Config Server service instance that uses SSH to access a configuration source, without host key verification, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+</pre>
+
+Host and private keys are masked in the Config Server dashboard.
+
+### <a id="multiple-repositories"></a>Multiple Repositories
+
+You can configure a Config Server service instance to use multiple configuration sources, which will be used only for specific applications or for applications which are using specific profiles. To do so, you must provide parameters in repository objects within the `git.repos` JSON object. Most parameters set in the `git` object for the default configuration source are also available for specific configuration sources and can be set in repository objects within the `git.repos` object.
+
+Each repository object in the `git.repos` object has a name. In the repository specified in the following JSON, the name is "cookie":
+
+```
+'{ "git": { "repos": { "cookie": { "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } } }'
+```
+
+Each repository object also has a `pattern`, which is a comma-separated list of application and profile names separated with forward slashes (`/`, as in `app/profile`) and potentially including wildcards (`*`, as in `app*/profile*`). If you do not supply a pattern, the repository object's name will be used as the pattern. In the repository specified in the following JSON, the pattern is `co*/dev*` (matching any application whose name begins with `co` and which is using a profile whose name begins with `dev`), and the default pattern would be `cookie`:
+
+```
+'{"git": { "repos": { "cookie": { "pattern": "co*/dev*", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } } }'
+```
+
+For more information about the pattern format, see ["Pattern Matching and Multiple Repositories"](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_pattern_matching_and_multiple_repositories) in the [Spring Cloud Config documentation](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html).
+
+The parameters used to configure specific configuration sources for the Config Server are listed below.
+
+| Parameter                                  | Function                                                                                                                                    |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
+| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)        |
+| <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of this repository                                            |
+| <code>repos."name".label</code>            | The default "label" to use with this repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application)                                                    |
+| <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
+| <code>repos."name".cloneOnStart</code>     | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
+| <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
+| <code>repos."name".password</code>         | The password used to access this repository (if protected by HTTP Basic authentication)                                                     |
+| <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/creating-an-instance.html#ssh-repository-access) section for more information                           |
+| <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
+| <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
+
+<p class='note'><strong>Important</strong>: If you set <code>cloneOnStart</code> to <code>true</code> for a repository which is secured with HTTP Basic authentication, you must set the <code>username</code> and <code>password</code> at the same time as you set <code>cloneOnStart</code>. Otherwise, the Config Server will be unable to access the repository and the service instance may fail to initialize.</p>
+
+The `uri` setting is required; you cannot define a Config Server configuration source without including a `uri`.
+
+The default value of the `label` setting is `master`. You can set `label` to a branch name, a tag name, or a specific Git commit hash.
+
+To set `label` to point to the `develop` branch of a repository, you might configure the setting as shown in the following JSON:
+
+```
+'{"git": { "repos": { "cookie": { "uri": "https://github.com/myorg/config-repo", "label": "develop" } } } }'
+```
+
+To set `label` to point to the `v1.1` tag in a repository, you might configure the setting as shown in the following JSON:
+
+```
+'{"git": { "repos": { "cookie": { "uri": "https://github.com/myorg/config-repo", "label": "v1.1" } } } }'
+```
+
+Within a client application, you can override this `label` setting's value by setting the `spring.cloud.config.label` property (for example, in `bootstrap.yml`).
+
+```yml
+spring:
+  cloud:
+    config:
+      label: v1.2
+```
+
+Passwords are masked in the Config Server dashboard.
+
+To create a Config Server service instance with a default repository and a repository specific to an application named "cook", run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "cook", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } } }'
+</pre>
+
+To create a Config Server service instance with a default repository and a repository specific to applications using the `dev` profile, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "*/dev", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } } }'
+</pre>
+
+### <a id="placeholders-in-repository-uris"></a>Placeholders in Repository URIs
+
+The URIs for configuration source Git repositories can include a couple of special strings as placeholders:
+
+* `{application}`: the name set in the `spring.application.name` property on an application
+* `{profile}`: a profile listed in the `spring.profiles.active` property on an application
+
+You can use these placeholders to (for example) set a single URI which maps one repository each to multiple applications that use the same Config Server, or to set a single URI which maps one repository each to multiple profiles.
+
+<p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="/spring-cloud-services/config-server/creating-an-instance.html#general-configuration-parameters">general configuration parameters.</a></p>
+
+A repository URI that enables use of one repository per application might be expressed as shown in the following JSON. For an application named "cook", this would locate the repository named `cook-config`:
+
+```
+'{"git": { "uri": "https://github.com/spring-cloud-services-samples/{application}-config"  } }'
+```
+
+A repository URI that enables use of one repository per profile might be expressed as shown in the following JSON. For an application using the `dev` profile, this would locate a repository named `config-dev`:
+
+```
+'{"git": { "uri": "https://github.com/spring-cloud-services-samples/config-{profile}"  } }'
+```
+
+For more information about using placeholders, see ["Placeholders in Git URI"](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_placeholders_in_git_uri) in the [Spring Cloud Config documentation](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html).
+
+To create a Config Server service instance with a repository URI that enables one repository per application, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/{application}-config"  } }'
+</pre>
+
+To create a Config Server service instance with a repository URI that enables one repository per profile, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/config-{profile}"  } }'
+</pre>
+
+### <a id="proxy-repository-access"></a>HTTP(S) Proxy Repository Access
+
+You can configure a Config Server service instance to access configuration sources using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `git.proxy.http` or `git.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
+
+<p class='note'><strong>Important</strong>: Config Server <%= vars.scs_suffix %> does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source at this time.</p>
+
+Settings for an HTTP proxy are set in the `git.proxy.http` object. These might be set as shown in the following JSON:
+
+```
+'{"git": { "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+```
+
+Settings for an HTTPS proxy are set in the `git.proxy.https` object. These might be set as shown in the following JSON:
+
+```
+'{"git": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
+```
+
+The parameters used to configure HTTP or HTTPS proxy settings for the Config Server are listed below.
+
+| Parameter                                  | Function                                                                                                                                            |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                        |
+| <code>proxy.http.host</code>               | The HTTP proxy host                                                                                                                                 |
+| <code>proxy.http.port</code>               | The HTTP proxy port                                                                                                                                 |
+| <code>proxy.http.nonProxyHosts</code>      | The hosts to access outside the HTTP proxy                                                                                                          |
+| <code>proxy.http.username</code>           | The username to use with an authenticated HTTP proxy                                                                                                |
+| <code>proxy.http.password</code>           | The password to use with an authenticated HTTP proxy                                                                                                |
+| <code>proxy.https</code>                   | A proxy object, containing HTTPS proxy fields                                                                                                       |
+| <code>proxy.https.host</code>              | The HTTPS proxy host                                                                                                                                |
+| <code>proxy.https.port</code>              | The HTTPS proxy port                                                                                                                                |
+| <code>proxy.https.nonProxyHosts</code>     | The hosts to access outside the HTTPS proxy (if <code>proxy.http.nonProxyHosts</code> is also provided, <code>http.nonProxyHosts</code> will be used instead of <code>https.nonProxyHosts</code>)      |
+| <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy (if <code>proxy.http.username</code> is also provided, <code>http.username</code> will be used instead of <code>https.username</code>) |
+| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy (if <code>proxy.http.password</code> is also provided, <code>http.password</code> will be used instead of <code>https.password</code>) |
+
+To create a Config Server service instance that uses an HTTP proxy to access configuration sources, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config", "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+</pre>
+
+To create a Config Server service instance that uses an authenticated HTTPS proxy to access configuration sources, specifying that `example.com` should be accessed outside of the proxy, run:
+
+<pre class="terminal">
+$ cf create-service p-config-server standard config-server -c '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
+</pre>
+
+## <a id="using-apps-manager"></a>Using Apps Manager
+
+<p class='note'><strong>Note</strong>: If you create a Config Server service instance using Apps Manager, you will need to use the cf CLI to update the service instance and provide settings (including one or more configuration sources) before the instance will be usable. For information on updating a Config Server service instance, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.</p>
+
+Log into Apps Manager as a Space Developer. In the Marketplace, select **Config Server**.
+
+   <%= image_tag(vars.scs_cs_creating_instance_img_marketplace) %>
+
+Select the desired plan for the new service instance.
+
+   <%= image_tag(vars.scs_cs_creating_instance_img_select_plan) %>
+
+Provide a name for the service instance (for example, "config-server"). Click the **Add** button.
+
+   <%= image_tag(vars.scs_cs_creating_instance_img_instance_name) %>
+
+In the **Services** list, click the **Manage** link under the listing for the new service instance.
+
+   <%= image_tag(vars.scs_cs_creating_instance_img_service_successfully_added) %>
+
+It may take a few minutes to provision the service instance; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
+
+   <%= image_tag(vars.scs_cs_creating_instance_img_dashboard_new) %>
+
+The dashboard displays the current settings for the Config Server service instance. Before you can use this service instance, you must update it using the cf CLI to supply it with a configuration source. For information about updating a service instance to configure instance settings, see the <a href="/spring-cloud-services/config-server/updating-an-instance.html">Updating an Instance</a> topic.

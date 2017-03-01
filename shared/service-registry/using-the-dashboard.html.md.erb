@@ -1,0 +1,49 @@
+---
+title: Using the Dashboard
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+<p class='note'><strong>Note</strong>: Service Registry <%= vars.scs_suffix %> is currently based on Spring Cloud&reg; OSS Camden. If binding a Spring Cloud OSS Angel application to a Service Registry service instance, you may see irregular behavior in the Service Registry service instance dashboard's listing for the application. <br /><br /> For information on current client dependencies provided for use with Spring Cloud Services service instances, see the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic.</p>
+
+To find the dashboard, navigate in <%= vars.scs_platform_name %> Apps Manager to the Service Registry service instance's space, click the listing for the service instance, and then click **Manage**.
+
+<%= image_tag(vars.scs_sr_using_dashboard_manage_link) %>
+
+If you are using version 6.8.0 or later of the Cloud Foundry Command Line Interface tool (cf CLI), you can also use `cf service SERVICE_NAME`, where `SERVICE_NAME` is the name of the Service Registry service instance:
+
+<pre class="terminal">
+$ cf service service-registry
+
+Service instance: service-registry
+Service: p-service-registry
+Bound apps:
+Tags:
+Plan: standard
+Description: Service Registry for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.wise.com/dashboard/p-service-registry/a9bcaf09-ba0a-4650-bdfc-75784882245e
+
+Last Operation
+Status: create succeeded
+Message:
+Started: 2016-09-19T21:05:32Z
+Updated:
+</pre>
+
+Visit the URL given for "Dashboard".
+
+## <a id="dashboard-information"></a>Dashboard Information
+
+The dashboard shows the URL of the Service Registry service instance, the count of backing applications for the service instance (the High Availability or HA count), and the URLs of any peer service instances, as well as the applications currently registered with the service instance or with any peer service instances.
+
+<%= image_tag(vars.scs_sr_using_dashboard_empty_dashboard_top) %>
+
+If the Service Registry service instance has been configured to replicate its registry with any peers, peers are listed according to their status in the "replicas" fields under **General Info**. Peers which are registered with this service instance are listed in "registered-replicas" and, if currently in service, will be listed in "available-replicas". Peers which have been configured for this service instance but have not registered will be listed in "unavailable-replicas".
+
+<%= image_tag(vars.scs_sr_using_dashboard_empty_dashboard_middle) %>
+
+Before you have bound any applications to the Service Registry instance, the Service Registry dashboard displays only `EUREKA-SERVER` (the Service Registry backing application itself) under "Registered Apps". If you bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic), restage the application, and wait for it to register with Eureka, you will see it listed in the dashboard.
+
+<%= image_tag(vars.scs_sr_using_dashboard_registered_service) %>

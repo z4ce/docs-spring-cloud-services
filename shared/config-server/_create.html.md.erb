@@ -1,0 +1,7 @@
+<pre class="terminal">
+$ cf create-service -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/config-repo", "cloneOnStart": "true", "repos": { "cook": { "pattern": "cook*", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } }, "count": 3 }' p-config-server standard config-server
+Creating service instance config-server in org myorg / space development as user...
+OK
+
+Create in progress. Use 'cf services' or 'cf service config-server' to check operation status.
+</pre>

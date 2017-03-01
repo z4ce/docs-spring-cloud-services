@@ -1,0 +1,26 @@
+---
+title: Spring Cloud&reg; Services
+owner: Spring Cloud Services
+---
+
+### What Is Spring Cloud Services?
+
+The rise in popularity of cloud-native architectures and the shift to implementing applications as series of focused microservices developed around bounded contexts has led to the discovery and rediscovery of patterns useful in designing distributed systems. Techniques such as service discovery, centralized configuration accessed through an application's deployment environment, and graceful degradation of behavior through circuit breakers are common solutions for this style of architecture and can be built into tools for applying these techniques across applications.
+
+Netflix, a pioneer in the microservices space, has built many such tools. Eureka is a service registry, which registers all of a microservice's instances and supplies each microservice with instance information to use in discovering others. Hystrix, the Hystrix Dashboard, and Turbine provide fault tolerance using circuit breakers and enable monitoring of circuits across microservices and instances. These components have been battle-tested in a production environment facing some of the most demanding traffic requirements in the world, and are available as open-source software.
+
+The [Spring Cloud](http://projects.spring.io/spring-cloud/) family of projects are based on [Spring Boot](http://projects.spring.io/spring-boot/) and provide tools including Netflix's Eureka and Hystrix as libraries easily consumable by Spring applications, following idiomatic Spring conventions. [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/) makes the use of Eureka and Hystrix as simple as including starters dependencies in an application and adding an annotation to a configuration class. [Spring Cloud Config](http://cloud.spring.io/spring-cloud-config/) includes a configuration server and client library that enable Spring applications to consume centralized configuration as series of property sources.
+
+Spring Cloud Services <%=vars.scs_suffix%> packages server-side components of Spring Cloud projects, including Spring Cloud Netflix and Spring Cloud Config, and makes them available as services in the PCF Marketplace. This frees you from having to implement and maintain your own managed services in order to use the included projects. You can create a Config Server, Service Registry, or Circuit Breaker Dashboard service instance on-demand, bind to it and consume its functionality, and return to focusing on the value added by your own microservices.
+
+### Services
+
+Spring Cloud Services currently provides the following services.
+
+| Service Type                                                         | Current Version     |
+|----------------------------------------------------------------------|---------------------|
+| <a href="./config-server/index.html">Config Server</a>               | 7                   |
+| <a href="./service-registry/index.html">Service Registry</a>         | 7                   |
+| <a href="./circuit-breaker/index.html">Circuit Breaker Dashboard</a> | 7                   |
+
+<%= partial vars.scs_details %>

@@ -1,0 +1,59 @@
+---
+title: Spring Cloud&reg; Connectors
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+To connect client applications to the Config Server, Spring Cloud Services uses [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html), including the [Spring Cloud Cloud Foundry Connector](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html), which discovers services bound to applications running in Cloud Foundry.
+
+## <a id="service-detection"></a>Service Detection
+
+The connector inspects Cloud Foundry's `VCAP_SERVICES` environment variable, which stores connection and identification information for service instances that are bound to Cloud Foundry applications, to detect available services. Below is an example of a `VCAP_SERVICES` entry for the Spring Cloud Services Config Server.
+
+```json
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+     "client_id": "p-config-server-c4a56a3d-9507-4c2f-9cd1-f858dbf9e11c",
+     "client_secret": "9aGx9K5Vx0cM",
+     "uri": "https://config-51711835-4626-4823-b5a1-e5d91012f3f2.wise.com"
+    },
+    "label": "p-config-server",
+    "name": "config-server",
+    "plan": "standard",
+    "tags": [
+     "configuration",
+     "spring-cloud"
+    ]
+   }
+  ]
+```
+
+For each service in the `VCAP_SERVICES` variable, the connector considers the following fields:
+
+* `tags`: Attributes or names of backing technologies behind the service.
+* `label`: The service offering's name (not to be confused with a service _instance's_ name).
+* `credentials.uri`: A URI pertaining to the service instance.
+* `credentials.uris`: URIs pertaining to the service instance.
+
+### <a id="config-server-detection-criteria"></a>Config Server Detection Criteria
+
+To establish availability of the Config Server, the Spring Cloud Cloud Foundry Connector compares `VCAP_SERVICES` service entries against the following criteria:
+
+* `tags` including `configuration`
+
+## <a id="application-configuration"></a>Application Configuration
+
+When the connector detects a Config Server service instance which has been bound to the application, it will automatically set the ```spring.cloud.config.uri``` property in the client application's environment, using the URL provided in the Config Server instance's ```credentials``` object. The connector will also set additional security properties to allow the client application to access the Config Server service instance.
+
+## <a id="see-also"></a>See Also
+
+For more information about Spring Cloud Connectors, see the following:
+
+* [Spring Cloud Cloud Foundry Connector documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-cloud-foundry-connector.html)
+* [Spring Cloud Connectors documentation](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-connectors.html)
+* [Spring Cloud Connectors for Spring Cloud Services on Pivotal Cloud Foundry](https://github.com/pivotal-cf/spring-cloud-services-connector)
