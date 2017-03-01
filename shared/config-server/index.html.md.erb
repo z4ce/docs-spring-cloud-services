@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 Config Server <%= vars.scs_suffix %> is an externalized application configuration service, which gives you a central place to manage an application's external properties across all environments. As an application moves through the deployment pipeline from development to test and into production, you can use Config Server to manage the configuration between environments and be certain that the application has everything it needs to run when you migrate it. Config Server easily supports labelled versions of environment-specific configurations and is accessible to a wide range of tooling for managing the content.
 
-<%= image_tag("/spring-cloud-services/images/config-server/config-server-fig1.png") %>
+<%= image_tag("config-server-fig1.png") %>
 
 The concepts on both client and server map identically to the Spring `Environment` and `PropertySource` abstractions. They work very well with Spring applications, but can be applied to applications written in any language. The default implementation of the server storage backend uses Git.
 
