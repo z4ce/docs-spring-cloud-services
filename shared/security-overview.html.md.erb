@@ -67,13 +67,13 @@ The other Identity Zone is specific to SCS (e.g. ```p-spring-cloud-services.uaa.
 
 The following diagram illustrates the OAuth clients used by SCS and the Identity Zones in which they exist.
 
-<%= image_tag("../images/security-overview/oauth2-clients.png") %>
+<%= image_tag("oauth2-clients.png") %>
 
 ## <a id="components"></a>Spring Cloud Services Components
 
 Before continuing, you should familiarize yourself with the following diagram, which shows the direct lines of communication between application components.
 
-<%= image_tag("../images/security-overview/component-communication.png") %>
+<%= image_tag("component-communication.png") %>
 
 ### <a id="core-components"></a>Core Components
 
@@ -411,11 +411,11 @@ The ownership of Eureka Application Names by a service instance parallels the ow
 
 PCF West is a PCF installation with Service Registry service instances in different organizations. These service instances are configured for peer replication with one another. One space hosts a CF Application ```accounting``` and the other hosts a CF Application ```inventory```. They both register with Eureka Application Names ```accounting``` and ```inventory``` as underlined, respectively.
 
-<%= image_tag("../images/security-overview/app-id-ownership-before.png") %>
+<%= image_tag("app-id-ownership-before.png") %>
 
 Later on, the ```accounting-west/production``` space wants to deploy ```accounting``` using a Blue/Green deployment strategy. The ```accounting``` CF Application is renamed ```accounting-blue```, but its Eureka Application Name stays the same. Then ```accounting-green``` is pushed, bound to the Service Registry service instance, and started. On startup it successully registers with the Eureka Application Name ```accounting```. This is allowed because there are no other service instances in this cluster, in PCF West, that have registered the Eureka Application Name ```accounting```.
 
-<%= image_tag("../images/security-overview/app-id-ownership-after.png") %>
+<%= image_tag("app-id-ownership-after.png") %>
 
 A space developer with access to the ```inventory-west/production``` space wishes to deploy a CF Application ```accounting-red``` in that space and register it with the Eureka Application Name ```accounting```. When ```accounting-red``` starts up, it tries to register but its registration requests are rejected. This is because the Eureka Application Name ```accounting``` has already been registered with another service instance in the cluster, in the same PCF installation. 
 
