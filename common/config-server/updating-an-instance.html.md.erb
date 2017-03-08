@@ -134,24 +134,7 @@ $ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048
 
 <%= partial vars.scs_cs_oauth_token %>
 
-The Config Server returns the encrypted value. You can use the encrypted value, prefixed with the string `{cipher}`, in a configuration file.
-
-If using a YAML file, surround the complete value with single quotes:
-
-```
-special:
-  surprise: '{cipher}PT63fqnrFn2fW3zS4HKfEnf36AuIYOSTqYkaBnjQZmC9dxatMNl99GYXjA8zmnXkV7l
-            K7Ed3mAddYEYdTSsSQtpIcSVrEgvQTNsa7VWrtH4XiR//9zwhk2unF1Vn/d335AhCYN9aw/hOl1q
-            0Hha5vV1bV6vUyWikb7mS16plrTg='
-```
-
-If using a properties file, do not use quotes:
-
-```
-special.surprise: {cipher}PT63fqnrFn2fW3zS4HKfEnf36AuIYOSTqYkaBnjQZmC9dxatMNl99GYXjA8zmn
-                  XkV7lK7Ed3mAddYEYdTSsSQtpIcSVrEgvQTNsa7VWrtH4XiR//9zwhk2unF1Vn/d335AhC
-                  YN9aw/hOl1q0Hha5vV1bV6vUyWikb7mS16plrTg=
-```
+The Config Server returns the encrypted value. You can use the encrypted value in a configuration file as described in the [Encrypted Configuration](/spring-cloud-services/common/config-server/configuration-files.html#encrypted-configuration) section of the [Configuration Files](/spring-cloud-services/common/config-server/configuration-files.html) topic.
 
 The parameters used to configure server-side encryption for a Config Server are listed below.
 
