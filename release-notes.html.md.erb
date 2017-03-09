@@ -3,11 +3,11 @@ title: Release Notes for Spring Cloud&reg; Services on Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
+<html class="list-style-none"></html>
+
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
-## <a id="1-1"></a>1.1
-
-### <a id="1-1-12"></a>1.1.12
+## <a id="1-1-12"></a>1.1.12
 
 **Release Date: 28th February 2017**
 
@@ -16,7 +16,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3263.20. This resolves the following issues:
   * [[USN-3208-2]](https://www.ubuntu.com/usn/usn-3208-2/): Linux kernel (Xenial HWE) vulnerabilities
 
-### <a id="1-1-11"></a>1.1.11
+## <a id="1-1-11"></a>1.1.11
 
 **Release Date: 30th January 2017**
 
@@ -27,7 +27,7 @@ Enhancements included in this release:
   * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
   * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
 
-### <a id="1-1-10"></a>1.1.10
+## <a id="1-1-10"></a>1.1.10
 
 **Release Date: 14th December 2016**
 
@@ -36,7 +36,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3263.13. This resolves the following issues:
   * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
   
-### <a id="1-1-9"></a>1.1.9
+## <a id="1-1-9"></a>1.1.9
 
 **Release Date: 7th December 2016**
 
@@ -45,7 +45,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3263.12. This resolves the following issues:
   * [[USN-3151-2]](https://www.ubuntu.com/usn/usn-3151-2/): Linux kernel (Xenial HWE) vulnerability
 
-### <a id="1-1-8"></a>1.1.8
+## <a id="1-1-8"></a>1.1.8
 
 **Release Date: 21st October 2016**
 
@@ -54,7 +54,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3233.3. This resolves the following issues:
   * [[USN-3106-2]](https://www.ubuntu.com/usn/usn-3106-2/): Linux kernel (Xenial HWE) vulnerability
 
-### <a id="1-1-7"></a>1.1.7
+## <a id="1-1-7"></a>1.1.7
 
 **Release Date: 12th October 2016**
 
@@ -62,7 +62,7 @@ Enhancements included in this release:
 
 * The stemcell has been updated to 3233.2 for stability and bug fixes.
 
-### <a id="1-1-6"></a>1.1.6
+## <a id="1-1-6"></a>1.1.6
 
 **Release Date: 6th October 2016**
 
@@ -70,7 +70,7 @@ Enhancements included in this release:
 
 * The stemcell has been updated to 3233.1 as an upgrade to Linux version 4.4 kernel and to enable future upgrades.
 
-### <a id="1-1-4"></a>1.1.4
+## <a id="1-1-4"></a>1.1.4
 
 **Release Date: 28th September 2016**
 
@@ -79,7 +79,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3232.21. This resolves the following issues:
   * [[USN-3087-2]](http://www.ubuntu.com/usn/usn-3087-2/): OpenSSL regression
 
-### <a id="1-1-3"></a>1.1.3
+## <a id="1-1-3"></a>1.1.3
 
 **Release Date: 8th September 2016**
 
@@ -89,7 +89,7 @@ Features included in this release:
 
 * The Cloud Foundry Command Line Interface tool (cf CLI) used in errands has been upgraded to version 6.21.1 and is now configured to allow for long DNS resolution times.
 
-### <a id="1-1-2"></a>1.1.2
+## <a id="1-1-2"></a>1.1.2
 
 **Release Date: 24th August 2016**
 
@@ -113,7 +113,7 @@ Fixes included in this release:
 * Applications unbound from a Service Registry service instance will no longer remain in the service instance's registry and will be removed from that registry shortly after being unbound from the service instance.
 * Fixed a problem where the service broker's authentication to the Cloud Controller would expire if the broker remained inactive for a long period of time.
 
-### <a id="1-1-1"></a>1.1.1
+## <a id="1-1-1"></a>1.1.1
 
 **Release Date: 1st July 2016**
 
@@ -122,7 +122,7 @@ Features included in this release:
 * The stemcell has been updated to 3232.12. This resolves the following issues:
   * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
   
-### <a id="1-1-0"></a>1.1.0
+## <a id="1-1-0"></a>1.1.0
 
 **Release Date: 28th June 2016**
 
@@ -155,7 +155,7 @@ Known issues:
 * Config Server currently does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source. For more information, see <a href="/spring-cloud-services/1-1/config-server/creating-an-instance.html">Creating an Instance</a> or <a href="/spring-cloud-services/1-1/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a>.
 * When upgrading a Circuit Breaker Dashboard instance from 1.0.x to 1.1.0, running applications must be unbound, rebound, and restarted, due to a change in how credentials are managed.
 
-#### <a id="migrating-from-1-0-x"></a>Migrating from 1.0.x
+### <a id="migrating-from-1-0-x"></a>Migrating from 1.0.x
 
 In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
 
