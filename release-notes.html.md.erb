@@ -7,6 +7,12 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
+## <a id="migrating-from-1-0-x"></a>Migrating from 1.0.x
+
+In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
+
+For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-1/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-1/client-dependencies.html">Client Dependencies</a>.
+
 ## <a id="1-1-12"></a>1.1.12
 
 **Release Date: 28th February 2017**
@@ -126,7 +132,7 @@ Features included in this release:
 
 **Release Date: 28th June 2016**
 
-<p class='note'><strong>Important</strong>: Your client applications which work with Spring Cloud Services 1.0.x service instances must be updated in order to work with 1.1.0 service instances. See <a href="#migrating-from-1-0-x">Migrating from 1.0.x</a> below.</p>
+<p class='note'><strong>Important</strong>: Your client applications which work with Spring Cloud Services 1.0.x service instances must be updated in order to work with 1.1.0 service instances. See <a href="#migrating-from-1-0-x">Migrating from 1.0.x</a>.</p>
 
 Features included in this release:
 
@@ -154,9 +160,3 @@ Known issues:
 
 * Config Server currently does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source. For more information, see <a href="/spring-cloud-services/1-1/config-server/creating-an-instance.html">Creating an Instance</a> or <a href="/spring-cloud-services/1-1/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a>.
 * When upgrading a Circuit Breaker Dashboard instance from 1.0.x to 1.1.0, running applications must be unbound, rebound, and restarted, due to a change in how credentials are managed.
-
-### <a id="migrating-from-1-0-x"></a>Migrating from 1.0.x
-
-In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
-
-For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-1/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-1/client-dependencies.html">Client Dependencies</a>.
