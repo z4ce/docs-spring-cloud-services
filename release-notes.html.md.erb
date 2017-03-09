@@ -3,21 +3,21 @@ title: Release Notes for Spring Cloud&reg; Services on Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
+<html class="list-style-none"></html>
+
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
-## <a id="1-2"></a>1.2
-
-### <a id="1-2-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+## <a id="1-2-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
 
 If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-### <a id="1-2-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+## <a id="1-2-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
 
 The Spring Cloud Services client dependencies were restructured in 1.1.0. To ensure compatibility of your client applications with Spring Cloud Services 1.2.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-2/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-2/client-dependencies.html">Client Dependencies</a>.
 
 After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.2.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
-### <a id="1-2-8"></a>1.2.8
+## <a id="1-2-8"></a>1.2.8
 
 **Release Date: 28th February 2017**
 
@@ -26,7 +26,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3263.20. This resolves the following issues:
   * [[USN-3208-2]](https://www.ubuntu.com/usn/usn-3208-2/): Linux kernel (Xenial HWE) vulnerabilities
 
-### <a id="1-2-7"></a>1.2.7
+## <a id="1-2-7"></a>1.2.7
 
 **Release Date: 30th January 2017**
 
@@ -37,7 +37,7 @@ Enhancements included in this release:
   * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
   * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
 
-### <a id="1-2-6"></a>1.2.6
+## <a id="1-2-6"></a>1.2.6
 
 **Release Date: 21st December 2016**
 
@@ -45,7 +45,7 @@ Fixes included in this release:
 
 * A timeout issue that could occur during the push operation for service instance backing applications has been resolved.
 
-### <a id="1-2-5"></a>1.2.5
+## <a id="1-2-5"></a>1.2.5
 
 **Release Date: 14th December 2016**
 
@@ -54,7 +54,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3263.13. This resolves the following issues:
   * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
 
-### <a id="1-2-4"></a>1.2.4
+## <a id="1-2-4"></a>1.2.4
 
 **Release Date: 7th December 2016**
 
@@ -65,7 +65,7 @@ Enhancements included in this release:
 * The Spring Cloud Services broker has been upgraded to Spring Cloud Brixton.SR7.
 * The validation normally performed by Spring Cloud Services for the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate can now be disabled by operators in the tile's settings.
 
-### <a id="1-2-3"></a>1.2.3
+## <a id="1-2-3"></a>1.2.3
 
 **Release Date: 10th November 2016**
 
@@ -75,7 +75,7 @@ Enhancements included in this release:
 
 <p class='note'><strong>Note</strong>: Pivotal recommends that client applications do not set either of the <code>eureka.instance.secureVirtualHostname</code> or <code>eureka.instance.virtualHostname</code> properties.</p>
 
-### <a id="1-2-2"></a>1.2.2
+## <a id="1-2-2"></a>1.2.2
 
 **Release Date: 21st October 2016**
 
@@ -84,7 +84,7 @@ Enhancements included in this release:
 * The stemcell has been updated to 3263.8. This resolves the following issues:
   * [[USN-3106-2]](https://www.ubuntu.com/usn/usn-3106-2/): Linux kernel (Xenial HWE) vulnerability
 
-### <a id="1-2-1"></a>1.2.1
+## <a id="1-2-1"></a>1.2.1
 
 **Release Date: 13th October 2016**
 
@@ -92,7 +92,7 @@ Enhancements included in this release:
 
 * The stemcell has been updated to 3263.7 for stability and bug fixes.
 
-### <a id="1-2-0"></a>1.2.0
+## <a id="1-2-0"></a>1.2.0
 
 **Release Date: 7th October 2016**
 
