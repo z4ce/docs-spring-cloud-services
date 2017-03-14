@@ -1,5 +1,5 @@
 <pre class="terminal">
-$ cf create-service -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/config-repo", "cloneOnStart": "true", "repos": { "cook": { "pattern": "cook*", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } }, "count": 3 }' p-config-server standard config-server
+$ cf create-service -c '{"git": { "uri": "https://github.com/spring-cloud-services-samples/config-repo", "repos": { "cook": { "pattern": "cook*", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } }, "count": 3 }' p-config-server standard config-server
 Creating service instance config-server in org myorg / space development as user...
 OK
 
