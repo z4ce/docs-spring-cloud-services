@@ -21,6 +21,16 @@ OK
 Update in progress. Use 'cf services' or 'cf service config-server' to check operation status.
 </pre>
 
+If the service instance is already at the latest available version, you can force an upgrade by adding the `force` parameter with a value of `true`:
+
+<pre class="terminal">
+$ cf update-service -c '{"upgrade": true, "force": true}' config-server
+Updating service instance config-server as admin...
+OK
+
+Update in progress. Use 'cf services' or 'cf service config-server' to check operation status.
+</pre>
+
 As the output from the command suggests, you can use the `cf services` or `cf service` commands to check the status of the upgrade.
 
 <pre class="terminal">
