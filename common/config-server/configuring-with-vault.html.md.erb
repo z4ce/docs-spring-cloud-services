@@ -1,0 +1,25 @@
+---
+title: Configuring with Vault
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+See below for information about configuring a Config Server service instance to use HashiCorp Vault for a configuration source.
+
+## <a id="general-configuration"></a>General Configuration
+
+Parameters used to configure a configuration source are part of a JSON object called `vault`, as in `{"vault": { "host": "127.0.0.1", "port": "8200" } }`.
+
+General parameters used to configure a Config Server configuration source are listed below.
+
+| Parameter                     | Function                                                                                     |
+|-------------------------------|----------------------------------------------------------------------------------------------|
+| <code>host</code>             | The host of the Vault server                                                                 |
+| <code>port</code>             | The port of the Vault server                                                                 |
+| <code>scheme</code>           | The URI scheme used in accessing the Vault server (default value: `http`)                    |
+| <code>backend</code>          | The name of the Vault backend from which to retrieve configuration (default value: `secret`) |
+| <code>defaultKey</code>       | The default key from which to retrieve configuration (default value: `application`)          |
+| <code>profileSeparator</code> | The value used to separate profiles (default value: `,`)                                     |
+
+The value of `defaultKey` is masked in the Config Server dashboard.
