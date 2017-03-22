@@ -292,6 +292,31 @@ $ cf restage cook
 
 The application will decrypt the encrypted property after receiving it from the Config Server. You can view the property value by visiting `/restaurant/secret-menu` on the application.
 
+## <a id="use-a-hashicorp-vault-server"></a>Use a HashiCorp Vault Server
+
+You can configure the Config Server to use a HashiCorp Vault server as a configuration source, as described in the [Configuring with Vault](/spring-cloud-services/config-server/configuring-with-vault.html) topic. To consume configuration from the Vault server via the service instance, your client application must be given a Vault token. You can give the token to an application by setting the `SPRING_CLOUD_CONFIG_TOKEN` environment variable on the application. The Spring Cloud Services Connectors for Config Server will automatically renew the application's token for as long as the application is running.
+
+<p class='note'><strong>Important</strong>: If the application is entirely stopped (i.e., no instances continue to run) and its Vault token expires, you will need to create a new token for the application and re-set the <code>SPRING_CLOUD_CONFIG_TOKEN</code> environment variable.</p>
+
+To generate a token for use in the application, you can run the `vault token-create` command, providing a Time To Live (TTL) that is long enough for the application to be restaged after you have set the environment variable. The following command creates a token with a TTL of one hour:
+
+<pre class="terminal">
+$ vault token-create -ttl="1h"
+</pre>
+
+After generating the token, set the environment variable on your client application and then restage the application for the environment variable setting to take effect:
+
+<pre class="terminal">
+$ cf set-env cook SPRING_CLOUD_CONFIG_TOKEN c3432ef5-6a78-8673-ea23-5528c26849e4
+Setting env variable 'SPRING_CLOUD_CONFIG_TOKEN' to 'c3432ef5-6a78-8673-ea23-5528c26849e4' for app cook in org myorg / space development as user...
+OK
+TIP: Use 'cf restage cook' to ensure your env variable changes take effect
+
+$ cf restage cook
+</pre>
+
+The Spring Cloud Services Connectors for Config Server renew the application token for as long as the application continues to run. For more information about the token renewal performed by the connectors, see the [HashiCorp Vault Token Renewal](/spring-cloud-services/config-server/connectors.html#hashicorp-vault-token-renewal) section of the [Spring Cloud Connectors](/spring-cloud-services/config-server/connectors.html) topic.
+
 ## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
 
 The Spring Cloud Config Client starter has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
