@@ -37,7 +37,7 @@ rbenv global 2.0.0-p481
 gem install bookbindery
   ```
   
-1. Clone this repo, `docs-book-pcfservices`, and `docs-layout-repo`.
+1. Clone this repo, `docs-book-scs`, and `docs-layout-repo`.
   
   ```
 git clone git@github.com:pivotal-cf/docs-spring-cloud-services.git
@@ -64,7 +64,7 @@ rackup
 
 ## Files to change
 
-In docs-book-pcfservices:
+In docs-book-scs:
 - /master_middleman/source/subnavs/spring_cloud_subnav.erb
 
 In docs-spring-cloud-services:
