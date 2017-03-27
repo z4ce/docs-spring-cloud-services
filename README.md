@@ -3,7 +3,7 @@ Documentation for Spring Cloud Services Product
 
 # Running Locally
 
-(See also: [&#8220;Streamlined Development Workflow&#8221;](https://github.com/pivotal-cf/docs-book-pivotalcf#streamlined-development-workflow) in [pivotal-cf/docs-book-pivotalcf](https://github.com/pivotal-cf/docs-book-pivotalcf).)
+(See also: [&#8220;Streamlined Development Workflow&#8221;](https://github.com/pivotal-cf/docs-book-scs#streamlined-development-workflow) in [pivotal-cf/docs-book-scs](https://github.com/pivotal-cf/docs-book-scs).)
 
 1. On OS X, install Xcode Command Line Tools:
 
@@ -30,13 +30,13 @@ gem install bookbindery
   
   ```
 git clone git@github.com:pivotal-cf/docs-spring-cloud-services.git
-git clone git@github.com:pivotal-cf/docs-book-pivotalcf.git
+git clone git@github.com:pivotal-cf/docs-book-scs.git
   ```
 
 1. Update the main docs site:
   
   ```
-cd docs-book-pivotalcf
+cd docs-book-scs
 bookbinder bind local
   ```
   
@@ -51,7 +51,7 @@ rackup
 
 ## Files to change
 
-In docs-book-pivotalcf:
+In docs-book-scs:
 - /master_middleman/source/subnavs/spring_cloud_subnav.erb
 
 In docs-spring-cloud-services:
