@@ -1,16 +1,16 @@
 ---
-title: Config Server
+title: Config Server for Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
 ## Overview ##
 
-Config Server <%= vars.scs_suffix %> is an externalized application configuration service, which gives you a central place to manage an application's external properties across all environments. As an application moves through the deployment pipeline from development to test and into production, you can use Config Server to manage the configuration between environments and be certain that the application has everything it needs to run when you migrate it. Config Server easily supports labelled versions of environment-specific configurations and is accessible to a wide range of tooling for managing the content.
+Config Server for [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) is an externalized application configuration service, which gives you a central place to manage an application's external properties across all environments. As an application moves through the deployment pipeline from development to test and into production, you can use Config Server to manage the configuration between environments and be certain that the application has everything it needs to run when you migrate it. Config Server easily supports labelled versions of environment-specific configurations and is accessible to a wide range of tooling for managing the content.
 
 <%= image_tag("config-server-fig1.png") %>
 
 The concepts on both client and server map identically to the Spring `Environment` and `PropertySource` abstractions. They work very well with Spring applications, but can be applied to applications written in any language. The default implementation of the server storage backend uses Git.
 
-Config Server <%= vars.scs_suffix_abbrev %> is based on <a href="http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_spring_cloud_config_server">Spring Cloud Config Server</a>. For more information about Spring Cloud Config and about Spring configuration, see <a href="/spring-cloud-services/config-server/resources.html">Additional Resources</a>.
+Config Server for Pivotal Cloud Foundry is based on <a href="http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_spring_cloud_config_server">Spring Cloud Config Server</a>. For more information about Spring Cloud Config and about Spring configuration, see <a href="/spring-cloud-services/config-server/resources.html">Additional Resources</a>.
 
 _Refer to the <a href="https://github.com/spring-cloud-services-samples/cook/tree/1.3.x">"Cook" sample application</a> to follow along with code in this section._
