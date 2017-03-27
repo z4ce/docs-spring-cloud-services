@@ -41,14 +41,14 @@ gem install bookbindery
   
   ```
 git clone git@github.com:pivotal-cf/docs-spring-cloud-services.git
-git clone git@github.com:pivotal-cf/docs-book-pcfservices.git
+git clone git@github.com:pivotal-cf/docs-book-scs.git
 git clone git@github.com:pivotal-cf/docs-layout-repo.git
   ```
 
 1. Update the main docs site:
   
   ```
-cd docs-book-pcfservices
+cd docs-book-scs
 bookbinder bind local
   ```
   
