@@ -19,6 +19,14 @@ By default, the Spring Cloud Services broker will only provision up to 100 servi
 
 In the **Service Instance Limit** field, enter the new service instance limit. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker now can provision up to as many service instances as you specified.
 
+### <a id="set-push-timeout-for-backing-applications"></a>Set Push Timeout for Backing Applications
+
+By default, the Spring Cloud Services service broker allows four (4) minutes for a service instance backing application to be staged and start. To use another timeout interval, you can specify a different number of minutes in the Spring Cloud Services tile settings.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/set-app-push-timeout.png") %>
+
+In the **App push timeout** field, enter the desired number of minutes. Click **Save**, return to the Installation Dashboard, and apply the change. The broker will now allow the specified number of minutes for service instance backing applications to start.
+
 ### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
 
 By default, the Spring Cloud Services service broker stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the broker to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
