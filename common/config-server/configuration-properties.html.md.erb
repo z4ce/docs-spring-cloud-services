@@ -1,17 +1,23 @@
 ---
-title: Configuration Files
+title: Configuration Properties
 owner: Spring Cloud Services
 ---
 
 <strong><%= modified_date %></strong>
 
-The Config Server serves configuration properties from files in YAML or Java .properties formats. Configuration properties can be applicable to all applications that use the Config Server, specific to an application, or specific to a Spring application profile, and can be stored in encrypted form. See below for information about the structure of configuration files used with the Config Server.
+The Config Server can serve configuration properties from either Git or HashiCorp Vault configuration sources. Configuration properties can be applicable to all applications that use the Config Server, specific to an application, or specific to a Spring application profile, and can be stored in encrypted form.
 
-## <a id="global-configuration"></a>Global Configuration
+See below for information about the structure and format of configuration properties to be served by the Config Server.
+
+## <a id="git"></a>Git
+
+If using a Git configuration source, you must store properties in YAML or Java .properties files.
+
+### <a id="git-global-configuration"></a>Global Configuration
 
 You can store configuration properties so that they are served to all applications which use the Config Server. In the configuration repository, a file named `application.yml` or `application.properties` contains configuration which will be served to all applications that access the Config Server.
 
-### <a id="global-configuration-using-yaml"></a>Using YAML
+#### Using YAML
 
 An example of a global `application.yml` file:
 
@@ -19,7 +25,7 @@ An example of a global `application.yml` file:
 message: Hi there!
 ```
 
-### <a id="global-configuration-using-properties"></a>Using a Properties File
+#### Using a Properties File
 
 An example of a global `application.properties` file:
 
@@ -27,11 +33,11 @@ An example of a global `application.properties` file:
 message=Hi there!
 ```
 
-## <a id="application-specific-configuration"></a>Application-Specific Configuration
+### <a id="git-application-specific-configuration"></a>Application-Specific Configuration
 
 You can store configuration properties so that they are served only to a specific application. In the configuration repository, a file named `[APP-NAME].yml` or `[APP-NAME].properties`, where `[APP-NAME]` is the name of an application, contains configuration which will be served only to the `APP-NAME` application.
 
-### <a id="application-specific-configuration-using-yaml"></a>Using YAML
+#### Using YAML
 
 An example of an application-specific `cook.yml` file:
 
@@ -43,7 +49,7 @@ cook:
   special: Fried Salamander
 ```
 
-### <a id="application-specific-configuration-using-properties"></a>Using a Properties File
+#### Using a Properties File
 
 An example of an application-specific `cook.properties` file:
 
@@ -53,11 +59,11 @@ server.port=80
 cook.special=Fried Salamander
 ```
 
-## <a id="profile-specific-configuration"></a>Profile-Specific Configuration
+### <a id="git-profile-specific-configuration"></a>Profile-Specific Configuration
 
 You can store configuration properties so that they are served only to applications which have activated a specific Spring application profile. In the configuration repository, a file named `[APP-NAME]-[PROFILE-NAME].yml` or `[APP-NAME]-[PROFILE-NAME].properties`, where `[APP-NAME]` is the name of an application and `[PROFILE-NAME]` is the name of an application profile, contains configuration which will be served only to the `APP-NAME` application running with the `[PROFILE-NAME]` profile activated. Within a YAML file named `[APP-NAME].yml`, a document that begins by setting the `spring.profiles` property contains configuration which will be served only to the `APP-NAME` application running with the profile specified by the `spring.profiles` property.
 
-### <a id="profile-specific-configuration-using-yaml"></a>Using YAML
+#### Using YAML
 
 An example of a profile-specific `cook-dev.yml` file:
 
@@ -83,7 +89,7 @@ cook:
   special: Birdfeather Tea
 ```
 
-### <a id="profile-specific-configuration-using-properties"></a>Using a Properties File
+#### Using a Properties File
 
 An example of a profile-specific `cook-dev.properties` file:
 
@@ -93,11 +99,11 @@ server.port=8080
 cook.special=Birdfeather Tea
 ```
 
-## <a id="encrypted-configuration"></a>Encrypted Configuration
+### <a id="encrypted-configuration"></a>Encrypted Configuration
 
 You can store configuration properties in encrypted form and have these properties decrypted by the Config Server before they are served to applications. In a file within the configuration repository, properties whose values are prefixed with `{cipher}` will be decrypted before they are served to client applications. To use this feature, you must configure the Config Server with an encryption key as described in the [Encryption and Encrypted Values](/spring-cloud-services/config-server/configuring-with-git.html#encryption-and-encrypted-values) section of the [Configuring with Git](/spring-cloud-services/config-server/configuring-with-git.html) topic.
 
-### <a id="encrypted-configuration-using-yaml"></a>Using YAML
+#### <a id="encrypted-configuration-using-yaml"></a>Using YAML
 
 In a YAML file, an encrypted property value must be surrounded by single quotes.
 
@@ -111,7 +117,7 @@ IzfF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyz
 ekw3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I='
 ```
 
-### <a id="encrypted-configuration-using-properties"></a>Using a Properties File
+#### <a id="encrypted-configuration-using-properties"></a>Using a Properties File
 
 An example of an encrypted property value in an `application.properties` file:
 
@@ -122,3 +128,37 @@ e4aIgsgUWuhbEek+3znkH9+Mc+5zNPvwN8hhgDMDVzgZLB+4YnvWJAq3Au4wEevakAHHxVY0mXcxj1Ro
 fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXPFSFkhNek
 w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
 ```
+
+## <a id="vault"></a>Vault
+
+If using a HashiCorp Vault configuration source, you must write secrets to the Vault server using the `vault` Command Line Interface (CLI) tool.
+
+### <a id="vault-global-configuration"></a>Global Configuration
+
+You can store configuration properties so that they are served to all applications which use the Config Server. A secret written to the `secret/application` path will be served to all applications that access the Config Server.
+
+An example of setting a global configuration property:
+
+<pre class="terminal">
+$ vault write secret/application message=Greetings
+</pre>
+
+### <a id="vault-application-specific-configuration"></a>Application-Specific Configuration
+
+You can store configuration properties so that they are served only to a specific application. A secret written to the `secret/[APP-NAME]` path contains configuration which will be served only to the `APP-NAME` application.
+
+An example of setting an application-specific configuration property:
+
+<pre class="terminal">
+$ vault write secret/cook message=Hi
+</pre>
+
+### <a id="vault-profile-specific-configuration"></a>Profile-Specific Configuration
+
+You can store configuration properties so that they are served only to applications which have activated a specific Spring application profile. A secret written to the `secret/[APP-NAME],[PROFILE-NAME]` path, where `[APP-NAME]` is the name of an application and `[PROFILE-NAME]` is the name of an application profile, contains configuration which will be served only to the `APP-NAME` application running with the `[PROFILE-NAME]` profile activated.
+
+An example of setting a profile-specific configuration property:
+
+<pre class="terminal">
+$ vault write secret/cook,dev message=Ho
+</pre>
