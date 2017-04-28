@@ -52,16 +52,16 @@ When the connector detects a Config Server service instance which has been bound
 
 ### <a id="hashicorp-vault-token-renewal"></a>HashiCorp Vault Token Renewal
 
-When the `spring.cloud.config.token` property is set on an application, the connector enables automatic token renewal for a HashiCorp Vault client token. By default, the token's Time To Live (TTL) is set at 300 seconds and the connector automatically renews the application's token every 60000 milliseconds.
+When the `spring.cloud.config.token` property is set on an application, the connector enables automatic token renewal for a HashiCorp Vault client token. By default, the token's Time To Live (TTL) is set at 300000 milliseconds and the connector automatically renews the application's token every 60000 milliseconds.
 
-You can configure the token's TTL and the renewal interval using properties under `vault.token`, set in your application's `application.yml` or `application.properties` file. The TTL is set in seconds using the `vault.token.ttl` property. The renewal interval is set in milliseconds using the `vault.token.renew.rate` property.
+You can configure the token's TTL and the renewal interval using properties under `vault.token`, set in the `application.yml` or `application.properties` file. The TTL is set using the `vault.token.ttl` property and the renewal interval is set using the `vault.token.renew.rate` property.
 
-The following YAML sets the token TTL to 600 seconds (10 minutes) and sets the renewal interval to 180000 milliseconds (three minutes).
+The following YAML sets the token TTL to 600000 milliseconds (10 minutes) and sets the renewal interval to 180000 milliseconds (three minutes).
 
 ```yml
 vault:
   token:
-    ttl: 600
+    ttl: 600000
     renew:
       rate: 180000 
 ```
