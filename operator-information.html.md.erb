@@ -383,31 +383,33 @@ The SB and Worker applications, as well as backing applications for service inst
 
 See the <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints">Endpoints</a> section of the Actuator documentation for the full list of endpoints.
 
-#### Endpoints on SB, Worker, Service Registry, or Circuit Breaker Dashboard
+#### Invoking Actuator Endpoints
 
-The SB application, the Worker application, the Service Registry's Eureka backing application, and the Circuit Breaker Dashboard's Hystrix backing application use [Dashboard SSO](http://docs.cloudfoundry.org/services/dashboard-sso.html). To access Actuator endpoints on one of these applications, you must be authenticated as a Space Developer in the application's space and have a current session with the application.
+The SB application, the Worker application, the Service Registry's Eureka backing application, the Config Server's backing application, and the Circuit Breaker Dashboard's Hystrix backing application all use OAuth 2 authentication. To access Actuator endpoints on one of these applications, you must supply a valid OAuth 2 token in the request header.
 
-1. Log in to Apps Manager as an admin user and navigate to the relevant application: for the SB or Worker, access the SB application or Worker application as described in the [The Service Broker](#the-service-broker) section; for a Service Registry or Circuit Breaker Dashboard service instance, access the backing application as described in the [Service Instances](#service-instances) section.
+1. Log in to Apps Manager as an admin user and navigate to the relevant application: for the SB or Worker, access the SB application or Worker application as described in the [The Service Broker](#the-service-broker) section; for a Service Registry, Config Server, or Circuit Breaker Dashboard service instance, access the backing application as described in the [Service Instances](#service-instances) section.
 
     <%= image_tag("/spring-cloud-services/images/operator-information/hystrix.png") %>
 
-2. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint on a Circuit Breaker Dashboard service instance’s Hystrix backing application, this would be something like `https://hystrix-ff835bde-5b3a-4623-a57f-8d88028b6376.apps.wise.com/health`.
+2. From the **Route** tab, copy the value of the application's route as described in [Get Service Instance Information](#get-service-instance-information).
 
-#### Endpoints on Config Server
+3. In a terminal where you have already authenticated to PCF using `cf auth` or `cf login`, send the request to the actuator endpoint using curl appending the endpoint ID to the route URL; e.g., for the `health` endpoint, this would be something like `https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/health`. The current OAuth 2 token can be obtained using the `cf oauth-token` command. In the example below the response from `cf oauth-token` is used directly inside the header string.
 
-The Config Server's Spring Cloud Config Server backing application uses HTTP Basic authentication. To access Actuator endpoints on this application, you must authenticate with the credentials stored in the application's environment variables.
+    <pre class="terminal">
+    $ curl -k https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/health -H "Authorization: $(cf oauth-token)"
+    {"status":"UP","git":{"status":"UP","default":{"status":"UP","repository":{"uri":"https://github.com/pivotal-cf/p-spring-cloud-services-acceptance"}},"app1":{"status":"UP","repository":{"uri":"https://github.com/pivotal-cf/p-spring-cloud-services-acceptance"}},"app2":{"status":"UP","repository":{"uri":"https://github.com/pivotal-cf/p-spring-cloud-services-acceptance"}}},"diskSpace":{"status":"UP","total":1056858112,"free":886517760,"threshold":10485760},"refreshScope":{"status":"UP"}}
+    </pre>
 
-1. Log in to Apps Manager as an admin user and navigate to the relevant application, as described in the [Service Instances](#service-instances) section.
+Note that it is also possible to send a request to the each application's `health` Actuator endpoint without the authorization header. In that case the response JSON object will only contain the summary status.
 
-    <%= image_tag("/spring-cloud-services/images/operator-information/config-server.png") %>
+    <pre class="terminal">
+    $ curl -k https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/health
+    {"status":"UP"}
+    </pre>
 
-2. From the **Env Variables** tab, copy the values of the `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` environment variables.
+Sending an unauthenticated request to any of the other Actuator endpoints will return a response indicating insufficient authorization.
 
-    <%= image_tag("/spring-cloud-services/images/operator-information/config-server-env-variables.png") %>
-
-3. Visit the application's URL, appending the endpoint ID to that URL; e.g., for the `health` endpoint, this would be something like `config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/health`. When challenged, provide the values of `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD` from Step 2.
-
-### <a id="invoke-config-server-endpoints"></a>Invoke Config Server Endpoints
+### <a id="invoke-config-server-endpoints"></a>Invoke Config Server Configuration Endpoints
 
 To view the configuration properties that a Config Server service instance is returning for an application, you can access the configuration endpoints on the service instance's Spring Cloud Config Server backing application directly.
 
@@ -431,7 +433,7 @@ To view the configuration properties that a Config Server service instance is re
     You can make the request using curl, providing the token---`TOKEN` in the below example---in a header with the `-H` or `--header` option:
 
     <pre class="terminal">
-    $ curl -H 'Authorization: bearer TOKEN_STRING' https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
+    $ curl -H 'Authorization: bearer TOKEN' https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
     {"name":"cook","profiles":["default"],"label":null,"version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3","propertySources":[{"name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
     </pre>
 
