@@ -32,7 +32,7 @@ Updated: 2016-06-27T14:32:30Z
 
 Visit the URL given for "Dashboard".
 
-The dashboard shows the JSON object used to configure Config Server settings. You can click the **Copy to clipboard** button to obtain this object in a string format suitable for use in command lines.
+The dashboard shows the current health of the Config Server along with the JSON object used to configure its settings. You can click the **Copy to clipboard** button to obtain this object in a string format suitable for use in command lines.
 
 <%= image_tag(vars.scs_cs_using_dashboard_updated_dashboard) %>
 
@@ -43,3 +43,6 @@ For the settings shown in the above figure, the button copies the following to t
 </pre>
 
 <p class='note'><strong>Important</strong>: If the Config Server service instance has been configured to use any credentials or encryption keys, you will need to edit the text provided by the <strong>Copy to clipboard</strong> button and replace the masked values (<code>****</code>) with the actual values.</p>
+
+If a Config Server is not running properly its dashboard will provide problem details as shown in the example below.
+
