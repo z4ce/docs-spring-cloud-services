@@ -362,6 +362,13 @@ $ cf logs config-86b38ce0-eed8-4c01-adb4-1a651a6178e2
 Connected, tailing logs for app config-86b38ce0-eed8-4c01-adb4-1a651a6178e2 in org p-spring-cloud-services / space instances as admin...
 </pre>
 
+If the backing application is not running properly then detailed health information will be written to its log on each GET request sent to its `health` Actuator endpoint. No health details are logged if the backing application is healthy.
+
+<pre class="terminal">
+2017-05-04T13:37:17.43+0100 [APP/PROC/WEB/0]OUT 2017-05-04 12:37:17.431  INFO 14 --- [nio-8080-exec-7] i.p.s.c.h.ConfigServerHealthEndpoint     : Health status: DOWN. Health details: {git=DOWN {default=DOWN {repository={uri=https://github.com/spring-cloud-samples/cook-config}, error=https://github.com/spring-cloud-samples/cook-config: Authentication is required but no credentials have been configured}}, diskSpace=UP {total=1056858112, free=889167872, threshold=10485760}, refreshScope=UP {}}
+2017-05-04T13:37:17.43+0100 [RTR/0]      OUT config-80593543-d141-424d-bcb9-1aa583be2356.olive.springapps.io - [2017-05-04T12:37:17.067+0000] "GET /health HTTP/1.1" 503 0 390 "-" "Java/1.8.0_121" "10.194.42.254:56706" "10.194.42.143:60820" x_forwarded_for:"10.194.42.143, 10.194.42.254" x_forwarded_proto:"https" vcap_request_id:"c04a99a8-c222-4e59-4acf-a9cfff62a3d5" response_time:0.369370172 app_id:"ee476250-6418-4e35-b3a4-9686947961d2" app_index:"0" x_b3_traceid:"2cfc3caf6fa0fa22" x_b3_spanid:"2cfc3caf6fa0fa22" x_b3_parentspanid:"-"
+</pre>
+
 ### <a id="access-actuator-endpoints"></a>Access Actuator Endpoints
 
 The SB and Worker applications, as well as backing applications for service instances, use [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready). Actuator adds a number of endpoints to these applications; some of the added endpoints are summarized below.
