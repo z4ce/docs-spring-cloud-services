@@ -123,7 +123,7 @@ This endpoint gets or modifies environment variables for the service instance's 
 
 *GET /dashboard/instance/{serviceInstanceId}/health*
 
-This endpoint returns the response of the ```/health``` endpoint on the backing application. The ```/health``` endpoint is provided by [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) and is accessed anonymously. This is used by the Config Server configuration page to indicate if there are any problems with the Config Server's configuration.
+This endpoint returns the response of the ```/health``` endpoint on the backing application. The ```/health``` endpoint is provided by [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) and may be accessed either anonymously, for summary information, or else using OAuth2 authentication, for detailed information.  This is used by the Config Server configuration page to indicate if there are any problems with the Config Server's configuration.
 
 <a id="sb-entry-point-caching-si-permission-check"></a>*Caching the Service Instance Permission Check*
 
@@ -190,7 +190,7 @@ The Worker listens for messages posted to the p-rabbitmq service instance. The S
 
 **Actuator Endpoints**
 
-[Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require HTTPS and Basic authentication. Credentials that provide this access are set at installation time in the Worker's environment variables. These environment variables are only accessible to the Operator.
+[Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require HTTPS and OAuth 2 authentication.
 
 ##### External Dependencies
 
@@ -278,7 +278,84 @@ The GUID in the ```aud``` and ```scope``` values must match the ```SERVICE_INSTA
 
 *GET /health*
 
-This is used by the Dashboard UI for checking if the Config Server is configured properly. This endpoint can be accessed anonymously, and only returns ```{"status":"UP"}``` or ```{"status":"DOWN"}```.
+This is used by the Dashboard UI for checking if the Config Server is configured properly. Requests sent to this endpoint using an OAuth 2 Bearer token receive a JSON object response containing health details for each configuration source. The following example shows a typical response from an authenticated request to a health endpoint where the Config Server is using a Git source:
+
+```json
+{
+  "status": "UP",
+  "git": {
+    "status": "UP",
+    "default": {
+      "status": "UP",
+      "repository": {
+        "uri": "https://github.com/spring-cloud-services-samples/cook-config"
+      }
+    },
+    "cook": {
+      "status": "UP",
+      "repository": {
+        "uri": "https://github.com/spring-cloud-services-samples/cook-config"
+      }
+    }
+  },
+  "diskSpace": {
+    "status": "UP",
+    "total": 1056858112,
+    "free": 889167872,
+    "threshold": 10485760
+  },
+  "refreshScope": {
+    "status": "UP"
+  }
+}
+```
+
+The overall health status can only be UP if all of the configuration source health indicators report UP. In the example response below the Config Server is using a composite of configuration sources where the vault source health is DOWN. This in turn leads to the overall summary health status for the Config Server being set to DOWN:
+
+```json
+{
+  "status": "DOWN",
+  "git": {
+    "status": "UP",
+    "git-1": {
+      "status": "UP",
+      "repository": {
+        "uri": "https://github.com/spring-cloud-services-samples/cook-config"
+      }
+    },
+    "cook": {
+      "status": "UP",
+      "repository": {
+        "uri": "https://github.com/spring-cloud-services-samples/cook-config"
+      }
+    }
+  },
+  "vault": {
+    "status": "DOWN",
+    "vault-1": {
+      "status": "DOWN",
+      "server": {
+        "scheme": "http",
+        "port": 8200,
+        "host": "myvault.mycompany.com"
+      },
+      "error": "Unable to contact Vault server at http://myvault.mycompany.com:8200/v1/sys/health",
+      "reason": "I/O error on GET request for \"http://myvault.mycompany.com:8200/v1/sys/health\": null; nested exception is org.apache.http.client.ClientProtocolException"
+    }
+  },
+  "diskSpace": {
+    "status": "UP",
+    "total": 1056858112,
+    "free": 889167872,
+    "threshold": 10485760
+  },
+  "refreshScope": {
+    "status": "UP"
+  }
+}
+```
+
+The endpoint may also be accessed anonymously, in which case it will only return ```{"status":"UP"}``` or ```{"status":"DOWN"}```.
 
 *OAuth 2 Clients for Bound Applications*
 
@@ -301,7 +378,7 @@ Other than checking for the claims mentioned in the previous section, no other a
 
 **Actuator Endpoints**
 
-[Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require HTTPS and Basic authentication, with the exception of ```/health``` as described above. Credentials that provide this access are set at provision time in the config-server application's environment variables. These environment variables are only accessible to the Operator.
+[Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require OAuth 2 authentication, with the exception of ```/health``` as described above which can also be accessed anonymously to receive less detailed information.
 
 ##### External Dependencies
 
