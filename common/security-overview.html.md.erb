@@ -123,7 +123,7 @@ This endpoint gets or modifies environment variables for the service instance's 
 
 *GET /dashboard/instance/{serviceInstanceId}/health*
 
-This endpoint returns the response of the ```/health``` endpoint on the backing application. The ```/health``` endpoint is provided by [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) and may be accessed either anonymously, for summary information, or else using OAuth2 authentication, for detailed information.  This is used by the Config Server configuration page to indicate if there are any problems with the Config Server's configuration.
+This endpoint returns the response of the ```/health``` endpoint on the backing application. The ```/health``` endpoint is provided by [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) and may be accessed anonymously for summary information or using OAuth2 authentication for detailed information.  This is used by the Config Server configuration page to indicate if there are any problems with the Config Server's configuration.
 
 <a id="sb-entry-point-caching-si-permission-check"></a>*Caching the Service Instance Permission Check*
 
@@ -278,7 +278,7 @@ The GUID in the ```aud``` and ```scope``` values must match the ```SERVICE_INSTA
 
 *GET /health*
 
-This is used by the Dashboard UI for checking if the Config Server is configured properly. Requests sent to this endpoint using an OAuth 2 Bearer token receive a JSON object response containing health details for each configuration source. The following example shows a typical response from an authenticated request to a health endpoint where the Config Server is using a Git source:
+This is used by the Dashboard UI for checking if the Config Server is configured properly. Requests sent to this endpoint using an OAuth 2 Bearer token receive a JSON object response containing health details for each configuration source. The following example shows a typical response from an authenticated request to a health endpoint; in this example, the Config Server is using a Git confoguration source:
 
 ```json
 {
@@ -310,7 +310,7 @@ This is used by the Dashboard UI for checking if the Config Server is configured
 }
 ```
 
-The overall health status can only be UP if all of the configuration source health indicators report UP. In the example response below the Config Server is using a composite of configuration sources where the vault source health is DOWN. This in turn leads to the overall summary health status for the Config Server being set to DOWN:
+The overall health status can only be `UP` if all of the configuration source health indicators report `UP`. In the example response below, the Config Server is using a composite of configuration sources, and the Vault source's health status is `DOWN`. This in turn leads to the overall summary health status for the Config Server being set to `DOWN`:
 
 ```json
 {
@@ -378,7 +378,7 @@ Other than checking for the claims mentioned in the previous section, no other a
 
 **Actuator Endpoints**
 
-[Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require OAuth 2 authentication, with the exception of ```/health``` as described above which can also be accessed anonymously to receive less detailed information.
+[Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require OAuth 2 authentication, with the exception of ```/health``` as described above; the ```health``` endpoint can also be accessed anonymously to receive less-detailed information.
 
 ##### External Dependencies
 
