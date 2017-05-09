@@ -44,5 +44,6 @@ For the settings shown in the above figure, the button copies the following to t
 
 <p class='note'><strong>Important</strong>: If the Config Server service instance has been configured to use any credentials or encryption keys, you will need to edit the text provided by the <strong>Copy to clipboard</strong> button and replace the masked values (<code>****</code>) with the actual values.</p>
 
-If a Config Server is not running properly its dashboard will provide problem details as shown in the example below.
+If the Config Server encounters an error in attempting to load configuration from the configuration source or is otherwise unable to use the provided connection information, its dashboard will provide problem details, as shown in the example below.
 
+<%= image_tag(vars.scs_cs_using_dashboard_updated_dashboard_error) %>
