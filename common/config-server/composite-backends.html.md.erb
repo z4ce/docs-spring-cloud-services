@@ -7,11 +7,11 @@ owner: Spring Cloud Services
 
 ## <a id="overview"></a>Overview
 
-Spring Cloud Config provides a composite backend, where a Config Server serves configuration properties from multiple repositories or servers and from multiple backends. The Spring Cloud Services Config Server can use a composite backend comprising backends that it supports, and can serve configuration from multiple Git repositories as well as from a HashiCorp Vault server.
+Spring Cloud Services Config Server provides the ability to serve configuration properities from a composite of multiple backends such as from multiple Github repositories and a HashiCorp Vault server.
 
-<p class='note'><strong>Note</strong>: The Spring Cloud Services Config Server cannot serve configuration properties from multiple Vault servers. A composite backend can contain only one Vault server.</p>
+<p class='note'><strong>Note</strong>: The Spring Cloud Services Config Server cannot serve configuration properties from multiple Vault servers. A composite backend can contain only a single Vault server.</p>
 
-When a Config Server uses a composite backend, a request from a client application retrieves properties found in any applicable backend within the composite. If the Config Server encounters an error when retrieving properties from one of the backends, the client application's request fails. Otherwise, the Config Server assembles configuration properties beginning at the first backend in the composite by order: a property `a` found in both the first and second backends uses the value set in the first backend, and a property `b` found only in the third backend uses the value set in the third backend.
+When a Config Server is composed with multiple backends, a request from a client application retrieves properties found in any applicable backend within the composite. If the Config Server encounters an error when retrieving properties from one of the backends, the client application's request fails. Otherwise, the Config Server assembles configuration properties beginning at the first backend in the composite by order: a property `a` found in both the first and second backends uses the value set in the first backend, and a property `b` found only in the third backend uses the value set in the third backend.
 
 Within the composite, all repositories or servers must contain the same labels---branches or tags in a Git repository, or paths in a Vault server. A label in a Config Server configuration source corresponds to a Spring application profile on a client application. If a client application makes a request for configuration for a given profile and one of the composite's backends does not have a corresponding branch, tag, or path, the request fails and no configuration is returned.
 
