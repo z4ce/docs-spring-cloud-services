@@ -612,7 +612,7 @@ The Hystrix application communicates to the CC via HTTPS to perform permission c
 
 This client is used for SSO with UAA. The scopes allow the Hystrix application to access the Cloud Controller API on the user's behalf, and are auto-approved. The ```uaa.resource``` authority allows the Hystrix application to access the token verification endpoints on UAA. The client is created by the [p-spring-cloud-services-worker](#worker-oauth-client-scs) client at provision time. The client ID and client secret are made available to the Hystrix application via environment variables set at provision time.
 
-### <a id="app-turbine"></a>Turbine
+#### <a id="app-turbine"></a>Turbine
 
 The Turbine application is the other backing application for a Circuit Breaker Dashboard service instance. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
 
