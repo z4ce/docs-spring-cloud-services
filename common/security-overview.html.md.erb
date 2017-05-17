@@ -47,7 +47,7 @@ The following abbreviations, example values, and terms are used in this topic as
 
 * **UAA**: The [Cloud Foundry User Account and Authentication Server](http://docs.pivotal.io/pivotalcf/concepts/architecture/uaa.html).
 
-## <a id="https"></a>A Note on HTTPS
+## <a id="https"></a>A Note on TLS/SSL
 
 All components in SCS force HTTPS for all inbound requests. Because SSL terminates at the load balancer, requests are deemed to originate over HTTPS by inspecting the ```X-Forwarded-For```, ```X-Forwarded-Proto```, and ```X-Forwarded-Port``` headers. More on how this is implemented can be found in the [Spring Boot documentation](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-security.html#howto-enable-https).
 
@@ -69,15 +69,15 @@ The following diagram illustrates the OAuth clients used by SCS and the Identity
 
 <%= image_tag("oauth2-clients.png") %>
 
-## <a id="components"></a>Spring Cloud Services Components
+## <a id="components"></a>Spring Cloud Services Overview
 
 Before continuing, you should familiarize yourself with the following diagram, which shows the direct lines of communication between application components.
 
 <%= image_tag("component-communication.png") %>
 
-### <a id="core-components"></a>Core Components
+## <a id="core-components"></a>Core Components
 
-#### <a id="installation-file"></a>The Installation File
+### <a id="installation-file"></a>The Installation File
 
 The installation file is the ```.pivotal``` file that contains the Spring Cloud Services product.
 
@@ -89,11 +89,11 @@ The installation file is downloaded from [https://network.pivotal.io](https://ne
 
 To install Spring Cloud Services, the installation file must be uploaded to Pivotal Cloud Foundry&reg; Operations Manager. Ops Manager can only be accessed over HTTPS by persons knowing the username and password for Ops Manager.
 
-#### <a id="spring-cloud-broker"></a>Spring Cloud Service Broker
+### <a id="spring-cloud-broker"></a>Spring Cloud Service Broker
 
 The Spring Cloud Service Broker is responsible for receiving Service Broker API requests from the Cloud Controller (CC), and hosts the primary dashboard UI for all service types.
 
-#####Deployment Details#####
+#### Deployment Details
 
 <dl>
 <dd><strong>Org</strong>: <code>system</code></dd>
@@ -101,7 +101,7 @@ The Spring Cloud Service Broker is responsible for receiving Service Broker API 
 <dd><strong>CF Application Name</strong>: <code>spring-cloud-broker</code></dd>
 </dl>
 
-##### Entry Points
+#### Entry Points
 
 <a id="sb-entry-point-service-broker-api"></a>**The Service Broker API**
 
@@ -137,7 +137,7 @@ Caching the permission check in this manner avoids the load and extra round trip
 
 This Actuator SSO flow is used by other components that already use [Dashboard SSO](#sb-entry-point-service-broker-dashboard), as no additional dependencies are required to enable this.
 
-##### External Dependencies
+#### External Dependencies
 
 **p-mysql**
 
@@ -155,7 +155,7 @@ The SB communicates to the CC via HTTPS to perform permission checks using the c
 
 The SB communicates with UAA via HTTPS to enable Dashboard SSO. All requests to UAA are authenticated as per the OAuth 2 specification, using the [p-spring-cloud-services](#sb-oauth-client-uaa) client credentials. The URI to UAA is derived from the [CC API ```/v2/info``` endpoint](https://apidocs.cloudfoundry.org/219/info/get_info.html), whose threat mitigations are described in the [previous section](#sb-dependency-cloud-controller).
 
-##### OAuth Clients
+#### OAuth Clients
 
 <a id="sb-oauth-client-uaa"></a>**p-spring-cloud-services**
 
@@ -170,11 +170,11 @@ The SB communicates with UAA via HTTPS to enable Dashboard SSO. All requests to 
 
 This client is used for SSO with UAA. The scopes allow the SB to access the Cloud Controller API on the user's behalf, and are auto-approved. The ```uaa.resource``` authority allows the SB to access the token verification endpoints on UAA. The client ID and client secret are made available to the SB via environment variables, which are set at installation time and are stored in encrypted form in the CC DB.
 
-#### <a id="spring-cloud-broker-worker"></a>Spring Cloud Service Broker Worker
+### <a id="spring-cloud-broker-worker"></a>Spring Cloud Service Broker Worker
 
 The Spring Cloud Service Broker Worker (the Worker) is responsible for managing service instance backing applications. Some of this work is done asynchronously from the requests that initiate it.
 
-#####Deployment Details#####
+#### Deployment Details
 
 <dl>
 <dd><strong>Org</strong>: <code>system</code></dd>
@@ -182,7 +182,7 @@ The Spring Cloud Service Broker Worker (the Worker) is responsible for managing 
 <dd><strong>CF Application Name</strong>: <code>spring-cloud-broker-worker</code></dd>
 </dl>
 
-##### Entry Points
+#### Entry Points
 
 **The RabbitMQ Message Listener**
 
@@ -192,7 +192,7 @@ The Worker listens for messages posted to the p-rabbitmq service instance. The S
 
 [Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require HTTPS and OAuth 2 authentication.
 
-##### External Dependencies
+#### External Dependencies
 
 **p-rabbitmq**
 
@@ -208,7 +208,7 @@ The URI to the CC is set at installation time in the Worker's environment variab
 
 The Worker uses the client management APIs of UAA to create and delete clients in both the platform and Spring Cloud Services Identity Zones. All requests are authenticated by including the OAuth 2 bearer token in the request, and are made over HTTPS. The credentials used in these requests are detailed in the OAuth Clients section. The URI to UAA is derived from the [CC API ```/v2/info``` endpoint](https://apidocs.cloudfoundry.org/219/info/get_info.html).
 
-##### OAuth Clients
+#### OAuth Clients
 
 **p-spring-cloud-services-worker**
 
@@ -240,7 +240,7 @@ This client is used to create and delete clients in the Spring Cloud Services Id
 
 The client ID and client secret are the same as the corresponding client in the UAA Identity Zone.
 
-##### Users
+#### Users
 
 <a id="worker-user-p-spring-cloud-services"></a>**p-spring-cloud-services**
 
@@ -252,7 +252,7 @@ This user is a Space Developer in the "p-spring-cloud-services" org, "instances"
 
 The Config Server CF Application is a backing application for a Config Server service instance. This application is responsible for handling requests for configuration values from bound applications.
 
-#####Deployment Details#####
+#### Deployment Details
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
@@ -260,7 +260,7 @@ The Config Server CF Application is a backing application for a Config Server se
 <dd><strong>CF Application Name</strong>: <code>config-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
 </dl>
 
-##### Entry Points
+#### Entry Points
 
 **Config Server REST endpoints**
 
@@ -380,7 +380,7 @@ Other than checking for the claims mentioned in the previous section, no other a
 
 [Actuator endpoints](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints) are enabled and require OAuth 2 authentication, with the exception of ```/health``` as described above; the ```health``` endpoint can also be accessed anonymously to receive less-detailed information.
 
-##### External Dependencies
+#### External Dependencies
 
 **Git repository**
 
@@ -390,7 +390,7 @@ The actual configurations are stored in a Git repository and retrieval of these 
 
 The Config Server accesses the ```/token_key``` endpoint on UAA to retrieve the token verification key. This key material is used to verify the JWT signature of the token in order to authenticate the request.
 
-##### OAuth Clients
+#### OAuth Clients
 
 **config-server-{guid}**
 
@@ -410,7 +410,7 @@ The ```uaa.resource``` authority allows the config-server application to access 
 
 The Eureka CF Application is a backing application for Service Registry service instances. This application hosts a REST API for the Service Registry and a dashboard UI for viewing the status of the Service Registry.
 
-#####Deployment Details#####
+#### Deployment Details
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
@@ -418,7 +418,7 @@ The Eureka CF Application is a backing application for Service Registry service 
 <dd><strong>CF Application Name</strong>: <code>eureka-[guid](-node[n])</code>, where <code>[guid]</code> is the service instance ID. When running in HA mode, <code>(-node[n])</code> uniquely identifies the application node.</dd>
 </dl>
 
-##### Roles
+#### Roles
 
 Clients are categorized into three roles, and the authorization model is designed around these three roles.
 
@@ -452,7 +452,7 @@ For an incoming request to be identified as coming from a Bound Application, the
 * ```sub```: must start with ```p-service-registry```
 * ```scope```: must equal ```p-service-registry-[guid].read```, ```p-service-registry-[guid].write```, where ```[guid]``` is the service instance ID of this server
 
-##### Entry Points
+#### Entry Points
 
 **Eureka REST endpoints**
 
@@ -521,7 +521,7 @@ The Eureka Dashboard requires the typical [Dashboard SSO flow](#sb-entry-point-s
 
 Actuator endpoints require the same [Actuator SSO](#sb-entry-point-actuator-endpoints) flow used by the Service Broker.
 
-##### External Dependencies
+#### External Dependencies
 
 **UAA**
 
@@ -531,7 +531,7 @@ The Eureka Server accesses the ```/token_key``` endpoint on UAA to retrieve the 
 
 The SB communicates to the CC via HTTPS to perform permission checks using the current user's token, as described in the Entry Points section, and to derive URIs for UAA. The URI to the CC is set at installation time in the SB's environment variables, under the name ```CF_TARGET```.  The environment variable could be modified so that the user's token is sent to another party. The environment variable can only be modified by a Space Developer in the "p-spring-cloud-services" space, and only the Operator would have this access.
 
-##### OAuth Clients
+#### OAuth Clients
 
 <a id="service-registry-oauth-client-uaa"></a>**eureka-{guid}**
 
@@ -564,7 +564,7 @@ The ```uaa.resource``` authority allows the Eureka application to access the tok
 
 The Hystrix application is one of two backing applications for a Circuit Breaker Dashboard service instance. This application is derived from the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/tree/master/hystrix-dashboard).
 
-#####Deployment Details#####
+#### Deployment Details
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
@@ -572,7 +572,7 @@ The Hystrix application is one of two backing applications for a Circuit Breaker
 <dd><strong>CF Application Name</strong>: <code>hystrix-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
 </dl>
 
-##### Entry Points
+#### Entry Points
 
 **Hystrix Dashboard**
 
@@ -582,7 +582,7 @@ The Hystrix Dashboard requires the typical [Dashboard SSO](#sb-entry-point-servi
 
 Actuator endpoints require the same [Actuator SSO](#sb-entry-point-actuator-endpoints) flow used by the Service Broker.
 
-##### External Dependencies
+#### External Dependencies
 
 **Turbine**
 
@@ -598,7 +598,7 @@ The Hystrix application accesses the ```/token_key``` endpoint on UAA to retriev
 
 The Hystrix application communicates to the CC via HTTPS to perform permission checks using the current user's token, as described in the Entry Points section, and to derive URIs for UAA. The URI to the CC is set by the [Worker](#spring-cloud-broker-worker) at provision time in the application's environment variables, under the name ```CF_TARGET```. The environment variable can only be modified by the Operator.
 
-##### OAuth Clients
+#### OAuth Clients
 
 **hystrix-{guid}**
 
@@ -616,7 +616,7 @@ This client is used for SSO with UAA. The scopes allow the Hystrix application t
 
 The Turbine application is the other backing application for a Circuit Breaker Dashboard service instance. This application is derived from [Netflix Turbine](https://github.com/Netflix/Turbine), which aggregates Hystrix AMQP messages and emits them as a Server Sent Event stream.
 
-#####Deployment Details#####
+#### Deployment Details
 
 <dl>
 <dd><strong>Org</strong>: <code>p-spring-cloud-services</code></dd>
@@ -624,7 +624,7 @@ The Turbine application is the other backing application for a Circuit Breaker D
 <dd><strong>CF Application Name</strong>: <code>turbine-[guid]</code>, where <code>[guid]</code> is the service instance ID</dd>
 </dl>
 
-##### Entry Points
+#### Entry Points
 
 <a id="circuit-breaker-entry-point-turbine-stream"></a>**GET /turbine.stream**
 
@@ -634,7 +634,7 @@ This emits the Server Sent Event stream and is the only HTTP-based entry point. 
 
 The Turbine application listens for AMQP messages posted by applications bound to the Circuit Breaker Dashboard service instance. Applications bound to the Circuit Breaker Dashboard receive credentials to the [p-rabbitmq](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance in order to post these messages. All bound applications receive the same credentials.
 
-##### External Dependencies
+#### External Dependencies
 
 <a id="app-turbine-p-rabbitmq"></a>**p-rabbitmq**
 
