@@ -243,7 +243,7 @@ To configure a Config Server service instance with a repository URI that enables
 
 You can configure a Config Server service instance to access configuration sources using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `git.proxy.http` or `git.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
 
-<p class='note'><strong>Important</strong>: Config Server for <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry</a> does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source at this time.</p>
+<p class='note'><strong>Note</strong>: Proxy settings must be set once in each <code>git</code> object, where applicable. If you are using a <a href="/spring-cloud-services/config-server/composite-backends.html">composite backend</a> with multiple configuration sources that use the same proxy, you must provide that proxy's settings for each configuration source object.</p>
 
 Settings for an HTTP proxy are set in the `git.proxy.http` object. These might be set as shown in the following JSON:
 

@@ -35,3 +35,48 @@ General parameters used to configure a Config Server configuration source are li
 The value of `defaultKey` is masked in the Config Server dashboard.
 
 For information about writing a client application that accesses configuration values from a Config Server which has been configured to use Vault, see the [Use a HashiCorp Vault Server](/spring-cloud-services/config-server/writing-client-applications.html#use-a-hashicorp-vault-server) section of the [Writing Client Applications](/spring-cloud-services/config-server/writing-client-applications.html) topic.
+
+## <a id="proxy-repository-access"></a>HTTP(S) Proxy Repository Access
+
+You can configure a Config Server service instance to access configuration sources using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `vault.proxy.http` or `vault.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
+
+Settings for an HTTP proxy are set in the `vault.proxy.http` object. These might be set as shown in the following JSON:
+
+```
+'{"vault": { "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+```
+
+Settings for an HTTPS proxy are set in the `vault.proxy.https` object. These might be set as shown in the following JSON:
+
+```
+'{"vault": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
+```
+
+The parameters used to configure HTTP or HTTPS proxy settings for the Config Server are listed below.
+
+| Parameter                                  | Function                                                                                                                                            |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                        |
+| <code>proxy.http.host</code>               | The HTTP proxy host                                                                                                                                 |
+| <code>proxy.http.port</code>               | The HTTP proxy port                                                                                                                                 |
+| <code>proxy.http.nonProxyHosts</code>      | The hosts to access outside the HTTP proxy                                                                                                          |
+| <code>proxy.http.username</code>           | The username to use with an authenticated HTTP proxy                                                                                                |
+| <code>proxy.http.password</code>           | The password to use with an authenticated HTTP proxy                                                                                                |
+| <code>proxy.https</code>                   | A proxy object, containing HTTPS proxy fields                                                                                                       |
+| <code>proxy.https.host</code>              | The HTTPS proxy host                                                                                                                                |
+| <code>proxy.https.port</code>              | The HTTPS proxy port                                                                                                                                |
+| <code>proxy.https.nonProxyHosts</code>     | The hosts to access outside the HTTPS proxy (if <code>proxy.http.nonProxyHosts</code> is also provided, <code>http.nonProxyHosts</code> will be used instead of <code>https.nonProxyHosts</code>)      |
+| <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy (if <code>proxy.http.username</code> is also provided, <code>http.username</code> will be used instead of <code>https.username</code>) |
+| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy (if <code>proxy.http.password</code> is also provided, <code>http.password</code> will be used instead of <code>https.password</code>) |
+
+To configure a Config Server service instance that uses an HTTP proxy to access configuration sources, use the following JSON object:
+
+```
+'{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+```
+
+To configure a Config Server service instance that uses an authenticated HTTPS proxy to access configuration sources, specifying that `example.com` should be accessed outside of the proxy, use the following JSON object:
+
+```
+'{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
+```
