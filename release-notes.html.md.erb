@@ -7,83 +7,34 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
-## <a id="1-3-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
+## <a id="1-4-0-migrating-from-1-3-x"></a>Migrating from 1.3.x
+
+If you are upgrading from a 1.3.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+## <a id="1-4-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
 
 If you are upgrading from a 1.2.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-## <a id="1-3-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+## <a id="1-4-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
 
 If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-## <a id="1-3-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+## <a id="1-4-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
 
 The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3.x, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.3.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-3/common/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-3/common/client-dependencies.html">Client Dependencies</a>.
 
 After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
-## <a id="1-3-4"></a>1.3.4
+## <a id="1-4-0"></a>1.4.0
 
-**Release Date: 24th March 2017**
-
-Enhancements included in this release:
-
-* Security for the Config Server's encryption capabilities has been increased.
-* Made timeout value for waiting on service instance creation configurable via the tile's configuration page.
-
-## <a id="1-3-3"></a>1.3.3
-
-**Release Date: 30th January 2017**
+**Release Date: 29th May 2017**
 
 Enhancements included in this release:
 
-* The stemcell has been updated to 3263.17. This resolves the following issues:
-  * [[USN-3161-2]](https://www.ubuntu.com/usn/usn-3161-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
-* The Config Server now exposes the `/encrypt` endpoint to generate encrypted property values based on a provided key.
-* The `/info` endpoint, accessed on the service broker applications or on service instance backing applications, now returns version information for the corresponding build of Spring Cloud Services.
+* The Config Server now can use a HashiCorp Vault server as a configuration source, directly or through an HTTP or HTTPS proxy. For more information, see the [Configuring with Vault](/spring-cloud-services/config-server/configuring-with-vault.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
+* The Config Server now can use a composite backend comprising one or more Git repositories and up to one HashiCorp Vault server. For more information, see the [Composite Backends](/spring-cloud-services/config-server/composite-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
+* The Config Server's `/health` endpoint, provided by Spring Boot Actuator, now displays failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing this endpoint, see the [Access Actuator Endpoints](/spring-cloud-services/operator-information.html#access-actuator-endpoints) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic.
+* The Config Server's backing application now logs failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing the backing application logs, see the [Read Backing Application Logs](/spring-cloud-services/operator-information.html#backing-application-logs) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic.
+* The Config Server dashboard now displays detailed failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For more information, see the [Using the Dashboard](/spring-cloud-services/config-server/using-the-dashboard.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
 
-## <a id="1-3-2"></a>1.3.2
-
-**Release Date: 21st December 2016**
-
-Enhancements included in this release:
-
-* Error reporting in the Spring Cloud Services tile's "Smoke Tests" errand has been improved.
-* The Spring Cloud Services service broker now returns a message for each of any errors encountered by the `cf create-service` and `cf update-service` commands.
-
-Fixes included in this release:
-
-* A timeout issue that could occur during the push operation for service instance backing applications has been resolved.
-
-## <a id="1-3-1"></a>1.3.1
-
-**Release Date: 7th December 2016**
-
-<p class='note'><strong>Important</strong>: If you upgrade to this release of Spring Cloud Services, you must ensure that your client applications which use the Service Registry do not set the <code>eureka.instance.virtualHostName</code> or <code>eureka.instance.secureVirtualHostName</code> properties to different values from that of the <code>eureka.instance.appname</code> property.</p>
-
-Enhancements included in this release:
-
-* The Spring Cloud Services broker has been upgraded to Spring Cloud Camden.SR3.
-* Spring Cloud Services service instance backing applications now print a custom Spring Boot banner on startup.
-* If a Service Registry client application's `eureka.instance.secureVirtualHostname` or `eureka.instance.virtualHostname` properties are set and do not match the application's `eureka.instance.appname` property, the Spring Cloud Services connector for Service Registry now prevents application startup and logs an error message. For more information, see the [Eureka Application Name Configuration](/spring-cloud-services/1-3/common/service-registry/connectors.html#eureka-application-name-configuration) section of the [Spring Cloud Connectors](/spring-cloud-services/1-3/common/service-registry/connectors.html) topic in the [Service Registry documentation](/spring-cloud-services/1-3/common/service-registry/).
-
-Fixes included in this release:
-
-* The Service Registry now supports servers which use Server Name Indication (SNI) to serve multiple SSL certificates.
-
-## <a id="1-3-0"></a>1.3.0
-
-**Release Date: 10th November 2016**
-
-<p class='note'><strong>Important</strong>: Spring Cloud Services 1.3.0 requires version 3.8 or later of the Cloud Foundry Java buildpack. If your Pivotal Cloud Foundry deployment is using an older version of the Java buildpack, upgrade it before installing this release.</p>
-
-Enhancements included in this release:
-
-* Spring Cloud Services now supports Pivotal Cloud Foundry versions 1.7 and later.
-* Spring Cloud Services now uses a floating stemcell for enhanced security. For more information, see the [Understanding Floating Stemcells](https://docs.pivotal.io/pivotalcf/customizing/understanding-stemcells.html) topic in the [Pivotal Cloud Foundry documentation](https://docs.pivotal.io/pivotalcf/).
-* The validation normally performed by Spring Cloud Services for the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate can now be disabled by operators in the tile's settings. See step 5 of the Installation Steps in the [Installation](/spring-cloud-services/1-3/installation.html) topic for more information.
-* The Spring Cloud Services broker has been upgraded to Spring Boot 1.4.1 and Spring Cloud Camden.SR2.
-* Service instances are now based on Spring Cloud Camden.SR2, and client applications can use Spring Boot 1.3.x--1.4.1 and Spring Cloud Brixton.x--Camden.SR2. For more information about client application dependencies, see <a href="/spring-cloud-services/1-3/common/client-dependencies.html">Client Dependencies</a>.
-
-<p class='note'><strong>Note</strong>: Spring Cloud Services 1.3.0 is compatible with Spring Boot versions 1.3.x--1.4.x, but is based on Spring Cloud Camden, which builds on Spring Boot 1.4. In client applications, Spring Boot 1.4.x is recommended for optimum experience with this release.</p>
+* The Spring Cloud Services service broker has been upgraded to Spring Boot 1.5.2 and Spring Cloud Dalston.RELEASE.
