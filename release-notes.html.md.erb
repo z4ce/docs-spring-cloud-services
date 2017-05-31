@@ -36,5 +36,48 @@ Enhancements included in this release:
 * The Config Server's `/health` endpoint, provided by Spring Boot Actuator, now displays failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing this endpoint, see the [Access Actuator Endpoints](/spring-cloud-services/operator-information.html#access-actuator-endpoints) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic.
 * The Config Server's backing application now logs failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing the backing application logs, see the [Read Backing Application Logs](/spring-cloud-services/operator-information.html#backing-application-logs) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic.
 * The Config Server dashboard now displays detailed failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For more information, see the [Using the Dashboard](/spring-cloud-services/config-server/using-the-dashboard.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
-
 * The Spring Cloud Services service broker has been upgraded to Spring Boot 1.5.2 and Spring Cloud Dalston.RELEASE.
+
+Known issues in this release:
+
+* A client application using RabbitMQ and bound to a Circuit Breaker Dashboard service instance may fail to start up. This is due to an issue in the Spring Cloud Stream RabbitMQ binder. The issue is resolved in the binder's version 1.2.1; this release of Spring Cloud Services depends on Spring Cloud OSS Dalston.RELEASE, which includes the binder's version 1.2.0.
+<br/> <br/>
+If you wish to use RabbitMQ with a Circuit Breaker Dashboard service instance, you must manually override either the version of the Spring Cloud Stream RabbitMQ binder used by your application or the version of the Spring Cloud Maven BOM used by your application (the 1.2.1 release of the binder is included in Spring Cloud OSS Dalston.SR1).
+<br/> <br/>
+    Using Gradle:
+
+    ```groovy
+    // Override managed version of Spring Cloud Stream RabbitMQ binder
+    compile ("org.springframework.cloud:spring-cloud-stream-binder-rabbit:1.2.1.RELEASE")
+  
+    // Override version of OSS Spring Cloud
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR1"
+        }
+    }
+    ```
+
+    Using Maven:
+
+    ```xml
+        <!-- Override managed version of Spring Cloud Stream RabbitMQ binder -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+            <version>1.2.1.RELEASE</version>
+        </dependency>
+
+        <!-- Override version of OSS Spring Cloud -->
+        <dependencyManagement>
+          <dependencies>
+              <dependency>
+                  <groupId>org.springframework.cloud</groupId>
+                  <artifactId>spring-cloud-dependencies</artifactId>
+                  <version>Dalston.SR1</version>
+                  <type>pom</type>
+                  <scope>import</scope>
+              </dependency>
+          </dependencies>
+        </dependencyManagement>
+    ```
