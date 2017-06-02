@@ -66,6 +66,29 @@ vault:
       rate: 180000 
 ```
 
+### <a id="hashicorp-vault-property-source-redaction"></a>HashiCorp Vault Property Source Redaction
+
+In the Spring Boot Actuator `/env` endpoint, property names and values from a HashiCorp Vault property source are redacted for security. By default, the connector redacts properties whose names begin with `configService:vault:`, and they are displayed in the output of `/env` as shown in the following example:
+
+```
+"configService:vault:game": {
+    "******": "Properties from this source are redacted for security reasons"
+},
+```
+
+You can configure the pattern used to determine which properties to redact, as well as the message displayed in place of those properties' values. The pattern is set using the `vault.endpoints.env.mask.sourceNamePatterns` property (wildcards, written as `*`, are allowed) and the message is set using the `vault.endpoints.env.mask.message` property.
+
+The following YAML sets the redacted property name pattern to match property sources whose names begin with `configService:` and sets the message to `Redacted for security`.
+
+```yml
+vault:
+  endpoints:
+    env:
+      mask: 
+        sourceNamePatterns: "configService:"
+        message: "Redacted for security"
+```
+
 ## <a id="see-also"></a>See Also
 
 For more information about Spring Cloud Connectors, see the following:
