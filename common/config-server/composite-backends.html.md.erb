@@ -1,5 +1,5 @@
 ---
-title: Composite Backends
+title: Declarative Composite Backends
 owner: Spring Cloud Services
 ---
 
@@ -8,11 +8,23 @@ owner: Spring Cloud Services
 ## <a id="overview"></a>Overview
 
 Spring Cloud Services Config Server provides the ability to serve configuration properities from a composite of multiple backends such as from multiple Github repositories and a HashiCorp Vault server.
+This feature builds upon the <a href="https://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_environment_repository">Composite Envirnment Repositories</a> feature from the
+<a href="https://spring.io/blog/2017/03/21/spring-cloud-dalston-rc1-released"> Dalston release</a> of Spring Cloud Config Server by enabling decleration of more than one Git server together with an (optional) Vault server, to compose a unified configuration source.
 
 <p class='note'><strong>Note</strong>: The Spring Cloud Services Config Server cannot serve configuration properties from multiple Vault servers. A composite backend can contain only a single Vault server.</p>
 
-When a Config Server is composed with multiple backends, a request from a client application retrieves properties found in any applicable backend within the composite. If the Config Server encounters an error when retrieving properties from one of the backends, the client application's request fails. Otherwise, the Config Server assembles configuration properties beginning at the first backend in the composite by order: a property `a` found in both the first and second backends uses the value set in the first backend, and a property `b` found only in the third backend uses the value set in the third backend.
+### Property source order of precedence
+When a Config Server is composed with multiple backends, a request from a client application retrieves properties found in any applicable backend within the composite. The composite backends are always searched in the order in which they are configured.
+Otherwise, the Config Server assembles configuration properties beginning at the first backend in the composite by order:, for example
+ * Property 'dbhost=foo' is defined in the first backend
+ * Property 'dbhost=bar' is also defined in the second backend
+ * Property 'port=4321' is *only* defined in the third backend
+ ** The client will resolve 'dbhost=foo' from the first backend as it has precedence over the second. 'port=4321' will be resolved as it is only defined in the third backend.
 
+### Fail fast behavior
+If the Config Server encounters an error when retrieving properties from any one of the backends, the client application's request fails. The Config Servers' composite configuration sources will only be available once all backends are available.
+
+### Use of labels
 Within the composite, all repositories or servers must contain the same labels---branches or tags in a Git repository, or paths in a Vault server. A label in a Config Server configuration source corresponds to a Spring application profile on a client application. If a client application makes a request for configuration for a given profile and one of the composite's backends does not have a corresponding branch, tag, or path, the request fails and no configuration is returned.
 
 See below for information about configuring a Config Server service instance to use a composite backend for configuration sources.
@@ -26,29 +38,29 @@ Configuration properties from individual backends are given precedence based on 
 To configure a Config Server service instance to use a composite backend comprising two Git repositories and a Vault server, you might use the following JSON object:
 
 ```
-'{ 
+'{
     "composite": [
         {
-            "git": { 
+            "git": {
                 "uri": "https://github.com/spring-cloud-services-samples/cook-config"
             }
         },
         {
-            "git": { 
+            "git": {
                 "uri": "https://github.com/spring-cloud-samples/config-repo"
             }
         },
-        { 
+        {
             "vault": {
-                "host": "127.0.0.1", 
-                "port": 8200, 
-                "scheme": "https", 
-                "backend": "secret", 
-                "defaultKey": "application", 
+                "host": "127.0.0.1",
+                "port": 8200,
+                "scheme": "https",
+                "backend": "secret",
+                "defaultKey": "application",
                 "profileSeparator": ","
             }
         }
-    ] 
+    ]
 }'
 ```
 
@@ -57,27 +69,74 @@ In this example, configuration properties found in the Vault server are added to
 To configure a Config Server service instance to use a composite backend comprising a Vault server and a Git repository, use the following JSON object:
 
 ```
-'{ 
+'{
     "composite": [
-        { 
+        {
             "vault": {
-                "host": "127.0.0.1", 
-                "port": 8200, 
-                "scheme": "https", 
-                "backend": "secret", 
-                "defaultKey": "application", 
+                "host": "127.0.0.1",
+                "port": 8200,
+                "scheme": "https",
+                "backend": "secret",
+                "defaultKey": "application",
                 "profileSeparator": ","
             }
         },
         {
-            "git": { 
+            "git": {
                 "uri": "https://github.com/spring-cloud-services-samples/cook-config"
             }
         }
-    ] 
+    ]
 }'
 ```
 
 In this example, the response consists of configuration properties found in the Vault server, plus any properties found only in the Git repository.
 
 For information about using an application to access configuration values served by a Config Server service instance, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.
+
+## Proxy servers for Composite Backends
+Proxy server configuration must be defined for each item in the composite set. For example:
+
+```
+'{
+    "composite": [
+        {
+            "git": {
+                "uri": "https://github.com/spring-cloud-services-samples/cook-config",
+                "proxy": {
+                   "http": {
+                       "host": "http://proxy1.com",
+                       "port": 3218
+                   }
+                }
+            }
+        },
+        {
+            "git": {
+                "uri": "https://github.com/spring-cloud-samples/config-repo",
+                "proxy": {
+                   "http": {
+                       "host": "http://proxy2.com",
+                       "port": 3218
+                   }
+                }
+            }
+        },
+        {
+            "vault": {
+                "host": "127.0.0.1",
+                "proxy": {
+                   "http": {
+                       "host": "http://proxy1.com",
+                       "port": 3218
+                   }
+                }
+
+            }
+        }
+    ]
+}'
+```
+
+See <a href="/spring-cloud-services/config-server/configuring-with-git.html#proxy-repository-access"> Configuring Git Proxy server support</a>
+and <a><a href="/spring-cloud-services/config-server/configuring-with-vault.html#proxy-repository-access"> Configuring Vault Proxy server support</a> for a detailed guide to configuring proxy suppoprt.

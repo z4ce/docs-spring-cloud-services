@@ -80,3 +80,7 @@ To configure a Config Server service instance that uses an authenticated HTTPS p
 ```
 '{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
 ```
+
+### Multiple proxy servers
+
+Some networks require that seperate proxy servers are used for HTTP and HTTPS URLs. This is supported in Config Server by setting both <code>proxy.http</code> and <code>proxy.https</code> objects.
