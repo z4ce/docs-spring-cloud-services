@@ -5,7 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-_Refer to the sample applications in the <a href="https://github.com/spring-cloud-services-samples/greeting/tree/1.3.x">"greeting" repository</a> to follow along with the code in this topic._
+_Refer to the sample applications in the <a href="https://github.com/spring-cloud-services-samples/greeting/tree/1.4.x">"greeting" repository</a> to follow along with the code in this topic._
 
 ## <a id="add-application-dependencies"></a>Add Application Dependencies for Service Registry
 
@@ -174,7 +174,7 @@ $ cf restage message-generation
 
 ## <a id="register-a-service"></a>Register a Service
 
-To register with a Service Registry service instance, your application must <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.3.x/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+To register with a Service Registry service instance, your application must <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.4.x/message-generation/src/main/java/message_generation/MessageGenerationApplication.java#L13-L16">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -195,7 +195,7 @@ applications:
   ...
 ```
 
-Set the `spring.application.name` property in <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.3.x/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
+Set the `spring.application.name` property in <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.4.x/message-generation/src/main/resources/application.yml#L1-L3">`application.yml`</a>:
 
 ```yml
 spring:
@@ -211,7 +211,7 @@ Follow the below instructions to consume a service that is registered with a Ser
 
 ### <a id="discover-and-consume-a-service-using-resttemplate"></a>Discover and Consume a Service Using RestTemplate
 
-A consuming application must <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.3.x/greeter/src/main/java/greeter/GreeterApplication.java#L22-L34">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
+A consuming application must <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.4.x/greeter/src/main/java/greeter/GreeterApplication.java#L22-L34">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>.
 
 ```java
 @SpringBootApplication
@@ -236,7 +236,7 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 By default, Service Registry requires HTTPS for access to registered services. If your client application is consuming a service application which has been registered with the Service Registry instance using route registration (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html#register-the-application">Register the Application</a> section above), you can use a schemeless URI (as `//message-generation`) to access the service. Spring Cloud Netflix Ribbon will default to using an HTTPS route if one is available and to an HTTP route otherwise. (This behavior requires Spring Cloud Brixton.SR6 or later.)
 
-The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.3.x/greeter/src/main/java/greeter/GreeterApplication.java#L40-L50">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```//message-generation``` to get a greeting message from Message Generation.
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so in the Greeter application, <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.4.x/greeter/src/main/java/greeter/GreeterApplication.java#L40-L50">the `hello()` method on the `GreeterApplication` class</a> uses the base URI ```//message-generation``` to get a greeting message from Message Generation.
 
 ```java
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
@@ -259,7 +259,7 @@ The Message Generation application is registered with the Service Registry insta
 
 If you wish to use [Feign](https://github.com/Netflix/feign) to consume a service that is registered with a Service Registry instance, your application must declare ```spring-cloud-starter-feign``` as a dependency. In order to have Feign client interfaces automatically configured, it must also use the ```@EnableFeignClients``` annotation.
 
-Your consuming application must <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.3.x/feign-greeter/src/main/java/greeter/GreeterApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. In the Greeter application, the ```GreeterApplication``` class contains a ```MessageGenerationClient``` interface, which is a Feign client for the Message Generation application.
+Your consuming application must <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.4.x/feign-greeter/src/main/java/greeter/GreeterApplication.java#L18-L25">include the ```@EnableDiscoveryClient``` annotation on a configuration class</a>. In the Greeter application, the ```GreeterApplication``` class contains a ```MessageGenerationClient``` interface, which is a Feign client for the Message Generation application.
 
 ```java
 @SpringBootApplication
@@ -277,7 +277,7 @@ To call a registered service, a consuming application can use a URI with a hostn
 
 <p class='note'><strong>Note</strong>: If the name of the registered application contains characters which are invalid in a hostname, that application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character. For example, given an application name of "message_generation", the Eureka application name used to register the application with the Service Registry service instance will be <code>message-generation</code>. See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-application-name-configuration">Eureka Application Name Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
-The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.3.x/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```http://message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
+The Message Generation application is registered with the Service Registry instance as ```message-generation```, so the ```@FeignClient``` annotation on the <a href="https://github.com/spring-cloud-services-samples/greeting/blob/1.4.x/feign-greeter/src/main/java/greeter/GreeterApplication.java#L52-L56">```MessageGenerationClient``` interface</a> uses the base URI ```http://message-generation```. The interface declares one method, ```greeting()```, which accesses the Message Generation application's ```/greeting``` endpoint and sends along optional ```name``` and ```salutation``` parameters if they are provided.
 
 ```java
     @FeignClient("http://message-generation")

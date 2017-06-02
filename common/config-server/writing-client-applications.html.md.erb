@@ -5,7 +5,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-_Refer to the <a href="https://github.com/spring-cloud-services-samples/cook/tree/1.3.x">"Cook" sample application</a> to follow along with the code in this topic._
+_Refer to the <a href="https://github.com/spring-cloud-services-samples/cook/tree/1.4.x">"Cook" sample application</a> to follow along with the code in this topic._
 
 To use a Spring Boot application as a client for a Config Server instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#config-server">Config Server</a> as well.
 
@@ -34,7 +34,7 @@ As the output from the ```cf set-env``` command suggests, restage the applicatio
 
 When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> topic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
 
-In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
+In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
 
 ```yml
 spring:
@@ -44,7 +44,7 @@ spring:
 
 This application will use a path with the application name `cook`, so the Config Server will look in its configuration source for files whose names begin with `cook`, and return configuration properties from those files.
 
-Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/java/cook/Menu.java">The Menu class</a> reads the value of `special` from the `cook.special` configuration property.
+Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Menu.java">The Menu class</a> reads the value of `special` from the `cook.special` configuration property.
 
 ```java
 @RefreshScope
@@ -65,7 +65,7 @@ public class Menu {
 }
 ```
 
-<a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
+<a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
 
 ```java
 @RestController
@@ -86,7 +86,7 @@ public class Application {
 
 You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> topic.)
 
-The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/manifest.yml">`manifest.yml`</a>.
+The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/manifest.yml">`manifest.yml`</a>.
 
 ```yml
 applications:
@@ -132,7 +132,7 @@ As noted in the <a href="/spring-cloud-services/config-server/configuration-clie
 
 <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds an `env` endpoint to the application and maps it to `/env`. This endpoint displays the application's profiles and property sources from the Spring ```ConfigurableEnvironment```. (See ["Endpoints"](http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html) in the "Spring Boot Actuator" section of the Spring Boot Reference Guide.) In the case of an application which is bound to a Config Server service instance, `env` will display properties provided by the instance.
 
-To use Actuator, you must add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/pom.xml#L63-L66">add to `pom.xml`</a>:
+To use Actuator, you must add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/pom.xml#L63-L66">add to `pom.xml`</a>:
 
 ```xml
 <dependency>
@@ -141,7 +141,7 @@ To use Actuator, you must add the `spring-boot-starter-actuator` dependency to y
 </dependency>
 ```
 
-If using Gradle, <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/build.gradle#L39">add to `build.gradle`</a>:
+If using Gradle, <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/build.gradle#L39">add to `build.gradle`</a>:
 
 ```groovy
 compile("org.springframework.boot:spring-boot-starter-actuator")
@@ -174,7 +174,7 @@ $ curl http://cookie.apps.wise.com/env
 
 Spring Boot Actuator also adds a `refresh` endpoint to the application. This endpoint is mapped to `/refresh`, and a POST request to the `refresh` endpoint refreshes any beans which are annotated with `@RefreshScope`. You can thus use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
 
-The `Menu.java` class is <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
+The `Menu.java` class is <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
 
 ```java
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -218,7 +218,7 @@ To use the decryption features in a client application, you must use a Java buil
 
 You must also include [Spring Security RSA](https://github.com/dsyer/spring-security-rsa) as a dependency.
 
-If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/pom.xml#L79-L84):
+If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/pom.xml#L79-L84):
 
 ```xml
     <dependency>
@@ -227,7 +227,7 @@ If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-services-
     </dependency>
 ```
 
-If using Gradle, [include in `build.gradle`](https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/build.gradle#L41):
+If using Gradle, [include in `build.gradle`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/build.gradle#L41):
 
 ```groovy
     compile("org.springframework.security:spring-security-rsa")
@@ -243,7 +243,7 @@ fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXP
 w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
 ```
 
-Put the key on the client application classpath. You can either add the keystore to the buildpack's `resources/open_jdk_jre/lib/security` directory (as described above for the JCE policy files) or include it with the source for the application. In the Cook application, the key is placed in [`src/main/resources`](https://github.com/spring-cloud-services-samples/cook/tree/1.3.x/src/main/resources).
+Put the key on the client application classpath. You can either add the keystore to the buildpack's `resources/open_jdk_jre/lib/security` directory (as described above for the JCE policy files) or include it with the source for the application. In the Cook application, the key is placed in [`src/main/resources`](https://github.com/spring-cloud-services-samples/cook/tree/1.4.x/src/main/resources).
 
 ```
 cook
@@ -257,7 +257,7 @@ cook
 
 <p class='note'><strong>Important</strong>: Cook is an example application, and the key is packaged with the application source for example purposes. If at all possible, use the buildpack for keystore distribution.</p>
 
-Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/resources/bootstrap.yml#L7-L12) using the `encrypt.keyStore` properties:
+Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L7-L12) using the `encrypt.keyStore` properties:
 
 ```yml
 encrypt:
@@ -268,7 +268,7 @@ encrypt:
     secret: changeme
 ```
 
-The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/java/cook/Menu.java#L14-L23).
+The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Menu.java#L14-L23).
 
 ```java
   @Value("${secretMenu}")
@@ -281,13 +281,13 @@ The Menu class has [a String property `secretMenu`](https://github.com/spring-cl
   }
 ```
 
-A [default value for `secretMenu`](https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/resources/bootstrap.yml#L5) is in `bootstrap.yml`:
+A [default value for `secretMenu`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L5) is in `bootstrap.yml`:
 
 ```yml
 secretMenu: Animal Crackers
 ```
 
-In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
+In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
 
 ```java
     @RequestMapping("/restaurant/secret-menu")
@@ -415,7 +415,7 @@ ttl                  997
 
 The Spring Cloud Config Client starter has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
 
-If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.3.x/src/main/resources/application.yml">`application.yml`</a> or `bootstrap.yml`:
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/application.yml">`application.yml`</a> or `bootstrap.yml`:
 
 ```yml
 security:
