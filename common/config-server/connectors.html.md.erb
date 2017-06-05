@@ -76,17 +76,16 @@ In the Spring Boot Actuator `/env` endpoint, property names and values from a Ha
 },
 ```
 
-You can configure the pattern used to determine which properties to redact, as well as the message displayed in place of those properties' values. The pattern is set using the `vault.endpoints.env.mask.sourceNamePatterns` property (wildcards, written as `*`, are allowed) and the message is set using the `vault.endpoints.env.mask.message` property.
+You can configure the pattern used to determine which properties to redact, as well as the message displayed in place of those properties' values, using properties set in the `application.yml` or `application.properties` file. The pattern is set using the `endpoints.env.mask.sourceNamePatterns` property (wildcards, written as `*`, are allowed) and the message is set using the `endpoints.env.mask.message` property.
 
-The following YAML sets the redacted property name pattern to match property sources whose names begin with `configService:` and sets the message to `Redacted for security`.
+For example, the following YAML sets the redacted property name pattern to match property sources whose names begin with `configService:` and sets the message to `Redacted for security`.
 
 ```yml
-vault:
-  endpoints:
-    env:
-      mask: 
-        sourceNamePatterns: "configService:"
-        message: "Redacted for security"
+endpoints:
+  env:
+    mask: 
+      sourceNamePatterns: "configService:"
+      message: "Redacted for security"
 ```
 
 ## <a id="see-also"></a>See Also
