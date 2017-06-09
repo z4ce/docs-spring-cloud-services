@@ -52,6 +52,8 @@ Settings for an HTTPS proxy are set in the `vault.proxy.https` object. These mig
 '{"vault": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
 ```
 
+<p class='note'><strong>Note</strong>: Some networks require that separate proxy servers are used for HTTP and HTTPS URLs. In such a case, you can set both the <code>proxy.http</code> and <code>proxy.https</code> objects.</p>
+
 The parameters used to configure HTTP or HTTPS proxy settings for the Config Server are listed below.
 
 | Parameter                                  | Function                                                                                                                                            |
@@ -80,7 +82,3 @@ To configure a Config Server service instance that uses an authenticated HTTPS p
 ```
 '{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
 ```
-
-### Multiple proxy servers
-
-Some networks require that seperate proxy servers are used for HTTP and HTTPS URLs. This is supported in Config Server by setting both <code>proxy.http</code> and <code>proxy.https</code> objects.

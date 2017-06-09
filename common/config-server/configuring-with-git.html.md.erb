@@ -257,6 +257,8 @@ Settings for an HTTPS proxy are set in the `git.proxy.https` object. These might
 '{"git": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
 ```
 
+<p class='note'><strong>Note</strong>: Some networks require that separate proxy servers are used for HTTP and HTTPS URLs. In such a case, you can set both the <code>proxy.http</code> and <code>proxy.https</code> objects.</p>
+
 The parameters used to configure HTTP or HTTPS proxy settings for the Config Server are listed below.
 
 | Parameter                                  | Function                                                                                                                                            |
@@ -288,4 +290,4 @@ To configure a Config Server service instance that uses an authenticated HTTPS p
 
 ### Multiple proxy servers
 
-Some networks require that seperate proxy servers are used for HTTP and HTTPS URLs. This is supported in Config Server by setting both <code>proxy.http</code> and <code>proxy.https</code> objects.
+
