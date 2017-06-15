@@ -9,7 +9,7 @@ See below for information about Spring Cloud&reg; Services' deployment model and
 
 ## <a id="tile-configuration-options"></a>Tile Configuration Options
 
-The Spring Cloud Services tile includes settings for various options. You can configure these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Spring Cloud Services** tab.
+The Spring Cloud Services tile includes settings for various options. You can configure these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Spring Cloud Services** pane.
 
 ### <a id="configure-service-instance-limit"></a>Configure Service Instance Limit
 
@@ -42,6 +42,18 @@ By default, Spring Cloud Services checks the Pivotal Cloud Foundry&reg; Elastic 
 <%= image_tag("/spring-cloud-services/images/operator-information/disable-ssl-certificate-validation.png") %>
 
 Click **Save** and return to the Installation Dashboard, then apply your changes. Spring Cloud Services will not validate the Elastic Runtime certificate as part of its installation process.
+
+### <a id="errand-configuration"></a>Errand Configuration
+
+The Spring Cloud Services tile includes four lifecycle errands. You can view these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Errands** pane.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/errands.png") %>
+
+Spring Cloud Services includes three post-deploy errands and one pre-delete errand. These errands can be individually set to run conditionally (**When Changed**), to always run (**On**), or to never run (**Off**).
+
+<p class='note'><strong>Important</strong>: To ensure that your PCF installation receives important updates to the tile, Pivotal recommends that all Spring Cloud Services lifecycle errands be set to <strong>On</strong>.</p>
+
+In the post-deploy errands, **Broker Deployer** pushes the Spring Cloud Services service broker and worker applications to PCF. **Broker Registrar** registers the service broker with the Cloud Controller and makes its service plans available to all orgs. **Smoke Tests** runs several tests to ensure service availability and correct configuration. The pre-delete errand, **Broker Deregistrar**, deletes all orgs and spaces specific to Spring Cloud Services and deregisters the broker from the Cloud Controller.
 
 ## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
 
