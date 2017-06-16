@@ -1,0 +1,62 @@
+---
+title: Updating an Instance
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+You can update settings on a Circuit Breaker Dashboard service instance using the Cloud Foundry Command Line Interface tool (cf CLI). The `cf update-service` command can be given a `-c` flag with a JSON object containing parameters used to configure the service instance.
+
+To update a Circuit Breaker Dashboard service instance's settings, target the org and space of the service instance:
+
+<pre class="terminal">
+$ cf target -o myorg -s development
+
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
+User:           user
+Org:            myorg
+Space:          development
+</pre>
+
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. For information about supported parameters, see the next section.
+
+## <a id="configuration-parameters"></a>Configuration Parameters
+
+General parameters accepted for the Circuit Breaker Dashboard are listed below.
+
+| Parameter               | Function                         | Example                          |
+|-------------------------|----------------------------------|----------------------------------|
+| <code>upgrade</code>    | Whether to upgrade the instance  | <code>'{"upgrade": true}'</code> |
+
+To update a service instance so that it is upgraded to the latest available service version, run:
+
+<pre class="terminal">
+$ cf update-service circuit-breaker-dashboard -c '{"upgrade": true}'
+Updating service instance circuit-breaker-dashboard as user...
+OK
+
+Update in progress. Use 'cf services' or 'cf service circuit-breaker-dashboard' to check operation status.
+</pre>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the update is complete, the `cf service` command will give a status of `update succeeded`:
+
+<pre class="terminal">
+Ben-Kleins-MacBook-Pro:Work bklein$ cf service circuit-breaker-dashboard
+
+Service instance: circuit-breaker-dashboard
+Service: p-circuit-breaker-dashboard
+Bound apps: agency
+Tags:
+Plan: standard
+Description: Circuit Breaker Dashboard for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-circuit-breaker-dashboard/9397f120-484d-45ef-a7bd-20661e98b643
+
+Last Operation
+Status: update succeeded
+Message:
+Started: 2017-06-16T18:18:14Z
+Updated: 2017-06-16T18:20:17Z
+</pre>
+
+The service instance is now updated and ready to be used. For an example of using a circuit breaker in an application, see the <a href="/spring-cloud-services/circuit-breaker/writing-client-applications.html">Writing Client Applications</a> topic.
