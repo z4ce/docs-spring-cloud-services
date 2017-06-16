@@ -24,9 +24,10 @@ Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `
 
 General parameters accepted for the Circuit Breaker Dashboard are listed below.
 
-| Parameter               | Function                         | Example                          |
-|-------------------------|----------------------------------|----------------------------------|
-| <code>upgrade</code>    | Whether to upgrade the instance  | <code>'{"upgrade": true}'</code> |
+| Parameter               | Function                                                                                                                                       | Example                          |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| <code>upgrade</code>    | Whether to upgrade the instance                                                                                                                | <code>'{"upgrade": true}'</code> |
+| <code>force</code>      | When `upgrade` is set to `true`, whether to force an upgrade of the instance, even if the instance is already at the latest available service version  | <code>'{"force": true}'</code>   |
 
 To update a service instance so that it is upgraded to the latest available service version, run:
 
