@@ -8,8 +8,9 @@ To work with Spring Cloud Services service instances, your client application mu
 | 1.1.x                 | 1.3.x--1.4.x | Brixton.x    |
 | 1.2.x                 | 1.3.x--1.4.x | Brixton.x    |
 | 1.3.x                 | 1.3.x--1.4.x | Camden.x     |
-| 1.4.x                 | 1.5.x        | Dalston.x    |
+| 1.4.x *               | 1.5.x        | Dalston.x    |
 
+* Client dependencies for Spring Cloud Services 1.4.x only need to be updated if support for HashiCorp Vault is required.
 <p class='note'><strong>Important</strong>: Spring Cloud Services is affected by an <a href="https://github.com/spring-projects/spring-boot/issues/9079">issue in Spring Boot version 1.5.3</a> and is not compatible with that version. To be compatible with Spring Cloud Services 1.4.0, client applications should use Spring Boot versions 1.5.0--1.5.2 or 1.5.4 and later.</p>
 
 If using Maven, include in `pom.xml`:
