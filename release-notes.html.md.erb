@@ -48,6 +48,15 @@ Enhancements included in this release:
 Fixes included in this release:
 
 * Fixed a Config Server issue which could prevent backing application startup and resulted in backing application log and dashboard errors when the service instance was configured to connect to a Git repository via SSH.
+
+Known issues in this release:
+
+* The "Broker Registrar" lifecyle errand fails during the tile upgrade process if the Spring Cloud Services service broker's MySQL for PCF service instance was created under a plan name other than `100mb` (the default name for the 100 MB plan). If the service broker for your existing installation of Spring Cloud Services has a MySQL for PCF service instance with a service plan name other than `100mb` and the tile upgrade process has failed, follow the below steps to migrate the existing database to a `100mb` plan and continue the upgrade process.
+  * In the MySQL for PCF tile configuration settings, create a service plan with name `100mb` and persistent disk of 100 MB.
+  * Back up the existing broker database, following the steps in the [Back Up Your MySQL for PCF v1.x Instance](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html#backup) section of the [Migrating a Database to MySQL for PCF v2](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html) topic in the [MySQL for PCF documentation](https://docs.pivotal.io/p-mysql/2-0/index.html).
+  * Using the Cloud Foundry Command Line Interface tool (cf CLI), target the `system` org and the `p-spring-cloud-services` space: `cf target -o system -s p-spring-cloud-services`
+  * Using the cf CLI, update the broker's MySQL for PCF service instance to the new `100mb` plan: `cf update-service spring-cloud-broker-db -p 100mb`
+  * Re-run the Spring Cloud Services post-deploy errands.
     
 ## <a id="1-4-0"></a>1.4.0
 
@@ -68,6 +77,12 @@ Enhancements included in this release:
 Known issues in this release:
 
 * uaac commands used by Spring Cloud Services lifecycle errands fail if Pivotal Cloud Foundry&reg; Operations Manager has been configured to use Trusted System Certificates (for example to support an internal root Certificate Authority). If you are using Trusted System Certificates, do not install or upgrade to this release. If you have already installed it following the tile installation process rather than the tile upgrade process, uninstall and delete the tile; if you have already upgraded to this release, please contact [Pivotal Support](https://pivotal.io/support) for assistance.
+* The "Broker Registrar" lifecyle errand fails during the tile upgrade process if the Spring Cloud Services service broker's MySQL for PCF service instance was created under a plan name other than `100mb` (the default name for the 100 MB plan). If the service broker for your existing installation of Spring Cloud Services has a MySQL for PCF service instance with a service plan name other than `100mb` and the tile upgrade process has failed, follow the below steps to migrate the existing database to a `100mb` plan and continue the upgrade process.
+  * In the MySQL for PCF tile configuration settings, create a service plan with name `100mb` and persistent disk of 100 MB.
+  * Back up the existing broker database, following the steps in the [Back Up Your MySQL for PCF v1.x Instance](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html#backup) section of the [Migrating a Database to MySQL for PCF v2](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html) topic in the [MySQL for PCF documentation](https://docs.pivotal.io/p-mysql/2-0/index.html).
+  * Using the Cloud Foundry Command Line Interface tool (cf CLI), target the `system` org and the `p-spring-cloud-services` space: `cf target -o system -s p-spring-cloud-services`
+  * Using the cf CLI, update the broker's MySQL for PCF service instance to the new `100mb` plan: `cf update-service spring-cloud-broker-db -p 100mb`
+  * Re-run the Spring Cloud Services post-deploy errands.
 * A Config Server service instance which has a configuration source consisting of a Git repository reached via SSH may fail to start, will report a status of `DOWN` on its `health` endpoint (provided by Spring Boot Actuator), and will report on its dashboard that it "cannot initialize using the configuration that has been provided". The backing application logs for the service instance may contain the phrases `reject HostKey` or `ssh protocol is not supported`.
 <br/> <br/>
 If you have upgraded Spring Cloud Services to version 1.4.0 but have a Config Server service instance which accesses a Git repository via SSH and has not yet been upgraded to the latest version, do not upgrade the service instance at this time. If you have such a service instance and it has been upgraded, follow the below steps to enable the Config Server to start (this will not correct the status given on the `health` endpoint or the dashboard message).
