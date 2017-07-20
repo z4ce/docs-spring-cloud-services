@@ -27,6 +27,7 @@ General parameters used to configure the Config Server's default configuration s
 | <code>cloneOnStart</code>      | Whether the Config Server should clone the default repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
 | <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 | <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
+| <code>skipSslValidation</code> | For a `https://` URI, whether to skip validation of the SSL certificate on the default repository's server. Valid values are `true` and `false`         |
 
 <p class='note'><strong>Important</strong>: If you set <code>cloneOnStart</code> to <code>true</code> for a service instance that uses a repository which is secured with HTTP Basic authentication, you must set the <code>username</code> and <code>password</code> at the same time as you set <code>cloneOnStart</code>. Otherwise, the Config Server will be unable to access the repository and the service instance may fail to initialize.</p>
 
@@ -147,19 +148,20 @@ For more information about the pattern format, see ["Pattern Matching and Multip
 
 The parameters used to configure specific configuration sources for the Config Server are listed below.
 
-| Parameter                                  | Function                                                                                                                                    |
-|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| <code>repos."name"</code>                  | A repository object, containing repository fields                                                                                           |
-| <code>repos."name".pattern</code>          | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)        |
-| <code>repos."name".uri</code>              | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of this repository                                            |
-| <code>repos."name".label</code>            | The default "label" to use with this repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application)                                                    |
-| <code>repos."name".searchPaths</code>      | A pattern used to search for configuration-containing subdirectories in this repository                                                     |
-| <code>repos."name".cloneOnStart</code>     | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
-| <code>repos."name".username</code>         | The username used to access this repository (if protected by HTTP Basic authentication)                                                     |
-| <code>repos."name".password</code>         | The password used to access this repository (if protected by HTTP Basic authentication)                                                     |
-| <code>repos."name".hostKey</code>          | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/creating-an-instance.html#ssh-repository-access) section for more information                           |
-| <code>repos."name".hostKeyAlgorithm</code> | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521" |
-| <code>repos."name".privateKey</code>       | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                              |
+| Parameter                                   | Function                                                                                                                                        |
+|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| <code>repos."name"</code>                   | A repository object, containing repository fields                                                                                               |
+| <code>repos."name".pattern</code>           | A pattern for the names of applications that store configuration from this repository (if not supplied, will be <code>"name"</code>)            |
+| <code>repos."name".uri</code>               | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of this repository                                                |
+| <code>repos."name".label</code>             | The default "label" to use with this repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application)                                                        |
+| <code>repos."name".searchPaths</code>       | A pattern used to search for configuration-containing subdirectories in this repository                                                         |
+| <code>repos."name".cloneOnStart</code>      | Whether the Config Server should clone this repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false`     |
+| <code>repos."name".username</code>          | The username used to access this repository (if protected by HTTP Basic authentication)                                                         |
+| <code>repos."name".password</code>          | The password used to access this repository (if protected by HTTP Basic authentication)                                                         |
+| <code>repos."name".skipSslValidation</code> | For a `https://` URI, whether to skip validation of the SSL certificate on the default repository's server. Valid values are `true` and `false` |
+| <code>repos."name".hostKey</code>           | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/creating-an-instance.html#ssh-repository-access) section for more information                               |
+| <code>repos."name".hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521"     |
+| <code>repos."name".privateKey</code>        | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                                  |
 
 <p class='note'><strong>Important</strong>: If you set <code>cloneOnStart</code> to <code>true</code> for a repository which is secured with HTTP Basic authentication, you must set the <code>username</code> and <code>password</code> at the same time as you set <code>cloneOnStart</code>. Otherwise, the Config Server will be unable to access the repository and the service instance may fail to initialize.</p>
 

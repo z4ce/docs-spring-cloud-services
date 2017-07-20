@@ -23,14 +23,15 @@ Parameters used to configure a configuration source are part of a JSON object ca
 
 General parameters used to configure a Config Server configuration source are listed below.
 
-| Parameter                     | Function                                                                                     |
-|-------------------------------|----------------------------------------------------------------------------------------------|
-| <code>host</code>             | The host of the Vault server                                                                 |
-| <code>port</code>             | The port of the Vault server                                                                 |
-| <code>scheme</code>           | The URI scheme used in accessing the Vault server (default value: `http`)                    |
-| <code>backend</code>          | The name of the Vault backend from which to retrieve configuration (default value: `secret`) |
-| <code>defaultKey</code>       | The default key from which to retrieve configuration (default value: `application`)          |
-| <code>profileSeparator</code> | The value used to separate profiles (default value: `,`)                                     |
+| Parameter                      | Function                                                                                                   |
+|--------------------------------|------------------------------------------------------------------------------------------------------------|
+| <code>host</code>              | The host of the Vault server                                                                               |
+| <code>port</code>              | The port of the Vault server                                                                               |
+| <code>scheme</code>            | The URI scheme used in accessing the Vault server (default value: `http`)                                  |
+| <code>backend</code>           | The name of the Vault backend from which to retrieve configuration (default value: `secret`)               |
+| <code>defaultKey</code>        | The default key from which to retrieve configuration (default value: `application`)                        |
+| <code>profileSeparator</code>  | The value used to separate profiles (default value: `,`)                                                   |
+| <code>skipSslValidation</code> | Whether to skip validation of the SSL certificate on the Vault server. Valid values are `true` and `false` |
 
 The value of `defaultKey` is masked in the Config Server dashboard.
 
