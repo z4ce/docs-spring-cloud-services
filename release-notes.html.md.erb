@@ -36,21 +36,6 @@ The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3
 
 After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
-## <a id="1-4-2"></a>1.4.2
-
-**Release Date: 24th July 2017**
-
-Enhancements included in this release:
-
-* The Spring Cloud Services "Broker Deployer" lifecycle errand has been made more resilient in cases where the service broker worker's Cloud Foundry user or UAA client already exists.
-* SSL certificate validation performed by the Spring Cloud Services "Broker Deployer" lifecycle errand is no longer case-sensitive.
-* The Spring Cloud Services service broker has been upgraded to Spring Cloud Dalston.SR2.
-
-Fixes included in this release:
-
-* Fixed an issue with the "Broker Deployer" lifecycle errand where a missing route on the existing service broker application could cause the errand to fail.
-* Fixed an issue with the "Broker Deployer" lifecycle errand where the presence of existing dependent service instances during an upgrade could cause the errand to fail.
-
 ## <a id="1-4-1"></a>1.4.1
 
 **Release Date: 7th July 2017**
