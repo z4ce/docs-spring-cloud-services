@@ -236,7 +236,9 @@ In the Spring Cloud Services Identity Zone, it also creates the following client
 
 ### <a id="get-access-token-for-direct-requests-to-a-service-instance"></a>Get Access Token for Direct Requests to a Service Instance
 
-To make requests directly against a Config Server service instance's Spring Cloud Config Server backing application or a Service Registry service instance's Spring Cloud Netflix Eureka backing application, you can get an access token using the binding credentials of an application that is bound to the service instance. 
+To make requests directly against a Config Server service instance's Spring Cloud Config Server backing application or a Service Registry service instance's Spring Cloud Netflix Eureka backing application, you must obtain an OAuth 2.0 token. For most Config Server endpoints and for Service Registry endpoints, you can get a client credentials access token using the binding credentials of an application that is bound to the service instance. For the `/encrypt` endpoint on a Config Server service instance, you can get a password credentials access token using the Cloud Foundry Command Line Interface tool (cf CLI).
+
+#### Get a Client Credentials Access Token
 
 <p class='note'><strong>Note</strong>: The following procedure uses the <a href="https://stedolan.github.io/jq/">jq</a> command-line JSON processing tool.</p>
 
@@ -289,6 +291,43 @@ Replace `ENDPOINT` with the relevant endpoint:
 * `application/profile` to retrieve configuration from a Config Server service instance
 * `eureka/apps` to retrieve the registry from a Service Registry service instance
 
+#### Get a Password Credentials Access Token
+
+Run `cf env`, giving the name of an application that is bound to the service instance:
+
+<pre class="terminal">
+$ cf services
+Getting services in org myorg / space development as admin...
+OK
+
+name             service           plan        bound apps   last operation
+config-server    p-config-server   standard    cook         create succeeded
+
+$ cf env cook
+Getting env variables for app cook in org myorg / space development as admin...
+OK
+
+System-Provided:
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+     "client_id": "p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73",
+     "client_secret": "rU7dMUw6bQjR",
+     "uri": "https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com"
+    },
+[...]
+</pre>
+
+Copy the value of `credentials.uri`. Then use the `cf oauth-token` command to get the token for the current session. The following example uses curl to access the `/encrypt` endpoint of a Config Server service instance (see the [Encryption and Encrypted Values](/spring-cloud-services/common/config-server/configuring-with-git.html#encryption-and-encrypted-values) section of the [Configuring with Git](/spring-cloud-services/common/config-server/configuring-with-git.html) topic):
+
+<pre class="terminal">
+$ curl -H "Authorization: $(cf oauth-token)" https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/encrypt -d 'Value to be encrypted'
+15f826dd703c4a3e9e1d64a5827d3b1f1584a1173c03c42d87e7480dddb07d86e009c2d78a68eee610f7f55c66894907
+</pre>
+
 ## <a id="service-instances-dashboard"></a>The Service Instances Dashboard
 
 To view the status of individual service instances, visit the Service Instances dashboard. You can access it at the following URL, where `SCS_BROKER_URL` is the URL of the SB (spring-cloud-broker):
@@ -305,7 +344,7 @@ The dashboard shows the version and status of each service instance, as well as 
 
 You can click the **Instance Name** of a listed service instance to view the instance's dashboard. Click the **+** icon beside the count of an instance's **Bound Apps** or **Service Keys** to view the names of the applications or service keys that are bound to that instance.
 
-<p class='note'><strong>Note</strong>: The Service Instances dashboard is updated frequently (close to real-time). If using the Cloud Foundry Command Line Interface tool (cf CLI), you may notice a discrepancy between the status given for a service instance by the cf CLI (e.g., by the <code>cf service</code> command) versus that given by the Service Instances dashboard. The status retrieved by the cf CLI is not updated as frequently and may take time to match that shown on the Service Instances dashboard.</p>
+<p class='note'><strong>Note</strong>: The Service Instances dashboard is updated frequently (close to real-time). If using the cf CLI, you may notice a discrepancy between the status given for a service instance by the cf CLI (e.g., by the <code>cf service</code> command) versus that given by the Service Instances dashboard. The status retrieved by the cf CLI is not updated as frequently and may take time to match that shown on the Service Instances dashboard.</p>
 
 ## <a id="application-health-and-status"></a>Application Health and Status
 
