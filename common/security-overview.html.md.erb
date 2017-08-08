@@ -81,7 +81,7 @@ Before continuing, you should familiarize yourself with the following diagram, w
 
 The installation file is the ```.pivotal``` file that contains the Spring Cloud Services product.
 
-The installation file is generated from source code repositories hosted on ```github.com```. The repositories are can only be accessed by authorized persons and cannot be accessed over a non-encrypted channel. No credentials are stored in any source repository used by Spring Cloud Services.
+The installation file is generated from source code repositories hosted on ```github.com```. The repositories can only be accessed by authorized persons and cannot be accessed over a non-encrypted channel. No credentials are stored in any source repository used by Spring Cloud Services.
 
 [Concourse](http://concourse.ci/) is used as the build pipeline to generate the installation file. The infrastructure that hosts Concourse can only be accessed from within the Pivotal network, using a username and password stored internally by Concourse. The build pipeline configuration contains credentials to the S3 bucket which hosts the installation file and intermediate artifacts, as well as the GitHub API key providing read/write access to the source code repositories. The resulting installation file built by the Concourse pipeline does not contain any credentials.
 
