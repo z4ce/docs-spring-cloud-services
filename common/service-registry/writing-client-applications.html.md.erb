@@ -205,6 +205,21 @@ spring:
 
 <p class='note'><strong>Note</strong>: If the application name contains characters which are invalid in a hostname, the application will be registered with the Service Registry service instance using the application name with each invalid character replaced by a hyphen (<code>-</code>) character (for example, given an application name of "message_generation", the Eureka application name used to register the application with the Service Registry service instance will be <code>message-generation</code>). See the <a href="/spring-cloud-services/service-registry/connectors.html#eureka-application-name-configuration">Eureka Application Name Configuration</a> section of the <a href="/spring-cloud-services/service-registry/connectors.html">Spring Cloud Connectors</a> topic for more information.</p>
 
+### <a id="register-using-c2c"></a>Register Using Container-to-Container Networking
+
+To use Cloud Foundry's container networking (see the [Understanding Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/concepts/understand-cf-networking.html) topic in the [Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/) documentation) with the application, your `application.yml` must specify a `spring.cloud.services.registrationMethod` of `direct`.
+
+```yml
+spring:
+  application:
+    name: message-generation
+  cloud:
+    services:
+      registrationMethod: direct
+```
+
+Before a client application can use the Service Registry to reach this directly-registered application, you must add a network policy that allows traffic from the client application to this application. See the [Consume Using Container-to-Container Networking](/spring-cloud-services/service-registry/writing-client-applications.html#consume-using-c2c) section for more information.
+
 ## <a id="consume-a-service"></a>Consume a Service
 
 Follow the below instructions to consume a service that is registered with a Service Registry service instance.
@@ -286,6 +301,41 @@ The Message Generation application is registered with the Service Registry insta
       Greeting greeting(@RequestParam("name") String name, @RequestParam("salutation") String salutation);
     }
 ```
+
+### <a id="consume-using-c2c"></a>Consume Using Container-to-Container Networking
+
+To use Cloud Foundry's container networking (see the [Understanding Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/concepts/understand-cf-networking.html) topic in the [Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/) documentation) to reach an application registered with the Service Registry, you must add a network policy. You can do this using the [Networking cf CLI plugin](https://github.com/cloudfoundry-incubator/cf-networking-release/).
+
+Run the `cf list-access` command to list current network policies:
+
+<pre class="terminal">
+$ cf list-access
+Listing policies as user...
+OK
+
+Source    Destination    Protocol    Port
+</pre>
+
+Use the `cf allow-access` command to grant access from the Greeter application to the Message Generation application:
+
+<pre class="terminal">
+$ cf allow-access greeter message-generation --protocol tcp --port 8080
+Allowing traffic from greeter to message-generation as user...
+OK
+</pre>
+
+Use `cf list-access` again to view the new access policy:
+
+<pre class="terminal">
+$ cf list-access
+Listing policies as user...
+OK
+
+Source        Destination           Protocol   Port
+greeter       message-generation    tcp        8080
+</pre>
+
+The Greeter application can now use container networking to access the Message Generation application via the Service Registry. For more information about configuring container networking, see the [Administering Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/cf-networking.html) topic in the [Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/) documentation.
 
 ## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
 
