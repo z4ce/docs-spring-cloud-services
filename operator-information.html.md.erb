@@ -55,9 +55,9 @@ Spring Cloud Services includes three post-deploy errands and one pre-delete erra
 
 In the post-deploy errands, **Broker Deployer** pushes the Spring Cloud Services service broker and worker applications to PCF. **Broker Registrar** registers the service broker with the Cloud Controller and makes its service plans available to all orgs. **Smoke Tests** runs several tests to ensure service availability and correct configuration. The pre-delete errand, **Broker Deregistrar**, deletes all orgs and spaces specific to Spring Cloud Services and deregisters the broker from the Cloud Controller.
 
-## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
+## <a id="service-orchestration"></a>Service Orchestration
 
-Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/ops1.png") %>
 
@@ -93,7 +93,7 @@ The applications are deployed in the "p-spring-cloud-services" space.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/broker-apps-apps-manager-space.png") %>
 
-### <a id="service-instances"></a>Service Instances
+## <a id="service-instances"></a>Service Instance Management
 
 A service instance is backed by one or more Spring Boot applications deployed by the Worker in the "p-spring-cloud-services" org to the "instances" space.
 
