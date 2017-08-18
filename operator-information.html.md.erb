@@ -27,9 +27,9 @@ By default, Spring Cloud Services checks the Pivotal Cloud Foundry&reg; Elastic 
 
 Click **Save** and return to the Installation Dashboard, then apply your changes. Spring Cloud Services will not validate the Elastic Runtime certificate as part of its installation process.
 
-## <a id="service-orchestration-and-instance-management"></a>Service Orchestration and Instance Management
+## <a id="service-orchestration"></a>Service Orchestration
 
-Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on PCF. It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation and details about how it manages service instances.
+Spring Cloud Services provides a series of [Managed Services](https://docs.cloudfoundry.org/services/) on PCF. It uses Cloud Foundry's [Service Broker API](https://docs.cloudfoundry.org/services/api.html) to manage the three services---Config Server, Service Registry, and Circuit Breaker Dashboard---that it makes available. See below for information about Spring Cloud Services's broker implementation.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/ops1.png") %>
 
@@ -65,7 +65,7 @@ The applications are deployed in the "p-spring-cloud-services" space.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/broker-apps-apps-manager-space.png") %>
 
-### <a id="service-instances"></a>Service Instances
+### <a id="service-instance-management"></a>Service Instance Management
 
 A service instance is backed by one or more Spring Boot applications deployed by the Worker in the "p-spring-cloud-services" org to the "instances" space.
 
