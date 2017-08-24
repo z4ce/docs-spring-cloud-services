@@ -80,3 +80,35 @@ After an upgrade of the Spring Cloud Services product, follow the below steps to
     Deleting route cook-new.wise.com...
     OK
     </pre>
+    
+## <a id="service-registry-upgrade-steps"></a>Service Registry Upgrade Steps
+
+After an upgrade of the Spring Cloud Services product, you can use the `cf update-service` command to update an individual Service Registry service instance.
+
+Run the `cf update-service` command, supplying the `upgrade` and `force` parameters and setting both to `true`:
+
+<pre class="terminal">
+$ cf update-service service-registry -c '{"upgrade": true, "force": true}'
+Updating service instance service-registry as user...
+OK
+
+Update in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
+</pre>
+
+For more information about parameters accepted for an update to a Service Registry service instance, see the [Updating an Instance](/spring-cloud-services/common/service-registry/updating-an-instance.html) topic of the [Service Registry documentation](/spring-cloud-services/common/service-registry/).
+
+## <a id="circuit-breaker-dashboard-upgrade-steps"></a>Circuit Breaker Dashboard Upgrade Steps
+
+After an upgrade of the Spring Cloud Services product, you can use the `cf update-service` command to update an individual Circuit Breaker Dashboard service instance.
+
+Run the `cf update-service` command, supplying the `upgrade` and `force` parameters and setting both to `true`:
+
+<pre class="terminal">
+$ cf update-service circuit-breaker-dashboard -c '{"upgrade": true, "force": true}'
+Updating service instance circuit-breaker-dashboard as user...
+OK
+
+Update in progress. Use 'cf services' or 'cf service circuit-breaker-dashboard' to check operation status.
+</pre>
+
+For more information about parameters accepted for an update to a Circuit Breaker Dashboard service instance, see the [Updating an Instance](/spring-cloud-services/common/circuit-breaker/updating-an-instance.html) topic of the [Circuit Breaker Dashboard documentation](/spring-cloud-services/common/circuit-breaker/).
