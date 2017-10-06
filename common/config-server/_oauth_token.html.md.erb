@@ -1,4 +1,4 @@
-When the Config Server has been configured to encrypt values, you can make a POST request to the <code>/encrypt</code> endpoint following the procedure described in the <a href="/spring-cloud-services/operator-information.html#get-access-token-for-direct-requests-to-a-service-instance">Get Access Token for Direct Requests to a Service Instance</a> section of the <a href="/spring-cloud-services/1-3/operator-information.html">Operator Information</a> topic. Include the property value in the request. A request to encrypt a value might look something like the following (using curl), where <code>TOKEN_STRING</code> is an OAuth 2.0 token and <code>SERVER</code> is the URL of the Config Server:
+When the Config Server has been configured to encrypt values, you can make a POST request to the <code>/encrypt</code> endpoint. Include the property value in the request. A request to encrypt a value might look something like the following (using curl), where <code>TOKEN_STRING</code> is an OAuth 2.0 token and <code>SERVER</code> is the URL of the Config Server:
 
 <pre>
 <code>
