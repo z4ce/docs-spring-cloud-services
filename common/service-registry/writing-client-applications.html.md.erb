@@ -128,25 +128,11 @@ dependencies {
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud Services Starters for Service Registry will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
-## <a id="self-signed-ssl-certificate"></a>Add Self-Signed SSL Certificate to JVM Truststore
+<% if vars.product_name == 'PCF' %>
+ <%= partial vars.scs_sr_self_signed_ssl %>
+<% end %>
 
-Spring Cloud&reg; Services uses HTTPS for all client-to-service communication. If your [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) installation is using a self-signed SSL certificate, the certificate will need to be added to the JVM truststore before your application can be registered with a Service Registry service instance or consume a service that is registered with a Service Registry service instance.
-
-Spring Cloud Services can add the certificate for you automatically. For this to work, you must set the `TRUST_CERTS` environment variable on your application to the API endpoint of your Elastic Runtime instance:
-
-<pre class="terminal">
-$ cf set-env message-generation TRUST_CERTS api.cf.wise.com
-Setting env variable 'TRUST_CERTS' to 'api.cf.wise.com' for app message-generation in org myorg / space development as user...
-OK
-TIP: Use 'cf restage message-generation' to ensure your env variable changes take effect
-$ cf restage message-generation
-</pre>
-
-<p class='note'><strong>Note</strong>: The <code>CF_TARGET</code> environment variable was formerly recommended for configuring Spring Cloud Services to add a certificate to the truststore. <code>CF_TARGET</code> is still supported for this purpose, but <code>TRUST_CERTS</code> is more flexible and is now recommended instead.</p>
-
-As the output from the ```cf set-env``` command suggests, restage the application after setting the environment variable.
-
-### <a id="peers-with-self-signed-certificates"></a>Service Registry Peers with Self-Signed Certificates
+## <a id="peers-with-self-signed-certificates"></a>Service Registry Peers with Self-Signed Certificates
 
 If binding your application to a Service Registry service instance that has one or more peers in another PCF deployment which uses self-signed certificates, you must set the `TRUST_CERTS` environment variable on your application to a hostname on the other PCF deployment in order for your application to communicate with applications bound to those Service Registry peers:
 
