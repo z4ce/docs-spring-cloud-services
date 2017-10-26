@@ -55,7 +55,7 @@ A path includes an _application_, a _profile_, and optionally a _label_.
 
 * **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash. The value given to the Config Server as a default label (the setting of `git.label`; see the table of the Config Server's [general configuration parameters](/spring-cloud-services/config-server/configuring-with-git.html#general-configuration)) can be overridden in a client application by setting the `spring.cloud.config.label` property.
 
-For information about using a Cloud Foundry application as a Config Server client, see the <a href="/spring-cloud-services/config-server/configuration-clients.html">Configuration Clients</a> topic.
+For information about using a Cloud Foundry application as a Config Server client, see the <a href="#configuration-clients">Configuration Clients</a> section.
 
 ## <a id="configuration-clients"></a>Configuration Clients
 
@@ -97,7 +97,7 @@ As shown in the above example, the Config Server may include multiple values for
 
 A Spring application can use a Config Server as a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html">property source</a>. Properties from a Config Server will override those defined locally (e.g. via an `application.yml` in the classpath).
 
-The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see the <a href="/spring-cloud-services/config-server/server.html#request-paths">Request Paths</a> section of the <a href="/spring-cloud-services/config-server/server.html">The Config Server</a> topic). It will derive values for these three parameters from the following properties:
+The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see the <a href="#request-paths">Request Paths</a> section). It will derive values for these three parameters from the following properties:
 
 
 * `{application}`: ```spring.cloud.config.name``` or ```spring.application.name```.
