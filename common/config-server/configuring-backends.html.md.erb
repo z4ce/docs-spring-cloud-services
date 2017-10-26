@@ -160,7 +160,7 @@ The parameters used to configure specific configuration sources for the Config S
 | <code>repos."name".username</code>          | The username used to access this repository (if protected by HTTP Basic authentication)                                                         |
 | <code>repos."name".password</code>          | The password used to access this repository (if protected by HTTP Basic authentication)                                                         |
 | <code>repos."name".skipSslValidation</code> | For a `https://` URI, whether to skip validation of the SSL certificate on the default repository's server. Valid values are `true` and `false` |
-| <code>repos."name".hostKey</code>           | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](/spring-cloud-services/config-server/creating-an-instance.html#ssh-repository-access) section for more information                               |
+| <code>repos."name".hostKey</code>           | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](#git-ssh-repository-access) section for more information                               |
 | <code>repos."name".hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521"     |
 | <code>repos."name".privateKey</code>        | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                                  |
 
@@ -214,7 +214,7 @@ The URIs for configuration source Git repositories can include a couple of speci
 
 You can use these placeholders to (for example) set a single URI which maps one repository each to multiple applications that use the same Config Server, or to set a single URI which maps one repository each to multiple profiles.
 
-<p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="/spring-cloud-services/config-server/creating-an-instance.html#general-configuration-parameters">general configuration parameters.</a></p>
+<p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="#git-general-configuration">general configuration parameters.</a></p>
 
 A repository URI that enables use of one repository per application might be expressed as shown in the following JSON. For an application named "cook", this would locate the repository named `cook-config`:
 
@@ -246,7 +246,7 @@ To configure a Config Server service instance with a repository URI that enables
 
 You can configure a Config Server service instance to access configuration sources using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `git.proxy.http` or `git.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
 
-<p class='note'><strong>Note</strong>: Proxy settings must be set once in each <code>git</code> object, where applicable. If you are using a <a href="/spring-cloud-services/config-server/composite-backends.html">composite backend</a> with multiple configuration sources that use the same proxy, you must provide that proxy's settings for each configuration source object.</p>
+<p class='note'><strong>Note</strong>: Proxy settings must be set once in each <code>git</code> object, where applicable. If you are using a <a href="/spring-cloud-services/config-server/configuring-backends.html#composite">composite backend</a> with multiple configuration sources that use the same proxy, you must provide that proxy's settings for each configuration source object.</p>
 
 Settings for an HTTP proxy are set in the `git.proxy.http` object. These might be set as shown in the following JSON:
 

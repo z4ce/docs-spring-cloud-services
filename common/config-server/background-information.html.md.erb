@@ -53,7 +53,7 @@ A path includes an _application_, a _profile_, and optionally a _label_.
 
 * **Profile**: The name of a profile, or a comma-separated list of profile names. The Config Server's concept of a "profile" corresponds directly to that of the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/Profile.html">Spring Profile</a>.
 
-* **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash. The value given to the Config Server as a default label (the setting of `git.label`; see the table of the Config Server's [general configuration parameters](/spring-cloud-services/config-server/configuring-with-git.html#general-configuration)) can be overridden in a client application by setting the `spring.cloud.config.label` property.
+* **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash. The value given to the Config Server as a default label (the setting of `git.label`; see the table of the Config Server's [general configuration parameters](/spring-cloud-services/config-server/configuring-backends.html#git-general-configuration)) can be overridden in a client application by setting the `spring.cloud.config.label` property.
 
 For information about using a Cloud Foundry application as a Config Server client, see the <a href="#configuration-clients">Configuration Clients</a> section.
 
