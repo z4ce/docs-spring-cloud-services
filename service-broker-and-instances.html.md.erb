@@ -1,59 +1,11 @@
 ---
-title: Operator Information
+title: The Service Broker and Instances
 owner: Spring Cloud Services
 ---
 
 <strong><%= modified_date %></strong>
 
 See below for information about Spring Cloud&reg; Services' deployment model and other information which may be useful in operating its services or client applications.
-
-## <a id="tile-configuration-options"></a>Tile Configuration Options
-
-The Spring Cloud Services tile includes settings for various options. You can configure these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Spring Cloud Services** pane.
-
-### <a id="configure-service-instance-limit"></a>Configure Service Instance Limit
-
-By default, the Spring Cloud Services broker will only provision up to 100 service instances. This service instance limit is also used to determine the memory quota for the org in which service instance backing applications are deployed; the org's memory quota will be equal to 1.5G times the service instance limit. You can configure this limit in the Spring Cloud Services tile settings.
-
-<%= image_tag("/spring-cloud-services/images/operator-information/configure-service-instance-limit.png") %>
-
-In the **Service Instance Limit** field, enter the new service instance limit. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker now can provision up to as many service instances as you specified.
-
-### <a id="set-push-timeout-for-backing-applications"></a>Set Push Timeout for Backing Applications
-
-By default, the Spring Cloud Services service broker allows four (4) minutes for a service instance backing application to be staged and start. To use another timeout interval, you can specify a different number of minutes in the Spring Cloud Services tile settings.
-
-<%= image_tag("/spring-cloud-services/images/operator-information/set-app-push-timeout.png") %>
-
-In the **App push timeout** field, enter the desired number of minutes. Click **Save**, return to the Installation Dashboard, and apply the change. The broker will now allow the specified number of minutes for service instance backing applications to start.
-
-### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
-
-By default, the Spring Cloud Services service broker stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the broker to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
-
-<%= image_tag("/spring-cloud-services/images/operator-information/set-buildpack.png") %>
-
-In the **Buildpack** field, enter the name of the desired Java buildpack. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker will now use the selected buildpack to stage service instance backing applications.
-
-### <a id="skip-ssl-certificate-validation"></a>Skip SSL Certificate Validation
-
-By default, Spring Cloud Services checks the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate for the domains included in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. You can disable this validation by checking the **Do not validate that SSL certificates are properly configured** checkbox.
-
-<%= image_tag("/spring-cloud-services/images/operator-information/disable-ssl-certificate-validation.png") %>
-
-Click **Save** and return to the Installation Dashboard, then apply your changes. Spring Cloud Services will not validate the Elastic Runtime certificate as part of its installation process.
-
-### <a id="errand-configuration"></a>Errand Configuration
-
-The Spring Cloud Services tile includes four lifecycle errands. You can view these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Errands** pane.
-
-<%= image_tag("/spring-cloud-services/images/operator-information/errands.png") %>
-
-Spring Cloud Services includes three post-deploy errands and one pre-delete errand. These errands can be individually set to run conditionally (**When Changed**), to always run (**On**), or to never run (**Off**).
-
-<p class='note'><strong>Important</strong>: To ensure that your PCF installation receives important updates to the tile, Pivotal recommends that all Spring Cloud Services lifecycle errands be set to <strong>On</strong>.</p>
-
-In the post-deploy errands, **Broker Deployer** pushes the Spring Cloud Services service broker and worker applications to PCF. **Broker Registrar** registers the service broker with the Cloud Controller and makes its service plans available to all orgs. **Smoke Tests** runs several tests to ensure service availability and correct configuration. The pre-delete errand, **Broker Deregistrar**, deletes all orgs and spaces specific to Spring Cloud Services and deregisters the broker from the Cloud Controller.
 
 ## <a id="service-orchestration"></a>Service Orchestration
 
@@ -320,7 +272,7 @@ System-Provided:
 [...]
 </pre>
 
-Copy the value of `credentials.uri`. Then use the `cf oauth-token` command to get the token for the current session. The following example uses curl to access the `/encrypt` endpoint of a Config Server service instance (see the [Encryption and Encrypted Values](/spring-cloud-services/common/config-server/configuring-with-git.html#encryption-and-encrypted-values) section of the [Configuring with Git](/spring-cloud-services/common/config-server/configuring-with-git.html) topic):
+Copy the value of `credentials.uri`. Then use the `cf oauth-token` command to get the token for the current session. The following example uses curl to access the `/encrypt` endpoint of a Config Server service instance (see the Git [Encryption and Encrypted Values](/spring-cloud-services/common/config-server/configuring-backends.html#git-encryption-and-encrypted-values) section of the [Configuring Backends](/spring-cloud-services/common/config-server/configuring-backends.html) topic):
 
 <pre class="terminal">
 $ curl -H "Authorization: $(cf oauth-token)" https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/encrypt -d 'Value to be encrypted'
@@ -437,7 +389,7 @@ See the <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsi
 
 The SB application, the Worker application, the Service Registry's Eureka backing application, the Config Server's backing application, and the Circuit Breaker Dashboard's Hystrix backing application all use OAuth 2 authentication. To access Actuator endpoints on one of these applications, you must supply a valid OAuth 2 token in the request header.
 
-1. Log in to Apps Manager as an admin user and navigate to the relevant application: for the SB or Worker, access the SB application or Worker application as described in the [The Service Broker](#the-service-broker) section; for a Service Registry, Config Server, or Circuit Breaker Dashboard service instance, access the backing application as described in the [Service Instances](#service-instances) section.
+1. Log in to Apps Manager as an admin user and navigate to the relevant application: for the SB or Worker, access the SB application or Worker application as described in the [The Service Broker](#the-service-broker) section; for a Service Registry, Config Server, or Circuit Breaker Dashboard service instance, access the backing application as described in the [Service Instance Management](#service-instance-management) section.
 
     <%= image_tag("/spring-cloud-services/images/operator-information/hystrix.png") %>
 
@@ -488,16 +440,3 @@ To view the configuration properties that a Config Server service instance is re
     </pre>
 
 For a list of path formats that the Config Server accepts, see the [Request Paths](/spring-cloud-services/config-server/server.html#request-paths) section of the [The Config Server](/spring-cloud-services/config-server/server.html) topic in the [Config Server documentation](/spring-cloud-services/config-server/).
-
-## <a id="capacity-requirements"></a>Capacity Requirements
-
-Below are usage requirements of the applications backing a single service instance (SI) of each Spring Cloud Services service type.
-
-| Service Type              | Memory Limit / SI   | Disk Limit / SI  |
-|---------------------------|---------------------|------------------|
-| Config Server             | 1 GB                | 1 GB             |
-| Service Registry          | 1 GB                | 1 GB             |
-| Circuit Breaker Dashboard | 2 GB                | 2 GB             |
-
-Spring Cloud Services service types may also be backed by non-SCS service instances. For example, a Circuit Breaker Dashboard service instance uses a [RabbitMQ for Pivotal Cloud Foundry](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance for communication between its two backing applications.
-

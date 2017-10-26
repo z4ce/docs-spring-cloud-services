@@ -18,7 +18,7 @@ See below for information about problems related to your [Pivotal Cloud Foundry]
 
 ## <a id="applicationcontextinitializer"></a>Installation: "java.lang.NoClassDefFoundError: org/springframework/context/ApplicationContextInitializer"
 
-If your installation of Spring Cloud Services fails and the `spring-cloud-broker` application logs (see the [Read Broker Application Logs](/spring-cloud-services/operator-information.html#broker-application-logs) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic for information about viewing those logs) include the following:
+If your installation of Spring Cloud Services fails and the `spring-cloud-broker` application logs (see the [Read Broker Application Logs](/spring-cloud-services/service-broker-and-instances.html#broker-application-logs) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic for information about viewing those logs) include the following:
 
 ```
 Caused by: java.lang.NoClassDefFoundError:
@@ -29,7 +29,7 @@ You may need to update the Java buildpack on your PCF deployment. Spring Cloud S
 
 ## <a id="timeout-exception-180000-ms"></a>"java.util.concurrent.TimeoutException: Execution took longer than 180000 MILLISECONDS"
 
-If the broker fails to provision a service instance and the logs for the `spring-cloud-broker-worker` application (see the [Read Broker Application Logs](/spring-cloud-services/operator-information.html#broker-application-logs) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic) contain the following:
+If the broker fails to provision a service instance and the logs for the `spring-cloud-broker-worker` application (see the [Read Broker Application Logs](/spring-cloud-services/service-broker-and-instances.html#broker-application-logs) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic) contain the following:
 
 ```
 java.util.concurrent.TimeoutException: Execution took longer than 180000 MILLISECONDS

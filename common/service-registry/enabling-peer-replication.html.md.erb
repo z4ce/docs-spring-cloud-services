@@ -78,7 +78,7 @@ A peer service instance URI is expected to meet the following criteria:
 
 A peer service instance is expected to meet the following criteria:
 
-* Have the same High Availability (HA) node count as its peer service instance. If you create or update a Service Registry service instance with a peer which has a different HA node count, you will see [an error message on the Service Registry dashboard](#peer-node-count-difference). See the [Configuration Parameters](/spring-cloud-services/service-registry/updating-an-instance.html#configuration-parameters) section of the [Updating an Instance](/spring-cloud-services/service-registry/updating-an-instance.html) topic for more information about setting the HA node count for a Service Registry service instance.
+* Have the same High Availability (HA) node count as its peer service instance. If you create or update a Service Registry service instance with a peer which has a different HA node count, you will see [an error message on the Service Registry dashboard](#peer-node-count-difference). See the [Configuration Parameters](/spring-cloud-services/service-registry/managing-service-instances.html#configuration-parameters) section of the [Managing Service Instances](/spring-cloud-services/service-registry/managing-service-instances.html) topic for more information about setting the HA node count for a Service Registry service instance.
 * Have a peer list equivalent to its peer service instance's peer list. If you create or update a Service Registry service instance with a peer that does has not have an equivalent peer list, you will see [a warning message on the Service Registry dashboard](#peer-list-difference).
 * Be at the same Service Registry version as its peer service instance. If you create or update a Service Registry service instance with a peer which is at a different Service Registry version, you will see [a warning message on the Service Registry dashboard](#peer-version-difference).
 
@@ -142,7 +142,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 <%= image_tag(vars.scs_sr_replication_img_different_node_counts) %>
 
-You can update one of the service instances to add or remove nodes so that the two service instances have consistent node counts. See the [Configuration Parameters](/spring-cloud-services/service-registry/updating-an-instance.html#configuration-parameters) section of the [Updating an Instance](/spring-cloud-services/service-registry/updating-an-instance.html) topic for more information.
+You can update one of the service instances to add or remove nodes so that the two service instances have consistent node counts. See the [Configuration Parameters](/spring-cloud-services/service-registry/managing-service-instances.html#configuration-parameters) section of the [Managing Service Instances](/spring-cloud-services/service-registry/managing-service-instances.html) topic for more information.
 
 ### <a id="peer-list-difference"></a>Peer Service Instance Peer List Difference
 
