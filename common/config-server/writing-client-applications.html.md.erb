@@ -296,7 +296,7 @@ The application will decrypt the encrypted property after receiving it from the 
 
 ## <a id="use-a-hashicorp-vault-server"></a>Use a HashiCorp Vault Server
 
-You can configure the Config Server to use a HashiCorp Vault server as a configuration source, as described in the [Vault Backend](/spring-cloud-services/config-server/configuring-backends.html#vault) section of the [Configuring Backends](/spring-cloud-services/config-server/configuring-backends.html) topic. To consume configuration from the Vault server via the service instance, your client application must be given a Vault token. You can give the token to an application by setting the `SPRING_CLOUD_CONFIG_TOKEN` environment variable on the application. The Spring Cloud Services Connectors for Config Server will automatically renew the application's token for as long as the application is running.
+You can configure the Config Server to use a HashiCorp Vault server as a configuration source, as described in the [Configuring with Vault](/spring-cloud-services/config-server/configuring-with-vault.html) topic. To consume configuration from the Vault server via the service instance, your client application must be given a Vault token. You can give the token to an application by setting the `SPRING_CLOUD_CONFIG_TOKEN` environment variable on the application. The Spring Cloud Services Connectors for Config Server will automatically renew the application's token for as long as the application is running.
 
 <p class='note'><strong>Important</strong>: If the application is entirely stopped (i.e., no instances continue to run) and its Vault token expires, you will need to create a new token for the application and re-set the <code>SPRING_CLOUD_CONFIG_TOKEN</code> environment variable.</p>
 

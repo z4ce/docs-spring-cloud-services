@@ -1,11 +1,11 @@
 ---
-title: Configuring Backends
+title: Configuring with Git
 owner: Spring Cloud Services
 ---
 
 <strong><%= modified_date %></strong>
 
-## <a id="git"></a>Git Backend
+## <a id="overview"></a>Overview
 
 [Git](https://git-scm.com) is a distributed version control system (DVCS). It encourages parallel development through simplified branching and merging, optimizes performance by conducting many operations on the local copy of the repository, and uses SHA-1 hashes for checksums to assure integrity and guard against corruption of repository data. For more information about Git, see the [documentation](https://git-scm.com/doc).
 
@@ -13,7 +13,7 @@ Spring Cloud Config provides a Git backend so that the Spring Cloud Config Serve
 
 See below for information about configuring a Config Server service instance to use Git for configuration sources.
 
-### <a id="git-general-configuration"></a>General Configuration
+## <a id="general-configuration"></a>General Configuration
 
 Parameters used to configure configuration sources are part of a JSON object called `git`, as in `{"git": { "uri": "http://example.com/config" } }`. For more information on the purposes of these fields, see the [The Config Server](/spring-cloud-services/config-server/background-information.html#the-config-server) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic.
 
@@ -58,7 +58,7 @@ spring:
 
 Passwords are masked in the Config Server dashboard.
 
-### <a id="git-encryption-and-encrypted-values"></a>Encryption and Encrypted Values
+## <a id="encryption-and-encrypted-values"></a>Encryption and Encrypted Values
 
 The Config Server can serve encrypted property values from a configuration file. If the Config Server is configured with a symmetric or asymmetric encryption key and the encrypted values are prefixed with the string `{cipher}`, the Config Server will decrypt the values before serving them to client applications. The Config Server has an `/encrypt` endpoint, which can be used to encrypt property values.
 
@@ -90,7 +90,7 @@ To configure a Config Server service instance that can encrypt property values, 
 
 The encryption key is masked in the Config Server dashboard.
 
-### <a id="git-ssh-repository-access"></a>SSH Repository Access
+## <a id="ssh-repository-access"></a>SSH Repository Access
 
 You can configure a Config Server configuration source so that the Config Server accesses it using the Secure Shell (SSH) protocol. To do so, you must specify a URI using the `ssh://` URI scheme or the Secure Copy Protocol (SCP) style URI format, and you must supply a private key. You may also supply a host key with which the server will be identified. If you do not provide a host key, the Config Server will not verify the host key of the configuration source's server.
 
@@ -129,7 +129,7 @@ To configure a Config Server service instance that uses SSH to access a configur
 
 Host and private keys are masked in the Config Server dashboard.
 
-### <a id="git-multiple-repositories"></a>Multiple Repositories
+## <a id="multiple-repositories"></a>Multiple Repositories
 
 You can configure a Config Server service instance to use multiple configuration sources, which will be used only for specific applications or for applications which are using specific profiles. To do so, you must provide parameters in repository objects within the `git.repos` JSON object. Most parameters set in the `git` object for the default configuration source are also available for specific configuration sources and can be set in repository objects within the `git.repos` object.
 
@@ -160,7 +160,7 @@ The parameters used to configure specific configuration sources for the Config S
 | <code>repos."name".username</code>          | The username used to access this repository (if protected by HTTP Basic authentication)                                                         |
 | <code>repos."name".password</code>          | The password used to access this repository (if protected by HTTP Basic authentication)                                                         |
 | <code>repos."name".skipSslValidation</code> | For a `https://` URI, whether to skip validation of the SSL certificate on the default repository's server. Valid values are `true` and `false` |
-| <code>repos."name".hostKey</code>           | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](#git-ssh-repository-access) section for more information                               |
+| <code>repos."name".hostKey</code>           | The host key used by the Config Server to access this repository (if accessing via SSH). See the [SSH Repository Access](#ssh-repository-access) section for more information                               |
 | <code>repos."name".hostKeyAlgorithm</code>  | The algorithm of <code>hostKey</code>: one of "ssh-dss", "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", and "ecdsa-sha2-nistp521"     |
 | <code>repos."name".privateKey</code>        | The private key corresponding to <code>hostKey</code>, with all newline characters replaced by <code>\n</code>                                  |
 
@@ -205,7 +205,7 @@ To configure a Config Server service instance with a default repository and a re
 '{"git": { "uri": "https://github.com/spring-cloud-services-samples/fortune-teller", "searchPaths": "configuration", "repos": { "cookie": { "pattern": "*/dev", "uri": "https://github.com/spring-cloud-services-samples/cook-config" } } } }'
 ```
 
-### <a id="git-placeholders-in-repository-uris"></a>Placeholders in Repository URIs
+## <a id="placeholders-in-repository-uris"></a>Placeholders in Repository URIs
 
 The URIs for configuration source Git repositories can include a couple of special strings as placeholders:
 
@@ -214,7 +214,7 @@ The URIs for configuration source Git repositories can include a couple of speci
 
 You can use these placeholders to (for example) set a single URI which maps one repository each to multiple applications that use the same Config Server, or to set a single URI which maps one repository each to multiple profiles.
 
-<p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="#git-general-configuration">general configuration parameters.</a></p>
+<p class='note'><strong>Note</strong>: URI placeholders cannot be used with a repository that has the <code>cloneOnStart</code> setting set to <code>true</code>. See the listing for <code>cloneOnStart</code> in the table of <a href="#general-configuration-parameters">general configuration parameters.</a></p>
 
 A repository URI that enables use of one repository per application might be expressed as shown in the following JSON. For an application named "cook", this would locate the repository named `cook-config`:
 
@@ -242,11 +242,11 @@ To configure a Config Server service instance with a repository URI that enables
 '{"git": { "uri": "https://github.com/spring-cloud-services-samples/config-{profile}"  } }'
 ```
 
-### <a id="git-proxy-repository-access"></a>HTTP(S) Proxy Repository Access
+## <a id="proxy-repository-access"></a>HTTP(S) Proxy Repository Access
 
 You can configure a Config Server service instance to access configuration sources using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `git.proxy.http` or `git.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
 
-<p class='note'><strong>Note</strong>: Proxy settings must be set once in each <code>git</code> object, where applicable. If you are using a <a href="/spring-cloud-services/config-server/configuring-backends.html#composite">composite backend</a> with multiple configuration sources that use the same proxy, you must provide that proxy's settings for each configuration source object.</p>
+<p class='note'><strong>Note</strong>: Proxy settings must be set once in each <code>git</code> object, where applicable. If you are using a <a href="/spring-cloud-services/config-server/composite-backends.html">composite backend</a> with multiple configuration sources that use the same proxy, you must provide that proxy's settings for each configuration source object.</p>
 
 Settings for an HTTP proxy are set in the `git.proxy.http` object. These might be set as shown in the following JSON:
 
@@ -290,224 +290,3 @@ To configure a Config Server service instance that uses an authenticated HTTPS p
 ```
 '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
 ```
-
-## <a id="vault"></a>Vault Backend
-
-[HashiCorp Vault](https://www.vaultproject.io) is a secrets management tool, which encrypts and stores credentials, API keys, and other secrets for use in distributed systems. It provides support for access control lists, secret revocation, auditing, and leases and renewals, and includes special capabilities for common infrastructure and systems such as AWS, MySQL, and RabbitMQ, among others. For more information about Vault, see the [documentation](https://www.vaultproject.io/docs/index.html).
-
-Spring Cloud Config provides a Vault backend so that the Spring Cloud Config Server can serve configuration stored in Vault. The Spring Cloud Services Config Server supports this backend and can serve configuration stored in Vault to client applications which have been given access to the Vault server (this includes provision of a Vault access token for the client application).
-
-<p class='note'><strong>Important</strong>: Spring Cloud Services does not provide a HashiCorp Vault server. You must provide your own Vault server in order to use Config Server with Vault.</p>
-
-See below for information about configuring a Config Server service instance to use a HashiCorp Vault server for a configuration source.
-
-### <a id="vault-general-configuration"></a>General Configuration
-
-Parameters used to configure a configuration source are part of a JSON object called `vault`, as in `{"vault": { "host": "127.0.0.1", "port": "8200" } }`.
-
-<p class='note'><strong>Important</strong>: The Spring Cloud Services Config Server supports only one Vault backend, so only one <code>vault</code> object is permitted in the configuration parameters.</p>
-
-General parameters used to configure a Config Server configuration source are listed below.
-
-| Parameter                      | Function                                                                                                   |
-|--------------------------------|------------------------------------------------------------------------------------------------------------|
-| <code>host</code>              | The host of the Vault server                                                                               |
-| <code>port</code>              | The port of the Vault server                                                                               |
-| <code>scheme</code>            | The URI scheme used in accessing the Vault server (default value: `http`)                                  |
-| <code>backend</code>           | The name of the Vault backend from which to retrieve configuration (default value: `secret`)               |
-| <code>defaultKey</code>        | The default key from which to retrieve configuration (default value: `application`)                        |
-| <code>profileSeparator</code>  | The value used to separate profiles (default value: `,`)                                                   |
-| <code>skipSslValidation</code> | Whether to skip validation of the SSL certificate on the Vault server. Valid values are `true` and `false` |
-
-The value of `defaultKey` is masked in the Config Server dashboard.
-
-For information about writing a client application that accesses configuration values from a Config Server which has been configured to use Vault, see the [Use a HashiCorp Vault Server](/spring-cloud-services/config-server/writing-client-applications.html#use-a-hashicorp-vault-server) section of the [Writing Client Applications](/spring-cloud-services/config-server/writing-client-applications.html) topic.
-
-### <a id="vault-proxy-repository-access"></a>HTTP(S) Proxy Repository Access
-
-You can configure a Config Server service instance to access a configuration source using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `vault.proxy.http` or `vault.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
-
-Settings for an HTTP proxy are set in the `vault.proxy.http` object. These might be set as shown in the following JSON:
-
-```
-'{"vault": { "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
-```
-
-Settings for an HTTPS proxy are set in the `vault.proxy.https` object. These might be set as shown in the following JSON:
-
-```
-'{"vault": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
-```
-
-<p class='note'><strong>Note</strong>: Some networks require that separate proxy servers are used for HTTP and HTTPS URLs. In such a case, you can set both the <code>proxy.http</code> and <code>proxy.https</code> objects.</p>
-
-The parameters used to configure HTTP or HTTPS proxy settings for the Config Server are listed below.
-
-| Parameter                                  | Function                                                                                                                                            |
-|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| <code>proxy.http</code>                    | A proxy object, containing HTTP proxy fields                                                                                                        |
-| <code>proxy.http.host</code>               | The HTTP proxy host                                                                                                                                 |
-| <code>proxy.http.port</code>               | The HTTP proxy port                                                                                                                                 |
-| <code>proxy.http.nonProxyHosts</code>      | The hosts to access outside the HTTP proxy                                                                                                          |
-| <code>proxy.http.username</code>           | The username to use with an authenticated HTTP proxy                                                                                                |
-| <code>proxy.http.password</code>           | The password to use with an authenticated HTTP proxy                                                                                                |
-| <code>proxy.https</code>                   | A proxy object, containing HTTPS proxy fields                                                                                                       |
-| <code>proxy.https.host</code>              | The HTTPS proxy host                                                                                                                                |
-| <code>proxy.https.port</code>              | The HTTPS proxy port                                                                                                                                |
-| <code>proxy.https.nonProxyHosts</code>     | The hosts to access outside the HTTPS proxy (if <code>proxy.http.nonProxyHosts</code> is also provided, <code>http.nonProxyHosts</code> will be used instead of <code>https.nonProxyHosts</code>)      |
-| <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy (if <code>proxy.http.username</code> is also provided, <code>http.username</code> will be used instead of <code>https.username</code>) |
-| <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy (if <code>proxy.http.password</code> is also provided, <code>http.password</code> will be used instead of <code>https.password</code>) |
-
-To configure a Config Server service instance that uses an HTTP proxy to access a configuration source, use the following JSON object:
-
-```
-'{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
-```
-
-To configure a Config Server service instance that uses an authenticated HTTPS proxy to access a configuration source, specifying that `example.com` should be accessed outside of the proxy, use the following JSON object:
-
-```
-'{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
-```
-
-## <a id="composite"></a>Composite Backend
-
-The Spring Cloud Services Config Server provides the ability to serve configuration properties from a composite of multiple backends, such as from multiple GitHub repositories and a HashiCorp Vault server.
-This feature builds upon the <a href="https://cloud.spring.io/spring-cloud-config/spring-cloud-config.html#_composite_environment_repositories">Composite Environment Repositories</a> feature from the
-<a href="https://spring.io/blog/2017/03/21/spring-cloud-dalston-rc1-released">Dalston release</a> of the Spring Cloud Config Server by enabling declaration of multiple Git servers together with (optionally) a Vault server to compose a unified configuration source.
-
-<p class='note'><strong>Note</strong>: The Spring Cloud Services Config Server cannot serve configuration properties from multiple Vault servers. A composite backend can contain only a single Vault server.</p>
-
-### <a id="composite-property-source-precedence"></a>Property Source Precedence
-
-When a Config Server is composed with multiple backends, a request from a client application retrieves properties found in any applicable backend within the composite. The composite backends are always searched in the order in which they are configured, and the Config Server assembles configuration properties beginning at the first backend in the composite by order.
-
-For example, given the following configuration:
-
- * Property `dbhost=foo` is defined in the first backend
- * Property `dbhost=bar` is defined in the second backend
- * Property `port=4321` is defined in the third backend
- 
-The client will resolve property `dbhost` to `foo`, from the first backend, as that backend has precedence over the second. Property `port` will be resolved to `4321`, as it is only defined in the third backend.
-
-### <a id="composite-fail-fast-behavior"></a>Fail-Fast Behavior
-
-If the Config Server encounters an error when retrieving properties from any one of the backends, the client application's request fails. The Config Server's composite configuration sources will only be available once all backends are available.
-
-### <a id="composite-use-of-labels"></a>Use of Labels
-
-Within the composite, all repositories or servers must contain the same labels---branches or tags in a Git repository, or paths in a Vault server. A label in a Config Server configuration source corresponds to a Spring application profile on a client application. If a client application makes a request for configuration for a given profile and one of the composite's backends does not have a corresponding branch, tag, or path, the request fails and no configuration is returned.
-
-See below for information about configuring a Config Server service instance to use a composite backend for configuration sources.
-
-### <a id="composite-general-configuration"></a>General Configuration
-
-Parameters used to configure configuration sources are part of a JSON array called `composite`. The `composite` array can contain one or more `git` JSON objects, each of which contains settings for a Git repository, and a `vault` object, which contains settings for a Vault server. For information about configuring a Git configuration source, see the [Git Backend](#git) section. For information about configuring a Vault configuration source, see the [Vault Backend](#vault) section.
-
-Configuration properties from individual backends are given precedence based on the order in which they are provided to the Config Server. A backend specified later in the `composite` array is searched after backends specified earlier in the array.
-
-To configure a Config Server service instance to use a composite backend comprising two Git repositories and a Vault server, you might use the following JSON object:
-
-```
-'{
-    "composite": [
-        {
-            "git": {
-                "uri": "https://github.com/spring-cloud-services-samples/cook-config"
-            }
-        },
-        {
-            "git": {
-                "uri": "https://github.com/spring-cloud-samples/config-repo"
-            }
-        },
-        {
-            "vault": {
-                "host": "127.0.0.1",
-                "port": 8200,
-                "scheme": "https",
-                "backend": "secret",
-                "defaultKey": "application",
-                "profileSeparator": ","
-            }
-        }
-    ]
-}'
-```
-
-In this example, configuration properties found in the Vault server are added to the response only if they are not found in either of the Git repositories specified before the Vault server.
-
-To configure a Config Server service instance to use a composite backend comprising a Vault server and a Git repository, use the following JSON object:
-
-```
-'{
-    "composite": [
-        {
-            "vault": {
-                "host": "127.0.0.1",
-                "port": 8200,
-                "scheme": "https",
-                "backend": "secret",
-                "defaultKey": "application",
-                "profileSeparator": ","
-            }
-        },
-        {
-            "git": {
-                "uri": "https://github.com/spring-cloud-services-samples/cook-config"
-            }
-        }
-    ]
-}'
-```
-
-In this example, the response consists of configuration properties found in the Vault server, plus any properties found only in the Git repository.
-
-For information about using an application to access configuration values served by a Config Server service instance, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.
-
-### <a id="composite-proxy-servers"></a>Proxy Servers for Composite Backends
-
-Proxy server configuration must be defined for each item in the composite set. For example:
-
-```
-'{
-    "composite": [
-        {
-            "git": {
-                "uri": "https://github.com/spring-cloud-services-samples/cook-config",
-                "proxy": {
-                   "http": {
-                       "host": "http://proxy1.com",
-                       "port": 3218
-                   }
-                }
-            }
-        },
-        {
-            "git": {
-                "uri": "https://github.com/spring-cloud-samples/config-repo",
-                "proxy": {
-                   "http": {
-                       "host": "http://proxy2.com",
-                       "port": 3218
-                   }
-                }
-            }
-        },
-        {
-            "vault": {
-                "host": "127.0.0.1",
-                "proxy": {
-                   "http": {
-                       "host": "http://proxy1.com",
-                       "port": 3218
-                   }
-                }
-
-            }
-        }
-    ]
-}'
-```
-
-For detailed information about configuring proxy support, see the [Git section](#git-proxy-repository-access) or [Vault section](#vault-proxy-repository-access) on using a HTTP or HTTPS proxy.
