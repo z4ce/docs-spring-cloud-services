@@ -1,0 +1,69 @@
+---
+title: Tile Configuration
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+See below for information about configuration options and capacity requirements of the Spring Cloud&reg; Services tile.
+
+## <a id="tile-configuration-options"></a>Tile Configuration Options
+
+The Spring Cloud Services tile includes settings for various options. You can configure these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Spring Cloud Services** pane.
+
+### <a id="configure-service-instance-limit"></a>Configure Service Instance Limit
+
+By default, the Spring Cloud Services broker will only provision up to 100 service instances. This service instance limit is also used to determine the memory quota for the org in which service instance backing applications are deployed; the org's memory quota will be equal to 1.5G times the service instance limit. You can configure this limit in the Spring Cloud Services tile settings.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/configure-service-instance-limit.png") %>
+
+In the **Service Instance Limit** field, enter the new service instance limit. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker now can provision up to as many service instances as you specified.
+
+### <a id="set-push-timeout-for-backing-applications"></a>Set Push Timeout for Backing Applications
+
+By default, the Spring Cloud Services service broker allows four (4) minutes for a service instance backing application to be staged and start. To use another timeout interval, you can specify a different number of minutes in the Spring Cloud Services tile settings.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/set-app-push-timeout.png") %>
+
+In the **App push timeout** field, enter the desired number of minutes. Click **Save**, return to the Installation Dashboard, and apply the change. The broker will now allow the specified number of minutes for service instance backing applications to start.
+
+### <a id="set-buildpack-for-service-instances"></a>Set Buildpack for Service Instances
+
+By default, the Spring Cloud Services service broker stages service instance backing applications using the buildpack chosen by the platform's buildpack detection; normally, this will be the highest-priority Java buildpack. To cause the broker to use a particular Java buildpack regardless of priority, you can set the name of the buildpack to use in the Spring Cloud Services tile settings.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/set-buildpack.png") %>
+
+In the **Buildpack** field, enter the name of the desired Java buildpack. Click **Save**, return to the Installation Dashboard, and apply your changes. The broker will now use the selected buildpack to stage service instance backing applications.
+
+### <a id="skip-ssl-certificate-validation"></a>Skip SSL Certificate Validation
+
+By default, Spring Cloud Services checks the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate for the domains included in the [Security Requirements](/spring-cloud-services/prerequisites.html#security-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic. You can disable this validation by checking the **Do not validate that SSL certificates are properly configured** checkbox.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/disable-ssl-certificate-validation.png") %>
+
+Click **Save** and return to the Installation Dashboard, then apply your changes. Spring Cloud Services will not validate the Elastic Runtime certificate as part of its installation process.
+
+### <a id="errand-configuration"></a>Errand Configuration
+
+The Spring Cloud Services tile includes four lifecycle errands. You can view these by visiting the Installation Dashboard of Pivotal Cloud Foundry&reg; Operations Manager, clicking the Spring Cloud Services tile, and then navigating to the **Errands** pane.
+
+<%= image_tag("/spring-cloud-services/images/operator-information/errands.png") %>
+
+Spring Cloud Services includes three post-deploy errands and one pre-delete errand. These errands can be individually set to run conditionally (**When Changed**), to always run (**On**), or to never run (**Off**).
+
+<p class='note'><strong>Important</strong>: To ensure that your PCF installation receives important updates to the tile, Pivotal recommends that all Spring Cloud Services lifecycle errands be set to <strong>On</strong>.</p>
+
+In the post-deploy errands, **Broker Deployer** pushes the Spring Cloud Services service broker and worker applications to PCF. **Broker Registrar** registers the service broker with the Cloud Controller and makes its service plans available to all orgs. **Smoke Tests** runs several tests to ensure service availability and correct configuration. The pre-delete errand, **Broker Deregistrar**, deletes all orgs and spaces specific to Spring Cloud Services and deregisters the broker from the Cloud Controller.
+
+## <a id="capacity-requirements"></a>Capacity Requirements
+
+Below are usage requirements of the applications backing a single service instance (SI) of each Spring Cloud Services service type.
+
+| Service Type              | Memory Limit / SI   | Disk Limit / SI  |
+|---------------------------|---------------------|------------------|
+| Config Server             | 1 GB                | 1 GB             |
+| Service Registry          | 1 GB                | 1 GB             |
+| Circuit Breaker Dashboard | 2 GB                | 2 GB             |
+
+Spring Cloud Services service types may also be backed by non-SCS service instances. For example, a Circuit Breaker Dashboard service instance uses a [RabbitMQ for Pivotal Cloud Foundry](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance for communication between its two backing applications.
+

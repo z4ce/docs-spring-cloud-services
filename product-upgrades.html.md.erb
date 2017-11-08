@@ -35,6 +35,8 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
     <%= image_tag("./images/upgrades/errands.png") %>
 
+    <p class='note'><strong>Important</strong>: The <strong>Broker Registrar</strong> post-deploy errand makes the Spring Cloud Services service broker's plans globally available (available to all orgs). This overrides any previous changes you have made to Spring Cloud Services service plan availability.</p>
+
 <%# removing for now
 1. If the **Stemcell** tab is highlighted in orange, click it. Then click **Import Stemcell** to import the correct stemcell.
 
@@ -65,7 +67,7 @@ After upgrading the Spring Cloud Services product, you can follow the below step
 
 <p class='note'><strong>Important</strong>: After upgrading a Circuit Breaker Dashboard service instance from 1.0.x to 1.1.x, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.</p>
 
-1. To see the current version of a service instance, visit the Service Instances dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/operator-information.html) topic.)
+1. To see the current version of a service instance, visit the Service Instances dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/service-broker-and-instances.html#service-instances-dashboard) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.)
 
     <%= image_tag("./images/upgrades/si-dashboard-pre-upgrade.png") %>
 

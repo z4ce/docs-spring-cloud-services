@@ -55,13 +55,10 @@ Missing certs: *.uaa.example.com - exiting install. Please refer to the Security
 Requirements section of the Spring Cloud Services prerequisites documentation.
 ```
 
-### <a id="self-signed-certificates-and-internal-cas"></a>Self-Signed Certificates and Internal CAs
+## <a id="domain-requirements"></a>Domain Requirements
 
-If your Pivotal Cloud Foundry installation is using its own self-signed SSL certificate, you must enable the "Ignore SSL certificate verification" or "Disable SSL certificate verification for this environment" option in the **Networking** section of the Pivotal Elastic Runtime tile **Settings** tab. See "Configuring Elastic Runtime for vSphere and vCloud" in the Pivotal Cloud Foundry documentation ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/customizing/config-er-vmware.html#security-config), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/customizing/config-er-vmware.html#networking)).
+If you are installing Spring Cloud Services version 1.4.0 or earlier, your Elastic Runtime deployment must have at least one shared domain available (see the [Shared Domains](https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/routes-domains.html#shared-domains) section of the [Routes and Domains](https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/routes-domains.html) topic in the PCF documentation). If the Elastic Runtime deployment does not have at least one shared domain available, the Spring Cloud Services service broker is unable to deploy service instance backing applications.
 
-If you are using an SSL certificate signed by an internal root Certificate Authority (CA), you must use a custom Java buildpack whose keystore contains the internal root CA. Follow the below steps to create and add the custom buildpack.
+In Spring Cloud Services version 1.4.1 and later, service instance backing applications can be deployed using a private domain assigned to the `p-spring-cloud-services` org. If there is at least one shared domain available in the Elastic Runtime deployment, service instance backing applications will be deployed using the first shared domain available. If there is not at least one shared domain available in the Elastic Runtime deployment, service instance backing applications will be deployed using the first private domain assigned to the `p-spring-cloud-services` org.
 
-1. Create a fork of the [Cloud Foundry Java buildpack](https://github.com/cloudfoundry/java-buildpack).
-1. Add your `cacerts` file to `resources/open_jdk_jre/lib/security/cacerts`.
-1. Following the instructions in the "Managing Custom Buildpacks" topic ([PCF 1.6](http://docs.pivotal.io/pivotalcf/1-6/adminguide/buildpacks.html), [PCF 1.7](http://docs.pivotal.io/pivotalcf/1-7/adminguide/buildpacks.html)), add your custom buildpack to Pivotal Cloud Foundry.
-1. Using the cf CLI as discussed in the <a href="/spring-cloud-services/prerequisites.html#platform-and-product-requirements">Platform and Product Requirements</a> section above, verify that the custom buildpack is now the default Java buildpack.
+For more information about the Spring Cloud Services service instance backing applications, see the [Service Instances](/spring-cloud-services/service-broker-and-instances.html#service-instance-management) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.

@@ -1,0 +1,114 @@
+---
+title: Service Instance Upgrades
+owner: Spring Cloud Services
+---
+
+See the below sections for steps to upgrade an individual Spring Cloud Services service instance after an upgrade of the Spring Cloud Services product.
+
+## <a id="config-server-upgrades"></a>Config Server Upgrades
+
+After an upgrade of the Spring Cloud Services product, follow the below steps to upgrade an individual Config Server service instance.
+
+1. Using the `cf rename-service` command, rename the current Config Server service instance. For example, given a service instance named "config-server", you might rename it to "config-server-old".
+
+    <pre class="terminal">
+    $ cf rename-service config-server config-server-old
+    Renaming service config-server to config-server-old in org myorg / space development as user...
+    OK
+    </pre>
+
+1. Using the `cf create-service` command, create a new instance with the old instance's settings and former name.
+
+    <pre class="terminal">
+    $ cf create-service -c '{ "git": { "uri": "https://github.com/spring-cloud-samples/cook-config", "label": "master"  } }' p-config-server standard config-server
+    Creating service instance config-server in org myorg / space development as user...
+    OK
+
+    Create in progress. Use 'cf services' or 'cf service config-server' to check operation status.
+    </pre>
+
+1. For each application that has been bound to the service instance, use the `cf rename` command to rename the application. For example, given an application named "cook", you might rename it to "cook-old".
+
+    <pre class="terminal">
+    $ cf rename cook cook-old
+    Renaming app cook to cook-old in org myorg / space development as user...
+    OK
+    </pre>
+
+1. Update client dependencies (see the [Client Dependencies](/spring-cloud-services/client-dependencies.html) topic) in the original application and push it, using a new temporary route, to Pivotal Cloud Foundry (PCF). Ensure that the updated original application is bound to the new service instance.
+
+    <pre class="terminal">
+    $ cf push -n cook-new cook
+    Using manifest file manifest.yml
+
+    Updating app cook in org myorg / space development as user...
+    OK
+
+    Using route cook-new.wise.com
+    Uploading cook...
+    </pre>
+
+1. Verify that the updated original application functions properly, then use the `cf map-route` command to map the original route to the updated original application.
+
+    <pre class="terminal">
+    $ cf map-route cook wise.com -n cook
+    Creating route cook.wise.com for org myorg / space development as user...
+    OK
+    Route cook.wise.com already exists
+    Adding route cook.wise.com to app cook in org myorg / space development as user...
+    OK
+    </pre>
+
+1. Delete the old application and service instance, then delete the temporary route on the updated application.
+
+    <pre class="terminal">
+    $ cf delete cook-old
+
+    Really delete the app cook-old?> y
+    Deleting app cook-old in org myorg / space development as user...
+    OK
+
+    $ cf delete-service config-server-old
+
+    Really delete the service config-server-old?> y
+    Deleting service config-server-old in org myorg / space development as user...
+    OK
+
+    $ cf delete-route wise.com -n cook-new
+
+    Really delete the route cook-new.wise.com?> y
+    Deleting route cook-new.wise.com...
+    OK
+    </pre>
+    
+## <a id="service-registry-upgrades"></a>Service Registry Upgrades
+
+After an upgrade of the Spring Cloud Services product, you can use the `cf update-service` command to update an individual Service Registry service instance.
+
+Run the `cf update-service` command, supplying the `upgrade` and `force` parameters and setting both to `true`:
+
+<pre class="terminal">
+$ cf update-service service-registry -c '{"upgrade": true, "force": true}'
+Updating service instance service-registry as user...
+OK
+
+Update in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
+</pre>
+
+For more information about parameters accepted for an update to a Service Registry service instance, see the [Updating an Instance](/spring-cloud-services/service-registry/managing-service-instances.html#updating) section of the [Managing Service Instances](/spring-cloud-services/service-registry/managing-service-instances.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
+
+## <a id="circuit-breaker-dashboard-upgrades"></a>Circuit Breaker Dashboard Upgrades
+
+After an upgrade of the Spring Cloud Services product, you can use the `cf update-service` command to update an individual Circuit Breaker Dashboard service instance.
+
+Run the `cf update-service` command, supplying the `upgrade` and `force` parameters and setting both to `true`:
+
+<pre class="terminal">
+$ cf update-service circuit-breaker-dashboard -c '{"upgrade": true, "force": true}'
+Updating service instance circuit-breaker-dashboard as user...
+OK
+
+Update in progress. Use 'cf services' or 'cf service circuit-breaker-dashboard' to check operation status.
+</pre>
+
+For more information about parameters accepted for an update to a Circuit Breaker Dashboard service instance, see the [Updating an Instance](/spring-cloud-services/circuit-breaker/managing-service-instances.html#updating) section of the [Managing Service Instances](/spring-cloud-services/circuit-breaker/managing-service-instances.html) topic in the [Circuit Breaker Dashboard documentation](/spring-cloud-services/circuit-breaker/).

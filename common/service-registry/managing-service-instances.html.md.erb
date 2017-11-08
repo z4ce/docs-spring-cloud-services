@@ -1,0 +1,136 @@
+---
+title: Managing Service Instances
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+## <a id="creating"></a>Creating an Instance
+
+You can create a Service Registry service instance using either the Cloud Foundry Command Line Interface tool (cf CLI) or <%= vars.scs_platform_name %> Apps Manager.
+
+<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes, and can replicate service registrations with peers in other PCF spaces, organizations, or deployments. These behaviors can only be configured through use of the cf CLI. (After creating a service instance using Apps Manager, you can use the cf CLI to configure the instance. See the <a href="#updating">Updating an Instance</a> section.)</p>
+
+### <a id="using-cf-cli"></a>Using the cf CLI
+
+Target the correct org and space:
+
+<%= partial vars.scs_sr_creating_instance_target %>
+
+You can view plan details for the Config Server product by running `cf marketplace -s`.
+
+<%= partial vars.scs_sr_creating_instance_marketplace %>
+
+Run `cf create-service`, specifying the service, plan name, and instance name. Optionally, you may add the `-c` flag and provide a JSON object that specifies configuration parameters.
+
+General parameters used to configure the Service Registry are listed below.
+
+| Parameter            | Function                                                                                   | Example                          |
+|----------------------|--------------------------------------------------------------------------------------------|----------------------------------|
+| <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
+
+A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](/spring-cloud-services/service-registry/enabling-peer-replication.html) topic.
+
+To create an instance with the default of a single node, run:
+
+<%= partial vars.scs_sr_creating_instance_create_one_node %>
+
+To create an instance, specifying that three nodes should be provisioned, run:
+
+<%= partial vars.scs_sr_creating_instance_create_multiple_nodes %>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the Service Registry instance is ready to be used, the `cf service` command will give a status of `create succeeded`:
+
+<%= partial vars.scs_sr_creating_instance_service %>
+
+<%= vars.scs_creating_instance_discrepancy %>
+
+### <a id="using-apps-manager"></a>Using Apps Manager
+
+Log into Apps Manager as a Space Developer. In the Marketplace, select **Service Registry**.
+
+<%= image_tag(vars.scs_sr_creating_instance_img_marketplace) %>
+
+Select the desired plan for the new service instance.
+
+<%= image_tag(vars.scs_sr_creating_instance_img_select_plan) %>
+
+Provide a name for the service instance (for example, "service-registry"). Click the **Add** button.
+
+<%= image_tag(vars.scs_sr_creating_instance_img_instance_name) %>
+
+In the **Services** list, click the listing for the new service instance.
+
+<%= image_tag(vars.scs_sr_creating_instance_img_service_successfully_added) %>
+
+Click the **Manage** link.
+
+<%= image_tag(vars.scs_sr_creating_instance_img_manage_link) %>
+
+It may take a few minutes to provision the service instance; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
+
+<%= image_tag(vars.scs_sr_creating_instance_img_dashboard_new) %>
+
+For information about registering an application with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
+
+## <a id="updating"></a>Updating an Instance
+
+You can update settings on a Service Registry service instance using the Cloud Foundry Command Line Interface tool (cf CLI). The `cf update-service` command can be given a `-c` flag with a JSON object containing parameters used to configure the service instance.
+
+To update a Service Registry service instance's settings, target the org and space of the service instance:
+
+<pre class="terminal">
+$ cf target -o myorg -s development
+
+API endpoint:   https://api.cf.wise.com (API version: 2.43.0)
+User:           user
+Org:            myorg
+Space:          development
+</pre>
+
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. For information about supported parameters, see the next section.
+
+### <a id="configuration-parameters"></a>Configuration Parameters
+
+General parameters accepted for the Service Registry are listed below.
+
+| Parameter               | Function                                                                                                                                               | Example                          |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| <code>count</code>      | The number of nodes to provision                                                                                                                       | <code>'{"count": 3}'</code>      |
+| <code>upgrade</code>    | Whether to upgrade the instance                                                                                                                        | <code>'{"upgrade": true}'</code> |
+| <code>force</code>      | When `upgrade` is set to `true`, whether to force an upgrade of the instance, even if the instance is already at the latest available service version  | <code>'{"force": true}'</code>   |
+
+A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](/spring-cloud-services/service-registry/enabling-peer-replication.html) topic.
+
+To update a service instance and set the count of nodes for running in high-availability mode, run:
+
+<pre class="terminal">
+$ cf update-service service-registry -c '{"count": 3}'
+Updating service instance service-registry as user...
+OK
+
+Update in progress. Use 'cf services' or 'cf service service-registry' to check operation status.
+</pre>
+
+As the command output suggests, you can use the `cf services` or `cf service` commands to check the status of the service instance. When the update is complete, the `cf service` command will give a status of `update succeeded`:
+
+<pre class="terminal">
+$ cf service service-registry
+
+Service instance: service-registry
+Service: p-service-registry
+Bound apps:
+Tags:
+Plan: standard
+Description: Service Registry for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/57ce88c1-6bd9-4224-b855-b4600e8e0f39
+
+Last Operation
+Status: update succeeded
+Message:
+Started: 2016-06-28T14:09:19Z
+Updated: 2016-06-28T14:12:25Z
+</pre>
+
+The service instance is now updated and ready to be used. For information about registering an application with a Service Registry service instance or calling an application which has been registered with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.

@@ -1,0 +1,115 @@
+---
+title: Background Information
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+## <a id="the-config-server"></a>The Config Server
+
+The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
+
+### <a id="configuration-sources"></a>Configuration Sources
+
+A configuration source contains one or more configuration files used by one or more applications. Each file applies to an _application_ and can optionally apply to a specific _profile_ and / or _label_.
+
+The following is the structure of a Git repository which could be used as a configuration source.
+
+```
+master
+------
+https://github.com/myorg/configurations
+|- myapp.yml
+|- myapp-development.yml
+|- myapp-production.yml
+
+tag v1.0.0
+----------
+https://github.com/myorg/configurations
+|- myapp.yml
+|- myapp-development.yml
+|- myapp-production.yml
+```
+
+In this example, the configuration source defines configurations for the `myapp` application. The Server will serve different properties for `myapp` depending on the values of `{profile}` and `{label}` in the request path. If the ```{profile}``` is neither ```development``` nor ```production```, the server will return the properties in `myapp.yml`, or if the ```{profile}``` is ```production```, the server will return the properties in both `myapp-production.yml` and `myapp.yml`.
+
+```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. You can reconfigure the default label (see the [Configuring with Git](/spring-cloud-services/config-server/configuring-with-git.html) topic).
+
+### <a id="request-paths"></a>Request Paths
+
+Configuration requests use one of the following path formats:
+
+```
+/{application}/{profile}[/{label}]
+/{application}-{profile}.yml
+/{label}/{application}-{profile}.yml
+/{application}-{profile}.properties
+/{label}/{application}-{profile}.properties
+```
+
+A path includes an _application_, a _profile_, and optionally a _label_.
+
+* **Application**: The name of the application. In a Spring application, this will be derived from `spring.application.name` or `spring.cloud.config.name`.
+
+* **Profile**: The name of a profile, or a comma-separated list of profile names. The Config Server's concept of a "profile" corresponds directly to that of the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/Profile.html">Spring Profile</a>.
+
+* **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash. The value given to the Config Server as a default label (the setting of `git.label`; see the table of the Config Server's [general configuration parameters](/spring-cloud-services/config-server/configuring-with-git.html#general-configuration)) can be overridden in a client application by setting the `spring.cloud.config.label` property.
+
+For information about using a Cloud Foundry application as a Config Server client, see the <a href="#configuration-clients">Configuration Clients</a> section.
+
+## <a id="configuration-clients"></a>Configuration Clients
+
+Config Server client applications can be written in any language. The interface for retrieving configuration is HTTP, and the endpoints are protected by OAuth 2.0.
+
+To be given a base URI and client credentials for accessing a Config Server instance, a Cloud Foundry application needs to bind to the instance.
+
+### <a id="bind-an-application-to-a-service-instance"></a>Bind an Application to a Service Instance
+
+Click the service instance's listing in Apps Manager. Under **App Bindings**, click **Bind Apps**.
+
+<%= image_tag(vars.scs_cs_configuration_clients_img_bind_apps) %>
+
+Select an application and click **Save**.
+
+<%= image_tag(vars.scs_cs_configuration_clients_img_save_binding) %>
+
+Alternatively, you can use the Cloud Foundry Command Line Interface tool (cf CLI). Run the command `cf bind-service`, specifying the application name and service instance name.
+
+<%= partial vars.scs_cs_configuration_clients_bind_service %>
+
+Then, as the command output suggests, run the command `cf restage` to restage the application before proceeding. (See the next section for information about the environment variable to which the command output refers.)
+
+<%= partial vars.scs_cs_configuration_clients_restage %>
+
+### <a id="configuration-requests-and-responses"></a>Configuration Requests and Responses
+
+After an application is bound to the service instance, the application's `VCAP_SERVICES` environment variable will contain an entry under the key ```p-config-server```. You can view the application's environment variables using the cf CLI:
+
+<%= partial vars.scs_cs_configuration_clients_env %>
+
+The following is an example of a response from the Config Server to a request using the path ```/cook/production``` (where the application is ```cook``` and the profile is ```production```).
+
+<%= partial vars.scs_cs_configuration_clients_response %>
+
+As shown in the above example, the Config Server may include multiple values for the same property in its response. In that case, the client application must decide how to interpret the response; the intent is that the first value in the list should take precedence over the others. Spring applications will do this for you automatically.
+
+#### Spring Client Applications
+
+A Spring application can use a Config Server as a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html">property source</a>. Properties from a Config Server will override those defined locally (e.g. via an `application.yml` in the classpath).
+
+The application requests properties from the Config Server using a path such as ```/{application}/{profile}/[{label}]``` (see the <a href="#request-paths">Request Paths</a> section). It will derive values for these three parameters from the following properties:
+
+
+* `{application}`: ```spring.cloud.config.name``` or ```spring.application.name```.
+* `{profile}`: ```spring.cloud.config.env``` or ```spring.profiles.active```.
+* `{label}`: ```spring.cloud.config.label``` if it is defined; otherwise, the Config Server's default label.
+
+These values can be specified in an `application.yml` or `application.properties` file on the classpath, via a system property (as in `-Dspring.profiles.active=production`), or (more commonly in Cloud Foundry) via an environment variable:
+
+<pre class="terminal">
+$ cf set-env cook SPRING_PROFILES_ACTIVE production
+</pre>
+
+Given the above example response for the request path ```/cook/production```, a Spring application would give the two Config Server property sources precedence over other property sources. This means that properties from `https://github.com/myorg/configurations/cook-production.yml` would have precedence over properties from `https://github.com/myorg/configurations/cook.yml`, which would have precedence over properties from the application's other property sources (such as `classpath:application.yml`).
+
+For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.

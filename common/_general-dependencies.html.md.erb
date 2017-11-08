@@ -1,0 +1,106 @@
+<p class='note'><strong>Important</strong>: Ensure that the ordering of the Maven BOM dependencies listed below is preserved in your application's build file. Dependency resolution is affected in both Maven and Gradle by the order in which dependencies are declared.</p>
+
+To work with Spring Cloud Services service instances, your client application must include the `spring-cloud-services-dependencies` and `spring-cloud-dependencies` BOMs. Unless you are using the `spring-boot-starter-parent` or Spring Boot Gradle plugin, you must also specify the `spring-boot-dependencies` BOM as a dependency. See below for compatible Spring Boot and Spring Cloud versions to use with a given Spring Cloud Services release.
+
+| Spring Cloud Services | Spring Boot  | Spring Cloud |
+|-----------------------|--------------|--------------|
+| 1.0.x                 | 1.2.x        | Angel.x      |
+| 1.1.x                 | 1.3.x--1.4.x | Brixton.x    |
+| 1.2.x                 | 1.3.x--1.4.x | Brixton.x    |
+| 1.3.x                 | 1.3.x--1.4.x | Camden.x     |
+| 1.4.x *               | 1.5.x        | Dalston.x    |
+
+<p class='note'><strong>Important</strong>: Spring Cloud Services is affected by an <a href="https://github.com/spring-projects/spring-boot/issues/9079">issue in Spring Boot version 1.5.3</a> and is not compatible with that version. To be compatible with Spring Cloud Services 1.4.0, client applications should use Spring Boot versions 1.5.0--1.5.2 or 1.5.4 and later.</p>
+<p class='note'><strong>Note</strong>: An application using Spring Cloud Services 1.3.x dependencies only requires an update to 1.4.x dependencies if using the Config Server support for HashiCorp Vault.</p>
+
+If using Maven, include in `pom.xml`:
+
+```xml
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.2.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.pivotal.spring.cloud</groupId>
+            <artifactId>spring-cloud-services-dependencies</artifactId>
+            <version>1.5.0.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Dalston.SR1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
+If not using the `spring-boot-starter-parent`, include in the `<dependencyManagement>` block of `pom.xml`:
+
+```
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>1.5.2.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+        <!-- ... -->
+
+    </dependencies>
+  </dependencyManagement>
+```
+
+If using Gradle, you will also need to use the <a href="https://github.com/spring-gradle-plugins/dependency-management-plugin">Gradle dependency management plugin</a>.
+
+Include in `build.gradle`:
+
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR1"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.5.0.RELEASE"
+    }
+}
+
+repositories {
+    maven {
+        url "https://repo.spring.io/plugins-release"
+    }
+}
+```
+
+If not using the Spring Boot Gradle plugin, include in the `dependencyManagement` block of `build.gradle`:
+
+```groovy
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:1.5.2.RELEASE"
+    }
+}
+```

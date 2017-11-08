@@ -1,0 +1,7 @@
+When the Config Server has been configured to encrypt values, you can make a POST request to the <code>/encrypt</code> endpoint. Include the property value in the request. A request to encrypt a value might look something like the following (using curl), where <code>TOKEN_STRING</code> is an OAuth 2.0 token and <code>SERVER</code> is the URL of the Config Server:
+
+<pre>
+<code>
+curl -H 'Authorization: bearer TOKEN_STRING' http://SERVER/encrypt -d 'Value to be encrypted'
+</code>
+</pre>

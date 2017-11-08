@@ -3,557 +3,182 @@ title: Release Notes for Spring Cloud&reg; Services on Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
+<html class="list-style-none"></html>
+
+<style>
+    .note.warning {
+        background-color: #fdd;
+        border-color: #fbb
+    }
+
+    .note.warning:before {
+        color: #f99;
+     }
+</style>
+
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
-## <a id="1-3"></a>1.3
+## <a id="1-4-0-migrating-from-1-3-x"></a>Migrating from 1.3.x
 
-### <a id="1-3-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
+If you are upgrading from a 1.3.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+## <a id="1-4-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
 
 If you are upgrading from a 1.2.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-### <a id="1-3-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+## <a id="1-4-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
 
 If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-### <a id="1-3-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+## <a id="1-4-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
 
-The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3.x, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.3.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-3/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-3/client-dependencies.html">Client Dependencies</a>.
+The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3.x, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.3.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-3/common/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-3/common/client-dependencies.html">Client Dependencies</a>.
 
 After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
-### <a id="1-3-3"></a>1.3.3
+## <a id="1-4-5"></a>1.4.5
 
-**Release Date: 30th January 2017**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.17. This resolves the following issues:
-  * [[USN-3161-2]](https://www.ubuntu.com/usn/usn-3161-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
-* The Config Server now exposes the `/encrypt` endpoint to generate encrypted property values based on a provided key.
-* The `/info` endpoint, accessed on the service broker applications or on service instance backing applications, now returns version information for the corresponding build of Spring Cloud Services.
-
-### <a id="1-3-2"></a>1.3.2
-
-**Release Date: 21st December 2016**
+**Release Date: 2nd November 2017**
 
 Enhancements included in this release:
 
-* Error reporting in the Spring Cloud Services tile's "Smoke Tests" errand has been improved.
-* The Spring Cloud Services service broker now returns a message for each of any errors encountered by the `cf create-service` and `cf update-service` commands.
+* The stemcell has been updated to the 3445 line of floating stemcells.
+
+## <a id="1-4-4"></a>1.4.4
+
+**Release Date: 21st September 2017**
+
+Enhancements included in this release:
+
+* The Spring Cloud Services service broker has been made more resilient in cases of the RabbitMQ for PCF cluster being unavailable.
+* Troubleshooting of Spring Cloud Services service broker activity with the RabbitMQ for PCF service has been enhanced.
 
 Fixes included in this release:
 
-* A timeout issue that could occur during the push operation for service instance backing applications has been resolved.
+* Resolved an issue with Config Server's health check failing when the service instance was configured with a Git SSH backend.
+* Resolved an issue where an upgrade of the Spring Cloud Services tile resulted in Config Server instances not retaining the `label` configuration parameter.
 
-### <a id="1-3-1"></a>1.3.1
+## <a id="1-4-3"></a>1.4.3
 
-**Release Date: 7th December 2016**
-
-<p class='note'><strong>Important</strong>: If you upgrade to this release of Spring Cloud Services, you must ensure that your client applications which use the Service Registry do not set the <code>eureka.instance.virtualHostName</code> or <code>eureka.instance.secureVirtualHostName</code> properties to different values from that of the <code>eureka.instance.appname</code> property.</p>
+**Release Date: 9th August 2017**
 
 Enhancements included in this release:
 
-* The Spring Cloud Services broker has been upgraded to Spring Cloud Camden.SR3.
-* Spring Cloud Services service instance backing applications now print a custom Spring Boot banner on startup.
-* If a Service Registry client application's `eureka.instance.secureVirtualHostname` or `eureka.instance.virtualHostname` properties are set and do not match the application's `eureka.instance.appname` property, the Spring Cloud Services connector for Service Registry now prevents application startup and logs an error message. For more information, see the [Eureka Application Name Configuration](/spring-cloud-services/1-3/service-registry/connectors.html#eureka-application-name-configuration) section of the [Spring Cloud Connectors](/spring-cloud-services/1-3/service-registry/connectors.html) topic in the [Service Registry documentation](/spring-cloud-services/1-3/service-registry/).
+* The Spring Cloud Services service broker has been upgraded to Spring Cloud Dalston.SR2.
 
 Fixes included in this release:
 
-* The Service Registry now supports servers which use Server Name Indication (SNI) to serve multiple SSL certificates.
+* Fixed a Config Server issue where Git repository passwords in configuration shown on the dashboard of a service instance using a composite backend were not masked.
 
-### <a id="1-3-0"></a>1.3.0
+## <a id="1-4-2"></a>1.4.2
 
-**Release Date: 10th November 2016**
-
-<p class='note'><strong>Important</strong>: Spring Cloud Services 1.3.0 requires version 3.8 or later of the Cloud Foundry Java buildpack. If your Pivotal Cloud Foundry deployment is using an older version of the Java buildpack, upgrade it before installing this release.</p>
+**Release Date: 31st July 2017**
 
 Enhancements included in this release:
 
-* Spring Cloud Services now supports Pivotal Cloud Foundry versions 1.7 and later.
-* Spring Cloud Services now uses a floating stemcell for enhanced security. For more information, see the [Understanding Floating Stemcells](https://docs.pivotal.io/pivotalcf/customizing/understanding-stemcells.html) topic in the [Pivotal Cloud Foundry documentation](https://docs.pivotal.io/pivotalcf/).
-* The validation normally performed by Spring Cloud Services for the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate can now be disabled by operators in the tile's settings. See step 5 of the Installation Steps in the [Installation](/spring-cloud-services/1-3/installation.html) topic for more information.
-* The Spring Cloud Services broker has been upgraded to Spring Boot 1.4.1 and Spring Cloud Camden.SR2.
-* Service instances are now based on Spring Cloud Camden.SR2, and client applications can use Spring Boot 1.3.x--1.4.1 and Spring Cloud Brixton.x--Camden.SR2. For more information about client application dependencies, see <a href="/spring-cloud-services/1-3/client-dependencies.html">Client Dependencies</a>.
-
-<p class='note'><strong>Note</strong>: Spring Cloud Services 1.3.0 is compatible with Spring Boot versions 1.3.x--1.4.x, but is based on Spring Cloud Camden, which builds on Spring Boot 1.4. In client applications, Spring Boot 1.4.x is recommended for optimum experience with this release.</p>
-
-## <a id="1-2"></a>1.2
-
-### <a id="1-2-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
-
-If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
-
-### <a id="1-2-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
-
-The Spring Cloud Services client dependencies were restructured in 1.1.0. To ensure compatibility of your client applications with Spring Cloud Services 1.2.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-2/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-2/client-dependencies.html">Client Dependencies</a>.
-
-After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.2.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
-
-### <a id="1-2-7"></a>1.2.7
-
-**Release Date: 30th January 2017**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.17. This resolves the following issues:
-  * [[USN-3161-2]](https://www.ubuntu.com/usn/usn-3161-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
-
-### <a id="1-2-6"></a>1.2.6
-
-**Release Date: 21st December 2016**
+* The Spring Cloud Services "Broker Deployer" lifecycle errand has been made more resilient in cases where the service broker worker's Cloud Foundry user or UAA client already exists.
+* SSL certificate validation performed by the Spring Cloud Services "Broker Deployer" lifecycle errand is no longer case-sensitive.
 
 Fixes included in this release:
 
-* A timeout issue that could occur during the push operation for service instance backing applications has been resolved.
+* Fixed an issue with the "Broker Deployer" lifecycle errand where a missing route on the existing service broker application could cause the errand to fail.
+* Fixed an issue with the "Broker Deployer" lifecycle errand where the presence of existing dependent service instances during an upgrade could cause the errand to fail.
 
-### <a id="1-2-5"></a>1.2.5
+## <a id="1-4-1"></a>1.4.1
 
-**Release Date: 14th December 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.13. This resolves the following issues:
-  * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
-
-### <a id="1-2-4"></a>1.2.4
-
-**Release Date: 7th December 2016**
+**Release Date: 7th July 2017**
 
 Enhancements included in this release:
 
-* The stemcell has been updated to 3263.12. This resolves the following issues:
-  * [[USN-3151-2]](https://www.ubuntu.com/usn/usn-3151-2/): Linux kernel (Xenial HWE) vulnerability
-* The Spring Cloud Services broker has been upgraded to Spring Cloud Brixton.SR7.
-* The validation normally performed by Spring Cloud Services for the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate can now be disabled by operators in the tile's settings.
-
-### <a id="1-2-3"></a>1.2.3
-
-**Release Date: 10th November 2016**
-
-Enhancements included in this release:
-
-* For increased security, the Service Registry now requires that a client application's `eureka.instance.secureVirtualHostname` and `eureka.instance.virtualHostname` properties, if set, match the client application's `eureka.instance.appname` property.
-
-<p class='note'><strong>Note</strong>: Pivotal recommends that client applications do not set either of the <code>eureka.instance.secureVirtualHostname</code> or <code>eureka.instance.virtualHostname</code> properties.</p>
-
-### <a id="1-2-2"></a>1.2.2
-
-**Release Date: 21st October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.8. This resolves the following issues:
-  * [[USN-3106-2]](https://www.ubuntu.com/usn/usn-3106-2/): Linux kernel (Xenial HWE) vulnerability
-
-### <a id="1-2-1"></a>1.2.1
-
-**Release Date: 13th October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.7 for stability and bug fixes.
-
-### <a id="1-2-0"></a>1.2.0
-
-**Release Date: 7th October 2016**
-
-<p class='note'><strong>Note</strong>: Spring Cloud Services 1.2.0 is compatible with <a href="https://network.pivotal.io/products/pivotal-cf">Pivotal Cloud Foundry</a> (PCF) versions 1.6.x, 1.7.x, and 1.8.x. PCF 1.8 is recommended for optimum experience with this release.</p>
-
-Enhancements included in this release:
-
-* Service Registry service instances can now be configured to replicate service registrations across multiple PCF installations and availability zones.
-* Service Registry service instances can now be configured to replicate service registrations across PCF organization and space boundaries.
-* Service Registry service instances now allow multiple applications within a space to register with the same application name, so that registered applications can use a blue / green deployment strategy.
-* Service Registry service instance dashboards now display the URI and, if a service instance is operating in high-availability (HA) mode, the local node count of the service instance.
-* The Spring Cloud Services broker has been upgraded to Spring Boot 1.3.7 and Spring Cloud Brixton.SR5.
-* The RabbitMQ Java client used by the Spring Cloud Services service broker has been upgraded to version 3.6.5. This resolves an issue where the Spring Cloud Services service broker could not provision service instances when the RabbitMQ for PCF product was using TLS and had its TLS 1.0 support disabled.
-
-## <a id="1-1"></a>1.1
-
-### <a id="1-1-11"></a>1.1.11
-
-**Release Date: 30th January 2017**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.17. This resolves the following issues:
-  * [[USN-3161-2]](https://www.ubuntu.com/usn/usn-3161-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
-
-### <a id="1-1-10"></a>1.1.10
-
-**Release Date: 14th December 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.13. This resolves the following issues:
-  * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
-
-### <a id="1-1-9"></a>1.1.9
-
-**Release Date: 7th December 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.12. This resolves the following issues:
-  * [[USN-3151-2]](https://www.ubuntu.com/usn/usn-3151-2/): Linux kernel (Xenial HWE) vulnerability
-
-### <a id="1-1-8"></a>1.1.8
-
-**Release Date: 21st October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3233.3. This resolves the following issues:
-  * [[USN-3106-2]](https://www.ubuntu.com/usn/usn-3106-2/): Linux kernel (Xenial HWE) vulnerability
-
-### <a id="1-1-7"></a>1.1.7
-
-**Release Date: 12th October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3233.2 for stability and bug fixes.
-
-### <a id="1-1-6"></a>1.1.6
-
-**Release Date: 6th October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3233.1 as an upgrade to Linux version 4.4 kernel and to enable future upgrades.
-
-### <a id="1-1-4"></a>1.1.4
-
-**Release Date: 28th September 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3232.21. This resolves the following issues:
-  * [[USN-3087-2]](http://www.ubuntu.com/usn/usn-3087-2/): OpenSSL regression
-
-### <a id="1-1-3"></a>1.1.3
-
-**Release Date: 8th September 2016**
-
-This release includes a Cloud Foundry component update.
-
-Features included in this release:
-
-* The Cloud Foundry Command Line Interface tool (cf CLI) used in errands has been upgraded to version 6.21.1 and is now configured to allow for long DNS resolution times.
-
-### <a id="1-1-2"></a>1.1.2
-
-**Release Date: 24th August 2016**
-
-This release updates the stemcell and adds enhancements to the Config Server and Circuit Breaker Dashboard services. It also contains bug fixes.
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.17. This resolves the following issues:
-  * [[USN-3064-1]](http://www.ubuntu.com/usn/usn-3064-1/): GnuPG vulnerability
-
-Enhancements included in this release:
-
-* Config Server support for placeholders in repository URIs has been improved.
-* Config Server can now be configured to clone configuration source repositories on startup (as opposed to the default behavior of cloning a repository when configuration is first requested from the associated configuration source). See the [table of general configuration parameters](/spring-cloud-services/1-1/config-server/creating-an-instance.html#general-configuration-parameters) in the [Creating an Instance](/spring-cloud-services/1-1/config-server/creating-an-instance.html) topic of the [Config Server documentation](/spring-cloud-services/1-1/config-server/index.html) for more information.
-* Circuit Breaker Dashboard's Spring Cloud Stream configuration now uses all URIs provided for the associated [RabbitMQ for Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-rabbitmq-service) service instance.
-* The tile install and uninstall processes are now more resilient to errors encountered during the relevant errands.
+* Messages sent by Circuit Breaker Dashboard to its RabbitMQ service instance now have a Time To Live (TTL) set, to prevent overloading of the RabbitMQ queue.
+* The Spring Cloud Services service broker now can use a private domain to deploy service instance backing applications when no shared domains are available in the Elastic Runtime deployment. For more information, see the [Domain Requirements](/spring-cloud-services/prerequisites.html#domain-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic.
 
 Fixes included in this release:
 
-* If the service broker worker fails to update a service instance when the service broker receives a provision or update request, the request to the service broker will now time out and the service instance status will be changed from PENDING to FAILED.
-* Applications unbound from a Service Registry service instance will no longer remain in the service instance's registry and will be removed from that registry shortly after being unbound from the service instance.
-* Fixed a problem where the service broker's authentication to the Cloud Controller would expire if the broker remained inactive for a long period of time.
+* Fixed a Config Server issue which could prevent backing application startup and resulted in backing application log and dashboard errors when the service instance was configured to connect to a Git repository via SSH.
 
-### <a id="1-1-1"></a>1.1.1
+Known issues in this release:
 
-**Release Date: 1st July 2016**
+* The "Broker Registrar" lifecyle errand fails during the tile upgrade process if the Spring Cloud Services service broker's MySQL for PCF service instance was created under a plan name other than `100mb` (the default name for the 100 MB plan). If the service broker for your existing installation of Spring Cloud Services has a MySQL for PCF service instance with a service plan name other than `100mb` and the tile upgrade process has failed, follow the below steps to migrate the existing database to a `100mb` plan and continue the upgrade process.
+  * In the MySQL for PCF tile configuration settings, create a service plan with name `100mb` and persistent disk of 100 MB.
+  * Back up the existing broker database, following the steps in the [Back Up Your MySQL for PCF v1.x Instance](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html#backup) section of the [Migrating a Database to MySQL for PCF v2](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html) topic in the [MySQL for PCF documentation](https://docs.pivotal.io/p-mysql/2-0/index.html).
+  * Using the Cloud Foundry Command Line Interface tool (cf CLI), target the `system` org and the `p-spring-cloud-services` space: `cf target -o system -s p-spring-cloud-services`
+  * Using the cf CLI, update the broker's MySQL for PCF service instance to the new `100mb` plan: `cf update-service spring-cloud-broker-db -p 100mb`
+  * Re-run the Spring Cloud Services post-deploy errands.
+    
+## <a id="1-4-0"></a>1.4.0
 
-Features included in this release:
+**Release Date: 29th May 2017**
 
-* The stemcell has been updated to 3232.12. This resolves the following issues:
-  * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
-
-### <a id="1-1-0"></a>1.1.0
-
-**Release Date: 28th June 2016**
-
-<p class='note'><strong>Important</strong>: Your client applications which work with Spring Cloud Services 1.0.x service instances must be updated in order to work with 1.1.0 service instances. See <a href="#migrating-from-1-0-x">Migrating from 1.0.x</a> below.</p>
-
-Features included in this release:
-
-* Spring Cloud Services now supports Pivotal Cloud Foundry versions 1.6 and later.
-* Service instances are now based on Spring Cloud Brixton.SR1, and client applications can use Spring Boot 1.3.x and Spring Cloud Brixton.SR1. For more information about client application dependencies, see <a href="/spring-cloud-services/1-1/client-dependencies.html">Client Dependencies</a>.
-* The service broker now supports asynchronous service operations. For more information, see the <a href="/spring-cloud-services/1-1/operator-information.html#the-service-broker">The Service Broker</a> section of the <a href="/spring-cloud-services/1-1/operator-information.html">Operator Information</a>.
-* Operators can now explicitly choose the Java buildpack that will be used to deploy service instances. For more information, see the <a href="/spring-cloud-services/1-1/operator-information.html#set-buildpack-for-service-instances">Set Buildpack for Service Instances</a> section of the <a href="/spring-cloud-services/1-1/operator-information.html">Operator Information</a>.
-* Operators can now upgrade either individual service instances or all non-upgraded service instances directly from the Service Instances dashboard. For more information, see the <a href="/spring-cloud-services/1-1/operator-information.html#service-instances-dashboard">The Service Instances Dashboard</a> section of the <a href="/spring-cloud-services/1-1/operator-information.html">Operator Information</a>.
-* Upgrades of service instances now result in zero downtime for the service instances. For more information about upgrading service instances, see <a href="/spring-cloud-services/1-1/service-instance-upgrades.html">Service Instance Upgrades</a>.
-* Updates to Config Server settings now result in zero downtime for the Config Server service instance. For more information about updating a Config Server instance's settings, see <a href="/spring-cloud-services/1-1/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a>.
-* Config Server can now access a Git repository that uses self-signed SSL certificates with HTTPS. For more information about supported configuration sources, see <a href="/spring-cloud-services/1-1/config-server/server.html">The Config Server</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a>.
-* Config Server can now access a Git repository via a proxy server when using HTTP or HTTPS.
-* Config Server can now access a Git repository using the Git or SSH protocols in addition to HTTP and HTTPS.
-* Config Server can now be created with or updated to use multiple Git repositories as configuration sources.
-* Config Server and Service Registry can now operate in high-availability mode, with a set count of instances to provision being specified when creating or updating a service instance. For more information, see <a href="/spring-cloud-services/1-1/config-server/creating-an-instance.html">Creating an Instance</a> and <a href="/spring-cloud-services/1-1/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a> and <a href="/spring-cloud-services/1-1/service-registry/creating-an-instance.html">Creating an Instance</a> and <a href="/spring-cloud-services/1-1/service-registry/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/1-1/service-registry/">Service Registry documentation</a>.
+<p class='note warning'><strong>WARNING</strong>: If you are using <a href="https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/trusted-system-certificates.html">Trusted System Certificates</a>, do not install or upgrade to Spring Cloud Services 1.4.0. See "Known issues" below.</p>
+<p class='note warning'><strong>WARNING</strong>: If you have upgraded to Spring Cloud Services version 1.4.0 but have a Config Server service instance which accesses a Git repository via SSH and has not yet been upgraded, do not upgrade the service instance at this time. See "Known issues" below.</p>
 
 Enhancements included in this release:
 
-* The operator Service Instances dashboard now displays the service keys bound to a service instance, in addition to its bound applications. For more information about the Service Instances dashboard, see the <a href="/spring-cloud-services/1-1/operator-information.html#service-instances-dashboard">The Service Instances Dashboard</a> section of the <a href="/spring-cloud-services/1-1/operator-information.html">Operator Information</a>.
-* Dashboards for individual service instances now display the username of the logged-in user and provide a link to log out.
-* Config Server service instances are now exclusively configured using provision and update parameters given to the Cloud Foundry Command Line Interface tool (cf CLI), and the Config Server's dashboard now displays the service instance's configuration. For more information, see <a href="/spring-cloud-services/1-1/config-server/creating-an-instance.html">Creating an Instance</a>, <a href="/spring-cloud-services/1-1/config-server/updating-an-instance.html">Updating an Instance</a>, and <a href="/spring-cloud-services/1-1/config-server/using-the-dashboard.html">Using the Dashboard</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a>.
-* When creating a Circuit Breaker Dashboard service instance, the service broker now performs tasks in parallel for faster provisioning.
-
-Known issues:
-
-* Config Server currently does not support use of a private Git repository accessed via an authenticated proxy server as a configuration source. For more information, see <a href="/spring-cloud-services/1-1/config-server/creating-an-instance.html">Creating an Instance</a> or <a href="/spring-cloud-services/1-1/config-server/updating-an-instance.html">Updating an Instance</a> in the <a href="/spring-cloud-services/1-1/config-server/">Config Server documentation</a>.
-* When upgrading a Circuit Breaker Dashboard instance from 1.0.x to 1.1.0, running applications must be unbound, rebound, and restarted, due to a change in how credentials are managed.
-
-#### <a id="migrating-from-1-0-x"></a>Migrating from 1.0.x
-
-In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
-
-For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-1/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-1/client-dependencies.html">Client Dependencies</a>.
-
-## <a id="1-0"></a>1.0
-
-### <a id="1-0-20"></a>1.0.20
-
-**Release Date: 30th January 2017**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.17. This resolves the following issues:
-  * [[USN-3161-2]](https://www.ubuntu.com/usn/usn-3161-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3169-2]](https://www.ubuntu.com/usn/usn-3169-2/): Linux kernel (Xenial HWE) vulnerabilities
-  * [[USN-3172-1]](https://www.ubuntu.com/usn/usn-3172-1/): Bind vulnerabilities
-
-### <a id="1-0-19"></a>1.0.19
-
-**Release Date: 14th December 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.13. This resolves the following issues:
-  * [[USN-3156-1]](https://www.ubuntu.com/usn/usn-3156-1/): APT vulnerability
-
-### <a id="1-0-18"></a>1.0.18
-
-**Release Date: 7th December 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3263.12. This resolves the following issues:
-  * [[USN-3151-2]](https://www.ubuntu.com/usn/usn-3151-2/): Linux kernel (Xenial HWE) vulnerability
-
-### <a id="1-0-17"></a>1.0.17
-
-**Release Date: 21st October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3233.3. This resolves the following issues:
-  * [[USN-3106-2]](https://www.ubuntu.com/usn/usn-3106-2/): Linux kernel (Xenial HWE) vulnerability
-
-### <a id="1-0-16"></a>1.0.16
-
-**Release Date: 12th October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3233.2 for stability and bug fixes.
-
-### <a id="1-0-15"></a>1.0.15
-
-**Release Date: 6th October 2016**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3233.1 as an upgrade to Linux version 4.4 kernel and to enable future upgrades.
-
-### <a id="1-0-13"></a>1.0.13
-
-**Release Date: 28th September 2016**
-
-<p class='note'><strong>Important</strong>: Spring Cloud Services version 1.0.13 was removed from Pivotal Network due to an incorrect stemcell dependency. Please upgrade to version 1.0.14 or later.</p>
-
-Enhancements included in this release:
-
-* The stemcell has been updated to 3232.21. This resolves the following issues:
-  * [[USN-3087-2]](http://www.ubuntu.com/usn/usn-3087-2/): OpenSSL regression
-
-### <a id="1-0-12"></a>1.0.12
-
-**Release Date: 24th August 2016**
-
-This release updates the stemcell.
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.17. This resolves the following issues:
-  * [[USN-3064-1]](http://www.ubuntu.com/usn/usn-3064-1/): GnuPG vulnerability
-
-### <a id="1-0-11"></a>1.0.11
-
-**Release Date: 1st July 2016**
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.12. This resolves the following issues:
-  * [[USN-3020-1]](http://www.ubuntu.com/usn/usn-3020-1/): Linux kernel (Vivid HWE) vulnerabilities
-
-### <a id="1-0-10"></a>1.0.10
-
-**Release Date: 14th June 2016**
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.8. This resolves the following issues:
-  * [[USN-3001-1]](http://www.ubuntu.com/usn/usn-3001-1/): Linux kernel (Vivid HWE) vulnerabilities
-
-### <a id="1-0-9"></a>1.0.9
-
-**Release Date: 6th May 2016**
-
-Features included in this release:
-
-* The stemcell has been updated to 3232.2. This resolves the following issues:
-  * [[USN-2959-1]](http://www.ubuntu.com/usn/usn-2959-1/): OpenSSL vulnerabilities
-
-### <a id="1-0-8"></a>1.0.8
-
-**Release Date: 18th April 2016**
-
-Fixes included in this release:
-
-* The Config Server now applies the values of its "Git Branch" and "Search Paths" configuration form fields when retrieving configuration for an application. These values were not applied from version 1.0.4 of Spring Cloud Services.
-
-### <a id="1-0-7"></a>1.0.7
-
-**Release Date: 16th March 2016**
-
-Features included in this release:
-
-* The stemcell has been updated to 3146.10. This resolves the following issues:
-  * [[USN-2929-1]](http://www.ubuntu.com/usn/usn-2929-1/): Linux kernel vulnerabilities
-
-### <a id="1-0-6"></a>1.0.6
-
-**Release Date: 16th March 2016**
-
-Fixes included in this release:
-
-* 1.0.4 was inadvertently released with a version number in its product metadata that prevented upgrades to 1.0.5. This release corrects that.
-
-### <a id="1-0-5"></a>1.0.5
-
-**Release Date: 25th February 2016**
-
-Features included in this release:
-
-* The stemcell has been updated to 3146.9. This resolves the following issues:
-  * [[USN-2910-1]](http://www.ubuntu.com/usn/usn-2910-1/):  Linux kernel (Vivid HWE) vulnerabilities
-  * [[USN-2900-1]](http://www.ubuntu.com/usn/usn-2900-1/): GNU C Library vulnerability
-  * [[USN-2897-1]](http://www.ubuntu.com/usn/usn-2897-1/): Nettle vulnerabilities
-  * [[USN-2896-1]](http://www.ubuntu.com/usn/usn-2896-1/): Libgcrypt vulnerability
-
-### <a id="1-0-4"></a>1.0.4
-
-**Release Date: 2nd February 2016**
-
-Features included in this release:
-
-* A new Service Instances dashboard is accessible to operators of Spring Cloud Services. The dashboard provides an overview of all service instances and shows their org/space locations, version, status, and bound applications. For more details, see the [The Service Instances Dashboard](/spring-cloud-services/1-0/operator-information.html#service-instances-dashboard) section of the [Operator Information](/spring-cloud-services/1-0/operator-information.html).
-* Service instances can now be individually upgraded to the latest version using the cf CLI. For more details, see the [Service Instance Upgrade Steps](/spring-cloud-services/1-0/upgrades.html#service-instance-upgrade-steps) section of [Upgrades](/spring-cloud-services/1-0/upgrades.html).
-* Config Server instance settings (i.e. Git repository configuration) can now be provided using arbitrary parameters via "cf create-service." They can also be updated via "cf update-service."
-* The stemcell has been updated to 3146.6. This resolves the following issues:
-  * [[USN-2882-1]](http://www.ubuntu.com/usn/usn-2882-1/): curl vulnerability
-  * [[USN-2879-1]](http://www.ubuntu.com/usn/usn-2879-1/): rsync vulnerability
-  * [[USN-2875-1]](http://www.ubuntu.com/usn/usn-2875-1/): libxml2 vulnerabilities
-  * [[USN-2874-1]](http://www.ubuntu.com/usn/usn-2874-1/): Bind vulnerability
-
-Enhancements included in this release:
-
-* Error pages are now consistent with the Spring Cloud Services UI styles.
-* If the version of the Spring Cloud Services service broker has not changed, the Deploy Service Broker errand will not perform a deployment. For more details, see the [The Service Broker](/spring-cloud-services/1-0/operator-information.html#the-service-broker) section of the [Operator Information](/spring-cloud-services/1-0/operator-information.html).
-* Deployment of the Spring Cloud Services service broker will no longer result in a broker outage. For more details, see the [The Service Broker](/spring-cloud-services/1-0/operator-information.html#the-service-broker) section of the [Operator Information](/spring-cloud-services/1-0/operator-information.html).
-* The "cf" and "uaac" commands that are run in BOSH errands are now echoed so that commands can be correlated with their output for troubleshooting purposes.
-* Incorrect configuration of generated SSL certificates in Elastic Runtime will now result in an installation failure with a descriptive error message in the install logs. For more details, see the [Security Requirements](/spring-cloud-services/1-0/prerequisites.html#security-requirements) section of [Prerequisites](/spring-cloud-services/1-0/prerequisites.html).
-* Service instance dashboards now include the name of the service instance as breadcrumbs.
-* Config Server instances will no longer strip the `{cipher}` prefix from ciphertext contained in the backing Git repository, so that client-side decryption is now possible.
-* [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) load balancers with publicly routable IP addresses are now supported.
-
-Fixes included in this release:
-
-* The password field on the Config Server configuration dashboard is now appropriately masked.
-* Restart of the backing application for Service Registry service instances will no longer cause a temporary return of empty registry information to clients.
-* The Circuit Breaker Dashboard now displays correctly in Safari and Firefox.
-
-### <a id="1-0-3"></a>1.0.3
-
-**Release Date: 7th January 2016**
-
-Features included in this release:
-
-* Updated stemcell to 3146.2. This resolves the following issues:
-  * [[USN-2857-1]](http://www.ubuntu.com/usn/usn-2857-1/): Linux kernel vulnerability
-  * [[USN-2842-1]](http://www.ubuntu.com/usn/usn-2842-1/): Linux kernel vulnerabilities
-  * [[USN-2842-2]](http://www.ubuntu.com/usn/usn-2842-2/): Linux kernel (Vivid HWE) vulnerabilities
-  * [[USN-2836-1]](http://www.ubuntu.com/usn/usn-2836-1/): GRUB vulnerability
-  * [[USN-2834-1]](http://www.ubuntu.com/usn/usn-2834-1/): libxml2 vulnerabilities
-  * [[USN-2830-1]](http://www.ubuntu.com/usn/usn-2830-1/): OpenSSL vulnerabilities
-  * [[USN-2829-1]](http://www.ubuntu.com/usn/usn-2829-1/): Linux kernel vulnerabilities
-
-
-### <a id="1-0-2"></a>1.0.2
-
-**Release Date: 1st December 2015**
-
-Features included in this release:
-
-* Updated stemcell to 3144. This resolves the following issues:
-  * [[USN-2815-1]](http://www.ubuntu.com/usn/usn-2815-1/): libpng vulnerabilities
-  * [[USN-2812-1]](http://www.ubuntu.com/usn/usn-2812-1/): libxml2 vulnerabilities
-  * [[USN-2810-1]](http://www.ubuntu.com/usn/usn-2810-1/): Kerberos vulnerabilities
-
-### <a id="1-0-1"></a>1.0.1
-
-**Release Date: 12th November 2015**
-
-Features included in this release:
-
-* Updated stemcell to 3130. This resolves the following issues:
-  * [[USN-2806-1]](http://www.ubuntu.com/usn/usn-2806-1/): Linux kernel (Vivid HWE) vulnerability
-  * [[USN-2798-1]](http://www.ubuntu.com/usn/usn-2798-1/): Linux kernel (Vivid HWE) vulnerabilities
-* Removed SVN support from Config Server due to licensing issues
-
-### <a id="1-0-0"></a>1.0.0
-
-**Release Date: 26th October 2015**
-
-Features included in this release:
-
-* General Availability release
-
-Known issues:
-
-* [Feign](https://github.com/Netflix/feign) clients require [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/) version 1.0.4. This release of Spring Cloud Services depends on Spring Cloud Netflix version 1.0.3. If you wish to use a Feign client with a Spring Cloud Services service instance, you must manually override the version of Spring Cloud Netflix used by your application.
+* The Config Server now can use a HashiCorp Vault server as a configuration source, directly or through an HTTP or HTTPS proxy. For more information, see the [Vault Backend](/spring-cloud-services/config-server/configuring-backends.html#vault) section of the [Configuring Backend](/spring-cloud-services/config-server/configuring-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation. In order to use the Vault support in a client application, you must update your application's Spring Cloud Services client dependencies; see the [Client Dependencies](/spring-cloud-services/client-dependencies.html) topic.
+* The Config Server now can use a composite backend comprising one or more Git repositories and up to one HashiCorp Vault server. For more information, see the [Composite Backend](/spring-cloud-services/config-server/configuring-backends.html#composite) section of the [Configuring Backends](/spring-cloud-services/config-server/configuring-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
+* The Config Server's `/health` endpoint, provided by Spring Boot Actuator, now displays failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing this endpoint, see the [Access Actuator Endpoints](/spring-cloud-services/service-broker-and-instances.html#access-actuator-endpoints) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.
+* The Config Server's backing application now logs failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing the backing application logs, see the [Read Backing Application Logs](/spring-cloud-services/service-broker-and-instances.html#backing-application-logs) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.
+* The Config Server dashboard now displays detailed failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For more information, see the [Using the Dashboard](/spring-cloud-services/config-server/using-the-dashboard.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
+* The Spring Cloud Services service broker has been upgraded to Spring Boot 1.5.2 and Spring Cloud Dalston.RELEASE.
+
+Known issues in this release:
+
+* uaac commands used by Spring Cloud Services lifecycle errands fail if Pivotal Cloud Foundry&reg; Operations Manager has been configured to use Trusted System Certificates (for example to support an internal root Certificate Authority). If you are using Trusted System Certificates, do not install or upgrade to this release. If you have already installed it following the tile installation process rather than the tile upgrade process, uninstall and delete the tile; if you have already upgraded to this release, please contact [Pivotal Support](https://pivotal.io/support) for assistance.
+* The "Broker Registrar" lifecyle errand fails during the tile upgrade process if the Spring Cloud Services service broker's MySQL for PCF service instance was created under a plan name other than `100mb` (the default name for the 100 MB plan). If the service broker for your existing installation of Spring Cloud Services has a MySQL for PCF service instance with a service plan name other than `100mb` and the tile upgrade process has failed, follow the below steps to migrate the existing database to a `100mb` plan and continue the upgrade process.
+  * In the MySQL for PCF tile configuration settings, create a service plan with name `100mb` and persistent disk of 100 MB.
+  * Back up the existing broker database, following the steps in the [Back Up Your MySQL for PCF v1.x Instance](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html#backup) section of the [Migrating a Database to MySQL for PCF v2](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html) topic in the [MySQL for PCF documentation](https://docs.pivotal.io/p-mysql/2-0/index.html).
+  * Using the Cloud Foundry Command Line Interface tool (cf CLI), target the `system` org and the `p-spring-cloud-services` space: `cf target -o system -s p-spring-cloud-services`
+  * Using the cf CLI, update the broker's MySQL for PCF service instance to the new `100mb` plan: `cf update-service spring-cloud-broker-db -p 100mb`
+  * Re-run the Spring Cloud Services post-deploy errands.
+* A Config Server service instance which has a configuration source consisting of a Git repository reached via SSH may fail to start, will report a status of `DOWN` on its `health` endpoint (provided by Spring Boot Actuator), and will report on its dashboard that it "cannot initialize using the configuration that has been provided". The backing application logs for the service instance may contain the phrases `reject HostKey` or `ssh protocol is not supported`.
+<br/> <br/>
+If you have upgraded Spring Cloud Services to version 1.4.0 but have a Config Server service instance which accesses a Git repository via SSH and has not yet been upgraded to the latest version, do not upgrade the service instance at this time. If you have such a service instance and it has been upgraded, follow the below steps to enable the Config Server to start (this will not correct the status given on the `health` endpoint or the dashboard message).
+  * Locate the backing application for the service instance (see the [Service Instance Management](/spring-cloud-services/service-broker-and-instances.html#service-instance-management) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic).
+  * Run `cf env [APPNAME]`, where `APPNAME` is the name of the backing application. From the output, copy the value of the `SPRING_APPLICATION_JSON` environment variable.
+  * Within the `spring.cloud.config.server.git` object for the relevant Git configuration source, add a property `strictHostKeyChecking` with value `false`. Use `cf set-env` to set the new environment variable value: `cf set-env config-xxx-xxx-xxx SPRING_APPLICATION_JSON '{"spring":{"cloud":{"config":{"server":{"git":{"strictHostKeyChecking":false, "uri:"...", "privateKey":"...", ...}'`
+  * Restage the backing application.
+* Spring Cloud Services is affected by an [issue in Spring Boot version 1.5.3](https://github.com/spring-projects/spring-boot/issues/9079) and is not compatible with that version. To be compatible with this release of Spring Cloud Services, client applications should use Spring Boot versions 1.5.0--1.5.2 or 1.5.4 and later.
+* A Config Server service instance which has a configuration source consisting of a Git repository defined using placeholders (see the Git [Placeholders in Repository URIs](/spring-cloud-services/common/config-server/configuring-backends.html#git-placeholders-in-repository-uris) section of the [Configuring Backends](/spring-cloud-services/configuring-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation) always clones that repository's data to a location under the system temporary directory, which can be periodically emptied, causing a loss of cloned configuration data. By default, the Spring Cloud Services Config Server does not clone repository data under the temporary directory. To ensure that repository data is cloned elsewhere, do not use placeholders in a Git repository URI with this release.
+* A Config Server service instance which has a configuration source consisting of a Git repository defined using the `label` setting will lose that setting in a tile upgrade from 1.3.x to 1.4.0.
+* A client application using RabbitMQ and bound to a Circuit Breaker Dashboard service instance may fail to start up. This is due to an issue in the Spring Cloud Stream RabbitMQ binder. The issue is resolved in the binder's version 1.2.1; this release of Spring Cloud Services depends on Spring Cloud OSS Dalston.RELEASE, which includes the binder's version 1.2.0.
+<br/> <br/>
+If you wish to use RabbitMQ with a Circuit Breaker Dashboard service instance, you must manually override either the version of the Spring Cloud Stream RabbitMQ binder used by your application or the version of the Spring Cloud Maven BOM used by your application (the 1.2.1 release of the binder is included in Spring Cloud OSS Dalston.SR1).
 <br/> <br/>
     Using Gradle:
 
     ```groovy
-    ext["spring-cloud-netflix.version"] = "1.0.4.RELEASE"
+    // Override managed version of Spring Cloud Stream RabbitMQ binder
+    compile ("org.springframework.cloud:spring-cloud-stream-binder-rabbit:1.2.1.RELEASE")
+
+    // Override version of OSS Spring Cloud
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR1"
+        }
+    }
     ```
 
     Using Maven:
 
     ```xml
-    <properties>
-        <!-- override the managed versions of Spring Cloud Netflix dependencies -->
-        <spring-cloud-netflix.version>1.0.4.RELEASE</spring-cloud-netflix.version>
-    </properties>
+        <!-- Override managed version of Spring Cloud Stream RabbitMQ binder -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+            <version>1.2.1.RELEASE</version>
+        </dependency>
+
+        <!-- Override version of OSS Spring Cloud -->
+        <dependencyManagement>
+          <dependencies>
+              <dependency>
+                  <groupId>org.springframework.cloud</groupId>
+                  <artifactId>spring-cloud-dependencies</artifactId>
+                  <version>Dalston.SR1</version>
+                  <type>pom</type>
+                  <scope>import</scope>
+              </dependency>
+          </dependencies>
+        </dependencyManagement>
     ```

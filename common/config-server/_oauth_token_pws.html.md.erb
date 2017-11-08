@@ -1,0 +1,50 @@
+When the Config Server has been configured to encrypt values, you can make a POST request to the `/encrypt` endpoint, including the property value in the request. To do this, you will need the binding credentials of an application that is bound to the service instance. 
+
+<p class='note'><strong>Note</strong>: The following procedure uses the <a href="https://stedolan.github.io/jq/">jq</a> command-line JSON processing tool.</p>
+
+Run `cf env`, giving the name of an application that is bound to the service instance:
+
+<pre class="terminal">
+$ cf services
+Getting services in org myorg / space development as user@example.com...
+OK
+
+name             service           plan        bound apps   last operation
+config-server    p-config-server   standard    cook         create succeeded
+
+$ cf env cook
+Getting env variables for app cook in org myorg / space development as user@example.com...
+OK
+
+System-Provided:
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.run.pivotal.io/oauth/token",
+     "client_id": "p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73",
+     "client_secret": "rU7dMUw6bQjR",
+     "uri": "https://config-629f5587-41f5-4257-a521-3582b0d4ca7b.cfapps.io"
+    },
+[...]
+</pre>
+
+Then run the following Bash script, which fetches a token and uses the token to access an endpoint on a service instance backing application:
+
+<pre>
+<code>
+TOKEN=$(curl -k ACCESS_TOKEN_URI -u CLIENT_ID:CLIENT_SECRET -d
+grant_type=client_credentials | jq -r .access_token); curl -k -H
+"Authorization: bearer $TOKEN" -H "Accept: application/json"
+URI/encrypt -d 'VALUE'
+</code>
+</pre>
+
+In this script, replace the following placeholders using values from the `cf env` command above:
+
+* `ACCESS_TOKEN_URI` with the value of `credentials.access_token_uri`
+* `CLIENT_ID` with the value of `credentials.client_id`
+* `CLIENT_SECRET` with the value of `credentials.client_secret`
+* `URI` with the value of `credentials.uri`
+* `VALUE` with the value to be encrypted

@@ -1,0 +1,34 @@
+---
+title: Cloud Foundry CLI Plugin
+owner: Spring Cloud Services
+---
+
+## Overview
+
+The Spring Cloud Services plugin for the Cloud Foundry Command Line Interface tool (cf CLI) adds commands for interacting with Spring Cloud Services service instances. It provides easy access to functionality relating to the Config Server and Service Registry; for example, it can be used to send values to a Config Server service instance for encryption or to list all applications registered with a Service Registry service instance.
+
+The Spring Cloud Services cf CLI plugin is open-source software released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license. From the plugin's [homepage on GitHub](https://github.com/pivotal-cf/spring-cloud-services-cli-plugin), you can raise issues or submit contributions for consideration by the plugin's authors.
+
+## Installation
+
+To install the plugin, add the `CF-Community` repository to the cf CLI's list of plugin repositories:
+
+<pre class="terminal">
+$ cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
+
+
+OK
+https://plugins.cloudfoundry.org/list added as 'CF-Community'
+</pre>
+
+Then install the `Spring Cloud Services` plugin (`SCSPlugin`) using the `cf install-plugin` command:
+
+<pre class="terminal">
+$ cf install-plugin -r CF-Community "Spring Cloud Services"
+...
+Plugin SCSPlugin v1.0.0 successfully installed.
+</pre>
+ 
+## Documentation
+
+Documentation for the Spring Cloud Services cf CLI plugin's commands is available at the plugin's homepage on GitHub. See the [Spring Cloud Services CF CLI Plugin Docs](https://github.com/pivotal-cf/spring-cloud-services-cli-plugin/blob/master/docs/cli.md) page.

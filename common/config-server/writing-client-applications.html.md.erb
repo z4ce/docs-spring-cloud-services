@@ -1,0 +1,425 @@
+---
+title: Writing Client Applications
+owner: Spring Cloud Services
+---
+
+<strong><%= modified_date %></strong>
+
+_Refer to the <a href="https://github.com/spring-cloud-services-samples/cook/tree/1.4.x">"Cook" sample application</a> to follow along with the code in this topic._
+
+To use a Spring Boot application as a client for a Config Server instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#config-server">Config Server</a> as well.
+
+<p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud&reg; Config Client starter will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
+
+<% if vars.product_name == 'PCF' %>
+ <%= partial vars.scs_cs_self_signed_ssl %>
+<% end %>
+
+## <a id="use-configuration-values"></a>Use Configuration Values
+
+When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/background-information.html#configuration-clients">Configuration Clients</a> section of the <a href="/spring-cloud-services/config-server/background-information.html">Background Information</a> topic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
+
+In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
+
+```yml
+spring:
+  application:
+    name: cook
+```
+
+This application will use a path with the application name `cook`, so the Config Server will look in its configuration source for files whose names begin with `cook`, and return configuration properties from those files.
+
+Now you can (for example) inject a configuration property value using the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html">`@Value`</a> annotation. <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Menu.java">The Menu class</a> reads the value of `special` from the `cook.special` configuration property.
+
+```java
+@RefreshScope
+@Component
+public class Menu {
+
+  @Value("${cook.special}")
+  String special;
+
+  //...
+
+  public String getSpecial() {
+    return special;
+  }
+
+  //...
+
+}
+```
+
+<a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Application.java">The `Application` class</a> is a [`@RestController`](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html). It has an injected `menu` and returns the `special` (the value of which will be supplied by the Config Server) in its `restaurant()` method, which it maps to `/restaurant`.
+
+```java
+@RestController
+@SpringBootApplication
+public class Application {
+
+    @Autowired
+    private Menu menu;
+
+    @RequestMapping("/restaurant")
+    public String restaurant() {
+      return String.format("Today's special is: %s", menu.getSpecial());
+    }
+    //...
+```
+
+## <a id="vary-configurations-based-on-profiles"></a>Vary Configurations Based on Profiles
+
+You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the [The Config Server](/spring-cloud-services/config-server/background-information.html#the-config-server) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic.)
+
+The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/manifest.yml">`manifest.yml`</a>.
+
+```yml
+applications:
+  - name: cook
+    host: cookie
+    services:
+      - config-server
+    env:
+      SPRING_PROFILES_ACTIVE: production
+```
+
+The sample configuration source <a href="https://github.com/spring-cloud-services-samples/cook-config">cook-config</a> contains the files `cook.properties` and `cook-production.properties`. With the active profile set to `production` as in `manifest.yml` above, the application will make a request of the Config Server using the path `/cook/production`, and the Config Server will return properties from both `cook-production.properties` (the profile-specific configuration) and `cook.properties` (the default configuration); for example:
+
+```
+{
+  "name":"cook",
+  "profiles":[
+    "production"
+  ],
+  "label":"master",
+  "propertySources":[
+    {
+      "name":"https://github.com/spring-cloud-services-samples/cook-config/cook-production.properties",
+      "source":
+        {
+          "cook.special":"Cake a la mode"
+        }
+    },
+    {
+      "name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties",
+      "source":
+        {
+          "cook.special":"Pickled Cactus"
+        }
+    }
+  ]
+}
+```
+
+As noted in the [Configuration Clients](/spring-cloud-services/config-server/background-information.html#configuration-clients) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
+
+## <a id="view-client-application-configuration"></a>View Client Application Configuration
+
+<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a> adds an `env` endpoint to the application and maps it to `/env`. This endpoint displays the application's profiles and property sources from the Spring ```ConfigurableEnvironment```. (See ["Endpoints"](http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html) in the "Spring Boot Actuator" section of the Spring Boot Reference Guide.) In the case of an application which is bound to a Config Server service instance, `env` will display properties provided by the instance.
+
+To use Actuator, you must add the `spring-boot-starter-actuator` dependency to your project. If using Maven, <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/pom.xml#L63-L66">add to `pom.xml`</a>:
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+If using Gradle, <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/build.gradle#L39">add to `build.gradle`</a>:
+
+```groovy
+compile("org.springframework.boot:spring-boot-starter-actuator")
+```
+
+You can now visit `/env` to see the application environment's properties (the following shows an excerpt of an example response):
+
+<pre class="terminal">
+$ curl http://cookie.apps.wise.com/env
+{
+  "profiles":[
+    "dev","cloud"
+  ],
+  "configService:https://github.com/spring-cloud-services-samples/cook-config/cook.properties":{
+    "cook.special":"Pickled Cactus"
+  },
+  "vcap":{
+    "vcap.application.limits.mem":"512",
+    "vcap.application.application_uris":"cookie.apps.wise.com",
+    "vcap.services.config-server.name":"config-server",
+    "vcap.application.uris":"cookie.apps.wise.com",
+    "vcap.application.application_version":"179de3f9-38b6-4939-bff5-41a14ce4e700",
+    "vcap.services.config-server.tags[0]":"configuration",
+    "vcap.application.space_name":"development",
+    "vcap.services.config-server.plan":"standard",
+//...
+</pre>
+
+## <a id="refresh-client-application-configuration"></a>Refresh Client Application Configuration
+
+Spring Boot Actuator also adds a `refresh` endpoint to the application. This endpoint is mapped to `/refresh`, and a POST request to the `refresh` endpoint refreshes any beans which are annotated with `@RefreshScope`. You can thus use `@RefreshScope` to refresh properties which were initialized with values provided by the Config Server.
+
+The `Menu.java` class is <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Menu.java#L4-L12">marked as a `@Component` and also annotated with `@RefreshScope`</a>.
+
+```java
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.stereotype.Component;
+
+@RefreshScope
+@Component
+public class Menu {
+
+  @Value("${cook.special}")
+  String special;
+  //...
+```
+
+This means that after you change values in the configuration source repository, you can update the `special` on the `Application` class's `menu` with a refresh event triggered on the application:
+
+<pre class="terminal">
+$ curl http://cookie.apps.wise.com/restaurant
+Today's special is: Pickled Cactus
+
+$ git commit -am "new special"
+[master 3c9ff23] new special
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git push
+
+$ curl -X POST http://cookie.apps.wise.com/refresh
+["cook.special"]
+
+$ curl http://cookie.apps.wise.com/restaurant
+Today's special is: Birdfeather Tea
+</pre>
+
+## <a id="use-client-side-decryption"></a>Use Client-Side Decryption
+
+On the Config Server, the decryption features are disabled, so encrypted property values from a configuration source are delivered to client applications unmodified. You can use the decryption features of Spring Cloud Config Client to perform client-side decryption of encrypted values.
+
+To use the decryption features in a client application, you must use a Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. These files are contained in the Cloud Foundry Java buildpack from version 3.7.1.
+
+<p class="tip">If you cannot use version 3.7.1 or later, you can add the JCE Unlimited Strength policy files to an earlier version of the Cloud Foundry Java buildpack. Fork the <a href="https://github.com/cloudfoundry/java-buildpack">buildpack on GitHub</a>, then download the policy files from Oracle and place them in the buildpack's <code>resources/open_jdk_jre/lib/security</code> directory. Follow the instructions in the <a href="http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html">Managing Custom Buildpacks</a> topic to add this buildpack to Pivotal Cloud Foundry. Be sure that it has the lowest position of all enabled Java buildpacks.</p>
+
+You must also include [Spring Security RSA](https://github.com/dsyer/spring-security-rsa) as a dependency.
+
+If using Maven, [include in `pom.xml`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/pom.xml#L79-L84):
+
+```xml
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-rsa</artifactId>
+    </dependency>
+```
+
+If using Gradle, [include in `build.gradle`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/build.gradle#L41):
+
+```groovy
+    compile("org.springframework.security:spring-security-rsa")
+```
+
+Encrypted values must be prefixed with the string `{cipher}`. If using YAML, enclose the entire value in single quotes, as in `'{cipher}vALuE'`; if using a properties file, do not use quotes. The [configuration source for the Cook application](https://github.com/spring-cloud-services-samples/cook-config) has a [`secretMenu` property](https://github.com/spring-cloud-services-samples/cook-config/blob/master/cook-encryption.properties#L2) in its `cook-encryption.properties`:
+
+```
+secretMenu={cipher}AQA90Q3GIRAMu6ToMqwS++En2iFzMXIWX99G66yaZFRHrQNq64CntqOzWymd3xE7uJpZK
+Qc9XBIkfyRz/HUGhXRdf3KZQ9bqclwmR5vkiLmN9DHlAxS+6biT+7f8ptKo3fzQ0gGOBaR4kTnWLBxmVaIkjq1Qz
+e4aIgsgUWuhbEek+3znkH9+Mc+5zNPvwN8hhgDMDVzgZLB+4YnvWJAq3Au4wEevakAHHxVY0mXcxj1Ro+H+ZelIz
+fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXPFSFkhNek
+w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
+```
+
+Put the key on the client application classpath. You can either add the keystore to the buildpack's `resources/open_jdk_jre/lib/security` directory (as described above for the JCE policy files) or include it with the source for the application. In the Cook application, the key is placed in [`src/main/resources`](https://github.com/spring-cloud-services-samples/cook/tree/1.4.x/src/main/resources).
+
+```
+cook
+└── src
+    └── main
+        └── resources
+            ├── application.yml
+            ├── bootstrap.yml
+            └── server.jks
+```
+
+<p class='note'><strong>Important</strong>: Cook is an example application, and the key is packaged with the application source for example purposes. If at all possible, use the buildpack for keystore distribution.</p>
+
+Specify the key location and credentials in `bootstrap.properties` or [`bootstrap.yml`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L7-L12) using the `encrypt.keyStore` properties:
+
+```yml
+encrypt:
+  keyStore:
+    location: classpath:/server.jks
+    password: letmein
+    alias: mytestkey
+    secret: changeme
+```
+
+The Menu class has [a String property `secretMenu`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Menu.java#L14-L23).
+
+```java
+  @Value("${secretMenu}")
+  String secretMenu;
+
+  //...
+
+  public String getSecretMenu() {
+    return secretMenu;
+  }
+```
+
+A [default value for `secretMenu`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L5) is in `bootstrap.yml`:
+
+```yml
+secretMenu: Animal Crackers
+```
+
+In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
+
+```java
+    @RequestMapping("/restaurant/secret-menu")
+    public String secretMenu() {
+      return menu.getSecretMenu();
+    }
+```
+
+After making the key available to the application and installing the JCE policy files in the Java buildpack, you can cause the Config Server to serve properties from the `cook-encryption.properties` file by activating the `encryption` profile on the application, e.g. by running `cf set-env` to set the `SPRING_PROFILES_ACTIVE` environment variable:
+
+<pre class="terminal">
+$ cf set-env cook SPRING_PROFILES_ACTIVE dev,encryption
+Setting env variable 'SPRING_PROFILES_ACTIVE' to 'dev,encryption' for app cook in org myorg / space development as user...
+OK
+TIP: Use 'cf restage' to ensure your env variable changes take effect
+
+$ cf restage cook
+</pre>
+
+The application will decrypt the encrypted property after receiving it from the Config Server. You can view the property value by visiting `/restaurant/secret-menu` on the application.
+
+## <a id="use-a-hashicorp-vault-server"></a>Use a HashiCorp Vault Server
+
+You can configure the Config Server to use a HashiCorp Vault server as a configuration source, as described in the [Configuring with Vault](/spring-cloud-services/config-server/configuring-with-vault.html) topic. To consume configuration from the Vault server via the service instance, your client application must be given a Vault token. You can give the token to an application by setting the `SPRING_CLOUD_CONFIG_TOKEN` environment variable on the application. The Spring Cloud Services Connectors for Config Server will automatically renew the application's token for as long as the application is running.
+
+<p class='note'><strong>Important</strong>: If the application is entirely stopped (i.e., no instances continue to run) and its Vault token expires, you will need to create a new token for the application and re-set the <code>SPRING_CLOUD_CONFIG_TOKEN</code> environment variable.</p>
+
+To generate a token for use in the application, you can run the `vault token-create` command, providing a Time To Live (TTL) that is long enough for the application to be restaged after you have set the environment variable. The following command creates a token with a TTL of one hour:
+
+<pre class="terminal">
+$ vault token-create -ttl="1h"
+</pre>
+
+After generating the token, set the environment variable on your client application and then restage the application for the environment variable setting to take effect:
+
+<pre class="terminal">
+$ cf set-env cook SPRING_CLOUD_CONFIG_TOKEN c3432ef5-6a78-8673-ea23-5528c26849e4
+Setting env variable 'SPRING_CLOUD_CONFIG_TOKEN' to 'c3432ef5-6a78-8673-ea23-5528c26849e4' for app cook in org myorg / space development as user...
+OK
+TIP: Use 'cf restage cook' to ensure your env variable changes take effect
+
+$ cf restage cook
+</pre>
+
+The Spring Cloud Services Connectors for Config Server renew the application token for as long as the application continues to run. For more information about the token renewal performed by the connectors, see the [HashiCorp Vault Token Renewal](/spring-cloud-services/config-server/connectors.html#hashicorp-vault-token-renewal) section of the [Spring Cloud Connectors](/spring-cloud-services/config-server/connectors.html) topic.
+
+### <a id="renew-vault-token-manually"></a>Renew Vault Token Manually
+
+After creating a Vault token for an application, you can renew the token manually using the Config Server service instance bound to the application.
+
+<p class='note'><strong>Note</strong>: The following procedure uses the <a href="https://stedolan.github.io/jq/">jq</a> command-line JSON processing tool.</p>
+
+Run `cf env`, giving the name of an application that is bound to the service instance:
+
+<pre class="terminal">
+$ cf services
+Getting services in org myorg / space development as admin...
+OK
+
+name             service           plan        bound apps   last operation
+config-server    p-config-server   standard    vault-app    create succeeded
+
+$ cf env vault-app
+Getting env variables for app vault-app in org myorg / space development as admin...
+OK
+
+System-Provided:
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "access_token_uri": "https://p-spring-cloud-services.uaa.cf.wise.com/oauth/token",
+     "client_id": "p-config-server-876cd13b-1564-4a9a-9d44-c7c8a6257b73",
+     "client_secret": "rU7dMUw6bQjR",
+     "uri": "https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com"
+    },
+[...]
+</pre>
+
+Then create a Bash script that accesses the Vault token renewal endpoint on the service instance backing application. In the following two commands:
+
+```sh
+TOKEN=$(curl -k [ACCESS_TOKEN_URI] -u [CLIENT_ID]:[CLIENT_SECRET] -d
+grant_type=client_credentials | jq -r .access_token); curl -H "Authorization: bearer
+$TOKEN" -H "X-VAULT-Token: [VAULT_TOKEN]" -H "Content-Type: application/json" -X POST
+[URI]/vault/v1/auth/token/renew-self -d '{"increment": [INTERVAL]}'
+```
+
+Replace the following placeholders using values from the `cf env` command above:
+
+* `[ACCESS_TOKEN_URI]` with the value of `credentials.access_token_uri`
+* `[CLIENT_ID]` with the value of `credentials.client_id`
+* `[CLIENT_SECRET]` with the value of `credentials.client_secret`
+* `[URI]` with the value of `credentials.uri`
+
+Replace the following placeholders with the relevant values:
+
+* `[VAULT_TOKEN]` with the Vault token string
+* `[INTERVAL]` with the number of seconds to set as the Vault token's Time To Live (TTL)
+
+After renewing the token, you can view its TTL by looking it up using the Vault command line. Run `vault token-lookup [TOKEN]`, replacing `[TOKEN]` with the Vault token string:
+
+<pre class="terminal">
+$ vault token-lookup 72ec7ca0-de41-b2dc-8fe4-d74c4c9a4e75
+Key                  Value
+---                  -----
+accessor             436db91b-6bfb-9eec-7bfb-913260488ce8
+creation_time        1493360487
+creation_ttl         3600
+display_name         token
+explicit_max_ttl     0
+id                   72ec7ca0-de41-b2dc-8fe4-d74c4c9a4e75
+last_renewal_time    1493360718
+meta                 <nil>
+num_uses             0
+orphan               false
+path                 auth/token/create
+policies             [root]
+renewable            true
+ttl                  997
+</pre>
+
+## <a id="disable-http-basic-auth"></a>Disable HTTP Basic Authentication
+
+The Spring Cloud Config Client starter has a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>. Unless your application has other security configuration, this will cause all application endpoints to be protected by HTTP Basic authentication.
+
+If you do not yet want to address application security, you can turn off Basic authentication by setting the `security.basic.enabled` property to `false`. In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/application.yml">`application.yml`</a> or `bootstrap.yml`:
+
+```yml
+security:
+  basic:
+    enabled: false
+```
+
+You might make this setting specific to a profile (such as the `dev` profile if you want Basic authentication disabled only for development):
+
+```yml
+---
+spring:
+  profiles: dev
+
+security:
+  basic:
+    enabled: false
+```
+
+For more information, see ["Security" in the Spring Boot Reference Guide](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security).
+
+<p class='note'><strong>Note</strong>: Because of the Spring Security dependency, HTTPS Basic authentication will also be enabled for Spring Boot Actuator endpoints. If you wish to disable that as well, you must also set the <code>management.security.enabled</code> property to <code>false</code>. See <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-customizing-management-server-port">"Customizing the management server port" in the Spring Boot Reference Guide</a>.</p>
