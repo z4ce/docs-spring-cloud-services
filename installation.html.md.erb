@@ -25,6 +25,13 @@ Make sure that you have or have completed all products and requirements listed i
 
     The **Service instance limit** setting sets the maximum number of service instances that the Spring Cloud Services service broker will allow to be provisioned (the default value is 100). This setting's value is also used to determine the memory quota for the org in which service instances are deployed; that org's quota will be equal to 1.5G times the configured service instance limit. The **App push timeout** setting is the number of minutes the broker allows for a service instance backing application to start. The **Buildpack** setting is the name of the Java buildpack that the Spring Cloud Services service broker will use to provision service instances (if this setting is left empty, the broker will use the default Java buildpack to provision service instances). The **Do not validate that SSL certificates are properly configured** checkbox, if checked, disables the validation that Spring Cloud Services performs by default on the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate.
 
+    <%= image_tag("./images/installation/service-settings.png") %>
+
+    The **Persistence store service** and **Persistence store service plan** settings set the service and service plan for the service broker's MySQL database. This must be a service that provides a MySQL-compatible database. The **Message bus service** and **Message bus service plan** settings set the service and service plan for the broker's message bus.
+<br /><br />These settings should be configured only during the Spring Cloud Services tile installation process. If you have already completed the tile installation process, do not alter these settings.
+
+    <p class="note warning"><strong>WARNING: </strong> Configuring the service broker's dependent services after installing the tile can cause corruption or loss of the broker's service instance data.</p>
+
 <%# removing for now
 1. If the **Stemcell** tab is highlighted in orange, click it. Download the correct stemcell from [Pivotal Network](http://network.pivotal.io) and click **Import Stemcell** to import it.
 
