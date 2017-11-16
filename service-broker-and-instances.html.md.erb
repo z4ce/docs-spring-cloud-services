@@ -301,6 +301,36 @@ You can click the **Instance Name** of a listed service instance to view the ins
 
 For more visibility into how Spring Cloud Services service instances and the broker applications are behaving, or for troubleshooting purposes, you may wish to access those applications directly. See below for information about accessing their output.
 
+### <a id="checking-broker-application-health"></a>Checking Broker Application Health
+
+The service broker and worker applications use Cloud Foundry's HTTP health check. The Cloud Foundry Cloud Controller accesses a `/healthcheck` endpoint on the broker and worker applications. This endpoint is indicative of overall health of the service broker, including the service broker application, the worker application, and the MySQL database and RabbitMQ server used to store service instance information and facilitate communication between the applications.
+
+If the broker topology is in a healthy state, the `/healthcheck` endpoint responds with HTTP status 200 and the following JSON output:
+
+```
+{
+  "status": "UP"
+}
+```
+
+If the broker applications are functional but the broker cannot verify the health of one or both of the dependent services, the endpoint may respond with the following JSON output:
+
+```
+{
+  "status": "UNKNOWN"
+}
+```
+
+If the broker topology is in a unhealthy state, the `/healthcheck` endpoint responds with HTTP status 503 and the following JSON output:
+
+```
+{
+  "status": "DOWN"
+}
+```
+
+The JSON response from the `/healthcheck` endpoint on the service broker Spring Boot application can be used with monitoring tools to ensure the broker's health. The Cloud Controller uses only the HTTP status code to determine the broker's health.
+
 ### <a id="broker-application-logs"></a>Read Broker Application Logs
 
 To access logs for the SB and Worker applications, target the "system" org and its "p-spring-cloud-services" space:
