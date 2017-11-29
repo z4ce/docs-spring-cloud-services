@@ -35,9 +35,9 @@ A release of the Spring Cloud Services client dependencies follows a release of 
 
 ### <a id="spring-cloud-oss-releases"></a>Spring Cloud OSS Releases
 
-Each Spring Cloud major release is named after a London Underground station (as in "Spring Cloud Camden"). Minor releases are known as service releases and are designated `SR[n]` (as in "Spring Cloud Camden.SR7"), where `[n]` is the minor release number.
+Each Spring Cloud major release is named after a London Underground station (as in "Spring Cloud Camden.RELEASE"). Minor releases are known as service releases and are designated `SR[n]` (as in "Spring Cloud Camden.SR7"), where `[n]` is the minor release number.
 
-A given major release of Spring Cloud supports the current Spring Boot minor release and one Spring Boot minor release following. When a new Spring Boot major release is published, it will be supported only in the next major release of Spring Cloud.
+A given major release of Spring Cloud supports the current Spring Boot minor release and one Spring Boot minor release following. When a new Spring Boot major release is published, it will be supported only in the next major release of Spring Cloud. (The Spring Boot 2.0 release follows the Spring Boot 1.5 release; there was no 1.6 release.)
 
 | Spring Cloud Release | Supported Spring Boot Release |
 |----------------------|-------------------------------|
@@ -46,7 +46,7 @@ A given major release of Spring Cloud supports the current Spring Boot minor rel
 | Edgware              | 1.5                           |
 | Finchley             | 2.0                           |
 
-### <a id="spring-cloud-services-dependencies-releases"></a>Spring Cloud Services Dependencies Releases
+### <a id="spring-cloud-services-client-releases"></a>Spring Cloud Services Client Releases
 
 The Spring Cloud Services connectors, as well as the starters dependencies that include the connectors, are versioned and released independently of the Spring Cloud Services tile. The connectors and starters are based on the open-source Spring Cloud client libraries for Config Server, Netflix Eureka, and Netflix Hystrix, and have a new release to follow each Spring Cloud release that affects these components.
 
@@ -67,7 +67,7 @@ A given minor release of the tile includes server-side components from a particu
 
 | Spring Cloud Services Tile Release | Underlying Spring Cloud Release |
 |------------------------------------|---------------------------------|
-| 1.1.0                              | Brixton.SR1                     |
-| 1.2.0                              | Brixton.SR5                     |
-| 1.3.0                              | Camden.SR2                      |
-| 1.4.0                              | Dalston.RELEASE                 |
+| 1.1.x                              | Brixton                         |
+| 1.2.x                              | Brixton                         |
+| 1.3.x                              | Camden                          |
+| 1.4.x                              | Dalston                         |
