@@ -28,12 +28,12 @@ If the default Java buildpack is older than version 3.8, you can download a newe
 
 If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 3.8 or later, you must specify an alternate buildpack that is at version 3.8 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
 
-## <a id="product-requirements"></a>Product Requirements
+## <a id="service-requirements"></a>Service Requirements
 
-Spring Cloud Services requires the following Pivotal Cloud Foundry products to be installed:
+Spring Cloud Services requires the following services to be installed:
 
-* [MySQL](https://network.pivotal.io/products/p-mysql)
-* [RabbitMQ](https://network.pivotal.io/products/pivotal-rabbitmq-service)
+* A MySQL service (Pivotal recommends [MySQL for PCF](https://network.pivotal.io/products/p-mysql) or [MySQL for PCF v2](https://network.pivotal.io/products/p-mysql) for use with Spring Cloud Services)
+* [RabbitMQ for PCF](https://network.pivotal.io/products/pivotal-rabbitmq-service)
 
 If they are not already installed, you can follow the steps listed in the <a href="/spring-cloud-services/installation.html">Installation</a> topic to install them along with Spring Cloud Services.
 
