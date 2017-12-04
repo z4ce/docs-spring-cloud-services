@@ -155,13 +155,13 @@ The parameters used to configure SSH for a Config Server configuration source's 
 To create a Config Server service instance that uses SSH to access a configuration source, allowing for host key verification, run:
 
 <pre class="terminal">
-$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "hostKey": "AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "hostKey": "AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN EXAMPLE RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
 </pre>
 
 To create a Config Server service instance that uses SSH to access a configuration source, without host key verification, run:
 
 <pre class="terminal">
-$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+$ cf create-service p-config-server standard config-server -c '{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "privateKey": "-----BEGIN EXAMPLE RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
 </pre>
 
 ### <a id="multiple-repositories"></a>Multiple Repositories
