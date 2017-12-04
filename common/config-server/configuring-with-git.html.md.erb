@@ -118,13 +118,13 @@ The parameters used to configure SSH for a Config Server configuration source's 
 To configure a Config Server service instance that uses SSH to access a configuration source, allowing for host key verification, use the following JSON object:
 
 ```
-'{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "hostKey": "AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+'{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "hostKey": "AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+...", "hostKeyAlgorithm": "ssh-rsa", "privateKey": "-----BEGIN EXAMPLE RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
 ```
 
 To configure a Config Server service instance that uses SSH to access a configuration source, without host key verification, use the following JSON object:
 
 ```
-'{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
+'{"git": { "uri": "ssh://git@github.com/spring-cloud-services-samples/cook.git", "privateKey": "-----BEGIN EXAMPLE RSA PRIVATE KEY-----\nMIIJKQIB..."} }'
 ```
 
 Host and private keys are masked in the Config Server dashboard.
