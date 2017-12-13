@@ -39,6 +39,13 @@ See below for information about configuring a Config Server service instance to 
 
 Parameters used to configure configuration sources are part of a JSON array called `composite`. The `composite` array can contain one or more `git` JSON objects, each of which contains settings for a Git repository, and a `vault` object, which contains settings for a Vault server. For information about configuring a Git configuration source, see the [Configuring with Git](/spring-cloud-services/config-server/configuring-with-git.html) topic. For information about configuring a Vault configuration source, see the [Configuring with Vault](/spring-cloud-services/config-server/configuring-with-vault.html) topic.
 
+In a composite backend, a Git configuration source can use the additional properties described below.
+
+| Parameter                          | Function                                                                               |
+|------------------------------------|----------------------------------------------------------------------------------------|
+| <code>git.pattern</code>           | A pattern for the names of applications that store configuration in the repository     |
+| <code>git.searchPaths</code>       | A pattern used to search for configuration-containing subdirectories in the repository |
+
 Configuration properties from individual backends are given precedence based on the order in which they are provided to the Config Server. A backend specified later in the `composite` array is searched after backends specified earlier in the array.
 
 To configure a Config Server service instance to use a composite backend comprising two Git repositories and a Vault server, you might use the following JSON object:
@@ -48,12 +55,14 @@ To configure a Config Server service instance to use a composite backend compris
     "composite": [
         {
             "git": {
-                "uri": "https://github.com/spring-cloud-services-samples/cook-config"
+                "uri": "https://github.com/spring-cloud-services-samples/cook-config",
+                "pattern": "cook*"
             }
         },
         {
             "git": {
-                "uri": "https://github.com/spring-cloud-samples/config-repo"
+                "uri": "https://github.com/spring-cloud-samples/config-repo",
+                "searchPaths": "specialConfig"
             }
         },
         {
