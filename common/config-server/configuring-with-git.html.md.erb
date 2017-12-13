@@ -23,7 +23,6 @@ General parameters used to configure the Config Server's default configuration s
 |--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | <code>uri</code>               | The URI (<code>http://</code>, <code>https://</code>, or <code>ssh://</code>) of a repository that can be used as the default configuration source      |
 | <code>label</code>             | The default "label" that can be used with the default repository if a request is received without a label (e.g., if the <code>spring.cloud.config.label</code> property is not set in a client application) |
-| <code>searchPaths</code>       | A pattern used to search for configuration-containing subdirectories in the default repository                                                          |
 | <code>cloneOnStart</code>      | Whether the Config Server should clone the default repository when it starts up (by default, the Config Server will only clone the repository when configuration is first requested from the repository). Valid values are `true` and `false` |
 | <code>username</code>          | The username used to access the default repository (if protected by HTTP Basic authentication)                                                          |
 | <code>password</code>          | The password used to access the default repository (if protected by HTTP Basic authentication)                                                          |
