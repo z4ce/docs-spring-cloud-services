@@ -18,167 +18,35 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
-## <a id="1-4-0-migrating-from-1-3-x"></a>Migrating from 1.3.x
+## <a id="1-5-0-migrating-from-1-4-x"></a>Migrating from 1.4.x
+
+If you are upgrading from a 1.4.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
+
+## <a id="1-5-0-migrating-from-1-3-x"></a>Migrating from 1.3.x
 
 If you are upgrading from a 1.3.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-## <a id="1-4-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
+## <a id="1-5-0-migrating-from-1-2-x"></a>Migrating from 1.2.x
 
 If you are upgrading from a 1.2.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-## <a id="1-4-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
+## <a id="1-5-0-migrating-from-1-1-x"></a>Migrating from 1.1.x
 
 If you are upgrading from a 1.1.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
 
-## <a id="1-4-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
+## <a id="1-5-0-migrating-from-1-0-x"></a>Migrating from 1.0.x
 
-The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.3.x, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.3.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-3/common/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-3/common/client-dependencies.html">Client Dependencies</a>.
+The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.5.x, they are based on Spring Cloud Camden. To ensure compatibility of your client applications with Spring Cloud Services 1.5.x service instances, you must update your client applications to include the current dependencies and the Spring Boot and Spring Cloud Maven BOM dependencies. For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/common/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the current Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/common/client-dependencies.html">Client Dependencies</a>.
 
-After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.3.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
+After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.5.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
-## <a id="1-4-5"></a>1.4.5
+## <a id="1-5-0"></a>1.5.0
 
-**Release Date: 2nd November 2017**
-
-Enhancements included in this release:
-
-* The stemcell has been updated to the 3445 line of floating stemcells.
-
-## <a id="1-4-4"></a>1.4.4
-
-**Release Date: 21st September 2017**
+**Release Date: 22nd December 2017**
 
 Enhancements included in this release:
 
-* The Spring Cloud Services service broker has been made more resilient in cases of the RabbitMQ for PCF cluster being unavailable.
-* Troubleshooting of Spring Cloud Services service broker activity with the RabbitMQ for PCF service has been enhanced.
-
-Fixes included in this release:
-
-* Resolved an issue with Config Server's health check failing when the service instance was configured with a Git SSH backend.
-* Resolved an issue where an upgrade of the Spring Cloud Services tile resulted in Config Server instances not retaining the `label` configuration parameter.
-
-## <a id="1-4-3"></a>1.4.3
-
-**Release Date: 9th August 2017**
-
-Enhancements included in this release:
-
-* The Spring Cloud Services service broker has been upgraded to Spring Cloud Dalston.SR2.
-
-Fixes included in this release:
-
-* Fixed a Config Server issue where Git repository passwords in configuration shown on the dashboard of a service instance using a composite backend were not masked.
-
-## <a id="1-4-2"></a>1.4.2
-
-**Release Date: 31st July 2017**
-
-Enhancements included in this release:
-
-* The Spring Cloud Services "Broker Deployer" lifecycle errand has been made more resilient in cases where the service broker worker's Cloud Foundry user or UAA client already exists.
-* SSL certificate validation performed by the Spring Cloud Services "Broker Deployer" lifecycle errand is no longer case-sensitive.
-
-Fixes included in this release:
-
-* Fixed an issue with the "Broker Deployer" lifecycle errand where a missing route on the existing service broker application could cause the errand to fail.
-* Fixed an issue with the "Broker Deployer" lifecycle errand where the presence of existing dependent service instances during an upgrade could cause the errand to fail.
-
-## <a id="1-4-1"></a>1.4.1
-
-**Release Date: 7th July 2017**
-
-Enhancements included in this release:
-
-* Messages sent by Circuit Breaker Dashboard to its RabbitMQ service instance now have a Time To Live (TTL) set, to prevent overloading of the RabbitMQ queue.
-* The Spring Cloud Services service broker now can use a private domain to deploy service instance backing applications when no shared domains are available in the Elastic Runtime deployment. For more information, see the [Domain Requirements](/spring-cloud-services/prerequisites.html#domain-requirements) section of the [Prerequisites](/spring-cloud-services/prerequisites.html) topic.
-
-Fixes included in this release:
-
-* Fixed a Config Server issue which could prevent backing application startup and resulted in backing application log and dashboard errors when the service instance was configured to connect to a Git repository via SSH.
-
-Known issues in this release:
-
-* The "Broker Registrar" lifecyle errand fails during the tile upgrade process if the Spring Cloud Services service broker's MySQL for PCF service instance was created under a plan name other than `100mb` (the default name for the 100 MB plan). If the service broker for your existing installation of Spring Cloud Services has a MySQL for PCF service instance with a service plan name other than `100mb` and the tile upgrade process has failed, follow the below steps to migrate the existing database to a `100mb` plan and continue the upgrade process.
-  * In the MySQL for PCF tile configuration settings, create a service plan with name `100mb` and persistent disk of 100 MB.
-  * Back up the existing broker database, following the steps in the [Back Up Your MySQL for PCF v1.x Instance](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html#backup) section of the [Migrating a Database to MySQL for PCF v2](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html) topic in the [MySQL for PCF documentation](https://docs.pivotal.io/p-mysql/2-0/index.html).
-  * Using the Cloud Foundry Command Line Interface tool (cf CLI), target the `system` org and the `p-spring-cloud-services` space: `cf target -o system -s p-spring-cloud-services`
-  * Using the cf CLI, update the broker's MySQL for PCF service instance to the new `100mb` plan: `cf update-service spring-cloud-broker-db -p 100mb`
-  * Re-run the Spring Cloud Services post-deploy errands.
-    
-## <a id="1-4-0"></a>1.4.0
-
-**Release Date: 29th May 2017**
-
-<p class='note warning'><strong>WARNING</strong>: If you are using <a href="https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/trusted-system-certificates.html">Trusted System Certificates</a>, do not install or upgrade to Spring Cloud Services 1.4.0. See "Known issues" below.</p>
-<p class='note warning'><strong>WARNING</strong>: If you have upgraded to Spring Cloud Services version 1.4.0 but have a Config Server service instance which accesses a Git repository via SSH and has not yet been upgraded, do not upgrade the service instance at this time. See "Known issues" below.</p>
-
-Enhancements included in this release:
-
-* The Config Server now can use a HashiCorp Vault server as a configuration source, directly or through an HTTP or HTTPS proxy. For more information, see the [Vault Backend](/spring-cloud-services/config-server/configuring-backends.html#vault) section of the [Configuring Backend](/spring-cloud-services/config-server/configuring-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation. In order to use the Vault support in a client application, you must update your application's Spring Cloud Services client dependencies; see the [Client Dependencies](/spring-cloud-services/client-dependencies.html) topic.
-* The Config Server now can use a composite backend comprising one or more Git repositories and up to one HashiCorp Vault server. For more information, see the [Composite Backend](/spring-cloud-services/config-server/configuring-backends.html#composite) section of the [Configuring Backends](/spring-cloud-services/config-server/configuring-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
-* The Config Server's `/health` endpoint, provided by Spring Boot Actuator, now displays failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing this endpoint, see the [Access Actuator Endpoints](/spring-cloud-services/service-broker-and-instances.html#access-actuator-endpoints) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.
-* The Config Server's backing application now logs failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For information about accessing the backing application logs, see the [Read Backing Application Logs](/spring-cloud-services/service-broker-and-instances.html#backing-application-logs) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.
-* The Config Server dashboard now displays detailed failure information when the Config Server cannot use the provided configuration or otherwise encounters an error. For more information, see the [Using the Dashboard](/spring-cloud-services/config-server/using-the-dashboard.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation.
-* The Spring Cloud Services service broker has been upgraded to Spring Boot 1.5.2 and Spring Cloud Dalston.RELEASE.
-
-Known issues in this release:
-
-* uaac commands used by Spring Cloud Services lifecycle errands fail if Pivotal Cloud Foundry&reg; Operations Manager has been configured to use Trusted System Certificates (for example to support an internal root Certificate Authority). If you are using Trusted System Certificates, do not install or upgrade to this release. If you have already installed it following the tile installation process rather than the tile upgrade process, uninstall and delete the tile; if you have already upgraded to this release, please contact [Pivotal Support](https://pivotal.io/support) for assistance.
-* The "Broker Registrar" lifecyle errand fails during the tile upgrade process if the Spring Cloud Services service broker's MySQL for PCF service instance was created under a plan name other than `100mb` (the default name for the 100 MB plan). If the service broker for your existing installation of Spring Cloud Services has a MySQL for PCF service instance with a service plan name other than `100mb` and the tile upgrade process has failed, follow the below steps to migrate the existing database to a `100mb` plan and continue the upgrade process.
-  * In the MySQL for PCF tile configuration settings, create a service plan with name `100mb` and persistent disk of 100 MB.
-  * Back up the existing broker database, following the steps in the [Back Up Your MySQL for PCF v1.x Instance](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html#backup) section of the [Migrating a Database to MySQL for PCF v2](https://docs.pivotal.io/p-mysql/2-0/migrate-to-v2.html) topic in the [MySQL for PCF documentation](https://docs.pivotal.io/p-mysql/2-0/index.html).
-  * Using the Cloud Foundry Command Line Interface tool (cf CLI), target the `system` org and the `p-spring-cloud-services` space: `cf target -o system -s p-spring-cloud-services`
-  * Using the cf CLI, update the broker's MySQL for PCF service instance to the new `100mb` plan: `cf update-service spring-cloud-broker-db -p 100mb`
-  * Re-run the Spring Cloud Services post-deploy errands.
-* A Config Server service instance which has a configuration source consisting of a Git repository reached via SSH may fail to start, will report a status of `DOWN` on its `health` endpoint (provided by Spring Boot Actuator), and will report on its dashboard that it "cannot initialize using the configuration that has been provided". The backing application logs for the service instance may contain the phrases `reject HostKey` or `ssh protocol is not supported`.
-<br/> <br/>
-If you have upgraded Spring Cloud Services to version 1.4.0 but have a Config Server service instance which accesses a Git repository via SSH and has not yet been upgraded to the latest version, do not upgrade the service instance at this time. If you have such a service instance and it has been upgraded, follow the below steps to enable the Config Server to start (this will not correct the status given on the `health` endpoint or the dashboard message).
-  * Locate the backing application for the service instance (see the [Service Instance Management](/spring-cloud-services/service-broker-and-instances.html#service-instance-management) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic).
-  * Run `cf env [APPNAME]`, where `APPNAME` is the name of the backing application. From the output, copy the value of the `SPRING_APPLICATION_JSON` environment variable.
-  * Within the `spring.cloud.config.server.git` object for the relevant Git configuration source, add a property `strictHostKeyChecking` with value `false`. Use `cf set-env` to set the new environment variable value: `cf set-env config-xxx-xxx-xxx SPRING_APPLICATION_JSON '{"spring":{"cloud":{"config":{"server":{"git":{"strictHostKeyChecking":false, "uri:"...", "privateKey":"...", ...}'`
-  * Restage the backing application.
-* Spring Cloud Services is affected by an [issue in Spring Boot version 1.5.3](https://github.com/spring-projects/spring-boot/issues/9079) and is not compatible with that version. To be compatible with this release of Spring Cloud Services, client applications should use Spring Boot versions 1.5.0--1.5.2 or 1.5.4 and later.
-* A Config Server service instance which has a configuration source consisting of a Git repository defined using placeholders (see the Git [Placeholders in Repository URIs](/spring-cloud-services/common/config-server/configuring-backends.html#git-placeholders-in-repository-uris) section of the [Configuring Backends](/spring-cloud-services/configuring-backends.html) topic in the [Config Server](/spring-cloud-services/config-server/) documentation) always clones that repository's data to a location under the system temporary directory, which can be periodically emptied, causing a loss of cloned configuration data. By default, the Spring Cloud Services Config Server does not clone repository data under the temporary directory. To ensure that repository data is cloned elsewhere, do not use placeholders in a Git repository URI with this release.
-* A Config Server service instance which has a configuration source consisting of a Git repository defined using the `label` setting will lose that setting in a tile upgrade from 1.3.x to 1.4.0.
-* A client application using RabbitMQ and bound to a Circuit Breaker Dashboard service instance may fail to start up. This is due to an issue in the Spring Cloud Stream RabbitMQ binder. The issue is resolved in the binder's version 1.2.1; this release of Spring Cloud Services depends on Spring Cloud OSS Dalston.RELEASE, which includes the binder's version 1.2.0.
-<br/> <br/>
-If you wish to use RabbitMQ with a Circuit Breaker Dashboard service instance, you must manually override either the version of the Spring Cloud Stream RabbitMQ binder used by your application or the version of the Spring Cloud Maven BOM used by your application (the 1.2.1 release of the binder is included in Spring Cloud OSS Dalston.SR1).
-<br/> <br/>
-    Using Gradle:
-
-    ```groovy
-    // Override managed version of Spring Cloud Stream RabbitMQ binder
-    compile ("org.springframework.cloud:spring-cloud-stream-binder-rabbit:1.2.1.RELEASE")
-
-    // Override version of OSS Spring Cloud
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR1"
-        }
-    }
-    ```
-
-    Using Maven:
-
-    ```xml
-        <!-- Override managed version of Spring Cloud Stream RabbitMQ binder -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-            <version>1.2.1.RELEASE</version>
-        </dependency>
-
-        <!-- Override version of OSS Spring Cloud -->
-        <dependencyManagement>
-          <dependencies>
-              <dependency>
-                  <groupId>org.springframework.cloud</groupId>
-                  <artifactId>spring-cloud-dependencies</artifactId>
-                  <version>Dalston.SR1</version>
-                  <type>pom</type>
-                  <scope>import</scope>
-              </dependency>
-          </dependencies>
-        </dependencyManagement>
-    ```
+* The Spring Cloud Services service broker and worker apps now can use the Pivotal Application Service (PAS) CredHub to store service instance credentials. Operators can enable use of CredHub in the Spring Cloud Services tile settings. For more information, see the [Secure Service Instance Credentials with CredHub](/spring-cloud-services/tile-configuration.html#secure-service-instance-credentials-with-credhub) section of the [Tile Configuration](/spring-cloud-services/tile-configuration.html) topic.
+* The dependent services used by the Spring Cloud Services service broker are now configurable during installation by operators. Operators can specify alternative services and service plans for the persistence store (the default is MySQL for PCF) and message bus (the default is RabbitMQ for PCF) services. For more information, see the [Installation](/spring-cloud-services/installation.html) topic.
+* The Config Server's composite backend now accepts the `pattern` and `searchPaths` properties for a Git backend within a composite. For more information, see the [Composite Backends](/spring-cloud-services/common/config-server/composite-backends.html) topic.
+* The Spring Cloud Services service broker has been upgraded to Spring Boot 1.5.7 and Spring Cloud Edgware.RELEASE.
