@@ -9,7 +9,7 @@ Please ensure that your [Pivotal Cloud Foundry](https://network.pivotal.io/produ
 
 ## <a id="buildpack-requirements"></a>Buildpack Requirements
 
-Spring Cloud Services is built using Spring Boot 1.4, which requires version 3.8 or later of the Java Cloud Foundry buildpack. The default Java buildpack---the buildpack at the lowest position of all Java buildpacks---on your PCF installation must therefore be at version 3.8 or later.
+Spring Cloud Services is built using Spring Boot 1.5 and requires version 4.5 or later of the Java Cloud Foundry buildpack. The default Java buildpack---the buildpack at the lowest position of all Java buildpacks---on your PCF installation must therefore be at version 4.5 or later.
 
 You can use the Cloud Foundry Command Line Interface tool (cf CLI) to see the version of the Java buildpack that is currently installed.
 
@@ -17,16 +17,16 @@ You can use the Cloud Foundry Command Line Interface tool (cf CLI) to see the ve
 $ cf buildpacks
 Getting buildpacks...
 
-buildpack                position   enabled   locked   filename
-java_buildpack_offline   1          true      false    java-buildpack-offline-v3.8.1.zip
-ruby_buildpack           2          true      false    ruby_buildpack-cached-v1.6.19.zip
-nodejs_buildpack         3          true      false    nodejs_buildpack-cached-v1.5.15.zip
-go_buildpack             4          true      false    go_buildpack-cached-v1.7.10.zip
+buildpack        position   enabled   locked  filename
+java_buildpack   1          true      false   java-buildpack-offline-v4.5.zip
+ruby_buildpack   2          true      false   ruby_buildpack-cached-v1.7.8.zip
+nodejs_buildpack 3          true      false   nodejs_buildpack-cached-v1.6.14.zip
+go_buildpack     4          true      false   go_buildpack-cached-v1.8.15.zip
 </pre>
 
-If the default Java buildpack is older than version 3.8, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Managing Custom Buildpacks](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
+If the default Java buildpack is older than version 4.5, you can download a newer version from [Pivotal Network](https://network.pivotal.io/products/pivotal-cf) and update Pivotal Cloud Foundry by following the instructions in the [Managing Custom Buildpacks](http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html) topic. To ensure that the newer buildpack is the default Java buildpack, you may delete or disable the older buildpack or make sure that the newer buildpack is in a lower position.
 
-If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 3.8 or later, you must specify an alternate buildpack that is at version 3.8 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
+If the default Java buildpack on the Pivotal Cloud Foundry platform is not at version 4.5 or later, you must specify an alternate buildpack that is at version 4.5 or later when installing the Spring Cloud Services product; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic.
 
 ## <a id="service-requirements"></a>Service Requirements
 
@@ -37,7 +37,7 @@ Spring Cloud Services requires the following services to be installed:
 
 If they are not already installed, you can follow the steps listed in the <a href="/spring-cloud-services/installation.html">Installation</a> topic to install them along with Spring Cloud Services.
 
-<p class='note'><strong>Important</strong>: If you enable the RabbitMQ&reg; for Pivotal Cloud Foundry product's SSL support by providing it with SSL keys and certificates, you must enable the RabbitMQ product's TLS 1.0 support; otherwise, the Spring Cloud Services service broker will fail to create or update service instances. See the <a href="http://docs.pivotal.io/rabbitmq-cf/configuring.html">Configuring the RabbitMQ Service</a> topic in the <a href="http://docs.pivotal.io/rabbitmq-cf/index.html">RabbitMQ for Pivotal Cloud Foundry documentation</a>.</p>
+<p class='note'><strong>Important</strong>: If you enable the RabbitMQ&reg; for Pivotal Cloud Foundry product's SSL support by providing it with SSL keys and certificates, you must enable the RabbitMQ product's TLS 1.0 support; otherwise, the Spring Cloud Services service broker will fail to create or update service instances. See the <a href="http://docs.pivotal.io/rabbitmq-cf/1-11/install-config-pp.html">Installing and Configuring the Pre-Provisioned Service</a> topic in the <a href="http://docs.pivotal.io/rabbitmq-cf/index.html">RabbitMQ for Pivotal Cloud Foundry documentation</a>.</p>
 
 ## <a id="security-requirements"></a>Security Requirements
 

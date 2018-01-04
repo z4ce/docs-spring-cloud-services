@@ -5,18 +5,6 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-## <a id="product-upgradeability"></a>Product Upgradeability
-
-Please see the relevant section below for important information regarding upgrades of the Spring Cloud Services product on your version of Pivotal Cloud Foundry.
-
-### Upgrades on Pivotal Cloud Foundry 1.6
-
-When upgrading to a patch version of the Spring Cloud Services (SCS) product on Pivotal Cloud Foundry 1.6, you must consecutively apply all patch versions between your currently-installed SCS version and the version to which you wish to upgrade, and you may not skip a patch version. For example, you may not upgrade SCS 1.0.6 directly to SCS 1.0.8; instead, to upgrade SCS 1.0.6 to SCS 1.0.8, you must upgrade SCS 1.0.6 to SCS 1.0.7, then upgrade SCS 1.0.7 to SCS 1.0.8.
-
-### Upgrades on Pivotal Cloud Foundry 1.7
-
-On Pivotal Cloud Foundry 1.7, you may not upgrade any version of the Spring Cloud Services product between 1.0.0 and 1.0.8 to any version older than 1.0.9 (e.g., you may not upgrade SCS 1.0.1 to SCS 1.0.2); however, you may upgrade any of these versions directly to 1.0.9 or later. You may upgrade any patch version of SCS after 1.0.9 directly to any later patch version and need not apply any intervening patch versions.
-
 ## <a id="product-upgrade-steps"></a>Product Upgrade Steps
 
 Follow the below steps to upgrade the Spring Cloud Services product.
@@ -62,10 +50,6 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 ## <a id="service-instance-upgrade-steps"></a>Service Instance Upgrade Steps
 
 After upgrading the Spring Cloud Services product, you can follow the below steps to upgrade an individual service instance or to upgrade all service instances. You can also use the Cloud Foundry Command Line Interface tool (cf CLI) to upgrade an individual service instance; see the [Service Instance Upgrades](/spring-cloud-services/service-instance-upgrades.html) topic for more information.
-
-<p class='note'><strong>Important</strong>: If you have client applications which work with Spring Cloud Services 1.0.x service instances and are upgrading these service instances to 1.1.x, you must update your client applications to use the current version of the Spring Cloud Services client dependencies. See the <a href="/spring-cloud-services/service-instance-upgrades.html#client-application-changes-in-1-0-0">Client Application Changes in 1.1.0</a> section of the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a> topic.</p>
-
-<p class='note'><strong>Important</strong>: After upgrading a Circuit Breaker Dashboard service instance from 1.0.x to 1.1.x, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.</p>
 
 1. To see the current version of a service instance, visit the Service Instances dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/service-broker-and-instances.html#service-instances-dashboard) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.)
 
