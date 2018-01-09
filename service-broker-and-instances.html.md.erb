@@ -445,7 +445,7 @@ Sending an unauthenticated request to any of the other Actuator endpoints will r
 
 To view the configuration properties that a Config Server service instance is returning for an application, you can access the configuration endpoints on the service instance's Spring Cloud Config Server backing application directly.
 
-1. Obtain an access token for interacting with the service instance, as described in the [Get Access Token for Direct Requests to a Service Instance](#get-access-token-for-direct-requests-to-a-service-instance) section. In Step 1 of that section, copy the URL in `credentials.uri` from the service instance's entry in the `VCAP_SERVICES` environment variable.
+1. Obtain an access token for interacting with the service instance, as described in the [Get Access Token for Direct Requests to a Service Instance](#get-access-token-for-direct-requests-to-a-service-instance) section. In the first step of that section, copy the URL in `credentials.uri` from the service instance's entry in the `VCAP_SERVICES` environment variable.
 
 2. Make a request of the Config Server service instance backing application in the format `http://SERVER/APPLICATION_NAME/PROFILE`, where `SERVER` is the URL from `credentials.uri` as mentioned in Step 1, `APPLICATION_NAME` is the application name as set in the `spring.application.name` property, and `PROFILE` is the name of a profile that has a configuration file in the repository.
 

@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 ## <a id="the-config-server"></a>The Config Server
 
-The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from a Git repository (a _configuration source_). Given the URI of a configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
+The Config Server serves configurations stored as either Java Properties files or YAML files. It reads files from either a HashiCorp Vault server or a Git repository (a _configuration source_). Given the URI of a Git configuration source, the server will clone the repository and make its configurations available to client applications in JSON as a series of `propertySources`.
 
 ### <a id="configuration-sources"></a>Configuration Sources
 
