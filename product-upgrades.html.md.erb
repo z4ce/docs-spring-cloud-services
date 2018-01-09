@@ -61,13 +61,13 @@ Follow the below steps to upgrade the Spring Cloud Services product.
 
 ## <a id="service-instance-upgrade-steps"></a>Service Instance Upgrade Steps
 
-After upgrading the Spring Cloud Services product, you can follow the below steps to upgrade an individual service instance or to upgrade all service instances. You can also use the Cloud Foundry Command Line Interface tool (cf CLI) to upgrade an individual service instance; see the [Service Instance Upgrades](/spring-cloud-services/service-instance-upgrades.html) topic for more information.
+After upgrading the Spring Cloud Services product, you can follow the below steps to upgrade an individual service instance or to upgrade all service instances. You can also use the Cloud Foundry Command Line Interface tool (cf CLI) to upgrade an individual service instance; see the [Service Instance Upgrades](../common/service-instance-upgrades.html) topic for more information.
 
-<p class='note'><strong>Important</strong>: If you have client applications which work with Spring Cloud Services 1.0.x service instances and are upgrading these service instances to 1.1.x, you must update your client applications to use the current version of the Spring Cloud Services client dependencies. See the <a href="/spring-cloud-services/service-instance-upgrades.html#client-application-changes-in-1-0-0">Client Application Changes in 1.1.0</a> section of the <a href="/spring-cloud-services/service-instance-upgrades.html">Service Instance Upgrades</a> topic.</p>
+<p class='note'><strong>Important</strong>: If you have client applications which work with Spring Cloud Services 1.0.x service instances and are upgrading these service instances to 1.1.x, you must update your client applications to use the current version of the Spring Cloud Services client dependencies. See the <a href="../common/service-instance-upgrades.html#client-application-changes-in-1-0-0">Client Application Changes in 1.1.0</a> section of the <a href="../common/service-instance-upgrades.html">Service Instance Upgrades</a> topic.</p>
 
 <p class='note'><strong>Important</strong>: After upgrading a Circuit Breaker Dashboard service instance from 1.0.x to 1.1.x, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.</p>
 
-1. To see the current version of a service instance, visit the Service Instances dashboard. (See the [Service Instances Dashboard](/spring-cloud-services/service-broker-and-instances.html#service-instances-dashboard) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.)
+1. To see the current version of a service instance, visit the Service Instances dashboard. (See the [Service Instances Dashboard](./service-broker-and-instances.html#service-instances-dashboard) section of the [The Service Broker and Instances](./service-broker-and-instances.html) topic.)
 
     <%= image_tag("./images/upgrades/si-dashboard-pre-upgrade.png") %>
 
