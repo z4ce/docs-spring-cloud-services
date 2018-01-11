@@ -23,7 +23,7 @@ security group issue?
 com.netflix.discovery.DiscoveryClient.makeRemoteCall(DiscoveryClient.java:1155)
 ```
 
-If your PCF environment is using a self-signed certificate (such as a certificate generated in Elastic Runtime), you must set the `TRUST_CERTS` environment variable on your application to the API endpoint of Elastic Runtime. See the [Add Self-Signed SSL Certificate to JVM Truststore](../common/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](../common/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](../common/service-registry/).
+If your PCF environment is using a self-signed certificate (such as a certificate generated in Elastic Runtime), you must set the `TRUST_CERTS` environment variable on your application to the API endpoint of Elastic Runtime. See the [Add Self-Signed SSL Certificate to JVM Truststore](../service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](../service-registry/writing-client-applications.html) topic in the [Service Registry documentation](../service-registry/).
 
 ## <a id="pkix"></a>"sun.security.validator.ValidatorException: PKIX path building failed"
 
@@ -35,4 +35,4 @@ sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid
 certification path to requested target
 ```
 
-If your PCF environment is using self-signed certificates, make sure that you have set the `TRUST_CERTS` environment variable on the application to the Elastic Runtime API endpoint as described in the [Add Self-Signed SSL Certificate to JVM Truststore](../common/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](../common/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](../common/service-registry/).
+If your PCF environment is using self-signed certificates, make sure that you have set the `TRUST_CERTS` environment variable on the application to the Elastic Runtime API endpoint as described in the [Add Self-Signed SSL Certificate to JVM Truststore](../service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](../service-registry/writing-client-applications.html) topic in the [Service Registry documentation](../service-registry/).
