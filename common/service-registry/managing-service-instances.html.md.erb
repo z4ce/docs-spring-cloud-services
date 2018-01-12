@@ -29,7 +29,7 @@ General parameters used to configure the Service Registry are listed below.
 |----------------------|--------------------------------------------------------------------------------------------|----------------------------------|
 | <code>count</code>   | The number of nodes to provision: 1 by default, more for running in high-availability mode | <code>'{"count": 3}'</code>      |
 
-A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](./service-registry/enabling-peer-replication.html) topic.
+A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](./enabling-peer-replication.html) topic.
 
 To create an instance with the default of a single node, run:
 
@@ -71,7 +71,7 @@ It may take a few minutes to provision the service instance; while it is being p
 
 <%= image_tag(vars.scs_sr_creating_instance_img_dashboard_new) %>
 
-For information about registering an application with a Service Registry service instance, see the <a href="./service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
+For information about registering an application with a Service Registry service instance, see the <a href="./writing-client-applications.html">Writing Client Applications</a> topic.
 
 ## <a id="updating"></a>Updating an Instance
 
@@ -100,7 +100,7 @@ General parameters accepted for the Service Registry are listed below.
 | <code>upgrade</code>    | Whether to upgrade the instance                                                                                                                        | <code>'{"upgrade": true}'</code> |
 | <code>force</code>      | When `upgrade` is set to `true`, whether to force an upgrade of the instance, even if the instance is already at the latest available service version  | <code>'{"force": true}'</code>   |
 
-A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](./service-registry/enabling-peer-replication.html) topic.
+A Service Registry service instance can also be configured to replicate its registry with peer Service Registry service instances in other PCF deployments, organizations, or spaces. For more information on the configuration parameters used to enable peer replication, see the [Enabling Peer Replication](./enabling-peer-replication.html) topic.
 
 To update a service instance and set the count of nodes for running in high-availability mode, run:
 
@@ -124,7 +124,7 @@ Tags:
 Plan: standard
 Description: Service Registry for Spring Cloud Applications
 Documentation url: http://docs.pivotal.io/spring-cloud-services/
-Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-service-registry/57ce88c1-6bd9-4224-b855-b4600e8e0f39
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-57ce88c1-6bd9-4224-b855-b4600e8e0f39
 
 Last Operation
 Status: update succeeded
@@ -133,4 +133,4 @@ Started: 2016-06-28T14:09:19Z
 Updated: 2016-06-28T14:12:25Z
 </pre>
 
-The service instance is now updated and ready to be used. For information about registering an application with a Service Registry service instance or calling an application which has been registered with a Service Registry service instance, see the <a href="./service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
+The service instance is now updated and ready to be used. For information about registering an application with a Service Registry service instance or calling an application which has been registered with a Service Registry service instance, see the <a href="./writing-client-applications.html">Writing Client Applications</a> topic.

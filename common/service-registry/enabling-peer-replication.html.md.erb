@@ -14,7 +14,7 @@ For information about the configuration parameters used to enable peer replicati
 
 ## <a id="configuration-parameters"></a>Configuration Parameters
 
-To enable peer replication for a Service Registry service instance, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](./service-registry/using-the-dashboard.html) topic).
+To enable peer replication for a Service Registry service instance, you must specify the peer Service Registry instance's URI using the `peers` JSON array, which contains an object for each Service Registry peer. You can find a Service Registry service instance's URI on its dashboard (see the [Using the Dashboard](./using-the-dashboard.html) topic).
 
 A Service Registry peer can be expressed as shown in the following JSON:
 
@@ -39,7 +39,7 @@ Spring Cloud Services will by default validate the SSL certificate on each peer.
 }
 ```
 
-<p class='note'><strong>Note</strong>: If you disable certificate validation for a Service Registry service instance's peer, you may need to set the <code>TRUST_CERTS</code> environment variable on applications bound to that Service Registry service instance or to the peer. See the <a href="./service-registry/writing-client-applications.html#peers-with-self-signed-certificates">Service Registry Peers with Self-Signed Certificates</a> section of the <a href="./service-registry/writing-client-applications.html">Writing Client Applications</a> topic for more information.</p>
+<p class='note'><strong>Note</strong>: If you disable certificate validation for a Service Registry service instance's peer, you may need to set the <code>TRUST_CERTS</code> environment variable on applications bound to that Service Registry service instance or to the peer. See the <a href="./writing-client-applications.html#peers-with-self-signed-certificates">Service Registry Peers with Self-Signed Certificates</a> section of the <a href="./writing-client-applications.html">Writing Client Applications</a> topic for more information.</p>
 
 The parameters used to configure a peer for the Service Registry are listed below.
 
@@ -78,7 +78,7 @@ A peer service instance URI is expected to meet the following criteria:
 
 A peer service instance is expected to meet the following criteria:
 
-* Have the same High Availability (HA) node count as its peer service instance. If you create or update a Service Registry service instance with a peer which has a different HA node count, you will see [an error message on the Service Registry dashboard](#peer-node-count-difference). See the [Configuration Parameters](./service-registry/managing-service-instances.html#configuration-parameters) section of the [Managing Service Instances](./service-registry/managing-service-instances.html) topic for more information about setting the HA node count for a Service Registry service instance.
+* Have the same High Availability (HA) node count as its peer service instance. If you create or update a Service Registry service instance with a peer which has a different HA node count, you will see [an error message on the Service Registry dashboard](#peer-node-count-difference). See the [Configuration Parameters](./managing-service-instances.html#configuration-parameters) section of the [Managing Service Instances](./managing-service-instances.html) topic for more information about setting the HA node count for a Service Registry service instance.
 * Have a peer list equivalent to its peer service instance's peer list. If you create or update a Service Registry service instance with a peer that does has not have an equivalent peer list, you will see [a warning message on the Service Registry dashboard](#peer-list-difference).
 * Be at the same Service Registry version as its peer service instance. If you create or update a Service Registry service instance with a peer which is at a different Service Registry version, you will see [a warning message on the Service Registry dashboard](#peer-version-difference).
 
@@ -142,7 +142,7 @@ If you have configured a Service Registry service instance with a peer service i
 
 <%= image_tag(vars.scs_sr_replication_img_different_node_counts) %>
 
-You can update one of the service instances to add or remove nodes so that the two service instances have consistent node counts. See the [Configuration Parameters](./service-registry/managing-service-instances.html#configuration-parameters) section of the [Managing Service Instances](./service-registry/managing-service-instances.html) topic for more information.
+You can update one of the service instances to add or remove nodes so that the two service instances have consistent node counts. See the [Configuration Parameters](./managing-service-instances.html#configuration-parameters) section of the [Managing Service Instances](./managing-service-instances.html) topic for more information.
 
 ### <a id="peer-list-difference"></a>Peer Service Instance Peer List Difference
 
