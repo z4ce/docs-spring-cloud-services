@@ -21,7 +21,7 @@ You can view plan details for the Config Server product using `cf marketplace -s
 
 <%= partial vars.scs_cs_creating_instance_marketplace %>
 
-Create the service instance using `cf create-service`, using the `-c` flag to provide a JSON object that specifies the configuration parameters. For information about the parameters used to configure a Git configuration source, see the [Configuring with Git](./config-server/configuring-with-git.html) topic. For information about the parameters used to configure a HashiCorp Vault configuration source, see the [Configuring with Vault](./config-server/configuring-with-vault.html) topic.
+Create the service instance using `cf create-service`, using the `-c` flag to provide a JSON object that specifies the configuration parameters. For information about the parameters used to configure a Git configuration source, see the [Configuring with Git](./configuring-with-git.html) topic. For information about the parameters used to configure a HashiCorp Vault configuration source, see the [Configuring with Vault](./configuring-with-vault.html) topic.
 
 General parameters accepted for the Config Server are listed below.
 
@@ -37,7 +37,7 @@ As the command output suggests, you can use the `cf services` or `cf service` co
 
 <%= partial vars.scs_cs_creating_instance_service %>
 
-<p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report a <code>create succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be created and have a <code>create succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="./config-server/using-the-dashboard.html">Using the Dashboard</a> topic.</p>
+<p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report a <code>create succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be created and have a <code>create succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="./using-the-dashboard.html">Using the Dashboard</a> topic.</p>
 
 <%= vars.scs_creating_instance_discrepancy %>
 
@@ -82,7 +82,7 @@ Org:            myorg
 Space:          development
 </pre>
 
-Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. For information about the parameters used to configure a Git configuration source, see the [Configuring with Git](./config-server/configuring-with-git.html) topic. For information about the parameters used to configure a HashiCorp Vault configuration source, see the [Configuring with Vault](./config-server/configuring-with-vault.html) topic.
+Then run `cf update-service SERVICE_NAME -c '{ "PARAMETER": "VALUE" }'`, where `SERVICE_NAME` is the name of the service instance, `PARAMETER` is a supported parameter, and `VALUE` is the value for the parameter. For information about the parameters used to configure a Git configuration source, see the [Configuring with Git](./configuring-with-git.html) topic. For information about the parameters used to configure a HashiCorp Vault configuration source, see the [Configuring with Vault](./configuring-with-vault.html) topic.
 
 General parameters accepted for the Config Server are listed below.
 
@@ -124,7 +124,7 @@ Tags:
 Plan: standard
 Description: Config Server for Spring Cloud Applications
 Documentation url: http://docs.pivotal.io/spring-cloud-services/
-Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-config-server/e2615a44-66f5-4fda-9ddc-079af1db9ae4
+Dashboard: https://spring-cloud-broker.apps.wise.com/dashboard/p-e2615a44-66f5-4fda-9ddc-079af1db9ae4
 
 Last Operation
 Status: update succeeded
@@ -133,6 +133,6 @@ Started: 2016-06-24T21:11:53Z
 Updated: 2016-06-24T21:13:59Z
 </pre>
 
-<p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report an <code>update succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be restarted and have an <code>update succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly after an update, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="./config-server/using-the-dashboard.html">Using the Dashboard</a> topic.</p>
+<p class='note'><strong>Important</strong>: The <code>cf service</code> and <code>cf services</code> commands may report an <code>update succeeded</code> status even if the Config Server cannot initialize using the provided settings. For example, given an invalid URI for a configuration source, the service instance may still be restarted and have an <code>update succeeded</code> status. <br /> <br /> If the service instance does not appear to be functioning correctly after an update, you can visit its dashboard to double-check that the provided settings are valid and accurate. See the <a href="./using-the-dashboard.html">Using the Dashboard</a> topic.</p>
 
-The service instance is now updated and ready to be used. For information about using an application to access configuration values served by a Config Server service instance, see the <a href="./config-server/writing-client-applications.html">Writing Client Applications</a> topic.
+The service instance is now updated and ready to be used. For information about using an application to access configuration values served by a Config Server service instance, see the <a href="./writing-client-applications.html">Writing Client Applications</a> topic.
