@@ -35,7 +35,7 @@ Spring Cloud Services requires the following Pivotal Cloud Foundry products to b
 * [MySQL](https://network.pivotal.io/products/p-mysql)
 * [RabbitMQ](https://network.pivotal.io/products/pivotal-rabbitmq-service)
 
-If they are not already installed, you can follow the steps listed in the <a href="/spring-cloud-services/installation.html">Installation</a> topic to install them along with Spring Cloud Services.
+If they are not already installed, you can follow the steps listed in the <a href="./installation.html">Installation</a> topic to install them along with Spring Cloud Services.
 
 <p class='note'><strong>Important</strong>: If you enable the RabbitMQ&reg; for Pivotal Cloud Foundry product's SSL support by providing it with SSL keys and certificates, you must enable the RabbitMQ product's TLS 1.0 support; otherwise, the Spring Cloud Services service broker will fail to create or update service instances. See the <a href="http://docs.pivotal.io/rabbitmq-cf/configuring.html">Configuring the RabbitMQ Service</a> topic in the <a href="http://docs.pivotal.io/rabbitmq-cf/index.html">RabbitMQ for Pivotal Cloud Foundry documentation</a>.</p>
 
@@ -61,4 +61,4 @@ If you are installing Spring Cloud Services version 1.4.0 or earlier, your Elast
 
 In Spring Cloud Services version 1.4.1 and later, service instance backing applications can be deployed using a private domain assigned to the `p-spring-cloud-services` org. If there is at least one shared domain available in the Elastic Runtime deployment, service instance backing applications will be deployed using the first shared domain available. If there is not at least one shared domain available in the Elastic Runtime deployment, service instance backing applications will be deployed using the first private domain assigned to the `p-spring-cloud-services` org.
 
-For more information about the Spring Cloud Services service instance backing applications, see the [Service Instances](/spring-cloud-services/service-broker-and-instances.html#service-instance-management) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.
+For more information about the Spring Cloud Services service instance backing applications, see the [Service Instances](./service-broker-and-instances.html#service-instance-management) section of the [The Service Broker and Instances](./service-broker-and-instances.html) topic.

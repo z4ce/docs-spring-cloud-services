@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 _Refer to the <a href="https://github.com/spring-cloud-services-samples/cook/tree/1.4.x">"Cook" sample application</a> to follow along with the code in this topic._
 
-To use a Spring Boot application as a client for a Config Server instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#config-server">Config Server</a> as well.
+To use a Spring Boot application as a client for a Config Server instance, you must add the dependencies listed in the <a href="../client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="../client-dependencies.html#config-server">Config Server</a> as well.
 
 <p class='note'><strong>Important</strong>: Because of a dependency on <a href="http://projects.spring.io/spring-security/">Spring Security</a>, the Spring Cloud&reg; Config Client starter will by default cause all application endpoints to be protected by HTTP Basic authentication. If you wish to disable this, please see <a href="#disable-http-basic-auth">Disable HTTP Basic Authentication</a> below.</p>
 
@@ -17,7 +17,7 @@ To use a Spring Boot application as a client for a Config Server instance, you m
 
 ## <a id="use-configuration-values"></a>Use Configuration Values
 
-When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="/spring-cloud-services/config-server/background-information.html#configuration-clients">Configuration Clients</a> section of the <a href="/spring-cloud-services/config-server/background-information.html">Background Information</a> topic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
+When the application requests a configuration from the Config Server, it will use a path containing the application name (as described in the <a href="./config-server/background-information.html#configuration-clients">Configuration Clients</a> section of the <a href="./config-server/background-information.html">Background Information</a> topic). You can declare the application name in `bootstrap.properties`, `bootstrap.yml`, `application.properties`, or `application.yml`.
 
 In <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/src/main/resources/bootstrap.yml#L1-L3">`bootstrap.yml`</a>:
 
@@ -69,7 +69,7 @@ public class Application {
 
 ## <a id="vary-configurations-based-on-profiles"></a>Vary Configurations Based on Profiles
 
-You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the [The Config Server](/spring-cloud-services/config-server/background-information.html#the-config-server) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic.)
+You can provide configurations for multiple profiles by including appropriately-named `.yml` or `.properties` files in the Config Server instance's configuration source (the Git repository). Filenames follow the format `{application}-{profile}.{extension}`, as in `cook-production.yml`. (See the [The Config Server](./config-server/background-information.html#the-config-server) section of the [Background Information](./config-server/background-information.html) topic.)
 
 The application will request configurations for any active profiles. To set profiles as active, you can use the `SPRING_PROFILES_ACTIVE` environment variable, set for example in <a href="https://github.com/spring-cloud-services-samples/cook/blob/1.4.x/manifest.yml">`manifest.yml`</a>.
 
@@ -111,7 +111,7 @@ The sample configuration source <a href="https://github.com/spring-cloud-service
 }
 ```
 
-As noted in the [Configuration Clients](/spring-cloud-services/config-server/background-information.html#configuration-clients) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
+As noted in the [Configuration Clients](./config-server/background-information.html#configuration-clients) section of the [Background Information](./config-server/background-information.html) topic, the application must decide what to do when the server returns multiple values for a configuration property, but a Spring application will take the first value for each property. In the example response above, the configuration for the specified profile (`production`) is first in the list, so the Boot sample application will use values from that configuration.
 
 ## <a id="view-client-application-configuration"></a>View Client Application Configuration
 
@@ -296,7 +296,7 @@ The application will decrypt the encrypted property after receiving it from the 
 
 ## <a id="use-a-hashicorp-vault-server"></a>Use a HashiCorp Vault Server
 
-You can configure the Config Server to use a HashiCorp Vault server as a configuration source, as described in the [Configuring with Vault](/spring-cloud-services/config-server/configuring-with-vault.html) topic. To consume configuration from the Vault server via the service instance, your client application must be given a Vault token. You can give the token to an application by setting the `SPRING_CLOUD_CONFIG_TOKEN` environment variable on the application. The Spring Cloud Services Connectors for Config Server will automatically renew the application's token for as long as the application is running.
+You can configure the Config Server to use a HashiCorp Vault server as a configuration source, as described in the [Configuring with Vault](./config-server/configuring-with-vault.html) topic. To consume configuration from the Vault server via the service instance, your client application must be given a Vault token. You can give the token to an application by setting the `SPRING_CLOUD_CONFIG_TOKEN` environment variable on the application. The Spring Cloud Services Connectors for Config Server will automatically renew the application's token for as long as the application is running.
 
 <p class='note'><strong>Important</strong>: If the application is entirely stopped (i.e., no instances continue to run) and its Vault token expires, you will need to create a new token for the application and re-set the <code>SPRING_CLOUD_CONFIG_TOKEN</code> environment variable.</p>
 
@@ -317,7 +317,7 @@ TIP: Use 'cf restage cook' to ensure your env variable changes take effect
 $ cf restage cook
 </pre>
 
-The Spring Cloud Services Connectors for Config Server renew the application token for as long as the application continues to run. For more information about the token renewal performed by the connectors, see the [HashiCorp Vault Token Renewal](/spring-cloud-services/config-server/connectors.html#hashicorp-vault-token-renewal) section of the [Spring Cloud Connectors](/spring-cloud-services/config-server/connectors.html) topic.
+The Spring Cloud Services Connectors for Config Server renew the application token for as long as the application continues to run. For more information about the token renewal performed by the connectors, see the [HashiCorp Vault Token Renewal](./config-server/connectors.html#hashicorp-vault-token-renewal) section of the [Spring Cloud Connectors](./config-server/connectors.html) topic.
 
 ### <a id="renew-vault-token-manually"></a>Renew Vault Token Manually
 

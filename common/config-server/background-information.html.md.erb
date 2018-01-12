@@ -33,7 +33,7 @@ https://github.com/myorg/configurations
 
 In this example, the configuration source defines configurations for the `myapp` application. The Server will serve different properties for `myapp` depending on the values of `{profile}` and `{label}` in the request path. If the ```{profile}``` is neither ```development``` nor ```production```, the server will return the properties in `myapp.yml`, or if the ```{profile}``` is ```production```, the server will return the properties in both `myapp-production.yml` and `myapp.yml`.
 
-```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. You can reconfigure the default label (see the [Configuring with Git](/spring-cloud-services/config-server/configuring-with-git.html) topic).
+```{label}``` can be a Git commit hash as well as a tag or branch name. If the request contains a ```{label}``` of (e.g.) ```v1.0.0```, the Server will serve properties from the `v1.0.0` tag. If the request does not contain a ```{label}```, the Server will serve properties from the default label. For Git repositories, the default label is **master**. You can reconfigure the default label (see the [Configuring with Git](./config-server/configuring-with-git.html) topic).
 
 ### <a id="request-paths"></a>Request Paths
 
@@ -53,7 +53,7 @@ A path includes an _application_, a _profile_, and optionally a _label_.
 
 * **Profile**: The name of a profile, or a comma-separated list of profile names. The Config Server's concept of a "profile" corresponds directly to that of the <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/Profile.html">Spring Profile</a>.
 
-* **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash. The value given to the Config Server as a default label (the setting of `git.label`; see the table of the Config Server's [general configuration parameters](/spring-cloud-services/config-server/configuring-with-git.html#general-configuration)) can be overridden in a client application by setting the `spring.cloud.config.label` property.
+* **Label**: The name of a version marker in the configuration source (the repository). This might be a branch name, a tag name, or a Git commit hash. The value given to the Config Server as a default label (the setting of `git.label`; see the table of the Config Server's [general configuration parameters](./config-server/configuring-with-git.html#general-configuration)) can be overridden in a client application by setting the `spring.cloud.config.label` property.
 
 For information about using a Cloud Foundry application as a Config Server client, see the <a href="#configuration-clients">Configuration Clients</a> section.
 
@@ -112,4 +112,4 @@ $ cf set-env cook SPRING_PROFILES_ACTIVE production
 
 Given the above example response for the request path ```/cook/production```, a Spring application would give the two Config Server property sources precedence over other property sources. This means that properties from `https://github.com/myorg/configurations/cook-production.yml` would have precedence over properties from `https://github.com/myorg/configurations/cook.yml`, which would have precedence over properties from the application's other property sources (such as `classpath:application.yml`).
 
-For a specific example of using a Spring application as a Config Server client, see the <a href="/spring-cloud-services/config-server/writing-client-applications.html">Writing Client Applications</a> topic.
+For a specific example of using a Spring application as a Config Server client, see the <a href="./config-server/writing-client-applications.html">Writing Client Applications</a> topic.
