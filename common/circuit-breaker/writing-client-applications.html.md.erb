@@ -7,7 +7,7 @@ owner: Spring Cloud Services
 
 _Refer to the sample applications in the <a href="https://github.com/spring-cloud-services-samples/traveler/tree/1.4.x">&#8220;traveler&#8221; repository</a> to follow along with the code in this topic._
 
-To use a circuit breaker in a Spring application with a Circuit Breaker Dashboard service instance, you must add the dependencies listed in the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="/spring-cloud-services/client-dependencies.html#circuit-breaker-dashboard">Circuit Breaker Dashboard</a> as well.
+To use a circuit breaker in a Spring application with a Circuit Breaker Dashboard service instance, you must add the dependencies listed in the <a href="./client-dependencies.html">Client Dependencies</a> topic to your application's build file. Be sure to include the dependencies for <a href="./client-dependencies.html#circuit-breaker-dashboard">Circuit Breaker Dashboard</a> as well.
 
 ## <a id="use-a-circuit-breaker"></a>Use a Circuit Breaker
 
@@ -34,7 +34,7 @@ To apply a circuit breaker to a method, <a href="https://github.com/spring-cloud
     }
 ```
 
-The `getGuide()` method uses a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">`RestTemplate`</a> to obtain a guide name from another application called Company, which is registered with a Service Registry instance. (See the <a href="/spring-cloud-services/service-registry/index.html">Service Registry documentation</a>, specifically the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.) The method thus relies on the Company application to return a response, and if the Company application fails to do so, calls to `getGuide()` will fail. When the failures exceed the threshold, the breaker on `getGuide()` will open the circuit.
+The `getGuide()` method uses a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">`RestTemplate`</a> to obtain a guide name from another application called Company, which is registered with a Service Registry instance. (See the <a href="../service-registry/index.html">Service Registry documentation</a>, specifically the <a href="../service-registry/writing-client-applications.html">Writing Client Applications</a> topic.) The method thus relies on the Company application to return a response, and if the Company application fails to do so, calls to `getGuide()` will fail. When the failures exceed the threshold, the breaker on `getGuide()` will open the circuit.
 
 While the circuit is open, the breaker redirects calls to the annotated method, and they instead call the designated `fallbackMethod`. The fallback method must be in the same class and have the same method signature (i.e., have the same return type and accept the same parameters) as the annotated method. In the Agency application, the `getGuide()` method on the `TravelAgent` class falls back to <a href="https://github.com/spring-cloud-services-samples/traveler/blob/1.4.x/agency/src/main/java/agency/TravelAgent.java#L30-L32">`getBackupGuide()`</a>.
 

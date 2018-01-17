@@ -5,8 +5,6 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-<p class='note'><strong>Note</strong>: Service Registry <%= vars.scs_suffix %> is currently based on Spring Cloud&reg; OSS Camden. If binding a Spring Cloud OSS Angel application to a Service Registry service instance, you may see irregular behavior in the Service Registry service instance dashboard's listing for the application. <br /><br /> For information on current client dependencies provided for use with Spring Cloud Services service instances, see the <a href="/spring-cloud-services/client-dependencies.html">Client Dependencies</a> topic.</p>
-
 To find the dashboard, navigate in <%= vars.scs_platform_name %> Apps Manager to the Service Registry service instance's space, click the listing for the service instance, and then click **Manage**.
 
 <%= image_tag(vars.scs_sr_using_dashboard_manage_link) %>
@@ -44,6 +42,6 @@ If the Service Registry service instance has been configured to replicate its re
 
 <%= image_tag(vars.scs_sr_using_dashboard_empty_dashboard_middle) %>
 
-Before you have bound any applications to the Service Registry instance, the Service Registry dashboard displays only `EUREKA-SERVER` (the Service Registry backing application itself) under "Registered Apps". If you bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic), restage the application, and wait for it to register with Eureka, you will see it listed in the dashboard.
+Before you have bound any applications to the Service Registry instance, the Service Registry dashboard displays only `EUREKA-SERVER` (the Service Registry backing application itself) under "Registered Apps". If you bind an application which uses ```@EnableDiscoveryClient``` to the service instance (see the [Writing Client Applications](./writing-client-applications.html) topic), restage the application, and wait for it to register with Eureka, you will see it listed in the dashboard.
 
 <%= image_tag(vars.scs_sr_using_dashboard_registered_service) %>
