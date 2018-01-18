@@ -228,9 +228,9 @@ TOKEN=$(curl -k [ACCESS_TOKEN_URI] -u [CLIENT_ID]:[CLIENT_SECRET] -d grant_type=
 curl -k -H "Authorization: bearer $TOKEN" -H "Accept: application/json" [URI]/[ENDPOINT] | jq
 ```
 
-This script is first retrieving an access token using an OAuth2 credential exchange with Cloud Foundy's UAA service. After being given an authroization token, it uses this token to make call to the service instance's API endpoints.
+This script retrieves an access token using an OAuth 2 credential exchange with Cloud Foundry's UAA service. After being given an authorization token, it uses this token to make a call to the service instance's API endpoints.
 
-In this script, replace the following placeholders using values from the `cf env` command above:
+In this script, replace the following placeholders with values from the `cf env` command above:
 
 * `[ACCESS_TOKEN_URI]` with the value of `p-config-server.credentials.access_token_uri`
 * `[CLIENT_ID]` with the value of `p-config-server.credentials.client_id`

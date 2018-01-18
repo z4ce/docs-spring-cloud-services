@@ -363,9 +363,9 @@ curl -H "Authorization: bearer $TOKEN" -H "X-VAULT-Token: [VAULT_TOKEN]" \
 [URI]/vault/v1/auth/token/renew-self -d '{"increment": [INTERVAL]}'
 ```
 
-This script is first retrieving an access token using an OAuth2 credential exchange with Cloud Foundy's UAA service. After being given an authroization token, it uses this token to make call to the service instance's API endpoints.
+This script retrieves an access token using an OAuth 2.0 credential exchange with Cloud Foundry's UAA service. After being given an authorization token, it uses this token to make a call to the service instance's API endpoints.
 
-Replace the following placeholders in the script by using values from the `cf env` command above:
+Replace the following placeholders in the script with values from the `cf env` command above:
 
 * `[ACCESS_TOKEN_URI]` with the value of `p-config-server.credentials.access_token_uri`
 * `[CLIENT_ID]` with the value of `p-config-server.credentials.client_id`
