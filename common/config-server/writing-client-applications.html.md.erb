@@ -353,21 +353,24 @@ System-Provided:
 [...]
 </pre>
 
-Then create a Bash script that accesses the Vault token renewal endpoint on the service instance backing application. In the following two commands:
+Then create a Bash script that accesses the Vault token renewal endpoint on the service instance backing application:
 
 ```sh
-TOKEN=$(curl -k [ACCESS_TOKEN_URI] -u [CLIENT_ID]:[CLIENT_SECRET] -d
-grant_type=client_credentials | jq -r .access_token); curl -H "Authorization: bearer
-$TOKEN" -H "X-VAULT-Token: [VAULT_TOKEN]" -H "Content-Type: application/json" -X POST
+TOKEN=$(curl -k [ACCESS_TOKEN_URI] -u [CLIENT_ID]:[CLIENT_SECRET] \
+-d grant_type=client_credentials | jq -r .access_token); \
+curl -H "Authorization: bearer $TOKEN" -H "X-VAULT-Token: [VAULT_TOKEN]" \
+-H "Content-Type: application/json" -X POST \
 [URI]/vault/v1/auth/token/renew-self -d '{"increment": [INTERVAL]}'
 ```
 
-Replace the following placeholders using values from the `cf env` command above:
+This script is first retrieving an access token using an OAuth2 credential exchange with Cloud Foundy's UAA service. After being given an authroization token, it uses this token to make call to the service instance's API endpoints.
 
-* `[ACCESS_TOKEN_URI]` with the value of `credentials.access_token_uri`
-* `[CLIENT_ID]` with the value of `credentials.client_id`
-* `[CLIENT_SECRET]` with the value of `credentials.client_secret`
-* `[URI]` with the value of `credentials.uri`
+Replace the following placeholders in the script by using values from the `cf env` command above:
+
+* `[ACCESS_TOKEN_URI]` with the value of `p-config-server.credentials.access_token_uri`
+* `[CLIENT_ID]` with the value of `p-config-server.credentials.client_id`
+* `[CLIENT_SECRET]` with the value of `p-config-server.credentials.client_secret`
+* `[URI]` with the value of `p-config-server.credentials.uri`
 
 Replace the following placeholders with the relevant values:
 
