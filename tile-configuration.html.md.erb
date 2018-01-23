@@ -47,11 +47,11 @@ Click **Save** and return to the Installation Dashboard, then apply your changes
 
 Spring Cloud Services can store its service instances' credentials in the Runtime CredHub. You can enable this behavior by selecting the **Secure service instance credentials** checkbox.
 
-<p class="note"><strong>Important: </strong> To use this feature, you must be using PAS 2.0 or later and have <a href="http://docs-pcf-staging.cfapps.io/pivotalcf/2-0/opsguide/secure-si-creds.html">configured the Runtime CredHub</a>, with at least one job instance in the PAS tile's Resource Config settings tab.</p>
+<p class="note"><strong>Important: </strong> To use this feature, you must be using PAS 2.0 or later and have <a href="http://docs.pivotal.io/pivotalcf/2-0/opsguide/secure-si-creds.html">configured the Runtime CredHub</a>, with at least one job instance in the PAS tile's Resource Config settings tab.</p>
 
 <%= image_tag("/spring-cloud-services/images/operator-information/secure-si-credentials.png") %>
 
-Click **Save** and return to the Installation Dashboard, then apply your changes. Spring Cloud Services will store credentials for new service instances in the Runtime CredHub (credentials for previously-existing service instances will remain stored in the Cloud Controller database).
+Click **Save** and return to the Installation Dashboard, then apply your changes. Spring Cloud Services will secure credentials for new service instances in the Runtime CredHub (credentials for previously-existing service instances will not be moved to CredHub).
 
 ### <a id="errand-configuration"></a>Errand Configuration
 
