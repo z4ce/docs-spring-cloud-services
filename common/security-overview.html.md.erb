@@ -159,7 +159,7 @@ The SB communicates with UAA via HTTPS to enable Dashboard SSO. All requests to 
 
 <p class='note'><strong>Note</strong>: CredHub support requires Pivotal Application Service (PAS) 2.0 or later.</p>
 
-If the Operator has configured the Spring Cloud Services tile to secure service instance credentials using CredHub, the SB uses the runtime CredHub to store the JSON payload generated for each service instance binding created. Such credentials are named as the following:
+If the Operator has configured the Spring Cloud Services tile to [secure service instance credentials using CredHub](http://docs.pivotal.io/pivotalcf/2-0/opsguide/secure-si-creds.html), the SB uses the runtime CredHub to store the JSON payload generated for each service instance binding created. Such credentials are named as the following:
 
 ```
 /c/p-spring-cloud-services/[service-name]/[binding-GUID]/credentials-json
@@ -226,7 +226,7 @@ The Worker uses the client management APIs of UAA to create and delete clients i
 
 _Service Instance Backing Application Credentials_
 
-If the Operator has configured the Spring Cloud Services tile to secure service instance credentials using CredHub, the Worker, when creating a service instance, relies on the runtime CredHub to generate basic access authentication credentials or OAuth 2.0 credentials for a service instance's backing application(s). Such credentials are named as the following:
+If the Operator has configured the Spring Cloud Services tile to [secure service instance credentials using CredHub](http://docs.pivotal.io/pivotalcf/2-0/opsguide/secure-si-creds.html), the Worker, when creating a service instance, relies on the runtime CredHub to generate basic access authentication credentials or OAuth 2.0 credentials for a service instance's backing application(s). Such credentials are named as the following:
 
 ```
 /c/p-spring-cloud-services/[app-name]-[instance-GUID]/basic/user-credential
