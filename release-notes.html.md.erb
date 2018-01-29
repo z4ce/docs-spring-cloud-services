@@ -40,6 +40,14 @@ The Spring Cloud Services client dependencies were restructured in 1.1.0. In 1.5
 
 After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.5.x version, you must unbind, rebind, and restart any client applications which were bound to the instance. This is due to a change in how service instance credentials are managed.
 
+## <a id="1-5-1"></a>1.5.1
+
+**Release Date: 29th January 2018**
+
+Enhancements included in this release:
+
+* Fixed issue with _beta_ CredHub service broker integration that Spring Cloud Services supports. This issue occurred when the Spring Cloud Services service broker received an error from CredHub when attempting to delete credentials, the binding deletion or instance deletion operations would fail and leave service instance in broken state. The Spring Cloud Services broker now handles this situation by not failing due to failed CredHub binding deletion attempt.
+
 ## <a id="1-5-0"></a>1.5.0
 
 **Release Date: 22nd December 2017**
