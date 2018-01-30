@@ -46,7 +46,7 @@ After upgrading a 1.0.x Circuit Breaker Dashboard service instance to a 1.5.x ve
 
 Enhancements included in this release:
 
-* Fixed issue with _beta_ CredHub service broker integration that Spring Cloud Services supports. This issue occurred when the Spring Cloud Services service broker received an error from CredHub when attempting to delete credentials, the binding deletion or instance deletion operations would fail and leave service instance in broken state. The Spring Cloud Services broker now handles this situation by not failing due to failed CredHub binding deletion attempt.
+* Resolved an issue with the Spring Cloud Services support for _beta_ CredHub service broker integration. This issue occurred if the Spring Cloud Services service broker received an error from CredHub when attempting to delete credentials: the binding or instance deletion operation would fail and leave the service instance in a broken state. The Spring Cloud Services broker now handles this situation by not failing due to a failed CredHub binding deletion attempt.
 
 ## <a id="1-5-0"></a>1.5.0
 
