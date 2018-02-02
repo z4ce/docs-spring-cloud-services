@@ -66,12 +66,6 @@ To use these features in a client application, you must use a Java buildpack whi
 
 <p class="tip">If you cannot use version 3.7.1 or later, you can add the JCE Unlimited Strength policy files to an earlier version of the Cloud Foundry Java buildpack. Fork the <a href="https://github.com/cloudfoundry/java-buildpack">buildpack on GitHub</a>, then download the policy files from Oracle and place them in the buildpack's <code>resources/open_jdk_jre/lib/security</code> directory. Follow the instructions in the <a href="http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html">Managing Custom Buildpacks</a> topic to add this buildpack to Pivotal Cloud Foundry. Be sure that it has the lowest position of all enabled Java buildpacks.</p>
 
-If you wish to use public-key (or asymmetric) encryption, you must configure the Config Server to use a PEM-encoded keypair. You might generate such a keypair using, for example, [OpenSSL](https://www.openssl.org/) on the command line:
-
-```
-$ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048
-```
-
 <%= partial vars.scs_cs_oauth_token %>
 
 The Config Server returns the encrypted value. You can use the encrypted value in a configuration file as described in the [Encrypted Configuration](/spring-cloud-services/config-server/configuration-properties.html#encrypted-configuration) section of the [Configuration Properties](/spring-cloud-services/config-server/configuration-properties.html) topic.
@@ -86,6 +80,19 @@ To configure a Config Server service instance that can encrypt property values, 
 
 ```
 '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "KEY" }}'
+```
+
+If you wish to use public-key (or asymmetric) encryption, you must configure the Config Server to use a PEM-encoded keypair. You might generate such a keypair using, for example, [OpenSSL](https://www.openssl.org/) on the command line:
+
+```
+$ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048 > server.key
+# Translate PEM encoded private key to a RSA private key and remove newlines from it
+$ openssl rsa -in server.key | tr -d '\n' > server_rsa.key
+```
+
+To configure a Config Server service instance that can encrypt property values with an assymetric keypair, use the following JSON object(key from content of server_rsa.key file):
+```
+'{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "-----BEGIN RSA PRIVATE KEY-----MIIE......-----END RSA PRIVATE KEY-----" }}'
 ```
 
 The encryption key is masked in the Config Server dashboard.
