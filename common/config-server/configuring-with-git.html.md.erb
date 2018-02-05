@@ -82,7 +82,7 @@ To configure a Config Server service instance that can encrypt property values, 
 '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "KEY" }}'
 ```
 
-If you wish to use public-key (or asymmetric) encryption, you must configure the Config Server to use a PEM-encoded keypair. You might generate such a keypair using, for example, [OpenSSL](https://www.openssl.org/) on the command line:
+If you wish to use public-key (or asymmetric) encryption, you may configure the Config Server to use a PEM-encoded keypair. You might generate such a keypair using, for example, [OpenSSL](https://www.openssl.org/) on the command line:
 
 ```
 $ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048 > server.key
