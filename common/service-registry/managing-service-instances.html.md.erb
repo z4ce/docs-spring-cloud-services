@@ -5,13 +5,9 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
+See below for information about managing Service Registry service instances using the Cloud Foundry Command Line Interface tool (cf CLI). You can also manage Service Registry service instances using <%= vars.scs_platform_name %> Apps Manager.
+
 ## <a id="creating"></a>Creating an Instance
-
-You can create a Service Registry service instance using either the Cloud Foundry Command Line Interface tool (cf CLI) or <%= vars.scs_platform_name %> Apps Manager.
-
-<p class='note'><strong>Note</strong>: Service Registry service instances can run in a high-availability mode, with an arbitrary number of replicated nodes, and can replicate service registrations with peers in other PCF spaces, organizations, or deployments. These behaviors can only be configured through use of the cf CLI. (After creating a service instance using Apps Manager, you can use the cf CLI to configure the instance. See the <a href="#updating">Updating an Instance</a> section.)</p>
-
-### <a id="using-cf-cli"></a>Using the cf CLI
 
 Target the correct org and space:
 
@@ -44,34 +40,6 @@ As the command output suggests, you can use the `cf services` or `cf service` co
 <%= partial vars.scs_sr_creating_instance_service %>
 
 <%= vars.scs_creating_instance_discrepancy %>
-
-### <a id="using-apps-manager"></a>Using Apps Manager
-
-Log into Apps Manager as a Space Developer. In the Marketplace, select **Service Registry**.
-
-<%= image_tag(vars.scs_sr_creating_instance_img_marketplace) %>
-
-Select the desired plan for the new service instance.
-
-<%= image_tag(vars.scs_sr_creating_instance_img_select_plan) %>
-
-Provide a name for the service instance (for example, "service-registry"). Click the **Add** button.
-
-<%= image_tag(vars.scs_sr_creating_instance_img_instance_name) %>
-
-In the **Services** list, click the listing for the new service instance.
-
-<%= image_tag(vars.scs_sr_creating_instance_img_service_successfully_added) %>
-
-Click the **Manage** link.
-
-<%= image_tag(vars.scs_sr_creating_instance_img_manage_link) %>
-
-It may take a few minutes to provision the service instance; while it is being provisioned, you will see a "The service instance is initializing" message. When the instance is ready, its dashboard will load automatically.
-
-<%= image_tag(vars.scs_sr_creating_instance_img_dashboard_new) %>
-
-For information about registering an application with a Service Registry service instance, see the <a href="/spring-cloud-services/service-registry/writing-client-applications.html">Writing Client Applications</a> topic.
 
 ## <a id="updating"></a>Updating an Instance
 
