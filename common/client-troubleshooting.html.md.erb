@@ -23,7 +23,7 @@ security group issue?
 com.netflix.discovery.DiscoveryClient.makeRemoteCall(DiscoveryClient.java:1155)
 ```
 
-If your PCF environment is using a self-signed certificate (such as a certificate generated in Elastic Runtime), you must set the `TRUST_CERTS` environment variable on your application to the API endpoint of Elastic Runtime. See the "Add Self-Signed SSL Certificate to JVM Truststore" section of the [Writing Client Applications](/spring-cloud-services/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
+If your PCF environment is using a self-signed certificate (such as a certificate generated in Elastic Runtime), you must set the `TRUST_CERTS` environment variable on your application to the API endpoint of Elastic Runtime. See the [Add Self-Signed SSL Certificate to JVM Truststore](/spring-cloud-services/common/service-registry/writing-client-applications.html#self-signed-ssl-certificate) section of the [Writing Client Applications](/spring-cloud-services/common/service-registry/writing-client-applications.html) topic in the [Service Registry documentation](/spring-cloud-services/service-registry/).
 
 ## <a id="pkix"></a>"sun.security.validator.ValidatorException: PKIX path building failed"
 
