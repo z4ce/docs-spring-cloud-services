@@ -17,7 +17,7 @@ If using Maven, include in `pom.xml`:
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.7.RELEASE</version>
+    <version>1.5.9.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -26,14 +26,14 @@ If using Maven, include in `pom.xml`:
         <dependency>
             <groupId>io.pivotal.spring.cloud</groupId>
             <artifactId>spring-cloud-services-dependencies</artifactId>
-            <version>1.6.0.RELEASE</version>
+            <version>1.6.1.RELEASE</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
-            <version>Edgware.RELEASE</version>
+            <version>Edgware.SR1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -49,7 +49,7 @@ If not using the `spring-boot-starter-parent`, include in the `<dependencyManage
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
-            <version>1.5.7.RELEASE</version>
+            <version>1.5.9.RELEASE</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -71,7 +71,7 @@ buildscript {
     }
     dependencies {
         classpath("io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
     }
 }
 
@@ -81,8 +81,8 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Edgware.RELEASE"
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.6.0.RELEASE"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Edgware.SR1"
+        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:1.6.1.RELEASE"
     }
 }
 
@@ -98,7 +98,7 @@ If not using the Spring Boot Gradle plugin, include in the `dependencyManagement
 ```groovy
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:1.5.7.RELEASE"
+        mavenBom "org.springframework.boot:spring-boot-dependencies:1.5.9.RELEASE"
     }
 }
 ```
