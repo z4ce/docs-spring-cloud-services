@@ -272,7 +272,7 @@ A [default value for `secretMenu`](https://github.com/spring-cloud-services-samp
 secretMenu: Animal Crackers
 ```
 
-In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-services-samples/cook/blob/1.5.x/src/main/java/cook/Application.java#L21-L24). It returns the value of the `secretMenu` property.
+In the Application class, [the method `secretMenu()` is mapped to `/restaurant/secret-menu`](https://github.com/spring-cloud-services-samples/cook/blob/1.5.x/src/main/java/cook/Application.java#L31-L34). It returns the value of the `secretMenu` property.
 
 ```java
     @RequestMapping("/restaurant/secret-menu")
@@ -293,6 +293,25 @@ $ cf restage cook
 </pre>
 
 The application will decrypt the encrypted property after receiving it from the Config Server. You can view the property value by visiting `/restaurant/secret-menu` on the application.
+
+## <a id="use-plain-text-configuration-files"></a>Use Plain Text Configuration Files
+
+You can use the Config Server to serve files from plain text files in a Git repository. The Spring Cloud Services Config Client library adds a `PlainTextConfigClient` that can read in a text file and make its contents available to a client application.
+
+The `PlainTextConfigClient` provides a `getConfigFile()` method which accepts an application profile, a label, and a filename. You can use this method to retrieve a Spring [`Resource`](https://docs.spring.io/spring-framework/docs/5.0.x/spring-framework-reference/core.html#resources). The Cook application takes the `InputStream` from the retrieved `Resource` and uses the `copyToString()` method of Spring's [`StreamUtils`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/StreamUtils.html) to [return a `String`](https://github.com/spring-cloud-services-samples/cook/blob/1.5.x/src/main/java/cook/Application.java#L20-L40).
+
+```
+@Autowired
+PlainTextConfigClient configClient;
+
+//...
+
+@RequestMapping("/restaurant/dessert-menu")
+String dessertMenu() throws IOException {
+  InputStream input = configClient.getConfigFile("cloud", "master", "dessert.json").getInputStream();
+  return StreamUtils.copyToString(input, Charset.defaultCharset());
+}
+```
 
 ## <a id="use-a-hashicorp-vault-server"></a>Use a HashiCorp Vault Server
 

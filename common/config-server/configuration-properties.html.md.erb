@@ -129,6 +129,12 @@ fF8K2AvC3vmvlmxy9Y49Zjx0RhMzUx17eh3mAB8UMMRJZyUG2a2uGCXmz+UunTA5n/dWWOvR3VcZyzXP
 w3db9XZ7goceJSPrRN+5s+GjLCPr+KSnhLmUt1XAScMeqTieNCHT5I=
 ```
 
+### <a id="git-plain-text-configuration"></a>Plain Text Configuration
+
+You can store configuration in files of other file types. The Spring Cloud Services Config Client library includes a `PlainTextConfigClient` that can be used to retrieve the contents of a plain text file as a Spring `Resource`.
+
+For more information about using the Config Server to serve plain text files to a client application, see the [Use Plain Text Configuration Files](/spring-cloud-services/config-server/writing-client-applications.html#use-plain-text-configuration-files) section of the [Writing Client Applications](/spring-cloud-services/config-server/writing-client-applications.html) topic.
+
 ## <a id="vault"></a>Vault
 
 If using a HashiCorp Vault configuration source, you must write secrets to the Vault server using the `vault` Command Line Interface (CLI) tool.
