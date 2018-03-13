@@ -41,16 +41,16 @@ For information about writing a client application that accesses configuration v
 
 You can configure a Config Server service instance to access a configuration source using an HTTP or HTTPS proxy. To do so, you must provide proxy settings in either of the `vault.proxy.http` or `vault.proxy.https` JSON objects. You can set the proxy host and port, the proxy username and password (if applicable), and a list of hosts which the Config Server should access outside of the proxy.
 
-Settings for an HTTP proxy are set in the `vault.proxy.http` object. These might be set as shown in the following JSON:
+Settings for an HTTP proxy are set in the `vault.proxy.http` object. These might be set as shown in the following command:
 
 ```
-'{"vault": { "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+cf create-service p-config-server standard config-server -c '{"vault": { "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
 ```
 
-Settings for an HTTPS proxy are set in the `vault.proxy.https` object. These might be set as shown in the following JSON:
+Settings for an HTTPS proxy are set in the `vault.proxy.https` object. These might be set as shown in the following command:
 
 ```
-'{"vault": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
+cf create-service p-config-server standard config-server -c '{"vault": { "proxy": { "https": { "host": "secure.wise.com", "port": "443" } } } }'
 ```
 
 <p class='note'><strong>Note</strong>: Some networks require that separate proxy servers are used for HTTP and HTTPS URLs. In such a case, you can set both the <code>proxy.http</code> and <code>proxy.https</code> objects.</p>
@@ -72,14 +72,14 @@ The parameters used to configure HTTP or HTTPS proxy settings for the Config Ser
 | <code>proxy.https.username</code>          | The username to use with an authenticated HTTPS proxy (if <code>proxy.http.username</code> is also provided, <code>http.username</code> will be used instead of <code>https.username</code>) |
 | <code>proxy.https.password</code>          | The password to use with an authenticated HTTPS proxy (if <code>proxy.http.password</code> is also provided, <code>http.password</code> will be used instead of <code>https.password</code>) |
 
-To configure a Config Server service instance that uses an HTTP proxy to access a configuration source, use the following JSON object:
+To configure a Config Server service instance that uses an HTTP proxy to access a configuration source, use the following command:
 
 ```
-'{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
+cf create-service p-config-server standard config-server -c '{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "http": { "host": "proxy.wise.com", "port": "80" } } } }'
 ```
 
-To configure a Config Server service instance that uses an authenticated HTTPS proxy to access a configuration source, specifying that `example.com` should be accessed outside of the proxy, use the following JSON object:
+To configure a Config Server service instance that uses an authenticated HTTPS proxy to access a configuration source, specifying that `example.com` should be accessed outside of the proxy, use the following command:
 
 ```
-'{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
+cf create-service p-config-server standard config-server -c '{"vault": { "host": "127.0.0.1", "port": "8200", "proxy": { "https": { "host": "secure.wise.com", "port": "443", "username": "jim", "password": "wright62", "nonProxyHosts": "example.com" } } } }'
 ```
