@@ -1,0 +1,44 @@
+---
+title: Service Instance Sharing
+owner: Spring Cloud Services
+---
+
+Spring Cloud Services supports Cloud Foundry service instance sharing. See the below sections for steps to share and unshare a Spring Cloud Services service instance across orgs and spaces.
+
+<% if vars.product_name == 'PCF' %>
+  <p class='note'><strong>Note</strong>: Service instance sharing is currently available in beta on <a href="https://run.pivotal.io/">Pivotal Web Services</a> (PWS). To use it with Spring Cloud Services, sign in to your PWS account.</p>
+<% end %>
+
+## <a id="config-server-upgrades"></a>Sharing a Service Instance
+
+To share an existing Spring Cloud Services service instance, run the `cf share-service` command. Provide the service instance name, the space with which to share the service instance, and the org with which to share the service instance (if the space is not in the currently-targeted org).
+
+To share a Service Registry service instance named `service-registry` with the `john` space in the current org, run:
+
+<pre class="terminal">
+$ cf share-service service-registry -s john
+</pre>
+
+To share a Service Registry service instance named `service-registry` with the `charles` space in the `development` org, run:
+
+<pre class="terminal">
+$ cf share-service service-registry -o development -s charles
+</pre>
+
+## <a id="service-registry-upgrades"></a>Unsharing a Service Instance
+
+To unshare a Spring Cloud Services service instance from a space with which it has been shared, run the `cf unshare-service` command. Provide the service instance name, the space with which the service instance should no longer be shared, and the org of that space (if different from the current org).
+
+To stop sharing a Service Registry service instance named `service-registry` with the `john` space in the current org, run:
+
+<pre class="terminal">
+$ cf unshare-service service-registry -s john
+</pre>
+
+To stop sharing a Service Registry service instance named `service-registry` with the `charles` space in the `development` org, run:
+
+<pre class="terminal">
+$ cf unshare-service service-registry -o development -s charles
+</pre>
+
+For more information about service instance sharing, see the [Sharing Service Instances](https://docs.cloudfoundry.org/devguide/services/sharing-instances.html) topic in the [Cloud Foundry documentation](https://docs.cloudfoundry.org).
