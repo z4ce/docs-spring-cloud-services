@@ -25,6 +25,8 @@ The broker relies on two other Pivotal Cloud Foundry products, [MySQL for Pivota
 * **spring-cloud-broker-db**: A MySQL database used by the SB.
 * **spring-cloud-broker-rmq**: A RabbitMQ queue used for communication between the SB and the Worker.
 
+<p class='note'><strong>Note</strong>: As of version 1.9, RabbitMQ for PCF can be configured to provide a dedicated cluster for use by Spring Cloud Services. See the see the <a href="https://docs.pivotal.io/rabbitmq-cf/1-11/replicator.html#scs-isolation">Running SCS on a Dedicated RabbitMQ Cluster</a> section of the <a href="https://docs.pivotal.io/rabbitmq-cf/1-11/replicator.html">Creating Isolation with the RabbitMQ for PCF Replicator</a> topic in the <a href="https://docs.pivotal.io/rabbitmq-cf/1-11/">RabbitMQ for PCF documentation</a>.</p>
+
 You can obtain the broker username and password from the Spring Cloud Services tile in Pivotal Cloud Foundry&reg; Operations Manager. Click the Spring Cloud Services tile, and in the **Credentials** tab, follow the link to the Broker Credentials.
 
 <%= image_tag("/spring-cloud-services/images/operator-information/broker-credentials.png") %>
