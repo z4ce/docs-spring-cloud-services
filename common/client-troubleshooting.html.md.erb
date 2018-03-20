@@ -5,6 +5,38 @@ owner: Spring Cloud Services
 
 See below for information about troubleshooting problems in client applications which are bound to Spring Cloud Services service instances.
 
+## <a id="not-registering-with-service-registry"></a>Service Registry client application not registering
+
+A client application bound to a Service Registry service instance may fail to register with the Service Registry and log an error such as the following:
+
+```
+2018-03-20T14:28:08.14-0500 [APP/PROC/WEB/0] OUT 2018-03-20 19:28:08.143  WARN 22 ---
+[           main] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed
+with message: I/O error on GET request for "http://localhost:8761/eureka/apps/":
+Connection refused (Connection refused); nested exception is java.net.ConnectException:
+Connection refused (Connection refused)
+```
+
+If the client application is consuming Spring Cloud Netflix Eureka configuration properties from other sources, such as a Config Server service instance, it may attempt to use those properties to connect to Eureka, and therefore fail to connect to the Spring Cloud Services Service Registry service instance. The application logs may also contain a message such as the following:
+
+```
+2018-03-20T14:27:58.62-0500 [APP/PROC/WEB/0] OUT 2018-03-20 19:27:58.622  WARN 22 ---
+[           main] .s.c.s.e.EurekaInstanceAutoConfiguration : Eureka zone could not be
+determined from eureka.client.serviceUrl.defaultZone="http://localhost:8761/eureka/".
+Using "unknown".
+```
+
+In the case of the application in this example, the application was bound to a Config Server service instance that served it the following configuration properties from an `application.yml` file:
+
+```
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+```
+
+Check that the client application is not using any other configuration properties to locate a Spring Cloud Netflix Eureka server. If it is, remove those properties, repackage the application if necessary, and push the application again.
+
 ## <a id="cant-contact-any-eureka-nodes"></a>"Can't contact any eureka nodes - possibly a security group issue?"
 
 A client application bound to a Service Registry service instance may log an error such as the following:
