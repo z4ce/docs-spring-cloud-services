@@ -18,6 +18,8 @@ owner: Spring Cloud Services
 
 Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://network.pivotal.io/products/p-spring-cloud-services)
 
+<p class='note'><strong>Important</strong>: The service broker applications in Spring Cloud Services 1.5 use the <code>system</code> org's system domain, and expect this domain to be a shared domain (the default setting). If you make the <code>system</code> org's system domain private, Spring Cloud Services 1.5 will fail to push applications to the <code>system</code> org.</p>
+
 ## <a id="1-5-0-migrating-from-1-4-x"></a>Migrating from 1.4.x
 
 If you are upgrading from a 1.4.x release of Spring Cloud Services, no changes are required for client applications or Spring Cloud Services service instances.
