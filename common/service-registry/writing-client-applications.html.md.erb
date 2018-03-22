@@ -145,35 +145,35 @@ The Message Generation application is registered with the Service Registry insta
 
 ### <a id="consume-using-c2c"></a>Consume Using Container-to-Container Networking
 
-To use Cloud Foundry's container networking (see the [Understanding Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/concepts/understand-cf-networking.html) topic in the [Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/) documentation) to reach an application registered with the Service Registry, you must add a network policy. You can do this using the [Networking cf CLI plugin](https://github.com/cloudfoundry-incubator/cf-networking-release/).
+To use Cloud Foundry's container networking (see the [Understanding Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/concepts/understand-cf-networking.html) topic in the [Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/) documentation) to reach an application registered with the Service Registry, you must add a network policy. You can do this using the Cloud Foundry Command Line Interface (cf CLI).
 
-Run the `cf list-access` command to list current network policies:
+<p class='note'><strong>Note</strong>: Container networking support is included in the cf CLI version 6.30.0 and later.</p>
+
+Run the `cf network-policies` command to list current network policies:
 
 <pre class="terminal">
-$ cf list-access
-Listing policies as user...
-OK
+$ cf network-policies
+Listing network policies in org myorg / space dev as user...
 
-Source    Destination    Protocol    Port
+source   destination   protocol   ports
 </pre>
 
-Use the `cf allow-access` command to grant access from the Greeter application to the Message Generation application:
+Use the `cf add-network-policy` command to grant access from the Greeter application to the Message Generation application:
 
 <pre class="terminal">
-$ cf allow-access greeter message-generation --protocol tcp --port 8080
-Allowing traffic from greeter to message-generation as user...
+$ cf add-network-policy greeter --destination-app message-generation --protocol tcp --port 8080
+Adding network policy to app greeter in org myorg / space dev as user...
 OK
 </pre>
 
-Use `cf list-access` again to view the new access policy:
+Use `cf network-policies` again to view the new access policy:
 
 <pre class="terminal">
-$ cf list-access
-Listing policies as user...
-OK
+$ cf network-policies
+Listing network policies in org myorg / space dev as user...
 
-Source        Destination           Protocol   Port
-greeter       message-generation    tcp        8080
+source    destination          protocol   ports
+greeter   message-generation   tcp        8080
 </pre>
 
 The Greeter application can now use container networking to access the Message Generation application via the Service Registry. For more information about configuring container networking, see the [Administering Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/cf-networking.html) topic in the [Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/) documentation.
