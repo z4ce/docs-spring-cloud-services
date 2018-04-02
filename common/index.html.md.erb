@@ -38,7 +38,19 @@ See below for the Spring Cloud Services releases that include each service versi
 | 9               | >= 1.4.3 & < 1.5.0 |
 | 10              | 1.5.x              |
 
+<% if vars.product_name == 'PWS' %>
+### Service Plans
+
+Spring Cloud Services currently provides the following service plans:
+
+| Plan Name             | Description                                                                         |
+------------------------|-------------------------------------------------------------------------------------|
+| <code>trial</code>    | Service instances are free and are automatically deleted seven days after creation. |
+| <code>standard</code> | Service instances are paid, at $39.99 per month.                                    |
+
+<p class="note warning"><strong>WARNING: </strong> Service instances created using the <code>trial</code> plan are deleted automatically after seven days. Use this service plan for trial or demonstration purposes only.</p>
+<% end %>
+
 <% if vars.product_name == 'PCF' %>
  <%= partial vars.scs_details %>
 <% end %>
-
