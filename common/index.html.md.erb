@@ -49,6 +49,12 @@ Spring Cloud Services currently provides the following service plans:
 | <code>standard</code> | Service instances are paid, at $39.99 per month.                                    |
 
 <p class="note warning"><strong>WARNING: </strong> Service instances created using the <code>trial</code> plan are deleted automatically after seven days. Use this service plan for trial or demonstration purposes only.</p>
+
+#### <code>trial</code> Service Instance Automatic Deletion
+
+Service instances created using the `trial` plan are deleted seven days after creation. You can use this plan to create service instances for trial or demonstration purposes for short-term usage.
+
+Service instances created using the former `standard` plan (the plan called `standard` before the `trial` plan was introduced) have been renamed to `standard-legacy`. The `standard-legacy` plan cannot be used to create new service instances, and existing service instances using the `standard-legacy` plan will be deleted 45 days after the introduction of the `trial` plan.
 <% end %>
 
 <% if vars.product_name == 'PCF' %>
