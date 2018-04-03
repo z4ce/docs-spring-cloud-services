@@ -58,11 +58,3 @@ If any of these domains are not attributed to your Elastic Runtime SSL certifica
 Missing certs: *.uaa.example.com - exiting install. Please refer to the Security
 Requirements section of the Spring Cloud Services prerequisites documentation.
 ```
-
-## <a id="domain-requirements"></a>Domain Requirements
-
-If you are installing Spring Cloud Services version 1.4.0 or earlier, your Elastic Runtime deployment must have at least one shared domain available (see the [Shared Domains](https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/routes-domains.html#shared-domains) section of the [Routes and Domains](https://docs.pivotal.io/pivotalcf/devguide/deploy-apps/routes-domains.html) topic in the PCF documentation). If the Elastic Runtime deployment does not have at least one shared domain available, the Spring Cloud Services service broker is unable to deploy service instance backing applications.
-
-In Spring Cloud Services version 1.4.1 and later, service instance backing applications can be deployed using a private domain assigned to the `p-spring-cloud-services` org. If there is at least one shared domain available in the Elastic Runtime deployment, service instance backing applications will be deployed using the first shared domain available. If there is not at least one shared domain available in the Elastic Runtime deployment, service instance backing applications will be deployed using the first private domain assigned to the `p-spring-cloud-services` org.
-
-For more information about the Spring Cloud Services service instance backing applications, see the [Service Instances](/spring-cloud-services/service-broker-and-instances.html#service-instance-management) section of the [The Service Broker and Instances](/spring-cloud-services/service-broker-and-instances.html) topic.
