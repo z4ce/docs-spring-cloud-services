@@ -1,0 +1,40 @@
+---
+title: Service Instance Access
+owner: Spring Cloud Services
+---
+
+See below for information about directly accessing the Spring Boot backing applications deployed for each Spring Cloud Services service instance.
+
+## <a id="get-access-token-for-direct-requests-to-a-service-instance"></a>Get Access Token for Direct Requests to a Service Instance
+
+<%= partial 'get_access_token_for_direct_requests_to_a_service_instance' %>
+
+## <a id="using-credhub"></a>Using CredHub for Service Instance Credentials
+
+If the Spring Cloud Services tile has been [configured to use the Pivotal Application Service (PAS) CredHub to secure service instance credentials](/spring-cloud-services/tile-configuration.html#secure-service-instance-credentials-with-credhub), an application's `VCAP_SERVICES` environment variable will not include credentials for bound service instances. The environment variable will instead contain a CredHub reference for the service instance's credentials, as in the following example:
+
+```
+{
+ "VCAP_SERVICES": {
+  "p-config-server": [
+   {
+    "credentials": {
+     "credhub-ref": "/c/p-spring-cloud-services/p-config-server/019e0b47-b06a-4291-a8b8-4a2a90c645f5/credentials-json"
+    },
+    "label": "p-config-server",
+    "name": "config-server",
+    "plan": "standard",
+    "provider": null,
+    "syslog_drain_url": null,
+    "tags": [
+     "configuration",
+     "spring-cloud"
+    ],
+    "volume_mounts": []
+   }
+  ]
+ }
+}
+```
+
+Service instance credentials secured using the PAS CredHub are securely provided to the bound application at runtime. For more information about CredHub, see the [documentation](https://docs.pivotal.io/pivotalcf/credhub/index.html).
