@@ -83,7 +83,7 @@ System-Provided:
 [...]
 </pre>
 
-Copy the value of `credentials.uri`. Then use the `cf oauth-token` command to get the token for the current session. The following example uses curl to access the `/encrypt` endpoint of a Config Server service instance (see the Git [Encryption and Encrypted Values](/spring-cloud-services/common/config-server/configuring-backends.html#git-encryption-and-encrypted-values) section of the [Configuring Backends](/spring-cloud-services/common/config-server/configuring-backends.html) topic):
+Copy the value of `credentials.uri`. Then use the `cf oauth-token` command to get the token for the current session. The following example uses curl to access the `/encrypt` endpoint of a Config Server service instance (see the Git [Encryption and Encrypted Values](/spring-cloud-services/config-server/configuring-backends.html#git-encryption-and-encrypted-values) section of the [Configuring Backends](/spring-cloud-services/config-server/configuring-backends.html) topic):
 
 <pre class="terminal">
 $ curl -H "Authorization: $(cf oauth-token)" https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/encrypt -d 'Value to be encrypted'
