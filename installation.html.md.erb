@@ -3,6 +3,17 @@ title: Installing Spring Cloud&reg; Services for Pivotal Cloud Foundry
 owner: Spring Cloud Services
 ---
 
+<style>
+    .note.warning {
+        background-color: #fdd;
+        border-color: #fbb
+    }
+
+    .note.warning:before {
+        color: #f99;
+     }
+</style>
+
 <strong><%= modified_date %></strong>
 
 Make sure that you have or have completed all products and requirements listed in the <a href="/spring-cloud-services/prerequisites.html">Prerequisites</a> topic. Then follow the below steps to install Spring Cloud Services.
@@ -27,7 +38,10 @@ Make sure that you have or have completed all products and requirements listed i
 
     <%= image_tag("./images/installation/settings.png") %>
 
-    The **Service instance limit** setting sets the maximum number of service instances that the Spring Cloud Services service broker will allow to be provisioned (the default value is 100). This setting's value is also used to determine the memory quota for the org in which service instances are deployed; that org's quota will be equal to 1.5G times the configured service instance limit. The **App push timeout** setting is the number of minutes the broker allows for a service instance backing application to start. The **Buildpack** setting is the name of the Java buildpack that the Spring Cloud Services service broker will use to provision service instances (if this setting is left empty, the broker will use the default Java buildpack to provision service instances). The **Do not validate that SSL certificates are properly configured** checkbox, if checked, disables the validation that Spring Cloud Services performs by default on the Pivotal Cloud Foundry&reg; Elastic Runtime SSL certificate.
+    The **Service instance limit** setting sets the maximum number of service instances that the Spring Cloud Services service broker will allow to be provisioned (the default value is 100). This setting's value is also used to determine the memory quota for the org in which service instances are deployed; that org's quota will be equal to 1.5G times the configured service instance limit. The **App push timeout** setting is the number of minutes the broker allows for a service instance backing application to start. The **Buildpack** setting is the name of the Java buildpack that the Spring Cloud Services service broker will use to provision service instances (if this setting is left empty, the broker will use the default Java buildpack to provision service instances).
+<br /><br />The **Do not validate that SSL certificates are properly configured** checkbox, if checked, disables only the validation that Spring Cloud Services performs by default on the Pivotal Cloud Foundry&reg; Pivotal Application Service (PAS) SSL certificate. It does not disable SSL certificate validation for application instances running on the Pivotal Cloud Foundry &reg; platform.
+
+    <p class="note warning"><strong>WARNING: </strong> Disabling Spring Cloud Services' validation of the PAS SSL certificate is an extreme action that should not be taken unless absolutely necessary, and can cause unexpected behavior across your installation of Spring Cloud Services. Do not disable this validation unless you are completely certain that you must do so.</p>
 
     <%= image_tag("./images/installation/service-settings.png") %>
 
