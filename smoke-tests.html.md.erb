@@ -3,7 +3,13 @@ title: Smoke Tests for Spring Cloud Services for PCF
 owner: Spring Cloud Services
 ---
 
-See below for information about the smoke tests used by the Spring Cloud Services tile to ensure proper operation of its services after an installation or upgrade.
+The Spring Cloud Services tile runs a set of smoke tests to verify proper operation of its services after an installation or upgrade. See below for information about the smoke tests.
+
+## <a id="errand"></a> Smoke Tests BOSH Errand
+
+The smoke tests are run within the "Smoke Tests" post-deploy BOSH lifecycle errand. By default, this errand is set to "On", and will be run on every installation or upgrade of the Spring Cloud Services tile. You can view the post-deploy errands by visiting the **Errands** tab of the Spring Cloud Services tile settings.
+
+<%= image_tag("./images/post-deploy-errands.png") %>
 
 ## <a id="steps"></a> Smoke Test Steps
 
