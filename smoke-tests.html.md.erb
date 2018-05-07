@@ -1,0 +1,36 @@
+---
+title: Smoke Tests for Spring Cloud Services for PCF
+owner: Spring Cloud Services
+---
+
+The Spring Cloud Services tile runs a set of smoke tests to verify proper operation of its services after an installation or upgrade. See below for information about the smoke tests.
+
+## <a id="errand"></a> Smoke Tests BOSH Errand
+
+The smoke tests are run within the "Smoke Tests" post-deploy BOSH lifecycle errand. By default, this errand is set to "On", and will be run on every installation or upgrade of the Spring Cloud Services tile. You can view the post-deploy errands by visiting the **Errands** tab of the Spring Cloud Services tile settings.
+
+<%= image_tag("./images/post-deploy-errands.png") %>
+
+## <a id="steps"></a> Smoke Test Steps
+
+The smoke tests are run in the "Smoke Tests" BOSH errand. They follow the steps below:
+
+1. Target the Cloud Foundry API of the Pivotal Cloud Foundry environment.
+
+1. Authenticate the test Cloud Foundry user.
+
+1. Target the Spring Cloud Services broker org, then target the smoke test space, creating the space if it does not exist.
+
+1. Delete any previously-existing test service keys and service instances.
+
+1. For each service, in the order of Service Registry, Config Server, Circuit Breaker Dashboard, run the smoke tests:
+
+  1. Create an instance of the service.
+
+  1. Wait for the service instance to be provisioned.
+
+  1. Create a service key for the service instance (this approximates the binding of an application to the service instance).
+
+  1. Delete the service key.
+
+  1. Delete the service instance.
