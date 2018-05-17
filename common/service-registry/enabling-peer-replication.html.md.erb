@@ -101,7 +101,7 @@ To configure two-way peer replication for two Service Registry service instances
 1. In the other PCF deployment, organization, or space, create a Service Registry service instance B, with A as a peer.
 
     ```
-    $ cf create-service p-service-registry-2 standard service-registry -c '{ "peers": [ { "uri": "https://eureka-dda7d2ac-8f9f-4d06-b8e3-9ce5b82b930e.wise.com" } ] }'
+    $ cf create-service p-service-registry standard service-registry-2 -c '{ "peers": [ { "uri": "https://eureka-dda7d2ac-8f9f-4d06-b8e3-9ce5b82b930e.wise.com" } ] }'
     ```
 
 1. Visit B's dashboard and copy its server URL. You will see a warning message on B's dashboard, because B currently has A as a peer and A currently has no peers.
