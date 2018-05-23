@@ -58,3 +58,18 @@ Service instances created using the `trial` plan are deleted seven days after cr
 <% if vars.product_name == 'PCF' %>
  <%= partial vars.scs_details %>
 <% end %>
+
+<a id="requirements"></a>
+## Requirements
+
+Spring Cloud Services for PCF has the following requirements:
+
+* [Java Cloud Foundry buildpack](https://github.com/cloudfoundry/java-buildpack) version 4.5 or later (if the default Java buildpack is not at version 4.5 or later, you must specify an alternate buildpack that is at version 4.5 or later when installing Spring Cloud Services; see step 4 of the [Installation](/spring-cloud-services/installation.html) topic)
+* A MySQL service (Pivotal recommends [MySQL for PCF](https://network.pivotal.io/products/p-mysql) or [MySQL for PCF v2](https://network.pivotal.io/products/pivotal-mysql) for use with Spring Cloud Services)
+* [RabbitMQ for PCF](https://network.pivotal.io/products/pivotal-rabbitmq-service) (for information about isolating the RabbitMQ cluster used for Spring Cloud Services, see [Running SCS on a Dedicated RabbitMQ Cluster](https://docs.pivotal.io/rabbitmq-cf/replicator.html#scs-isolation) in the RabbitMQ for PCF documentation)
+  * If you enable the RabbitMQ&reg; for PCF product's SSL support by providing it with SSL keys and certificates, you must <a href="http://docs.pivotal.io/rabbitmq-cf/1-11/install-config-pp.html">enable the RabbitMQ for PCF product's TLS 1.0 support</a>
+* A single Pivotal Application Service (PAS) or Elastic Runtime SSL certificate (see the Pivotal Cloud Foundry documentation for information about <a href="https://docs.pivotal.io/pivotalcf/opsguide/security_config.html">configuring the SSL certificate</a>) that includes the following domains, where `SYS_DOMAIN.TLD` is your PCF installation's system domain and `APP_DOMAIN.TLD` is your PCF installation's application domain:
+  * `*.SYS_DOMAIN.TLD`
+  * `*.APP_DOMAIN.TLD`
+  * `*.login.SYS_DOMAIN.TLD`
+  * `*.uaa.SYS_DOMAIN.TLD`
