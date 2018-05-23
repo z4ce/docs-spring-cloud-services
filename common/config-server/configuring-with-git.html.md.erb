@@ -96,7 +96,7 @@ $ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048 > se
 $ openssl rsa -in server.key | tr -d '\n' > server_rsa.key
 ```
 
-To configure a Config Server service instance that can encrypt property values with an assymetric keypair, use the following JSON object, key from content of server_rsa.key file):
+To configure a Config Server service instance that can encrypt property values with an assymetric keypair, use the following JSON object, where the value of `key` is the content of the `server_rsa.key` file:
 
 ```
 '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "-----BEGIN RSA PRIVATE KEY-----MIIE......-----END RSA PRIVATE KEY-----" }}'
