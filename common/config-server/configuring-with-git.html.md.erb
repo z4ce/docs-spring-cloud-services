@@ -62,11 +62,17 @@ Passwords are masked in the Config Server dashboard.
 
 The Config Server can serve encrypted property values from a configuration file. If the Config Server is configured with a symmetric or asymmetric encryption key and the encrypted values are prefixed with the string `{cipher}`, the Config Server will decrypt the values before serving them to client applications. The Config Server has an `/encrypt` endpoint, which can be used to encrypt property values.
 
+<% if vars.product_name == 'PCF' %>
 To use these features in a client application, you must use a Java buildpack which contains the Java Cryptography Extension (JCE) Unlimited Strength policy files. These files are contained in the Cloud Foundry Java buildpack from version 3.7.1.
 
 <p class="tip">If you cannot use version 3.7.1 or later, you can add the JCE Unlimited Strength policy files to an earlier version of the Cloud Foundry Java buildpack. Fork the <a href="https://github.com/cloudfoundry/java-buildpack">buildpack on GitHub</a>, then download the policy files from Oracle and place them in the buildpack's <code>resources/open_jdk_jre/lib/security</code> directory. Follow the instructions in the <a href="http://docs.pivotal.io/pivotalcf/adminguide/buildpacks.html">Managing Custom Buildpacks</a> topic to add this buildpack to Pivotal Cloud Foundry. Be sure that it has the lowest position of all enabled Java buildpacks.</p>
+<% end %>
 
-<%= partial vars.scs_cs_oauth_token %>
+When the Config Server has been configured to encrypt values, you can make a POST request to the <code>/encrypt</code> endpoint. Include the property value in the request. A request to encrypt a value might look something like the following (using cURL), where the `cf oauth-token` command is used to provide an OAuth 2.0 token and <code>SERVER</code> is the URL of the Config Server:
+
+```
+curl -H 'Authorization: $(cf oauth-token)' http://SERVER/encrypt -d 'Value to be encrypted'
+```
 
 The Config Server returns the encrypted value. You can use the encrypted value in a configuration file as described in the [Encrypted Configuration](/spring-cloud-services/config-server/configuration-properties.html#encrypted-configuration) section of the [Configuration Properties](/spring-cloud-services/config-server/configuration-properties.html) topic.
 
@@ -90,7 +96,8 @@ $ openssl genpkey -algorithm RSA -outform PEM -pkeyopt rsa_keygen_bits:2048 > se
 $ openssl rsa -in server.key | tr -d '\n' > server_rsa.key
 ```
 
-To configure a Config Server service instance that can encrypt property values with an assymetric keypair, use the following JSON object(key from content of server_rsa.key file):
+To configure a Config Server service instance that can encrypt property values with an assymetric keypair, use the following JSON object, key from content of server_rsa.key file):
+
 ```
 '{"git": {"uri": "https://github.com/spring-cloud-services-samples/cook-config.git" }, "encrypt": { "key": "-----BEGIN RSA PRIVATE KEY-----MIIE......-----END RSA PRIVATE KEY-----" }}'
 ```
