@@ -34,3 +34,36 @@ The smoke tests are run in the "Smoke Tests" BOSH errand. They follow the steps 
   1. Delete the service key.
 
   1. Delete the service instance.
+
+## <a id="troubleshooting"></a> Troubleshooting
+
+If a step in the smoke tests fails or encounters an error, the failure or error message will be logged in the smoke test output. See below for troubleshooting information about some potential failures encountered by the smoke tests.
+
+### <a id="troubleshooting-timeouts-on-azure"></a> Timeouts On Microsoft Azure
+
+In a PCF deployment on Microsoft Azure, service instance provision operations may time out. The smoke tests give a log message similar to the following:
+
+```
+2017-10-04T09:55:57.28-0400 [APP/PROC/WEB/0]OUT 2017-10-04 13:55:57.285  INFO 19 ---
+	[cTaskExecutor-3] o.apache.http.impl.execchain.RetryExec   : I/O exception
+	(java.net.SocketException) caught when processing request to {s}->
+	https://api.system.wise.com:443: Connection timed out (Read failed)
+```
+
+To allow for longer service instance provisioning times:
+
+* Check [idle timeout settings for any Azure resource with a public IP address](https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-tcp-idle-timeout). The default setting is 4 minutes. Change this to 30 minutes (see the [Azure Networking Connection Idle for more than Four minutes](https://discuss.pivotal.io/hc/en-us/articles/115005583008-Azure-Networking-Connection-Idle-for-more-than-Four-minutes) article in the [Pivotal Knowledge Base](https://discuss.pivotal.io/hc/)).
+* Check the setting of the [Spring Cloud Services "App push timeout" tile configuration option](http://docs.pivotal.io/spring-cloud-services/tile-configuration.html#set-push-timeout-for-backing-applications). The default setting is 4 minutes. Change this to 15 minutes.
+
+### <a id="troubleshooting-app-push-timeout"></a> Application Push Timeouts
+
+Deployment of backing applications for service instances may time out. The smoke tests give a log message similar to the following:
+
+```
++ echo 'Timed out waiting for service instance to provision: circuit-breaker' 
+Timed out waiting for service instance to provision: circuit-breaker
+```
+
+To allow for longer application deployment times, without increasing the time required to deploy backing applications:
+
+* Check the setting of the [Spring Cloud Services "App push timeout" tile configuration option](http://docs.pivotal.io/spring-cloud-services/tile-configuration.html#set-push-timeout-for-backing-applications). The default setting is 4 minutes. Change this to 8 minutes.
