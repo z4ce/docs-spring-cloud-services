@@ -9,9 +9,10 @@ Release notes for [Spring Cloud Services for Pivotal Cloud Foundry](https://netw
 
 ## <a id="migrating-from-1-0-x"></a>Migrating from 1.0.x
 
-In 1.1.0, the Spring Cloud Services client dependencies have been restructured and are based on Spring Cloud Brixton. To ensure compatibility of your client applications with Spring Cloud Services 1.1.0 service instances, you must update client applications to include the new dependencies. Your client applications must also include the Spring Boot and Spring Cloud Maven BOM dependencies.
+For each client application, you must:
 
-For information about upgrading Spring Cloud Services service instances after upgrading the Spring Cloud Services product, see the <a href="/spring-cloud-services/1-1/service-instance-upgrades.html">Service Instance Upgrades</a> topic. For complete information about the Spring Cloud Services client dependencies, see <a href="/spring-cloud-services/1-1/client-dependencies.html">Client Dependencies</a>.
+* Update the build file to use the new versions of the Spring Cloud Services client dependencies (see [Client Dependencies](/spring-cloud-services/1-1/client-dependencies.html))
+* Update the build file to use the Maven BOM dependencies for Spring Boot and Spring Cloud (see [Client Dependencies](/spring-cloud-services/1-1/client-dependencies.html))
 
 ## <a id="1-1-32"></a>1.1.32
 
