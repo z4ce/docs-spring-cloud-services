@@ -16,7 +16,7 @@ owner: Spring Cloud Services
 
 <strong><%= modified_date %></strong>
 
-Ensure that you have or have completed all items listed in <a href="/spring-cloud-services/index.html#requirements">Requirements</a>. Then follow the below steps to install Spring Cloud Services.
+Ensure that you have or have completed all items listed in <a href="./index.html#requirements">Requirements</a>. Then follow the below steps to install Spring Cloud Services.
 
 <p class="note"><strong>Important: </strong> Spring Cloud Services requires one of the <a href="https://network.pivotal.io/products/p-mysql">MySQL for PCF</a> or <a href="https://network.pivotal.io/products/pivotal-mysql">MySQL for PCF v2</a> products. Install one of these products before installing Spring Cloud Services.</p>
 
@@ -34,32 +34,16 @@ Ensure that you have or have completed all items listed in <a href="/spring-clou
 
     Select the availability zones for the tile to use. In the **Network** section, select the PAS (or ERT) network.
 
-1. Still in the **Settings** tab, click **Spring Cloud Services** to configure settings for Spring Cloud Services.
+1. Still in the **Settings** tab, click **Spring Cloud Services** to configure settings for Spring Cloud Services. For information about configuring these settings, see [Tile Configuration Options](./tile-configuration.html#tile-configuration-options).
 
     <%= image_tag("./images/installation/settings.png") %>
 
-    The **Service instance limit** setting sets the maximum number of service instances that the Spring Cloud Services service broker will allow to be provisioned (the default value is 100). This setting's value is also used to determine the memory quota for the org in which service instances are deployed; that org's quota will be equal to 1.5G times the configured service instance limit. The **App push timeout** setting is the number of minutes the broker allows for a service instance backing application to start. The **Buildpack** setting is the name of the Java buildpack that the Spring Cloud Services service broker will use to provision service instances (if this setting is left empty, the broker will use the default Java buildpack to provision service instances).
-<br /><br />The **Do not validate that SSL certificates are properly configured** checkbox, if checked, disables only the validation that Spring Cloud Services performs by default on the Pivotal Cloud Foundry&reg; Pivotal Application Service (PAS) SSL certificate. It does not disable SSL certificate validation for application instances running on the Pivotal Cloud Foundry &reg; platform.
-
-    <p class="note warning"><strong>WARNING: </strong> Disabling Spring Cloud Services' validation of the PAS SSL certificate is an extreme action that should not be taken unless absolutely necessary, and can cause unexpected behavior across your installation of Spring Cloud Services. Do not disable this validation unless you are completely certain that you must do so.</p>
-
-    <%= image_tag("./images/installation/service-settings.png") %>
-
-    The **Persistence store service** and **Persistence store service plan** settings set the service and service plan for the service broker's MySQL database. This must be a service that provides a MySQL-compatible database. The **Message bus service** and **Message bus service plan** settings set the service and service plan for the broker's message bus.
-<br /><br />These settings should be configured only during the Spring Cloud Services tile installation process. If you have already completed the tile installation process, do not alter these settings.
-
-    <p class="note warning"><strong>WARNING: </strong> Configuring the service broker's dependent services after installing the tile can cause corruption or loss of the broker's service instance data.</p>
+    After configuring the settings, click **Save**.
 
 <%# removing for now
 1. If the **Stemcell** tab is highlighted in orange, click it. Download the correct stemcell from [Pivotal Network](http://network.pivotal.io) and click **Import Stemcell** to import it.
 
     installation/stemcell.png
 %>
-
-1. If you wish to use CredHub to secure service instance credentials, enable the **Secure service instance credentials** checkbox.
-
-    <p class="note"><strong>Important: </strong> To use CredHub with Spring Cloud Services, you must be using Pivotal Application Service (PAS) 2.0 or later, have <a href="http://docs.pivotal.io/pivotalcf/2-0/opsguide/secure-si-creds.html">configured the Runtime CredHub</a>, and have at least one job instance configured in the PAS tile's Resource Config settings tab.</p>
-
-    <%= image_tag("./images/installation/secure-si-credentials.png") %>
 
 1. Return to the Installation Dashboard and click **Apply changes** on the right sidebar to install the tile.

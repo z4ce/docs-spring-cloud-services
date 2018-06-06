@@ -414,3 +414,15 @@ To view the configuration properties that a Config Server service instance is re
     </pre>
 
 For a list of path formats that the Config Server accepts, see the [Request Paths](/spring-cloud-services/config-server/background-information.html#request-paths) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic in the [Config Server documentation](/spring-cloud-services/config-server/).
+
+## <a id="capacity-requirements"></a>Capacity Requirements
+
+Below are usage requirements of the applications backing a single service instance (SI) of each Spring Cloud Services service type.
+
+| Service Type              | Memory Limit / SI   | Disk Limit / SI  |
+|---------------------------|---------------------|------------------|
+| Config Server             | 1 GB                | 1 GB             |
+| Service Registry          | 1 GB                | 1 GB             |
+| Circuit Breaker Dashboard | 2 GB                | 2 GB             |
+
+Spring Cloud Services service types may also be backed by non-SCS service instances. For example, a Circuit Breaker Dashboard service instance uses a [RabbitMQ for Pivotal Cloud Foundry](http://docs.pivotal.io/rabbitmq-cf/index.html) service instance for communication between its two backing applications.
