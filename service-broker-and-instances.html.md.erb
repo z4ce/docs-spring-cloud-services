@@ -385,36 +385,6 @@ The SB application, the Worker application, the Service Registry's Eureka backin
 
     Sending an unauthenticated request to any of the other Actuator endpoints will return a response indicating insufficient authorization.
 
-### <a id="invoke-config-server-endpoints"></a>Invoke Config Server Configuration Endpoints
-
-To view the configuration properties that a Config Server service instance is returning for an application, you can access the configuration endpoints on the service instance's Spring Cloud Config Server backing application directly.
-
-1. Obtain an access token for interacting with the service instance, as described in the [Get Access Token for Direct Requests to a Service Instance](#get-access-token-for-direct-requests-to-a-service-instance) section. In the first step of that section, copy the URL in `credentials.uri` from the service instance's entry in the `VCAP_SERVICES` environment variable.
-
-2. Make a request of the Config Server service instance backing application in the format `http://SERVER/APPLICATION_NAME/PROFILE`, where `SERVER` is the URL from `credentials.uri` as mentioned in Step 1, `APPLICATION_NAME` is the application name as set in the `spring.application.name` property, and `PROFILE` is the name of a profile that has a configuration file in the repository.
-
-    <br />
-    An example request URL might look like this:
-
-    ```
-    https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/production
-    ```
-
-    Or, for the `default` profile:
-
-    ```
-    https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
-    ```
-
-    You can make the request using curl, providing the token---`TOKEN` in the below example---in a header with the `-H` or `--header` option:
-
-    <pre class="terminal">
-    $ curl -H 'Authorization: bearer TOKEN' https://config-86b38ce0-eed8-4c01-adb4-1a651a6178e2.apps.wise.com/cook/default
-    {"name":"cook","profiles":["default"],"label":null,"version":"7b5da0d68d9237f2852f7ac6c5e7474fd433c3f3","propertySources":[{"name":"https://github.com/spring-cloud-services-samples/cook-config/cook.properties","source":{"cook.special":"Pickled Cactus"}}]}
-    </pre>
-
-For a list of path formats that the Config Server accepts, see the [Request Paths](/spring-cloud-services/config-server/background-information.html#request-paths) section of the [Background Information](/spring-cloud-services/config-server/background-information.html) topic in the [Config Server documentation](/spring-cloud-services/config-server/).
-
 ## <a id="capacity-requirements"></a>Capacity Requirements
 
 Below are usage requirements of the applications backing a single service instance (SI) of each Spring Cloud Services service type.

@@ -91,6 +91,7 @@ In this script, replace the following placeholders with values from the `cf env`
 
 Replace `[ENDPOINT]` with the relevant endpoint. For example:
 
-* `application/profile` to retrieve configuration from a Config Server service instance
-* `eureka/apps` to retrieve the registry from a Service Registry service instance
-
+* To get properties from a Config Server service instance, use `application/profile`, where:
+  * `application` is the `spring.application.name` of a client application
+  * `profile` is a profile that has a configuration file in the Config Server's repository
+* To get the registry from a Service Registry service instance, use `eureka/apps` 
