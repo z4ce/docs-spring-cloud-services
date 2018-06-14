@@ -45,7 +45,7 @@ Ensure that you have or have completed all items listed in <a href="/spring-clou
 
     <%= image_tag("./images/installation/service-settings.png") %>
 
-    The **Persistence store service** and **Persistence store service plan** settings set the service and service plan for the service broker's MySQL database. This must be a service that provides a MySQL-compatible database. The **Message bus service** and **Message bus service plan** settings set the service and service plan for the broker's message bus.
+    The **Persistence store service** and **Persistence store service plan** settings set the service and service plan for the service broker's MySQL database. For MySQL v1 tile enter `p-mysql` as the store service and for MySQL v2 tile enter `p.mysql`.This must be a service that provides a MySQL-compatible database. The **Message bus service** and **Message bus service plan** settings set the service and service plan for the broker's message bus.
 <br /><br />These settings should be configured only during the Spring Cloud Services tile installation process. If you have already completed the tile installation process, do not alter these settings.
 
     <p class="note warning"><strong>WARNING: </strong> Configuring the service broker's dependent services after installing the tile can cause corruption or loss of the broker's service instance data.</p>
